@@ -1,0 +1,174 @@
+options
+{
+    LOOKAHEAD=1;
+}
+PARSER_BEGIN(Parser)
+
+import java.util.ArrayList;
+import java.io.Reader;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class Parser {
+	protected static ArrayList<String> opGroup;
+	protected static String cakeType;
+	protected static ArrayList<String> keyPairList;
+	
+	public Parser(String s) {
+		this((Reader)(new java.io.StringReader(s)));
+	
+		opGroup     = new ArrayList<String>();
+		keyPairList = new ArrayList<String>();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Exp result = new Parser(new java.io.StringReader(args[0])).S();
+//		String content = readFile(args[0]);
+//		System.out.println("file read");
+//		Exp result = new Parser(new java.io.StringReader(content)).S();
+		
+		System.out.println(result);
+
+		System.out.println("Cake Type: " + cakeType);
+		
+		System.out.println(keyPairList);
+	}
+
+	private static String readFile(String filename) { 
+		File file = new File(filename);
+		FileInputStream fis = null;
+		String text = "";
+		try {
+			fis = new FileInputStream(file);
+			
+			int content;
+			while ((content = fis.read()) != -1) {
+				// convert to char and display it
+				text += ((char) content);
+			}
+
+			System.out.println("File content \n " + text);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fis != null)
+					fis.close();
+				return "Error reading file";
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				return "Error reading file";
+			}
+		}
+	}
+}
+
+// Classes defining the Abstract Syntax Tree
+abstract class Exp {
+	
+}
+
+class Num extends Exp {
+    int value;
+    Num(int v) {value = v;}
+    public String toString() {return value + "";}
+}
+
+class Str extends Exp {
+    String value;
+    Str(String v) {value = v;}
+    public String toString() {return value;}
+}
+
+class TopText extends Exp {
+	String txt;
+	TopText(Exp text) { txt = text.toString();}
+	public String toString()
+	{
+	  return txt;
+	}
+}
+
+class BinaryExp extends Exp {
+    String op;
+    Exp left, right;
+    BinaryExp(String o, Exp l, Exp r) {op = o; left = l; right = r;}
+    public String toString() {
+		Parser.opGroup.add("(" + op + " " + left + " " + right + ")");
+		return "(" + op + " " + left + " " + right + ")";
+	}
+}
+
+PARSER_END(Parser)
+
+SKIP:  { " " | "\t" | "\n" | "\r" }
+TOKEN:
+	{
+	  	"(" | ")" | "+" | "*" 
+	 	| <COMMAND: ("DEFINE") >
+	 	| <CAKETYPE: ("CAKE" | "WEDCAKE") >
+	 	| <KEYWORD: ("TOPTEXT" | "TEXTCOLOR") >
+	 	| <STRUCTKEYWORD: ("LAYER")>
+		| <STRING: "'" (<CHAR> | <NUM> | " " )+ "'"> 
+	 	| <CHAR: (["A"-"Z","a"-"z"])> 
+		| <NUM: (["0"-"9"])+> 
+		| <COLOR: ("red" | "blue")>
+	}
+
+Exp S(): {Exp e;}
+{
+  e=DefineObj() <EOF> {return e;}
+}
+
+
+
+//Exp E(): {Exp e1; Exp e2;}
+//{
+//  e1=T() ("+" e2=T() {e1 = new BinaryExp("+", e1, e2);} )* {return e1;}
+//}
+//
+//Exp T(): {Exp e1; Exp e2;}
+//{
+//  e1=NumToken() ("*" e2=F() {e1 = new BinaryExp("*", e1, e2);} )* {return e1;}
+//}
+Exp DefineObj(): {Token e1; Exp e2;}
+{
+//	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} e2=TopText() {e2 = new TopText(e2);} { return e2;} // TODO: Create DefineObjExp
+	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} (e2=KeyPair())+ { return e2;} // TODO: Create DefineObjExp 
+}
+
+//Exp Struct(): { Token e1; Exp e2; }
+//{
+//	<STRUCTKEYWORD> "=" e2=StructObjAttr() {return e2;} 
+//}
+//
+//Exp StructObjAttr(): { }
+//
+Exp KeyPair(): { Token e1; Exp e2;}
+{
+	e1=<KEYWORD> "=" e2=StrToken() {Parser.keyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+} 
+
+Exp TopText(): {Exp e1;}
+{
+	<KEYWORD> "=" e1=StrToken() {e1 = new TopText(e1);} { return e1; } 
+}
+
+Exp NumToken(): {Token t;}
+{
+  t=<NUM> {return new Num(Integer.parseInt(t.image));}
+}
+
+Exp CharToken(): {Token t;}
+{
+  t=<CHAR> {return new Str(t.toString());}
+}
+
+Exp StrToken(): {Token t;}
+{
+  t=<STRING> {return new Str(t.toString());}
+}
+
+

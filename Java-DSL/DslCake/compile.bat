@@ -1,0 +1,1 @@
+.\jcc_compile.bat Cake.jj && .\java_compile.bat
