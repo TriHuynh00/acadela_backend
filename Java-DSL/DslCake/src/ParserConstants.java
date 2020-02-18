@@ -9,21 +9,31 @@ public interface ParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int COMMAND = 9;
+  int COMMAND = 11;
   /** RegularExpression Id. */
-  int CAKETYPE = 10;
+  int CAKETYPE = 12;
   /** RegularExpression Id. */
-  int KEYWORD = 11;
+  int KEYWORD = 13;
   /** RegularExpression Id. */
-  int STRUCTKEYWORD = 12;
+  int STRUCTKEYWORD = 14;
   /** RegularExpression Id. */
-  int STRING = 13;
+  int LAYERPOSITION = 15;
   /** RegularExpression Id. */
-  int CHAR = 14;
+  int LAYERHASCREAM = 16;
   /** RegularExpression Id. */
-  int NUM = 15;
+  int LAYERINGREDIENT = 17;
   /** RegularExpression Id. */
-  int COLOR = 16;
+  int LAYERDIAMETER = 18;
+  /** RegularExpression Id. */
+  int LAYERATTR = 19;
+  /** RegularExpression Id. */
+  int STRING = 20;
+  /** RegularExpression Id. */
+  int CHAR = 21;
+  /** RegularExpression Id. */
+  int NUM = 22;
+  /** RegularExpression Id. */
+  int COLOR = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -39,15 +49,23 @@ public interface ParserConstants {
     "\")\"",
     "\"+\"",
     "\"*\"",
+    "\"[\"",
+    "\"]\"",
     "\"DEFINE\"",
     "<CAKETYPE>",
     "<KEYWORD>",
     "\"LAYER\"",
+    "\"POSITION\"",
+    "\"HASCREAM\"",
+    "\"INGREDIENT\"",
+    "\"DIAMETER\"",
+    "<LAYERATTR>",
     "<STRING>",
     "<CHAR>",
     "<NUM>",
     "<COLOR>",
     "\"=\"",
+    "\",\"",
   };
 
 }
