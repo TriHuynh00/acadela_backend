@@ -5,13 +5,19 @@ options
 PARSER_BEGIN(Parser)
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.io.Reader;
+
+import java.lang.Integer;
+import cakeelement.Layer;
 
 public class Parser {
 	protected static ArrayList<String> opGroup;
 	protected static String cakeType;
 	protected static ArrayList<String> keyPairList;
 	protected static ArrayList<String> layerKeyPairList;
+
+	protected static LinkedList<Layer> layerList;
 	
 	public Parser(String s) {
 		this((Reader)(new java.io.StringReader(s)));
@@ -19,6 +25,7 @@ public class Parser {
 		opGroup     	 = new ArrayList<String>();
 		keyPairList 	 = new ArrayList<String>();
 		layerKeyPairList = new ArrayList<String>();
+		layerList        = new LinkedList<Layer>();
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -29,7 +36,13 @@ public class Parser {
 		System.out.println("Cake Type: " + cakeType);
 		
 		System.out.println(keyPairList);
-		System.out.println(layerKeyPairList);
+//		System.out.println(layerKeyPairList);
+		for (Layer layer : layerList) {
+			System.out.println("layer.position = " + layer.position);
+			System.out.println("layer.diameter = " + layer.diameter);
+			System.out.println("layer.ingredientList = " + layer.ingredientList);
+			System.out.println("layer.hasCream = " + layer.hasCream);
+		}
 	}
 }
 
@@ -133,8 +146,9 @@ Exp Layer(): { Token e1; Exp e2; }
 //	e1=<LAYERATTR> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
 //}
 
-Exp LayerKeyPair(): { Exp e1;}
+Exp LayerKeyPair(): { Exp e1; }
 {
+  	{layerList.add(new Layer());}
 	(e1=LayerPosition() LayerHasCream() LayerIngredient() LayerDiameter() )
 //	   ( e1="HASCREAM" "=" e2=StrToken() ){0,1}
 //	   ( e1="DIAMETER" "=" e2=StrToken() ){0,1}
@@ -146,22 +160,38 @@ Exp LayerKeyPair(): { Exp e1;}
 
 Exp LayerPosition(): { Token e1; Exp e2; }
 {
-	e1=<LAYERPOSITION> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+//	e1=<LAYERPOSITION> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+	e1=<LAYERPOSITION> "=" e2=StrToken() {
+	  Parser.layerList.get(layerList.size() - 1).position = e2.toString();
+	  return new Str(e1.toString() + ":" + e2.toString());
+	}
 }
 
 Exp LayerHasCream(): { Token e1; Exp e2; }
 {
-	e1=<LAYERHASCREAM> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+//	e1=<LAYERHASCREAM> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+	e1=<LAYERHASCREAM> "=" e2=StrToken() {
+	  Parser.layerList.get(layerList.size() - 1).hasCream = e2.toString();
+	  return new Str(e1.toString() + ":" + e2.toString());
+	}
 }
 
 Exp LayerDiameter(): { Token e1; Exp e2; }
 {
-	e1=<LAYERDIAMETER> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+//	e1=<LAYERDIAMETER> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+	e1=<LAYERDIAMETER> "=" e2=StrToken() {
+	  Parser.layerList.get(layerList.size() - 1).diameter = e2.toString();
+	  return new Str(e1.toString() + ":" + e2.toString());
+	}
 }
 
 Exp LayerIngredient(): { Token e1; Exp e2; }
 {
-	e1=<LAYERINGREDIENT> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+//	e1=<LAYERINGREDIENT> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+	e1=<LAYERINGREDIENT> "=" e2=StrToken() {
+	  Parser.layerList.get(layerList.size() - 1).ingredientList = e2.toString();
+	  return new Str(e1.toString() + ":" + e2.toString());
+	}
 }
 
 Exp KeyPair(): { Token e1; Exp e2;}
