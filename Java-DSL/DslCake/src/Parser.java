@@ -38,6 +38,7 @@ public class Parser implements ParserConstants {
                         System.out.println("layer.diameter = " + layer.diameter);
                         System.out.println("layer.ingredientList = " + layer.ingredientList);
                         System.out.println("layer.hasCream = " + layer.hasCream);
+                        System.out.println("layer.expression = " + layer.expression);
                 }
         }
 
@@ -72,17 +73,28 @@ Token e1; Exp e2;
 Parser.cakeType = e1.toString();
       label_1:
       while (true) {
-        if (jj_2_1(2)) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case KEYWORD:{
           e2 = KeyPair();
-        } else if (jj_2_2(2)) {
+          break;
+          }
+        case STRUCTKEYWORD:{
           e2 = Layer();
-        } else {
+          break;
+          }
+        default:
+          jj_la1[0] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
-        if (jj_2_3(2)) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case KEYWORD:
+        case STRUCTKEYWORD:{
           ;
-        } else {
+          break;
+          }
+        default:
+          jj_la1[1] = jj_gen;
           break label_1;
         }
       }
@@ -109,9 +121,13 @@ Token e1; Exp e2;
       label_2:
       while (true) {
         e2 = LayerKeyPair();
-        if (jj_2_4(2)) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LAYERPOSITION:{
           ;
-        } else {
+          break;
+          }
+        default:
+          jj_la1[2] = jj_gen;
           break label_2;
         }
       }
@@ -141,6 +157,7 @@ layerList.add(new Layer());
       LayerHasCream();
       LayerIngredient();
       LayerDiameter();
+      LayerExpression();
 {if ("" != null) return e1;}
     throw new Error("Missing return statement in function");
     } finally {
@@ -154,7 +171,7 @@ layerList.add(new Layer());
 Token e1; Exp e2;
       //	e1=<LAYERPOSITION> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
               e1 = jj_consume_token(LAYERPOSITION);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e2 = StrToken();
 Parser.layerList.get(layerList.size() - 1).position = e2.toString();
           {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
@@ -170,7 +187,7 @@ Parser.layerList.get(layerList.size() - 1).position = e2.toString();
 Token e1; Exp e2;
       //	e1=<LAYERHASCREAM> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
               e1 = jj_consume_token(LAYERHASCREAM);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e2 = StrToken();
 Parser.layerList.get(layerList.size() - 1).hasCream = e2.toString();
           {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
@@ -186,7 +203,7 @@ Parser.layerList.get(layerList.size() - 1).hasCream = e2.toString();
 Token e1; Exp e2;
       //	e1=<LAYERDIAMETER> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
               e1 = jj_consume_token(LAYERDIAMETER);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e2 = StrToken();
 Parser.layerList.get(layerList.size() - 1).diameter = e2.toString();
           {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
@@ -202,7 +219,7 @@ Parser.layerList.get(layerList.size() - 1).diameter = e2.toString();
 Token e1; Exp e2;
       //	e1=<LAYERINGREDIENT> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
               e1 = jj_consume_token(LAYERINGREDIENT);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e2 = StrToken();
 Parser.layerList.get(layerList.size() - 1).ingredientList = e2.toString();
           {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
@@ -212,12 +229,40 @@ Parser.layerList.get(layerList.size() - 1).ingredientList = e2.toString();
     }
 }
 
+  static final public Exp LayerExpression() throws ParseException {
+    trace_call("LayerExpression");
+    try {
+Token e1; Exp e2;
+      //	e1=<LAYERINGREDIENT> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+              e1 = jj_consume_token(LAYEREXP);
+      jj_consume_token(28);
+      e2 = FunctionExp();
+Parser.layerList.get(layerList.size() - 1).expression = e2.toString();
+          {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("LayerExpression");
+    }
+}
+
+  static final public Exp FunctionExp() throws ParseException {
+    trace_call("FunctionExp");
+    try {
+Token e1; Exp e2;
+      e1 = jj_consume_token(FUNCTION);
+{if ("" != null) return new Str(e1.toString());}
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("FunctionExp");
+    }
+}
+
   static final public Exp KeyPair() throws ParseException {
     trace_call("KeyPair");
     try {
 Token e1; Exp e2;
       e1 = jj_consume_token(KEYWORD);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e2 = StrToken();
 Parser.keyPairList.add(e1.toString() + ":" + e2.toString()); {if ("" != null) return new Str(e1.toString() + ":" + e2.toString());}
     throw new Error("Missing return statement in function");
@@ -231,7 +276,7 @@ Parser.keyPairList.add(e1.toString() + ":" + e2.toString()); {if ("" != null) re
     try {
 Exp e1;
       jj_consume_token(KEYWORD);
-      jj_consume_token(24);
+      jj_consume_token(28);
       e1 = StrToken();
 e1 = new TopText(e1);
 {if ("" != null) return e1;}
@@ -249,10 +294,14 @@ Exp e1;
       label_3:
       while (true) {
         e1 = StrToken();
-        jj_consume_token(25);
-        if (jj_2_5(2)) {
+        jj_consume_token(11);
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case STRING:{
           ;
-        } else {
+          break;
+          }
+        default:
+          jj_la1[3] = jj_gen;
           break label_3;
         }
       }
@@ -300,119 +349,6 @@ Token t;
     }
 }
 
-  static private boolean jj_2_1(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_1()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(0, xla); }
-  }
-
-  static private boolean jj_2_2(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_2()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(1, xla); }
-  }
-
-  static private boolean jj_2_3(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_3()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(2, xla); }
-  }
-
-  static private boolean jj_2_4(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_4()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(3, xla); }
-  }
-
-  static private boolean jj_2_5(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_5()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(4, xla); }
-  }
-
-  static private boolean jj_3R_6()
- {
-    if (jj_3R_8()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_7()
- {
-    if (jj_scan_token(STRING)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
- {
-    if (jj_3R_7()) return true;
-    if (jj_scan_token(25)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_8()
- {
-    if (jj_scan_token(LAYERPOSITION)) return true;
-    if (jj_scan_token(24)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1()
- {
-    if (jj_3R_4()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_3()
- {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (!jj_3_1()) return false;
-    jj_scanpos = xsp;
-    if (jj_3_2()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_5()
- {
-    if (jj_scan_token(STRUCTKEYWORD)) return true;
-    Token xsp;
-    if (jj_3_4()) return true;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_4()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  static private boolean jj_3_4()
- {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_4()
- {
-    if (jj_scan_token(KEYWORD)) return true;
-    if (jj_scan_token(24)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
- {
-    if (jj_3R_5()) return true;
-    return false;
-  }
-
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
   static public ParserTokenManager token_source;
@@ -422,20 +358,15 @@ Token t;
   /** Next token. */
   static public Token jj_nt;
   static private int jj_ntk;
-  static private Token jj_scanpos, jj_lastpos;
-  static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[0];
+  static final private int[] jj_la1 = new int[4];
   static private int[] jj_la1_0;
   static {
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {};
+	   jj_la1_0 = new int[] {0xc000,0xc000,0x10000,0x2000000,};
 	}
-  static final private JJCalls[] jj_2_rtns = new JJCalls[5];
-  static private boolean jj_rescan = false;
-  static private int jj_gc = 0;
 
   {
       enable_tracing();
@@ -458,7 +389,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -472,8 +403,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 0; i++) jj_la1[i] = -1;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -490,7 +420,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -508,7 +438,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -524,7 +454,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -533,7 +463,7 @@ Token t;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
+	 for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -543,51 +473,12 @@ Token t;
 	 jj_ntk = -1;
 	 if (token.kind == kind) {
 	   jj_gen++;
-	   if (++jj_gc > 100) {
-		 jj_gc = 0;
-		 for (int i = 0; i < jj_2_rtns.length; i++) {
-		   JJCalls c = jj_2_rtns[i];
-		   while (c != null) {
-			 if (c.gen < jj_gen) c.first = null;
-			 c = c.next;
-		   }
-		 }
-	   }
 	   trace_token(token, "");
 	   return token;
 	 }
 	 token = oldToken;
 	 jj_kind = kind;
 	 throw generateParseException();
-  }
-
-  @SuppressWarnings("serial")
-  static private final class LookaheadSuccess extends java.lang.Error {
-    @Override
-    public Throwable fillInStackTrace() {
-      return this;
-    }
-  }
-  static private final LookaheadSuccess jj_ls = new LookaheadSuccess();
-  static private boolean jj_scan_token(int kind) {
-	 if (jj_scanpos == jj_lastpos) {
-	   jj_la--;
-	   if (jj_scanpos.next == null) {
-		 jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
-	   } else {
-		 jj_lastpos = jj_scanpos = jj_scanpos.next;
-	   }
-	 } else {
-	   jj_scanpos = jj_scanpos.next;
-	 }
-	 if (jj_rescan) {
-	   int i = 0; Token tok = token;
-	   while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
-	   if (tok != null) jj_add_error_token(kind, i);
-	 }
-	 if (jj_scanpos.kind != kind) return true;
-	 if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
-	 return false;
   }
 
 
@@ -621,56 +512,16 @@ Token t;
   static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   static private int[] jj_expentry;
   static private int jj_kind = -1;
-  static private int[] jj_lasttokens = new int[100];
-  static private int jj_endpos;
-
-  static private void jj_add_error_token(int kind, int pos) {
-	 if (pos >= 100) {
-		return;
-	 }
-
-	 if (pos == jj_endpos + 1) {
-	   jj_lasttokens[jj_endpos++] = kind;
-	 } else if (jj_endpos != 0) {
-	   jj_expentry = new int[jj_endpos];
-
-	   for (int i = 0; i < jj_endpos; i++) {
-		 jj_expentry[i] = jj_lasttokens[i];
-	   }
-
-	   for (int[] oldentry : jj_expentries) {
-		 if (oldentry.length == jj_expentry.length) {
-		   boolean isMatched = true;
-
-		   for (int i = 0; i < jj_expentry.length; i++) {
-			 if (oldentry[i] != jj_expentry[i]) {
-			   isMatched = false;
-			   break;
-			 }
-
-		   }
-		   if (isMatched) {
-			 jj_expentries.add(jj_expentry);
-			 break;
-		   }
-		 }
-	   }
-
-	   if (pos != 0) {
-		 jj_lasttokens[(jj_endpos = pos) - 1] = kind;
-	   }
-	 }
-  }
 
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[26];
+	 boolean[] la1tokens = new boolean[29];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 0; i++) {
+	 for (int i = 0; i < 4; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -679,16 +530,13 @@ Token t;
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 26; i++) {
+	 for (int i = 0; i < 29; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;
 		 jj_expentries.add(jj_expentry);
 	   }
 	 }
-	 jj_endpos = 0;
-	 jj_rescan_token();
-	 jj_add_error_token(0, 0);
 	 int[][] exptokseq = new int[jj_expentries.size()][];
 	 for (int i = 0; i < jj_expentries.size(); i++) {
 	   exptokseq[i] = jj_expentries.get(i);
@@ -750,50 +598,6 @@ Token t;
 	   }
 	   System.out.println(" at line " + t1.beginLine + " column " + t1.beginColumn + ">; Expected token: <" + tokenImage[t2] + ">");
 	 }
-  }
-
-  static private void jj_rescan_token() {
-	 jj_rescan = true;
-	 for (int i = 0; i < 5; i++) {
-	   try {
-		 JJCalls p = jj_2_rtns[i];
-
-		 do {
-		   if (p.gen > jj_gen) {
-			 jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
-			 switch (i) {
-			   case 0: jj_3_1(); break;
-			   case 1: jj_3_2(); break;
-			   case 2: jj_3_3(); break;
-			   case 3: jj_3_4(); break;
-			   case 4: jj_3_5(); break;
-			 }
-		   }
-		   p = p.next;
-		 } while (p != null);
-
-		 } catch(LookaheadSuccess ls) { }
-	 }
-	 jj_rescan = false;
-  }
-
-  static private void jj_save(int index, int xla) {
-	 JJCalls p = jj_2_rtns[index];
-	 while (p.gen > jj_gen) {
-	   if (p.next == null) { p = p.next = new JJCalls(); break; }
-	   p = p.next;
-	 }
-
-	 p.gen = jj_gen + xla - jj_la; 
-	 p.first = token;
-	 p.arg = xla;
-  }
-
-  static final class JJCalls {
-	 int gen;
-	 Token first;
-	 int arg;
-	 JJCalls next;
   }
 
 }

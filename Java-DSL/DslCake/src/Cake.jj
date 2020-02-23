@@ -1,6 +1,6 @@
 options
 {
-    LOOKAHEAD=2;
+    LOOKAHEAD=1;
 }
 PARSER_BEGIN(Parser)
 
@@ -42,6 +42,7 @@ public class Parser {
 			System.out.println("layer.diameter = " + layer.diameter);
 			System.out.println("layer.ingredientList = " + layer.ingredientList);
 			System.out.println("layer.hasCream = " + layer.hasCream);
+			System.out.println("layer.expression = " + layer.expression);
 		}
 	}
 }
@@ -87,19 +88,22 @@ PARSER_END(Parser)
 SKIP:  { " " | "\t" | "\n" | "\r" }
 TOKEN:
 	{
-	  	"(" | ")" | "+" | "*" | "[" | "]"
+	  	"(" | ")" | "+" | "*" | "[" | "]" | ","
 	 	| <COMMAND: ("DEFINE") >
-	 	| <CAKETYPE: ("CAKE" | "WEDCAKE") >
+		| <CAKETYPE: ("CAKE" | "WEDCAKE") >
 	 	| <KEYWORD: ("TOPTEXT" | "TEXTCOLOR") >
 	 	| <STRUCTKEYWORD: ("LAYER")>
 	 	| <LAYERPOSITION: ("POSITION")>
 	 	| <LAYERHASCREAM: ("HASCREAM")>
 	 	| <LAYERINGREDIENT: ("INGREDIENT")>
+	 	| <LAYEREXP: ("EXP")>
 	 	| <LAYERDIAMETER: ("DIAMETER")>  
 	 	| <LAYERATTR: ("POSITION" | "HASCREAM" | "INGREDIENT" | "DIAMETER")>
-		| <STRING: "'" (<CHAR> | <NUM> | " " )+ "'"> 
-	 	| <CHAR: (["A"-"Z","a"-"z"])> 
-		| <NUM: (["0"-"9"])+> 
+	 	| <PARAM: (<CHAR> | <NUM>)+>
+	 	| <FUNCTION: "'" (<CHAR> | <NUM>)+ "(" <PARAM> ("," <PARAM>)? ")" "'">
+	 	| <CHAR: (["A"-"Z","a"-"z"])>
+	 	| <STRING: "'" (<CHAR> | <NUM> | " " | "(" | ")" )+ "'"> 
+		| <NUM: (["0"-"9"])+>
 		| <COLOR: ("red" | "blue")>
 	}
 
@@ -149,7 +153,7 @@ Exp Layer(): { Token e1; Exp e2; }
 Exp LayerKeyPair(): { Exp e1; }
 {
   	{layerList.add(new Layer());}
-	(e1=LayerPosition() LayerHasCream() LayerIngredient() LayerDiameter() )
+	(e1=LayerPosition() LayerHasCream() LayerIngredient() LayerDiameter() LayerExpression())
 //	   ( e1="HASCREAM" "=" e2=StrToken() ){0,1}
 //	   ( e1="DIAMETER" "=" e2=StrToken() ){0,1}
 //	   ( e1="INGREDIENT" "=" e2=StrToken() ){0,1}
@@ -194,6 +198,24 @@ Exp LayerIngredient(): { Token e1; Exp e2; }
 	}
 }
 
+Exp LayerExpression(): { Token e1; Exp e2; }
+{
+//	e1=<LAYERINGREDIENT> "=" e2=StrToken() {Parser.layerKeyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
+	e1=<LAYEREXP> "=" e2=FunctionExp() {
+	  Parser.layerList.get(layerList.size() - 1).expression = e2.toString();
+	  return new Str(e1.toString() + ":" + e2.toString());
+	}
+}
+
+Exp FunctionExp(): { Token e1; Exp e2; }
+{
+		(e1=<FUNCTION>)
+	
+	{
+	  return new Str(e1.toString());
+	}
+}
+
 Exp KeyPair(): { Token e1; Exp e2;}
 {
 	e1=<KEYWORD> "=" e2=StrToken() {Parser.keyPairList.add(e1.toString() + ":" + e2.toString()); return new Str(e1.toString() + ":" + e2.toString());}
@@ -221,6 +243,7 @@ Exp CharToken(): {Token t;}
 
 Exp StrToken(): {Token t;}
 {
-  t=<STRING> {return new Str(t.toString());}
+  t=<STRING>
+  {return new Str(t.toString());}
 }
 
