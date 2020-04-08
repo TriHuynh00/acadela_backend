@@ -93,12 +93,13 @@ TOKEN:
 	 	| <COMMAND: ("DEFINE") >
 		| <FUNCKEY: ("FUNCTION") >
 		| <VALIDFUNCTIONSIGN: ("number" | "round") >
+		| <COMPARESIGN: ("<" | "<=" | "==" | ">=" | ">") >
 	 	| <CHAR: (["A"-"Z","a"-"z"])>
 	 	| <STRING: "'" (<CHAR> | <NUM> |
 	 				" " | "(" | ")" | "[" | "]" | "{" | "}" | "." | "\"" )+ "'"> 
 		| <NUM: (["0"-"9"])+>
 		| <FLOAT: (<NUM> "." <NUM>) >
-		| <COLOR: ("red" | "blue")>
+		| <COLOR: ("red" | "blue" | "green")>
 	}
 
 Exp S(): {Exp e;}
@@ -119,7 +120,15 @@ Exp DefineObj(): {Token e1; Exp e2;}
 {
 //	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} e2=TopText() {e2 = new TopText(e2);} { return e2;} // TODO: Create DefineObjExp
 //	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} (e2=KeyPair() | e2=Layer())+ { return e2;} // TODO: Create DefineObjExp 
-	<COMMAND> e1=<FUNCKEY> {Parser.objType = e1.toString();} "=" e2=FuncProd()
+	<COMMAND> e2=FuncObj() (UiRefObj())?
+	{return e2;}
+}
+
+
+
+Exp FuncObj(): {Token e1; Exp e2;}
+{
+	e1=<FUNCKEY> {Parser.objType = e1.toString();} "=" e2=FuncProd()
 	{
 	  System.out.println("FUNCKEY " + e1);
 	  System.out.println("FUNCSIGN " + e2.toString());
@@ -131,7 +140,7 @@ Exp FuncProd(): {Exp e1; Exp e2;}
 {
   	{String production = "";}
 	e1=FuncExpr() ("+" e2=FuncExpr() {production += new TopText(e2).toString();})* 
-	{return new Str(new TopText(e1) + "+" + production);}
+	{return new Str(new TopText(e1) + " + " + production);}
 }
 
 Exp FuncExpr(): {Exp funcSignature; Token e1; Exp funcElement; Exp extraParam;}
@@ -161,6 +170,44 @@ Exp Param(): { Exp e1; }
   (e1=StrToken() | e1=NumToken() | e1=FuncExpr())    {return e1;}
 }
 
+Exp UiRefObj(): {Token e1; Exp e2;}
+{
+	e1="uiReference" "=" e2=ComparisonExp()
+	{
+		System.out.println("uiRef " + e2.toString());
+	}
+	{
+		return e2;
+	}
+}
+
+Exp ComparisonExp(): {Exp e1; Exp e2;}
+{
+  	{ String phraseExp = ""; }
+	(
+	  e2=StrToken() {phraseExp = new TopText(e2).toString();}
+      |
+      (		"colors" "(" e1=NumToken() {phraseExp += new TopText(e1).toString();} (e2=ComparePhrase() {phraseExp += new TopText(e2).toString();})* ")"
+	  )
+		
+	)
+	
+	{return new Str(phraseExp);} 
+}
+
+Exp ComparePhrase(): { Token t1; Token t2; Exp e1;}
+{
+  	{String word = "";}
+	t1=<COMPARESIGN>
+	(
+	  t2=<COLOR> {word += t2.toString();}
+	  | e1=NumToken(){word += new TopText(e1).toString();}
+	)//	  t1=<COMPARESIGN> (e1=CharToken() {word += new TopText(e1).toString();})+
+	
+//	  	  
+	  	
+	{return new Str(t1.toString() + word);}
+}
 
 //Exp Struct(): { Token e1; Exp e2; }
 //{
