@@ -50,7 +50,10 @@ public class Parser {
 
 // Classes defining the Abstract Syntax Tree
 abstract class Exp {
-	
+	public String toString()
+	{
+		return this.toString();
+	}
 }
 
 class Num extends Exp {
@@ -95,8 +98,9 @@ TOKEN:
 		| <VALIDFUNCTIONSIGN: ("number" | "round") >
 		| <COMPARESIGN: ("<" | "<=" | "==" | ">=" | ">") >
 	 	| <CHAR: (["A"-"Z","a"-"z"])>
-	 	| <STRING: "'" (<CHAR> | <NUM> |
-	 				" " | "(" | ")" | "[" | "]" | "{" | "}" | "." | "\"" )+ "'"> 
+//	 	| <STRING: "'" (<CHAR> | <NUM> |
+//	 				(" " | "(" | ")" | "[" | "]" | "{" | "}" | "." | "\"" | "#" | "=" )+ )+ "'">
+		| <COLORCODE: "#" (["A"-"F", "a"-"f", "0"-"9"])+ >
 		| <NUM: (["0"-"9"])+>
 		| <FLOAT: (<NUM> "." <NUM>) >
 		| <COLOR: ("red" | "blue" | "green")>
@@ -120,15 +124,17 @@ Exp DefineObj(): {Token e1; Exp e2;}
 {
 //	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} e2=TopText() {e2 = new TopText(e2);} { return e2;} // TODO: Create DefineObjExp
 //	<COMMAND> e1=<CAKETYPE> {Parser.cakeType = e1.toString();} (e2=KeyPair() | e2=Layer())+ { return e2;} // TODO: Create DefineObjExp 
-	<COMMAND> e2=FuncObj() (UiRefObj())?
+	<COMMAND> e2=FuncObj() UiRefObj() ColorConditionalAssignment()
 	{return e2;}
 }
 
-
+// TODO: Check How Assignments are handle in java
+//       Check How to Handle String with "=" sign
+//		 READ INPUT FROM FILE
 
 Exp FuncObj(): {Token e1; Exp e2;}
 {
-	e1=<FUNCKEY> {Parser.objType = e1.toString();} "=" e2=FuncProd()
+	e1=<FUNCKEY> {Parser.objType = e1.toString();} "=" "'" e2=FuncProd() "'"
 	{
 	  System.out.println("FUNCKEY " + e1);
 	  System.out.println("FUNCSIGN " + e2.toString());
@@ -172,7 +178,7 @@ Exp Param(): { Exp e1; }
 
 Exp UiRefObj(): {Token e1; Exp e2;}
 {
-	e1="uiReference" "=" e2=ComparisonExp()
+	e1="uiReference" "=" "'" e2=ComparisonExp() "'"
 	{
 		System.out.println("uiRef " + e2.toString());
 	}
@@ -207,6 +213,49 @@ Exp ComparePhrase(): { Token t1; Token t2; Exp e1;}
 //	  	  
 	  	
 	{return new Str(t1.toString() + word);}
+}
+
+Exp ColorConditionalAssignment(): { Token t1; Exp e1; Exp e2;}
+{
+	{
+	  String varName = "";
+	  String valueStr = "";
+    }
+	"let"
+		((t1=<CHAR>|t1=<NUM>){varName += t1.toString();})*
+			"="
+				(e1=ConditionalAssignment() | e1=ColorCodeToken()) "in"
+	{
+	  System.out.println("Assign " + varName + " = " + new TopText(e1).toString());
+	  e2 = new Str(varName + " = " + new TopText(e1).toString());
+	  return e2;
+	}
+}
+
+Exp ConditionalAssignment(): { Exp e1; Exp e2;}
+{
+	(e1=StrWithoutQuoteToken() | e1=CondBlock()) ("+" e2=CondBlock())?
+	{return e1;}
+}
+
+Exp CondBlock(): { Exp e1; Exp e2;}
+{
+  	e1=CondStatement()
+  	
+  	{System.out.println("Variable in if cond: " + e1.toString());}
+	{return e1;}
+}
+
+Exp CondStatement(): {Exp e1; Exp e2;}
+{
+	"if" e1=StrWithoutQuoteToken() "=" StrToken() "then" e2=StrToken()
+	{return e1;}
+}
+
+Exp CondExec(): {Exp e1; Exp e2;}
+{
+	"if" e1=StrWithoutQuoteToken() "=" StrToken() "then" e2=CondExec()
+	{return e1;}
 }
 
 //Exp Struct(): { Token e1; Exp e2; }
@@ -245,7 +294,22 @@ Exp CharToken(): {Token t;}
 
 Exp StrToken(): {Token t;}
 {
-  t=<STRING>
+  t="'" (<CHAR> | <NUM> | "(" | ")" | "[" | "]" | "{" | "}" | "." | "\"" | "#" | "=" )+ "'"
   {return new Str(t.toString());}
 }
+
+Exp StrWithoutQuoteToken(): {Token t;}
+{
+  {String strVal = "";}
+  (t=<CHAR> { strVal += t.toString();}
+   | t=<NUM> { strVal += t.toString();})+
+  {return new Str(strVal);}
+}
+
+Exp ColorCodeToken(): {Token t;}
+{
+  t=<COLORCODE>
+  {return new Str(t.toString());}
+}
+
 
