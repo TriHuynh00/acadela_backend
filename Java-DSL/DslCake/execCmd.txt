@@ -1,0 +1,4 @@
+DEFINE 
+	FUNCTION = 'number(7,number(2,0)) + round(5,2)' 
+	uiReference = 'colors(5<=green<7<red<=10)' 
+	let r2 = r1 + if r1 = '1' then '#herat="alpha"' in
