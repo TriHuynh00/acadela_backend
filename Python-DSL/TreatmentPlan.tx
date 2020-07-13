@@ -1,0 +1,27 @@
+Define:
+    'define' case=Case
+;
+
+Case:
+    'case' casename=Text caseAttr*=CaseAttr
+;
+
+CaseAttr:
+    CasePrefix | Multiplicity
+;
+
+CasePrefix:
+    'prefix' Eq pattern=Text
+;
+
+Multiplicity:
+    'multiplicity' Eq multiplicity=INT
+;
+
+Text:
+    STRING
+;
+
+Eq:
+    '='
+;
