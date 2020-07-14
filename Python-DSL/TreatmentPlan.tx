@@ -7,15 +7,53 @@ Case:
 ;
 
 CaseAttr:
-    CasePrefix | Multiplicity
+    CasePrefix | Multiplicity | UiReference
 ;
 
 CasePrefix:
     'prefix' Eq pattern=Text
 ;
 
+UiReference:
+    'uiReference' Eq uiRef=Function
+;
+
 Multiplicity:
     'multiplicity' Eq multiplicity=INT
+;
+
+ValidFunctionName:
+    'number' | 'colors'
+;
+
+Function:
+    ValidFunctionName
+    '('
+        (Expression | ParamPattern)
+    ')'
+;
+
+ParamPattern:
+    Text (',' Text)*
+;
+
+Expression:
+    INT (Comparator ColorName Comparator INT)+
+;
+
+ColorName:
+    'red'
+    | 'blue'
+    | 'green'
+;
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    |'>='
+    | '<'
+    | '>'
 ;
 
 Text:

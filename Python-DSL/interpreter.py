@@ -12,16 +12,19 @@ class Interpreter():
     def __init__(self, model):
         self.model = model
 
-    # Let's interpret the model
+    # Interpret the case object
     def interpret(self):
         case = self.model.case
 
         if cname(case) == 'Case':
             print('Case Name', case.casename)
 
+        # Interpret caseAttr
         for caseAttr in case.caseAttr:
             if cname(caseAttr) == 'CasePrefix':
                 print('Case Prefix =', caseAttr.pattern)
             if cname(caseAttr) == 'Multiplicity':
                 print('Multiplicity =', caseAttr.multiplicity)
+            if cname(caseAttr) == 'UiReference':
+                print('UiReference', caseAttr.uiRef)
 
