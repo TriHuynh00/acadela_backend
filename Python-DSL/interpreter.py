@@ -14,17 +14,48 @@ class Interpreter():
 
     # Interpret the case object
     def interpret(self):
-        case = self.model.case
+        model = self.model
+        workspace = model.workspace
+
+        print('Workspace \n\t StaticID = {} \n\t ID = {} \n'.format(
+              workspace.staticId, workspace.id))
+
+        case = model.workspaceProp.case
 
         if cname(case) == 'Case':
-            print('Case Name', case.casename)
+            print('Case', case.casename)
 
         # Interpret caseAttr
-        for caseAttr in case.caseAttr:
-            if cname(caseAttr) == 'CasePrefix':
-                print('Case Prefix =', caseAttr.pattern)
-            if cname(caseAttr) == 'Multiplicity':
-                print('Multiplicity =', caseAttr.multiplicity)
-            if cname(caseAttr) == 'UiReference':
-                print('UiReference', caseAttr.uiRef)
+        # print('CaseAttr', case.caseAttr.prefix.pattern)
+
+        for userGroup in case.userGroupList:
+            print("\tgroup: staticId = {}, id = {}".
+                  format(userGroup.staticId, userGroup.id))
+
+        print()
+
+        for user in case.userList:
+            print("\tuser: staticId = {}, id = {}".
+                  format(user.staticId, user.id))
+
+        print()
+
+        for entity in case.attrList.entity:
+            print("\tentity "
+                  "\n\t\t name = {0}"
+                  "\n\t\t description = {1}"
+                  "\n\t\t multiplicity = {2}"
+                  .format(entity.name,
+                          entity.attr[0].description,
+                          entity.attr[1].multiplicity))
+
+
+        # for caseAttr in case.caseAttrList.attr:
+        #     # print('CaseAttr', cname(caseAttr))
+        #     if cname(caseAttr) == 'CasePrefix':
+        #         print('Case Prefix =', caseAttr.pattern)
+        #     if cname(caseAttr) == 'Multiplicity':
+        #         print('Multiplicity =', caseAttr.multiplicity)
+        #     if cname(caseAttr) == 'UiReference':
+        #         print('UiReference', caseAttr.uiRef)
 
