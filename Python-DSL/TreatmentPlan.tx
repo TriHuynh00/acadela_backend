@@ -48,7 +48,7 @@ Entity:
     (
         attr += Description
         attr += Multiplicity
-        type ?= Type?
+        type = Type*
     )#
 
 ;

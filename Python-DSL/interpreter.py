@@ -41,13 +41,18 @@ class Interpreter():
         print()
 
         for entity in case.attrList.entity:
+            entityType = ""
+            if len(entity.type) == 1:
+                entityType = entity.type[0].type
             print("\tentity "
                   "\n\t\t name = {0}"
                   "\n\t\t description = {1}"
                   "\n\t\t multiplicity = {2}"
+                  "\n\t\t type = {3} \n"
                   .format(entity.name,
                           entity.attr[0].description,
-                          entity.attr[1].multiplicity))
+                          entity.attr[1].multiplicity,
+                          entityType))
 
 
         # for caseAttr in case.caseAttrList.attr:
