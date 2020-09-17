@@ -1,9 +1,9 @@
 from textx import metamodel_from_str, metamodel_from_file, get_children_of_type, TextXSyntaxError
 import sys, os
 from os.path import join, dirname
-from pointmodel.point import Point
+
 from interpreter import Interpreter
-from exceptionhandler.syntaxerrorhandler import SyntaxErrorHandler
+from syntaxerrorhandler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.

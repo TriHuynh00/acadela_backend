@@ -3,6 +3,6 @@ var router = express.Router();
 const compilerController = require("../controller/compiler");
 
 /* GET home page. */
-router.get('/', compilerController.compile);
+router.post('/', compilerController.compile);
 
 module.exports = router;

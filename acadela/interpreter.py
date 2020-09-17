@@ -1,8 +1,5 @@
 # At this point model is a plain Python object graph with instances of
 # dynamically created classes and attributes following the grammar.
-import colored as colored
-
-from pointmodel.point import Point
 
 
 def cname(o):
