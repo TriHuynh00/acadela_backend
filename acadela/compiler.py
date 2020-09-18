@@ -2,6 +2,9 @@ from textx import metamodel_from_str, metamodel_from_file, get_children_of_type,
 import sys, os
 from os.path import join, dirname
 
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
+
 from interpreter import Interpreter
 from syntaxerrorhandler import SyntaxErrorHandler
 
@@ -40,7 +43,11 @@ model_str = """
 model = None
 
 try:
-    model = mm.model_from_str(model_str)
+    input = model_str
+    if len(sys.argv) > 1:
+        input = sys.argv[1];
+
+    model = mm.model_from_str(input)
 
     point_interpreter = Interpreter(model)
 
