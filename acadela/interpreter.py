@@ -1,56 +1,71 @@
 # At this point model is a plain Python object graph with instances of
 # dynamically created classes and attributes following the grammar.
+from os.path import join, dirname
 
+
+this_folder = dirname(__file__)
 
 def cname(o):
     return o.__class__.__name__
 
 class Interpreter():
-    def __init__(self, model):
+    def __init__(self, metamodel, model):
+        self.metamodel = metamodel
         self.model = model
 
     # Interpret the case object
     def interpret(self):
         model = self.model
-        workspace = model.workspace
+        workspace = model.defWorkspace
 
-        print('Workspace \n\t StaticID = {} \n\t ID = {} \n'.format(
-              workspace.staticId, workspace.id))
+        # Pure Object Import
+        if workspace == None:
+            for defObj in model.defObj:
+                if cname(defObj.object) == 'Entity':
+                    obj = defObj.object;
+                    print(obj.name)
+                    for attr in obj.attr:
+                       print('{} = {}'.format(cname(attr), attr.value))
 
-        case = model.workspaceProp.case
 
-        if cname(case) == 'Case':
-            print('Case', case.casename)
+        else:
+            workspace = model.defWorkspace.workspace
+            print('Workspace \n\t StaticID = {} \n\t ID = {} \n'.format(
+                workspace.staticId, workspace.id))
 
-        # Interpret caseAttr
-        # print('CaseAttr', case.caseAttr.prefix.pattern)
+            case = model.defWorkspace.workspaceProp.case
 
-        for userGroup in case.userGroupList:
-            print("\tgroup: staticId = {}, id = {}".
-                  format(userGroup.staticId, userGroup.id))
+            if cname(case) == 'Case':
+                print('Case', case.casename)
 
-        print()
+            # Interpret caseAttr
+            # print('CaseAttr', case.caseAttr.prefix.pattern)
 
-        for user in case.userList:
-            print("\tuser: staticId = {}, id = {}".
-                  format(user.staticId, user.id))
+            for userGroup in case.userGroupList:
+                print("\tgroup: staticId = {}, id = {}".
+                      format(userGroup.staticId, userGroup.id))
 
-        print()
+            print()
 
-        for entity in case.attrList.entity:
-            # TODO: Crafting entityType based on casePrefix
-            entityType = ""
-            if len(entity.type) == 1:
-                entityType = entity.type[0].type
-            print("\tentity "
-                  "\n\t\t name = {0}"
-                  "\n\t\t description = {1}"
-                  "\n\t\t multiplicity = {2}"
-                  "\n\t\t type = {3} \n"
-                  .format(entity.name,
-                          entity.attr[0].description,
-                          entity.attr[1].multiplicity,
-                          entityType))
+            for user in case.userList:
+                print("\tuser: staticId = {}, id = {}".
+                      format(user.staticId, user.id))
+
+            print()
+
+            for entity in case.attrList.entity:
+                # TODO: Crafting entityType based on casePrefix
+                entityType = ""
+                if len(entity.type) == 1:
+                    entityType = entity.type
+
+                print('entity', entity.name)
+                for attr in entity.attr:
+                    print('\t{} = {}'.format(cname(attr), attr.value))
+                print()
+
+
+            print("Case Definition", case.caseDef.caseDefName)
 
 
         # for caseAttr in case.caseAttrList.attr:

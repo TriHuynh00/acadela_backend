@@ -1,19 +1,42 @@
 Start:
-    (('workspace' workspace=Workspace) workspaceProp=Define)#
+    (
+        (importList *= Import)
+        (
+            (defWorkspace = DefWorkspace)
+            | (defObj *= DefineObj)
+        )
+    )#
+;
+
+// Import Definition Level
+Import:
+    'import' importVar=ID '=' 'get' objectId=STRING 'from' path=STRING
 ;
 
 // Workspace Definition Level
+DefWorkspace:
+    (workspace=Workspace
+    workspaceProp=DefineCase)#
 
+;
 Workspace:
-    BasicIdentity
+    'workspace' BasicIdentity
 ;
 
 BasicIdentity:
-    (('staticId' Eq staticId=Text) ('id' Eq id=Text))#
+    (('staticId' Eq staticId=Text)? ('id' Eq id=Text))#
 ;
 
-Define:
+DefineCase:
     'define' case=Case
+;
+
+DefineObj:
+    'define' object=Obj
+;
+
+Obj:
+    (Case | Entity)
 ;
 
 // Case Definition Level
@@ -72,11 +95,11 @@ MultiAttrModel:
 ;
 
 Multiplicity:
-    ('multiplicity' Eq multiplicity=Text)
+    ('multiplicity' Eq value=Text)
 ;
 
 Description:
-    ('description' Eq description=Text)
+    ('description' Eq value=Text)
 ;
 
 CasePrefix:
@@ -84,7 +107,7 @@ CasePrefix:
 ;
 
 UiReference:
-    'uiReference' Eq uiRef=Function
+    'uiReference' Eq value=Function
 ;
 
 
@@ -128,9 +151,16 @@ Text:
 
 
 TextNoQuote:
-    /([a-z-_A-Z])*/
+    /([a-zA-Z0-9-_])*/
 ;
 
 Eq:
     '='
+;
+
+Comment:
+  (/\/\/.*$/
+  | /\/\*.*$/
+  | /\*.*$/
+  | /.*[\*\/]$/ )
 ;

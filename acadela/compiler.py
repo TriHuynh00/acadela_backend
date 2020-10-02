@@ -10,16 +10,36 @@ from syntaxerrorhandler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
-this_folder = dirname(__file__)
 
+this_folder = dirname(__file__)
 mm = metamodel_from_file(join(this_folder, 'TreatmentPlan.tx'), classes=None, ignore_case=True)
 
+def verifyImport(model):
+    importList = model.importList
+    for importStmt in importList:
+        print('import {} = get {} from {}'.format(
+            importStmt.importVar,
+            importStmt.objectId,
+            importStmt.path
+        ))
+        absImportPath = this_folder + importStmt.path
+        importedModel = mm.model_from_file(absImportPath)
+
+        print (importedModel.defObj[0].object)
+
+# model_str = """
+#     define entity Discharge
+#             description = 'Discharge Stage Definition'
+#             multiplicity = 'exactlyOne'
+# """
+
 model_str = """
+    import discharge = get 'Discharge' from '/stages/discharge.aca'
     workspace staticId = 'c023' id = 'Lleida_Cancer' 
     define case COPD_Plan
         group staticId = 'g01' id = 'doctorGroup'
-        group staticId = 'g02' id = 'nurseGroup'
-        user staticId = 'u01' id = 'Jane'
+        group id = 'nurseGroup'
+        user id = 'Jane'
         user staticId = 'u02' id = 'Kim'
         
         attributelist
@@ -27,6 +47,10 @@ model_str = """
                 description = 'Settings desc'
                 multiplicity = 'exactlyOne'
                 type = "Link.Type.Settings"
+                // A comment
+                /* a multiline
+                 * Comment
+                 */
             entity Identifications
                 description = 'Identitfication desc'
                 multiplicity = 'many'
@@ -48,8 +72,22 @@ try:
         input = sys.argv[1];
 
     model = mm.model_from_str(input)
+    verifyImport(model)
+    # importList = model.importList
+    #
+    # for importStmt in importList:
+    #     print('import {} = get {} from {}'.format(
+    #         importStmt.importVar,
+    #         importStmt.objectId,
+    #         importStmt.path
+    #     ))
+    #     absImportPath = this_folder + importStmt.path
+    #     importedModel = mm.model_from_file(absImportPath)
+    #
+    #     print (importedModel.defObj[0].object)
 
-    point_interpreter = Interpreter(model)
+
+    point_interpreter = Interpreter(mm, model)
 
     point_interpreter.interpret()
 
