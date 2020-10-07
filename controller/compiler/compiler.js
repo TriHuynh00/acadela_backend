@@ -9,8 +9,6 @@ let options = {
     // args: ['value1', 'value2', 'value3']
 };
 
-
-
 const compile = async (req, res) => {
     // const pythonProcess = await spawn('python', ["compiler.py"]);
     options.args = [req.body.code]
