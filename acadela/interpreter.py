@@ -1,7 +1,8 @@
 # At this point model is a plain Python object graph with instances of
 # dynamically created classes and attributes following the grammar.
-from os.path import join, dirname
-
+from os.path import dirname
+from acadela.sc_controller.workspace import WorkspaceController
+from acadela.sc_controller.group import GroupController
 
 this_folder = dirname(__file__)
 
@@ -12,6 +13,8 @@ class Interpreter():
     def __init__(self, metamodel, model):
         self.metamodel = metamodel
         self.model = model
+        self.refFinder = WorkspaceController
+        self.groupFinder = GroupController
 
     # Interpret the case object
     def interpret(self):
@@ -30,8 +33,10 @@ class Interpreter():
 
         else:
             workspace = model.defWorkspace.workspace
-            print('Workspace \n\t StaticID = {} \n\t ID = {} \n'.format(
-                workspace.staticId, workspace.id))
+
+            workspace.staticId = self.refFinder.findWorkspaceStaticIdByName(workspace.id)
+
+
 
             case = model.defWorkspace.workspaceProp.case
 
@@ -40,6 +45,15 @@ class Interpreter():
 
             # Interpret caseAttr
             # print('CaseAttr', case.caseAttr.prefix.pattern)
+
+            gc = GroupController()
+            for userGroup in case.userGroupList:
+                userGroup.staticId = gc.findGroupStaticIdByName(userGroup.id, workspace.staticId)
+
+            print()
+
+            print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
+                workspace.staticId, workspace.id))
 
             for userGroup in case.userGroupList:
                 print("\tgroup: staticId = {}, id = {}".

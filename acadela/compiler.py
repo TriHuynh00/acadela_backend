@@ -35,10 +35,10 @@ def verifyImport(model):
 
 model_str = """
     import discharge = get 'Discharge' from '/stages/discharge.aca'
-    workspace staticId = 'c023' id = 'Lleida_Cancer' 
+    workspace id = 'Umcg' 
     define case COPD_Plan
-        group staticId = 'g01' id = 'doctorGroup'
-        group id = 'nurseGroup'
+        group id = 'Umcg Secretary'
+        group id = 'Umcg Physician'
         user id = 'Jane'
         user staticId = 'u02' id = 'Kim'
         
