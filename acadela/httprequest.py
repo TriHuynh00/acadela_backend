@@ -11,9 +11,7 @@ class HttpRequest():
 
 
     def get(baseUrl, requestUrl, header = defaultHeader, body = None):
-        print (requestUrl)
-        url = baseUrl + requestUrl
-        print(url)
+
         r = requests.get(
             baseUrl + requestUrl,
             headers = header,

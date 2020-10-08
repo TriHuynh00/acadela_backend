@@ -1,4 +1,4 @@
-from acadela.http_request import HttpRequest
+from acadela.httprequest import HttpRequest
 import json
 
 class WorkspaceController:
@@ -11,7 +11,7 @@ class WorkspaceController:
 
         if workspaceListJson != None:
             for workspace in workspaceListJson:
-                print(json.dumps(workspace, indent=4))
+                # print(json.dumps(workspace, indent=4))
                 if workspace['name'] == name:
                     return workspace['id']
         else:
@@ -28,18 +28,19 @@ class WorkspaceController:
 
         if workspace != None:
             # print(json.dumps(workspace, indent=4))
-            print(json.dumps(workspace['permissions'], indent=4))
+            # print(json.dumps(workspace['permissions'], indent=4))
             if workspace['permissions'] is not None:
                 for permission in workspace['permissions']:
                     permissionObj = workspace['permissions'][permission]
+                    # print("Permission: ", permission)
                     if len(permissionObj) > 0:
                         if permissionObj[0]["id"] is not None:
                             permissionIdList.append(permissionObj[0]["id"])
-                            print(json.dumps(permissionObj[0]["id"]))
+                            # print(json.dumps(permissionObj[0]["id"]))
         else:
             return "invalidGetWorkspaceRequest"
 
-        print(permissionIdList)
+        # print(permissionIdList)
         return permissionIdList
 
     # findPermissionGroupByStaticId("2c9480885d1737ef015d74deed260006")

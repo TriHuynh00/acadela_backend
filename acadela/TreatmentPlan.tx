@@ -27,6 +27,10 @@ BasicIdentity:
     (('staticId' Eq staticId=Text)? ('id' Eq id=Text))#
 ;
 
+GroupIdentity:
+    (('staticId' Eq staticId=Text)? ('name' Eq name=Text))#
+;
+
 DefineCase:
     'define' case=Case
 ;
@@ -59,7 +63,7 @@ AttrList:
 ;
 
 Group:
-    'group' BasicIdentity
+    'group' GroupIdentity
 ;
 
 User:

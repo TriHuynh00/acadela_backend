@@ -34,13 +34,15 @@ def verifyImport(model):
 # """
 
 model_str = """
-    import discharge = get 'Discharge' from '/stages/discharge.aca'
+    import discharge = get 'Discharge' from '/stages/discharge.aca'\n
     workspace id = 'Umcg' 
     define case COPD_Plan
-        group id = 'Umcg Secretary'
-        group id = 'Umcg Physician'
-        user id = 'Jane'
-        user staticId = 'u02' id = 'Kim'
+        group name = 'Umcg Physician'
+        group name = 'Umcg Clinician'
+        group name = 'Umcg Patient'
+        
+        user id = 'matthijs'
+        user id = 'williamst'
         
         attributelist
             entity Settings
