@@ -4,7 +4,9 @@ from os.path import dirname
 from acadela.referencer.workspace import WorkspaceController
 from acadela.referencer.group import GroupController
 from acadela.referencer.user import UserController
+from acadela.httprequest import HttpRequest
 import json
+import requests
 
 this_folder = dirname(__file__)
 
@@ -12,7 +14,6 @@ def cname(o):
     return o.__class__.__name__
 
 class Interpreter():
-
 
     def __init__(self, metamodel, model):
         self.metamodel = metamodel
@@ -36,9 +37,9 @@ class Interpreter():
                     print(obj.name)
                     for attr in obj.attr:
                        print('{} = {}'.format(cname(attr), attr.value))
-
-
         else:
+            caseObjList = {}
+
             workspace = model.defWorkspace.workspace
 
             workspace.staticId = self.refFinder.findWorkspaceStaticIdByName(workspace.id)
@@ -78,22 +79,16 @@ class Interpreter():
 
             print()
 
-            for entity in case.attrList.entity:
-                # TODO: Crafting entityType based on casePrefix
-                entityType = ""
-                if len(entity.type) == 1:
-                    entityType = entity.type
-
-                print('entity', entity.name)
-                for attr in entity.attr:
-                    print('\t{} = {}'.format(cname(attr), attr.value))
-                print()
-
-
-
             print("Case Definition", case.caseDef.caseDefName)
 
-            caseObjList = {}
+            workspaceObjList = {}
+            workspaceObjList["$"] = \
+                {
+                    "staticId": workspace.staticId,
+                    "id": workspace.id
+                }
+
+
 
             jsonGroupList = []
             for group in self.groupList:
@@ -106,19 +101,62 @@ class Interpreter():
 
             caseObjList['Group'] = jsonGroupList
 
-            caseObjList["Workspace"] = [
-                {
+            jsonUserList = []
+            for user in self.userList:
+                jsonUserList.append({
                     "$": {
-                        "staticId": "workspace.staticId",
-                        "id": "workspace.id"
+                        "staticId": str(user.staticId),
+                        "id": str(user.id)
                     }
-                }]
+                })
+
+            caseObjList['User'] = jsonUserList
+
+            jsonEntityList = []
+            for entity in case.attrList.entity:
+                # TODO: Crafting entityType based on casePrefix
+                entityType = ""
+                if len(entity.type) == 1:
+                    entityType = entity.type
+
+                print('entity', entity.name)
+
+                print('\tmultiplicity: {} \n\t description: {}'.format(entity.multiplicity.value, entity.description.value))
+
+                jsonEntityList.append({
+                    "$": {
+                        "id": entity.name,
+                        "description": entity.description.value
+                    }
+                })
+
+            workspaceObjList["EntityDefinition"] = \
+                jsonEntityList
+
+            # workspaceObjList.append({
+            #     'EntityDefinition': jsonEntityList
+            # })
+
+            caseObjList["Workspace"] = [workspaceObjList]
 
             caseDefJson = {"SACMDefinition": caseObjList}
 
+            caseDefJsonFinal = {"jsonTemplate": caseDefJson}
+
             # print(json.dumps(caseDefJson['SACMDefinition']['Group'], indent=4))
 
-            print(json.dumps(caseDefJson, indent=4))
+            print(json.dumps(caseDefJsonFinal, indent=4))
+            # print(str('{ "jsonTemplate"' + ":" + json.dumps(caseDefJson, indent=4)) + "}")
+            print()
+            response = HttpRequest.post(HttpRequest.sacmUrl,
+                             "import/acadela/casedefinition?version=11&isExecute=false",
+                             header=HttpRequest.simulateUserHeader,
+                             body=caseDefJsonFinal)
+            # response = requests.post(
+            #     HttpRequest.sacmUrl + "import/acadela/casedefinition?version=10&isExecute=false",
+            #     headers=HttpRequest.simulateUserHeader,
+            #     json=json.loads(json.dumps(caseDefJsonFinal)))
+            print(json.dumps(response, indent=4))
 
         # for caseAttr in case.caseAttrList.attr:
         #     # print('CaseAttr', cname(caseAttr))

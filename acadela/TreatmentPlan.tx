@@ -73,8 +73,8 @@ User:
 Entity:
     "entity" name=TextNoQuote
     (
-        attr += Description
-        attr += Multiplicity
+        description = Description
+        multiplicity = Multiplicity
         type = Type*
     )#
 

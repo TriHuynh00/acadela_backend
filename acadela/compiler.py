@@ -48,7 +48,7 @@ model_str = """
             entity Settings
                 description = 'Settings desc'
                 multiplicity = 'exactlyOne'
-                type = "Link.Type.Settings"
+                type = "Link.EntityDefinition.Settings"
                 // A comment
                 /* a multiline
                  * Comment
