@@ -36,7 +36,8 @@ def verifyImport(model):
 model_str = """
     import discharge = get 'Discharge' from '/stages/discharge.aca'\n
     workspace id = 'Umcg' 
-    define case COPD_Plan
+    define case GCS1_Groningen
+        prefix = 'GCS1'
         group name = 'Umcg Physician'
         group name = 'Umcg Clinician'
         group name = 'Umcg Patient'
@@ -44,18 +45,28 @@ model_str = """
         user id = 'matthijs'
         user id = 'williamst'
         
-        attributelist
-            entity Settings
-                description = 'Settings desc'
-                multiplicity = 'exactlyOne'
-                type = "Link.EntityDefinition.Settings"
-                // A comment
-                /* a multiline
-                 * Comment
-                 */
-            entity Identifications
-                description = 'Identitfication desc'
-                multiplicity = 'many'
+        // A comment
+            /* a multiline
+             * Comment
+             */
+        
+        entity CaseData
+            description = 'Settings desc'
+            multiplicity = 'exactlyOne'
+            
+            
+            attributeList
+                entity Settings
+                    description = "Setting Description"
+                    type = "Link.EntityDefinition.Settings"
+                    defaultValues = ['120']
+            endAttributeList
+                
+            
+        entity Identifications
+            description = 'Identitfication desc'
+            multiplicity = 'many'
+            
         CaseDefinition Leida
 """
 

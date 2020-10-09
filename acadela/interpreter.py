@@ -64,6 +64,8 @@ class Interpreter():
 
             print()
 
+            print('casePrefix = ' + case.casePrefix.value)
+
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspace.staticId, workspace.id))
 
@@ -88,8 +90,6 @@ class Interpreter():
                     "id": workspace.id
                 }
 
-
-
             jsonGroupList = []
             for group in self.groupList:
                 jsonGroupList.append({
@@ -113,15 +113,18 @@ class Interpreter():
             caseObjList['User'] = jsonUserList
 
             jsonEntityList = []
-            for entity in case.attrList.entity:
+            print ("#entities = ", len(case.entityList))
+            for entity in case.entityList:
                 # TODO: Crafting entityType based on casePrefix
-                entityType = ""
-                if len(entity.type) == 1:
-                    entityType = entity.type
+                entityType = 'N/A'
+                multiplicity = 'N/A'
+                # if entity.attrProp.type is not None:
+                #     entityType = entity.type.value
 
                 print('entity', entity.name)
 
-                print('\tmultiplicity: {} \n\t description: {}'.format(entity.multiplicity.value, entity.description.value))
+                print('\tmultiplicity: {} \n\tdescription: {} \n\ttype: {}'.
+                      format(multiplicity, entity.description.value, entityType))
 
                 jsonEntityList.append({
                     "$": {
@@ -129,6 +132,12 @@ class Interpreter():
                         "description": entity.description.value
                     }
                 })
+
+                if len(entity.attrList) > 0:
+                    for entityAttr in entity.attrList:
+                        for entityAttrProp in entityAttr.entity:
+                            if entityAttrProp.attrProp.defaultValues is not None:
+                                print("\tEntity Attribute Default Value = ", entityAttrProp.attrProp.defaultValues.value)
 
             workspaceObjList["EntityDefinition"] = \
                 jsonEntityList
@@ -148,22 +157,15 @@ class Interpreter():
             print(json.dumps(caseDefJsonFinal, indent=4))
             # print(str('{ "jsonTemplate"' + ":" + json.dumps(caseDefJson, indent=4)) + "}")
             print()
-            response = HttpRequest.post(HttpRequest.sacmUrl,
-                             "import/acadela/casedefinition?version=11&isExecute=false",
-                             header=HttpRequest.simulateUserHeader,
-                             body=caseDefJsonFinal)
+            # response = HttpRequest.post(HttpRequest.sacmUrl,
+            #                  "import/acadela/casedefinition?version=11&isExecute=false",
+            #                  header=HttpRequest.simulateUserHeader,
+            #                  body=caseDefJsonFinal)
+
+            # print(json.dumps(response, indent=4))
+
             # response = requests.post(
             #     HttpRequest.sacmUrl + "import/acadela/casedefinition?version=10&isExecute=false",
             #     headers=HttpRequest.simulateUserHeader,
             #     json=json.loads(json.dumps(caseDefJsonFinal)))
-            print(json.dumps(response, indent=4))
-
-        # for caseAttr in case.caseAttrList.attr:
-        #     # print('CaseAttr', cname(caseAttr))
-        #     if cname(caseAttr) == 'CasePrefix':
-        #         print('Case Prefix =', caseAttr.pattern)
-        #     if cname(caseAttr) == 'Multiplicity':
-        #         print('Multiplicity =', caseAttr.multiplicity)
-        #     if cname(caseAttr) == 'UiReference':
-        #         print('UiReference', caseAttr.uiRef)
 

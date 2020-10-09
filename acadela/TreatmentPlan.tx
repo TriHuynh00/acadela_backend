@@ -48,18 +48,14 @@ Obj:
 Case:
     (
         ('case' casename=TextNoQuote)
+        casePrefix = CasePrefix
         userGroupList += Group
         userList += User
         (
-            attrList = AttrList
+            entityList += Entity
             caseDef = CaseDef
         )#
     )#
-;
-
-AttrList:
-    'attributelist'
-    (entity += Entity | attr += Attribute)*
 ;
 
 Group:
@@ -74,18 +70,39 @@ Entity:
     "entity" name=TextNoQuote
     (
         description = Description
-        multiplicity = Multiplicity
-        type = Type*
+        (attrProp = AttributeProp)?
     )#
+    (attrList += AttrList)?
 
 ;
 
 Type:
-    ('type' Eq type=Text)
+    ('type' Eq value=Text)
+;
+
+AttrList:
+    'attributelist'
+    (entity += Entity | attr += Attribute)*
+    'endAttributeList'
 ;
 
 Attribute:
     "attribute" name=TextNoQuote
+    (
+        description = Description
+        attrProp = AttributeProp
+    )#
+;
+
+AttributeProp:
+    (
+        (externalId = ExternalId)?
+        (multiplicity = Multiplicity)?
+        (additionalDescription = AdditionalDescription)?
+        (uiRef = UiReference)?
+        (type = Type)?
+        (defaultValues = DefaultValues)?
+    )#
 ;
 
 CaseDef:
@@ -98,23 +115,37 @@ MultiAttrModel:
     attr+=UiReference)#
 ;
 
-Multiplicity:
-    ('multiplicity' Eq value=Text)
-;
-
 Description:
     ('description' Eq value=Text)
 ;
 
 CasePrefix:
-    'prefix' Eq pattern=Text
+    'prefix' Eq value=Text
+;
+
+// Shared Properties
+Multiplicity:
+    ('multiplicity' Eq value=Text)
 ;
 
 UiReference:
     'uiReference' Eq value=Function
 ;
 
+DefaultValues:
+    'defaultValues' Eq value=WrapValue
+;
 
+AdditionalDescription:
+    "additionalDescription" Eq value=STRING
+;
+
+ExternalId:
+    "externalId" Eq value=STRING
+;
+
+
+// Valid Function For Expression
 ValidFunctionName:
     'number' | 'colors'
 ;
@@ -160,6 +191,10 @@ TextNoQuote:
 
 Eq:
     '='
+;
+
+WrapValue:
+    '[' (Text | TextNoQuote) ']'
 ;
 
 Comment:
