@@ -28,7 +28,7 @@ BasicIdentity:
 ;
 
 GroupIdentity:
-    (('staticId' Eq staticId=Text)? ('name' Eq name=Text))#
+    (('staticId' Eq staticId=Text)? ('id' Eq id=Text) ('name' Eq name=Text))#
 ;
 
 DefineCase:
@@ -82,7 +82,7 @@ Type:
 
 AttrList:
     'attributelist'
-    (entity += Entity | attr += Attribute)*
+    (attr += Entity | attr += Attribute)*
     'endAttributeList'
 ;
 

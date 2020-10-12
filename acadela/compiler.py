@@ -38,9 +38,10 @@ model_str = """
     workspace id = 'Umcg' 
     define case GCS1_Groningen
         prefix = 'GCS1'
-        group name = 'Umcg Physician'
-        group name = 'Umcg Clinician'
-        group name = 'Umcg Patient'
+        group name = 'Umcg Physician' id = 'UmcgPhysicians'
+        group name = 'Umcg Clinician' id = 'UmcgClinicians'
+        group name = 'Umcg Professionals' id = 'UmcgProfessionals'
+        group name = 'Umcg Patient' id = 'UmcgPatients'
         
         user id = 'matthijs'
         user id = 'williamst'
@@ -57,9 +58,23 @@ model_str = """
             
             attributeList
                 entity Settings
-                    description = "Setting Description"
+                    description = "Settings"
                     type = "Link.EntityDefinition.Settings"
-                    defaultValues = ['120']
+                    
+                    attributeList
+                        Attribute Patient
+                            description = 'Patient'
+                            additionalDescription = 'Patient that is assigned to this case'
+                            type = 'Link.Users(UmcgPatients)'
+                            multiplicity= 'exactlyOne'
+                            
+                        Attribute CaseOwner
+                            description = 'Case Owner'
+                            additionalDescription = 'The owner of this case'
+                            type = 'Link.Users(UmcgClinicians)'
+                            multiplicity= 'exactlyOne'
+                    endAttributeList
+                    
             endAttributeList
                 
             

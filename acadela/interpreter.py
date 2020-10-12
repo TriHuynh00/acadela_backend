@@ -23,6 +23,63 @@ class Interpreter():
         self.userFinder = UserController()
         self.groupList = []
         self.userList = []
+        self.jsonEntityList = []
+        self.jsonAttributeList = []
+
+    def interpretEntity(self, targetEntity, parentEntity):
+
+        # TODO: Crafting entityType based on casePrefix
+        # if entity.attrProp.type is not None:
+        #     entityType = entity.type.value
+
+        print('entity', targetEntity.name)
+
+        print('\n\tdescription: {}'.format(targetEntity.description.value))
+
+        entityProp = {}
+
+        entityProp["$"] = {
+            "id": targetEntity.name,
+            "description": targetEntity.description.value
+        }
+
+        # self.jsonEntityList["$"]["AttributeDefinition"]
+
+        attrDefList = []
+
+        if len(targetEntity.attrList) > 0:
+            for attrElem in targetEntity.attrList:
+
+                for entityAttr in attrElem.attr:
+                    # If this entityAttr has an entity, append it to the entity list
+                    if cname(entityAttr) == "Entity":
+                        self.interpretEntity(entityAttr, parentEntity)
+
+                    attrObj = {"$": {}}
+                    entityAttrProp = entityAttr.attrProp
+
+                    thisAttr = attrObj["$"]
+                    thisAttr['id'] = entityAttr.name
+                    thisAttr['description'] = entityAttr.description.value
+                    if entityAttrProp.defaultValues is not None:
+                        thisAttr['defaultValues'] = entityAttrProp.defaultValues.value
+
+                        print("\tEntity Attribute Default Value = ",
+                              entityAttrProp.defaultValues.value)
+                    if entityAttrProp.additionalDescription is not None:
+                        thisAttr['additionalDescription'] = \
+                            entityAttrProp.additionalDescription.value
+
+                    if entityAttrProp.type is not None:
+                        thisAttr['type'] = entityAttrProp.type.value
+
+                    if entityAttrProp.multiplicity is not None:
+                        thisAttr['multiplicity'] = entityAttrProp.multiplicity.value
+
+                    attrDefList.append(attrObj)
+
+            entityProp["AttributeDefinition"] = attrDefList
+        self.jsonEntityList.append(entityProp)
 
     # Interpret the case object
     def interpret(self):
@@ -95,7 +152,7 @@ class Interpreter():
                 jsonGroupList.append({
                     "$": {
                         "staticId": str(group.staticId),
-                        "id": str(group.name)
+                        "id": str(group.id)
                     }
                 })
 
@@ -112,36 +169,12 @@ class Interpreter():
 
             caseObjList['User'] = jsonUserList
 
-            jsonEntityList = []
-            print ("#entities = ", len(case.entityList))
+            print("#entities = ", len(case.entityList))
             for entity in case.entityList:
-                # TODO: Crafting entityType based on casePrefix
-                entityType = 'N/A'
-                multiplicity = 'N/A'
-                # if entity.attrProp.type is not None:
-                #     entityType = entity.type.value
-
-                print('entity', entity.name)
-
-                print('\tmultiplicity: {} \n\tdescription: {} \n\ttype: {}'.
-                      format(multiplicity, entity.description.value, entityType))
-
-                jsonEntityList.append({
-                    "$": {
-                        "id": entity.name,
-                        "description": entity.description.value
-                    }
-                })
-
-                if len(entity.attrList) > 0:
-                    for entityAttr in entity.attrList:
-                        for entityAttrProp in entityAttr.entity:
-                            if entityAttrProp.attrProp.defaultValues is not None:
-                                print("\tEntity Attribute Default Value = ", entityAttrProp.attrProp.defaultValues.value)
+                self.interpretEntity(entity, entity)
 
             workspaceObjList["EntityDefinition"] = \
-                jsonEntityList
-
+                self.jsonEntityList
             # workspaceObjList.append({
             #     'EntityDefinition': jsonEntityList
             # })
@@ -164,8 +197,8 @@ class Interpreter():
 
             # print(json.dumps(response, indent=4))
 
-            # response = requests.post(
-            #     HttpRequest.sacmUrl + "import/acadela/casedefinition?version=10&isExecute=false",
-            #     headers=HttpRequest.simulateUserHeader,
-            #     json=json.loads(json.dumps(caseDefJsonFinal)))
+            response = requests.post(
+                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=3&isExecute=false",
+                headers=HttpRequest.simulateUserHeader,
+                json=json.loads(json.dumps(caseDefJsonFinal)))
 
