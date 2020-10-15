@@ -12,8 +12,10 @@ from acadela.interpreter import jsonutil
 from acadela.interpreter import util
 import json
 import requests
+import sys
 
 this_folder = dirname(__file__)
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 class Interpreter():
 

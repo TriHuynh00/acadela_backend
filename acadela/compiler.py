@@ -2,6 +2,7 @@ from textx import metamodel_from_str, metamodel_from_file, get_children_of_type,
 import sys, os
 from os.path import join, dirname
 
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\interpreter')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
@@ -39,7 +40,7 @@ def verifyImport(model):
 # """
 
 model_str = """
-    import discharge from '/stages/discharge.aca' 
+    //import discharge from '/stages/discharge.aca' 
     workspace id = 'Umcg' 
     define case GCS1_Groningen
         prefix = 'GCS1'
@@ -105,7 +106,7 @@ try:
         input = sys.argv[1];
 
     model = mm.model_from_str(input)
-    verifyImport(model)
+    # verifyImport(model)
     # importList = model.importList
     #
     # for importStmt in importList:
