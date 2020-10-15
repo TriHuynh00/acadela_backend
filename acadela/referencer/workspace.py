@@ -1,9 +1,12 @@
 from acadela.httprequest import HttpRequest
 import json
 
-class WorkspaceController:
+class WorkspaceReferencer:
 
-    def findWorkspaceStaticIdByName(name):
+    def __init__(self):
+        pass
+
+    def findWorkspaceStaticIdByRefId(self, refId):
         workspaceListJson = HttpRequest.get(
             HttpRequest.sociocortexUrl,
             "workspaces",
@@ -12,14 +15,14 @@ class WorkspaceController:
         if workspaceListJson != None:
             for workspace in workspaceListJson:
                 # print(json.dumps(workspace, indent=4))
-                if workspace['name'] == name:
+                if workspace['name'] == refId:
                     return workspace['id']
         else:
             return "invalidGetWorkspaceRequest"
 
         return "workspaceIdNotFound"
 
-    def findPermissionGroupByStaticId(workspaceId):
+    def findPermissionGroupByStaticId(self, workspaceId):
         permissionIdList = []
         workspace = HttpRequest.get(
             HttpRequest.sociocortexUrl,

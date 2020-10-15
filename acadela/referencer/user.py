@@ -1,11 +1,11 @@
 from acadela.httprequest import HttpRequest
-from acadela.referencer.group import GroupController
+from acadela.referencer.group import GroupReferencer
 import json
 
-class UserController:
+class UserReferencer:
 
     def __init__(self):
-        self.groupController = GroupController()
+        self.groupController = GroupReferencer()
 
     def findAllUsers(self):
         allUserJson = HttpRequest.get(
@@ -35,7 +35,8 @@ class UserController:
                 for member in groupJson['members']:
 
                     memberJsonObj = self.findUserById(member['id'])
-                    if memberJsonObj is not None:
+                    if memberJsonObj is not None \
+                        and member['resourceType'] == 'users':
                         # print(json.dumps(member['id'], indent=4))
                         # compare member's refId with the target userRefId
                         for attribute in memberJsonObj['attributes']:

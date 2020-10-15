@@ -3,10 +3,11 @@ import sys, os
 from os.path import join, dirname
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\interpreter')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
 
-from interpreter import Interpreter
-from syntaxerrorhandler import SyntaxErrorHandler
+from acadela.interpreter.casetemplate import Interpreter
+from acadela.exceptionhandler.syntaxerrorhandler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
@@ -17,9 +18,13 @@ mm = metamodel_from_file(join(this_folder, 'TreatmentPlan.tx'), classes=None, ig
 def verifyImport(model):
     importList = model.importList
     for importStmt in importList:
-        print('import {} = get {} from {}'.format(
+        # print('import {} = get {} from {}'.format(
+        #     importStmt.importVar,
+        #     importStmt.objectId,
+        #     importStmt.path
+        # ))
+        print('import {} from {}'.format(
             importStmt.importVar,
-            importStmt.objectId,
             importStmt.path
         ))
         absImportPath = this_folder + importStmt.path
@@ -34,13 +39,13 @@ def verifyImport(model):
 # """
 
 model_str = """
-    import discharge = get 'Discharge' from '/stages/discharge.aca'\n
+    import discharge from '/stages/discharge.aca' 
     workspace id = 'Umcg' 
     define case GCS1_Groningen
         prefix = 'GCS1'
         group name = 'Umcg Physician' id = 'UmcgPhysicians'
         group name = 'Umcg Clinician' id = 'UmcgClinicians'
-        group name = 'Umcg Professionals' id = 'UmcgProfessionals'
+        group name = 'Umcg Professional' id = 'UmcgProfessionals'
         group name = 'Umcg Patient' id = 'UmcgPatients'
         
         user id = 'matthijs'

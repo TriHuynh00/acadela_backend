@@ -10,7 +10,7 @@ Start:
 
 // Import Definition Level
 Import:
-    'import' importVar=ID '=' 'get' objectId=STRING 'from' path=STRING
+    'import' importVar=ID 'from' path=STRING
 ;
 
 // Workspace Definition Level

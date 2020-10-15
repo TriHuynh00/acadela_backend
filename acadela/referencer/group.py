@@ -1,11 +1,12 @@
 from acadela.httprequest import HttpRequest
-from acadela.referencer.workspace import WorkspaceController
+from acadela.referencer.workspace import WorkspaceReferencer
 import json
 
-class GroupController:
+class GroupReferencer:
 
     def __init__(self):
         groupPrincipalTypes = ['members', '']
+        self.workspaceFinder = WorkspaceReferencer()
 
     def findGroupById(self, groupId):
         groupJson = HttpRequest.get(
@@ -15,7 +16,7 @@ class GroupController:
         return groupJson
 
     def findGroupStaticIdByName(self, groupName, workspaceId):
-        permissionIdList = WorkspaceController.findPermissionGroupByStaticId(workspaceId)
+        permissionIdList = self.workspaceFinder.findPermissionGroupByStaticId(workspaceId)
         # print ("permissionIdList", permissionIdList)
         for permissionId in permissionIdList:
 
