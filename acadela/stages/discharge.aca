@@ -1,0 +1,3 @@
+define entity Discharge
+    description = 'Discharge Stage Definition'
+    multiplicity = 'exactlyOne'
