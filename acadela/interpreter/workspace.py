@@ -64,7 +64,8 @@ class WorkspaceInterpreter:
                         thisAttr['type'] = entityAttrProp.type.value
 
                     if entityAttrProp.multiplicity is not None:
-                        thisAttr['multiplicity'] = entityAttrProp.multiplicity.value
+                        print(entityAttrProp.multiplicity)
+                        thisAttr['multiplicity'] = entityAttrProp.multiplicity
 
                     print("\tEntity Attributes: ", json.dumps(thisAttr, indent=4))
 
@@ -83,10 +84,10 @@ class WorkspaceInterpreter:
             }
 
         # print("#entities = ", len(case.entityList))
-        for entity in case.entityList:
-            self.interpretEntity(entity, entity)
+        # for entity in case.entityList:
+        #     self.interpretEntity(entity, entity)
 
-        workspaceObjList["EntityDefinition"] = \
-            self.jsonEntityList
+        # workspaceObjList["EntityDefinition"] = \
+        #     self.jsonEntityList
 
         return workspaceObjList

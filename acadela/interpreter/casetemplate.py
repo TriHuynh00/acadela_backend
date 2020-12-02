@@ -17,6 +17,8 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
+runNetworkOp = False;
+
 class Interpreter():
 
     def __init__(self, metamodel, model):
@@ -49,9 +51,14 @@ class Interpreter():
         else:
             caseObjList = {}
 
+            acaversion = model.versionTag
+
+            print("ACA v =", acaversion);
+
             workspace = model.defWorkspace.workspace
 
-            workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.id)
+            if runNetworkOp:
+                workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.id)
 
             case = model.defWorkspace.workspaceProp.case
 
@@ -67,22 +74,27 @@ class Interpreter():
             if util.cname(case) == 'Case':
                 print('Case', case.casename)
 
-            for group in case.userGroupList:
-                if self.groupInterpreter.\
-                        findStaticId(group, workspace.staticId) is not None:
-                    self.groupList.append(group)
-                else:
-                    raise Exception("cannot find static ID for group {} with name {} in workspace {}"
-                                    .format(group.id, group.name, workspace.staticId))
+            for group in case.responsibilities.groupList:
+                print("Group", group.id)
 
-            for user in case.userList:
-                if self.userInterpreter.\
-                        findStaticId(user, self.groupList) is not None:
-                    self.userList.append(user)
-                else:
-                    raise Exception(("cannot find static ID for user with reference ID {0}. " +
-                                    "Please verify if the user reference ID is correct.")
-                                    .format(user.id))
+                if runNetworkOp:
+                    if self.groupInterpreter.\
+                            findStaticId(group, workspace.staticId) is not None:
+                        self.groupList.append(group)
+                    else:
+                        raise Exception("cannot find static ID for group {} with name {} in workspace {}"
+                                        .format(group.id, group.name, workspace.staticId))
+
+            for user in case.responsibilities.userList:
+                print("User", user.id)
+                if runNetworkOp:
+                    if self.userInterpreter.\
+                            findStaticId(user, self.groupList) is not None:
+                        self.userList.append(user)
+                    else:
+                        raise Exception(("cannot find static ID for user with reference ID {0}. " +
+                                        "Please verify if the user reference ID is correct.")
+                                        .format(user.id))
 
             print()
 
@@ -103,7 +115,14 @@ class Interpreter():
 
             print()
 
-            print("Case Definition", case.caseDef.caseDefName)
+            print("Setting Info")
+            print("Case Owner \n\tgroup = '{}' \n\tdesc = '{}'".format(
+                case.setting.caseOwner.attr.group,
+                case.setting.caseOwner.attr.description.value
+            ))
+            print("AttrList size =", len(case.setting.attrList))
+
+            # print("Case Definition", case.caseDef.caseDefName)
 
             workspaceObjList = self.workspaceInterpreter\
                                    .workspacePropToJson(workspace, case)
@@ -126,8 +145,9 @@ class Interpreter():
             print(json.dumps(caseDefJsonFinal, indent=4))
             print()
 
-            response = requests.post(
-                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=9&isExecute=false",
+            if runNetworkOp:
+                response = requests.post(
+                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=1&isExecute=false",
                 headers=HttpRequest.simulateUserHeader,
                 json=json.loads(json.dumps(caseDefJsonFinal)))
 

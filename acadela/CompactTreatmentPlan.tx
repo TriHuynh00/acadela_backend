@@ -1,0 +1,286 @@
+Start:
+    versionTag = AcaVersion
+    (importList *= Import)?
+    (
+        (
+            (defWorkspace = DefWorkspace)
+            | (defObj *= DefineObj)
+        )
+    )#
+;
+
+AcaVersion:
+    /(#aca)\d\.\d/
+;
+
+// Import Definition Level
+Import:
+    'import' importVar=ID 'from' path=STRING
+;
+
+// Workspace Definition Level
+DefWorkspace:
+    (workspace=Workspace
+    workspaceProp=DefineCase)#
+
+;
+Workspace:
+    'workspace' BasicIdentity
+;
+
+BasicIdentity:
+    id=TextNoQuote
+    ('staticId' Eq staticId=Text)?
+;
+
+GroupIdentity:
+    (('staticId' Eq staticId=Text)? ('id' Eq id=Text) ('name' Eq name=Text))#
+;
+
+DefineCase:
+    'define' case=Case
+;
+
+DefineObj:
+    'define' object=Obj
+;
+
+Obj:
+    (Case | Entity)
+;
+
+// Case Definition Level
+
+Case:
+    'case' casename = TextNoQuote
+    (
+        casePrefix = CasePrefix
+        ('version' Eq version = INT)
+        responsibilities = Responsibilities
+        setting = CaseSetting
+        // (
+            //entityList += Entity
+            //caseDef = CaseDef
+        // )#
+    )#
+;
+
+CaseSetting:
+    'Setting'
+    (
+        caseOwner = CaseOwner
+        (casePatient = CasePatient)?
+        (attrList += Attribute)?
+    )#
+;
+
+CaseOwner:
+    'CaseOwner' (id=TextNoQuote)?
+        attr = LinkUserGroupAttr
+;
+
+CasePatient:
+    'CasePatient' (id=TextNoQuote)?
+        attr = LinkUserGroupAttr
+;
+
+LinkUserGroupAttr:
+    directive = AttributeDirective
+    (
+        ('group' Eq group = Text)
+        description = Description
+        (attrProp = AttributeProp)?
+    )#
+;
+
+
+Responsibilities:
+    'Responsibilities'
+    (
+        groupList += Group
+        userList += User
+    )#
+;
+
+Group:
+    'group' GroupIdentity
+;
+
+User:
+    'user' BasicIdentity
+;
+
+Entity:
+    "entity" name=TextNoQuote
+    (
+        description = Description
+        (attrProp = AttributeProp)?
+    )#
+    (attrList += AttrList)?
+
+;
+
+AttrList:
+    'attributelist'
+    (attr += Entity | attr += Attribute)*
+    'endAttributeList'
+;
+
+Attribute:
+    "attribute" name=TextNoQuote
+    (
+        description = Description
+        attrProp = AttributeProp
+    )#
+;
+
+AttributeProp:
+    directive = AttributeDirective
+    (
+        (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
+        (uiRef = UiReference)?
+        (defaultValues = DefaultValues)?
+    )#
+;
+
+CaseDef:
+    'casedefinition' caseDefName=TextNoQuote
+;
+
+MultiAttrModel:
+    (attr+=Multiplicity
+    attr+=CasePrefix
+    attr+=UiReference)#
+;
+
+Description:
+    ('description' Eq value=Text)
+;
+
+CasePrefix:
+    'prefix' Eq value=Text
+;
+
+/***********************
+****** DIRECTIVES ******
+***********************/
+
+AttributeDirective:
+    (multiplicity = Multiplicity)?
+    (type = Type)?
+;
+
+Multiplicity:
+    Hash (
+        'maxOne'
+        | 'onlyOne'
+        | 'atLeastOne'
+        | 'any'
+    )
+;
+
+Type:
+    Hash (
+        DateType |
+        NumType |
+        'entity'
+    )
+;
+
+DateType:
+    'date.after(TODAY)'
+;
+
+NumType:
+    'number' '('
+        ((Comparator INT) | (INT '-' INT))
+    ')'
+;
+
+// Shared Properties
+
+UiReference:
+    'uiReference' Eq value=Function
+;
+
+DefaultValues:
+    'defaultValues' Eq value=WrapValue
+;
+
+AdditionalDescription:
+    "additionalDescription" Eq value=STRING
+;
+
+ExternalId:
+    "externalId" Eq value=STRING
+;
+
+
+// Valid Function For Expression
+ValidFunctionName:
+    'number' | 'colors'
+;
+
+Function:
+    ValidFunctionName
+    '('
+        (Expression | ParamPattern)
+    ')'
+;
+
+ParamPattern:
+    Text (',' Text)*
+;
+
+Expression:
+    INT (Comparator ColorName Comparator INT)+
+;
+
+ColorName:
+    'red'
+    | 'blue'
+    | 'green'
+;
+
+/*********************
+******* TERMINAL *****
+*********************/
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    |'>='
+    | '<'
+    | '>'
+;
+
+Text:
+    STRING
+;
+
+
+TextNoQuote:
+    /([a-zA-Z0-9-_])*/
+;
+
+Eq:
+    '='
+;
+
+// DirectiveSign
+Hash:
+    '#'
+;
+
+WrapValue:
+    '[' (Text | TextNoQuote) ']'
+;
+
+Comment:
+  (/\/\/.*$/
+  | /\/\*.*$/
+  | /\*.*$/
+  | /.*[\*\/]$/ )
+;

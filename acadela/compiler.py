@@ -14,7 +14,7 @@ from acadela.exceptionhandler.syntaxerrorhandler import SyntaxErrorHandler
 # the rule `pointmodel` from the grammar.
 
 this_folder = dirname(__file__)
-mm = metamodel_from_file(join(this_folder, 'TreatmentPlan.tx'), classes=None, ignore_case=True)
+mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.tx'), classes=None, ignore_case=True)
 
 def verifyImport(model):
     importList = model.importList
@@ -40,17 +40,60 @@ def verifyImport(model):
 # """
 
 model_str = """
+    #aca0.1
     //import discharge from '/stages/discharge.aca' 
-    workspace id = 'Umcg' 
+    workspace Umcg
     define case GCS1_Groningen
         prefix = 'GCS1'
-        group name = 'Umcg Physician' id = 'UmcgPhysicians'
-        group name = 'Umcg Clinician' id = 'UmcgClinicians'
-        group name = 'Umcg Professional' id = 'UmcgProfessionals'
-        group name = 'Umcg Patient' id = 'UmcgPatients'
-        
-        user id = 'matthijs'
-        user id = 'williamst'
+        version = 1
+        Responsibilities
+            group name = 'Umcg Physician' id = 'UmcgPhysicians'
+            group name = 'Umcg Clinician' id = 'UmcgClinicians'
+            group name = 'Umcg Professional' id = 'UmcgProfessionals'
+            group name = 'Umcg Patient' id = 'UmcgPatients'
+
+            user matthijs
+            user williamst
+
+        // A comment
+            /* a multiline
+             * Comment
+             */
+             
+        Setting
+            CaseOwner #onlyOne
+                group = 'UmcgProfessionals'
+                description = 'case owner is UMCG Professionals'
+            
+            Attribute WorkplanDueDate
+                #onlyOne #date.after(TODAY)
+                description = 'Workplan Due Date'
+                
+            Attribute EvalDueDate
+                #onlyOne #date.after(TODAY)
+                description = 'Evaluation Due Date'
+                
+            CasePatient #onlyOne
+                group = 'UmcgPatient'
+                description = 'the patient of this case'
+           
+"""
+
+str2="""
+    #aca0.1
+    //import discharge from '/stages/discharge.aca' 
+    workspace Umcg
+    define case GCS1_Groningen
+        prefix = 'GCS1'
+        version = 1
+        Responsibilities
+            group name = 'Umcg Physician' id = 'UmcgPhysicians'
+            group name = 'Umcg Clinician' id = 'UmcgClinicians'
+            group name = 'Umcg Professional' id = 'UmcgProfessionals'
+            group name = 'Umcg Patient' id = 'UmcgPatients'
+            
+            user matthijs
+            user williamst
         
         // A comment
             /* a multiline
@@ -59,26 +102,26 @@ model_str = """
         
         entity CaseData
             description = 'Settings desc'
-            multiplicity = 'exactlyOne'
-            
+            #onlyOne
             
             attributeList
                 entity Settings
                     description = "Settings"
+                    #onlyOne
                     type = "Link.EntityDefinition.Settings"
                     
                     attributeList
                         Attribute Patient
                             description = 'Patient'
+                            #onlyOne
                             additionalDescription = 'Patient that is assigned to this case'
                             type = 'Link.Users(UmcgPatients)'
-                            multiplicity= 'exactlyOne'
                             
                         Attribute CaseOwner
                             description = 'Case Owner'
+                            #onlyOne
                             additionalDescription = 'The owner of this case'
                             type = 'Link.Users(UmcgClinicians)'
-                            multiplicity= 'exactlyOne'
                     endAttributeList
                     
             endAttributeList
@@ -86,7 +129,7 @@ model_str = """
             
         entity Identifications
             description = 'Identitfication desc'
-            multiplicity = 'many'
+            #atLeastOne
             
         CaseDefinition Leida
 """
