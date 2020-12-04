@@ -44,7 +44,7 @@ class Interpreter():
         if workspace == None:
             for defObj in model.defObj:
                 if util.cname(defObj.object) == 'Entity':
-                    obj = defObj.object;
+                    obj = defObj.object
                     print(obj.name)
                     for attr in obj.attr:
                        print('{} = {}'.format(util.cname(attr), attr.value))
@@ -53,7 +53,7 @@ class Interpreter():
 
             acaversion = model.versionTag
 
-            print("ACA v =", acaversion);
+            print("ACA v =", acaversion)
 
             workspace = model.defWorkspace.workspace
 
@@ -120,8 +120,15 @@ class Interpreter():
                 case.setting.caseOwner.attr.group,
                 case.setting.caseOwner.attr.description.value
             ))
-            print("AttrList size =", len(case.setting.attrList))
 
+            print("AttrList size =", len(case.setting.attrList))
+            for attr in case.setting.attrList:
+                print("Attr ID " + attr.name)
+                print("#Directives ", attr.attrProp.directive.type)
+
+            print("Hook Info")
+            for hook in case.hook:
+                print("On {} invoke {}".format(hook.event, hook.url))
             # print("Case Definition", case.caseDef.caseDefName)
 
             workspaceObjList = self.workspaceInterpreter\

@@ -56,12 +56,13 @@ Case:
     (
         casePrefix = CasePrefix
         ('version' Eq version = INT)
-        responsibilities = Responsibilities
-        setting = CaseSetting
-        // (
-            //entityList += Entity
-            //caseDef = CaseDef
-        // )#
+        (
+            responsibilities = Responsibilities
+            setting = CaseSetting
+            ('Trigger' hook += HttpHook)?
+
+        )#
+        stage += Stage
     )#
 ;
 
@@ -69,6 +70,7 @@ CaseSetting:
     'Setting'
     (
         caseOwner = CaseOwner
+        (attrList += Attribute)?
         (casePatient = CasePatient)?
         (attrList += Attribute)?
     )#
@@ -144,8 +146,44 @@ AttributeProp:
     )#
 ;
 
+/********************
+***** HTTPHOOK ******
+********************/
+
+HttpHook:
+    'on' event = HookEvent
+    'invoke' url = STRING
+;
+
+HookEvent:
+    BaseEvent | DualTaskEvent
+;
+
+BaseEvent:
+    'available'
+    | 'enable'
+    | 'activate'
+    | 'complete'
+    | 'terminate'
+    | 'correct'
+    | 'delete'
+;
+
+DualTaskEvent:
+    'activatehumanpart'
+    | 'activateautopart'
+    | 'completehumanpart'
+    | 'completeautopart'
+    | 'correcthumanpart'
+    | 'correctautopart'
+;
+
 CaseDef:
     'casedefinition' caseDefName=TextNoQuote
+;
+
+CasePrefix:
+    'prefix' Eq value=Text
 ;
 
 MultiAttrModel:
@@ -158,8 +196,16 @@ Description:
     ('description' Eq value=Text)
 ;
 
-CasePrefix:
-    'prefix' Eq value=Text
+/***********************
+******** STAGE *********
+***********************/
+
+Stage:
+    'Stage' id=TextNoQuote
+        directive = StageDirective
+        (
+            ('ownerpath' Eq owner = STRING)
+        )#
 ;
 
 /***********************
@@ -169,6 +215,14 @@ CasePrefix:
 AttributeDirective:
     (multiplicity = Multiplicity)?
     (type = Type)?
+;
+
+StageDirective:
+    (
+        (mandatory = Mandatory)
+        (repeatable = Repeatable)?
+        (activation = Activation)?
+    )#
 ;
 
 Multiplicity:
@@ -196,6 +250,29 @@ NumType:
     'number' '('
         ((Comparator INT) | (INT '-' INT))
     ')'
+;
+
+Repeatable:
+    Hash (
+        'noRepeat'
+        | 'repeatSerial'
+        | 'repeatParallel'
+    )
+;
+
+Mandatory:
+    Hash (
+        'mandatory'
+        | 'notmandatory'
+    )
+;
+
+Activation:
+    Hash (
+        'manual'
+        | 'auto'
+        | 'customTrigger' '(' STRING ')'
+    )
 ;
 
 // Shared Properties

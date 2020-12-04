@@ -69,13 +69,21 @@ model_str = """
                 #onlyOne #date.after(TODAY)
                 description = 'Workplan Due Date'
                 
+            CasePatient #onlyOne
+                group = 'UmcgPatient'
+                description = 'the patient of this case'
+            
             Attribute EvalDueDate
                 #onlyOne #date.after(TODAY)
                 description = 'Evaluation Due Date'
                 
-            CasePatient #onlyOne
-                group = 'UmcgPatient'
-                description = 'the patient of this case'
+        Trigger
+            on activate invoke 'http://integration-producer:8081/v1/activate'
+            on delete invoke 'http://integration-producer:8081/v1/delete'
+                
+        Stage
+            #noRepeat #mandatory #manual
+            ownerpath = 'Settings.CaseManager'
            
 """
 
