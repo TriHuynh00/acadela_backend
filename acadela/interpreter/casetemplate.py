@@ -121,14 +121,57 @@ class Interpreter():
                 case.setting.caseOwner.attr.description.value
             ))
 
-            print("AttrList size =", len(case.setting.attrList))
+            print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
                 print("Attr ID " + attr.name)
                 print("#Directives ", attr.attrProp.directive.type)
 
-            print("Hook Info")
+            print("\n Hook Info")
             for hook in case.hook:
                 print("On {} invoke {}".format(hook.event, hook.url))
+
+            for stage in case.stage:
+                print("\n Stage Info")
+                directive = stage.directive
+                print("\tDirectives: "
+                      "\n\t\t mandatory = {}"
+                      "\n\t\t repeatable = {}"
+                      "\n\t\t activation = {}"
+                      "\n\t\t multiplicity = {}".
+                      format(directive.mandatory,
+                             directive.repeatable,
+                             directive.activation,
+                             directive.multiplicity,))
+                print("\tDescription: " + stage.description.value)
+                print("\tOwnerPath: " + stage.ownerpath.value)
+                print("\tDynamic Description Path: " + stage.dynamicDescriptionPath.value)
+                print("\tExternal ID: " + stage.externalId.value)
+
+                # Task interpret
+                for task in stage.taskList:
+                    directive = task.directive
+                    attrList = task.attrList
+                    print("\n\tTask {}"
+                          "\n\t\tDirectives "
+                          "\n\t\t\tmandatory = {}"
+                          "\n\t\t\trepeatable = {}"
+                          "\n\t\t\tactivation = {}"
+                          "\n\t\t\tmultiplicity = {}"
+                          "\n\t\tdescription = {}"
+                          "\n\t\townerPath = {}"
+                          "\n\t\tdueDatePath = {}"
+                          "\n\t\texternalId = {}"
+                          "\n\t\tdynamicDescriptionPath = {}"
+                          .format(task.id,
+                                  directive.mandatory,
+                                  directive.repeatable,
+                                  directive.activation,
+                                  directive.multiplicity,
+                                  attrList.description.value,
+                                  ("None" if attrList.ownerPath is None else attrList.ownerPath.value ),
+                                  ("None" if attrList.dueDatePath is None else attrList.dueDatePath.value),
+                                  ("None" if attrList.externalId is None else attrList.externalId.value),
+                                  ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
             # print("Case Definition", case.caseDef.caseDefName)
 
             workspaceObjList = self.workspaceInterpreter\

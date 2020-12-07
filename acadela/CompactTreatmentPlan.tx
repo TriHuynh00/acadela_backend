@@ -202,10 +202,53 @@ Description:
 
 Stage:
     'Stage' id=TextNoQuote
-        directive = StageDirective
+        directive = StageElementDirective
         (
-            ('ownerpath' Eq owner = STRING)
+            (description = Description)
+            (ownerpath = OwnerPath)?
+            (dynamicDescriptionPath = DynamicDescriptionPath)?
+            (externalId = ExternalId)?
         )#
+
+        taskList += Task
+;
+
+/***********************
+******** TASK *********
+***********************/
+
+Task:
+    HumanTask
+    | AutomatedTask
+    | DualTask
+;
+
+HumanTask:
+    'HumanTask' id = TextNoQuote
+        directive = StageElementDirective
+        attrList = SharedTaskAttrs
+;
+
+AutomatedTask:
+    'AutoTask' id = TextNoQuote
+        directive = StageElementDirective
+        attrList = SharedTaskAttrs
+;
+
+DualTask:
+    'DualTask' id = TextNoQuote
+        directive = StageElementDirective
+        attrList = SharedTaskAttrs
+;
+
+SharedTaskAttrs:
+    (
+        description = Description
+        (ownerPath = OwnerPath)?
+        (dueDatePath = DueDatePath)?
+        (externalId = ExternalId)?
+        (dynamicDescriptionPath = DynamicDescriptionPath)?
+    )#
 ;
 
 /***********************
@@ -217,20 +260,30 @@ AttributeDirective:
     (type = Type)?
 ;
 
-StageDirective:
+StageElementDirective:
     (
-        (mandatory = Mandatory)
+        (mandatory = Mandatory)?
         (repeatable = Repeatable)?
         (activation = Activation)?
+        (multiplicity = Multiplicity)?
     )#
 ;
+
+/*TaskDirective:
+    (
+       (mandatory = Mandatory)?
+       (repeatable = Repeatable)?
+       (activation = Activation)?
+       (multiplicity = Multiplicity)?
+    )#
+;*/
 
 Multiplicity:
     Hash (
         'maxOne'
         | 'onlyOne'
         | 'atLeastOne'
-        | 'any'
+        // Default: | 'any'
     )
 ;
 
@@ -239,6 +292,7 @@ Type:
         DateType |
         NumType |
         'entity'
+        // TODO: Find other num types
     )
 ;
 
@@ -254,16 +308,16 @@ NumType:
 
 Repeatable:
     Hash (
-        'noRepeat'
-        | 'repeatSerial'
+        'repeatSerial'
         | 'repeatParallel'
+        // Default: | 'noRepeat'
     )
 ;
 
 Mandatory:
     Hash (
         'mandatory'
-        | 'notmandatory'
+        // Default: | 'notmandatory'
     )
 ;
 
@@ -271,28 +325,48 @@ Activation:
     Hash (
         'manual'
         | 'auto'
-        | 'customTrigger' '(' STRING ')'
+        | 'activateWhen' '(' STRING ')'
     )
 ;
 
-// Shared Properties
+isReadOnly:
+    Hash (
+        'readOnly'
+        // Default: | 'notReadOnly'
+    )
+;
 
-UiReference:
-    'uiReference' Eq value=Function
+/***********************
+***** SHARED PROPS *****
+************************/
+
+AdditionalDescription:
+    "additionalDescription" Eq value=STRING
 ;
 
 DefaultValues:
     'defaultValues' Eq value=WrapValue
 ;
 
-AdditionalDescription:
-    "additionalDescription" Eq value=STRING
+DynamicDescriptionPath:
+    'dynamicDescriptionRef' Eq value=STRING
 ;
 
 ExternalId:
-    "externalId" Eq value=STRING
+    'externalId' Eq value = STRING
 ;
 
+OwnerPath:
+    'ownerpath' Eq value = STRING
+;
+
+UiReference:
+    'uiRef' Eq value=Function
+;
+
+DueDatePath:
+    'dueDateRef' Eq value=STRING
+;
 
 // Valid Function For Expression
 ValidFunctionName:

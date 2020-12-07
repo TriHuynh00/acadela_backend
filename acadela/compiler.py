@@ -81,9 +81,28 @@ model_str = """
             on activate invoke 'http://integration-producer:8081/v1/activate'
             on delete invoke 'http://integration-producer:8081/v1/delete'
                 
-        Stage
-            #noRepeat #mandatory #manual
-            ownerpath = 'Settings.CaseManager'
+        Stage AdmitPatient
+            #mandatory #manual
+            ownerPath = 'Settings.CaseManager'
+            description = 'Admit Patient into Treatment'
+            dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
+            externalId = 'SelectPatient'
+            
+            HumanTask HumanTask1
+                #mandatory
+                description = 'Human Task 1'
+                ownerPath = 'Settings.UmcgProfessionals'
+                dueDateRef = 'Settings.WorkplanDueDate'
+                externalId = 'HumanTask1External'
+                dynamicDescriptionRef = 'Settings.PatientNumber'
+                
+            AutoTask AutoTask1
+                #mandatory
+                description = 'Automated Task 1'
+                
+            DualTask DualTask1
+                #mandatory #repeatSerial #manual
+                description = 'Dual task 1'
            
 """
 
