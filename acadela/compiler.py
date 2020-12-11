@@ -61,20 +61,20 @@ model_str = """
              */
              
         Setting
-            CaseOwner #onlyOne
+            CaseOwner #exactlyOne
                 group = 'UmcgProfessionals'
                 description = 'case owner is UMCG Professionals'
             
             Attribute WorkplanDueDate
-                #onlyOne #date.after(TODAY)
+                #exactlyOne #date.after(TODAY)
                 description = 'Workplan Due Date'
                 
-            CasePatient #onlyOne
+            CasePatient #exactlyOne
                 group = 'UmcgPatient'
                 description = 'the patient of this case'
             
             Attribute EvalDueDate
-                #onlyOne #date.after(TODAY)
+                #exactlyOne #date.after(TODAY)
                 description = 'Evaluation Due Date'
                 
         Trigger
@@ -82,7 +82,7 @@ model_str = """
             on delete invoke 'http://integration-producer:8081/v1/delete'
                 
         Stage AdmitPatient
-            #mandatory #manual
+            #mandatory #manualActivate
             ownerPath = 'Settings.CaseManager'
             description = 'Admit Patient into Treatment'
             dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
@@ -96,14 +96,66 @@ model_str = """
                 externalId = 'HumanTask1External'
                 dynamicDescriptionRef = 'Settings.PatientNumber'
                 
+                Trigger
+                    on activate invoke 'http://integration-producer:8081/v1/activate' method Post
+                
+                Form BMIForm
+                    #readOnly #mandatory
+                    description = 'BMI Info Collection'
+                    Field Height
+                        #number(0-150) #exactlyOne
+                        description = 'Height of patient in cm'    
+                        
+                    Field Weight
+                        #number(0-300) #exactlyOne
+                        description = 'Weight of patient in kg'
+                        
+                    Field AgeRange
+                        #selector #mandatory
+                        Question = 'What is your age range?'
+                            Option 'less than 10' value = '1'
+                            Option '10-30' value = '1.2'
+                            Option '30-50' value = '1.5'
+                            Option 'over 50' value = '1.7'
+                            
+                
+                        
             AutoTask AutoTask1
-                #mandatory
+                #mandatory #exactlyOne
                 description = 'Automated Task 1'
                 
+                Trigger
+                    on delete invoke 'https://server1.com/api1' method post
+                
+                Form AutoForm
+                    #mandatory 
+                    description = 'AutoForm'
+                    
+                    Field AutoField1
+                        #number(<10) #mandatory
+                        description = 'AutoField1'
+                
             DualTask DualTask1
-                #mandatory #repeatSerial #manual
+                #mandatory #repeatSerial #manualActivate
                 description = 'Dual task 1'
-           
+                ownerPath = 'Settings.UmcgProfessionals'
+                externalId = 'HumanTask1External'
+                
+                Form BloodPressureMeasurement
+                    #mandatory #readonly
+                    description = 'Measure Blood Pressure and inform doctor in emergency situation'
+                    
+                    Field Systolic 
+                        #readonly #humanDuty #number(0-300)
+                        description = 'Measure Systolic blood pressure'
+                        
+                    Field Diastolic 
+                        #readonly #humanDuty #number(0-300)
+                        description = 'Measure Diastolic blood pressure'
+                        
+                    Field BloodPressureAnalysis
+                        #readonly #systemDuty #number(0-300)
+                        description = 'Automatically alert when blood pressure is critically high'
 """
 
 str2="""
@@ -129,24 +181,24 @@ str2="""
         
         entity CaseData
             description = 'Settings desc'
-            #onlyOne
+            #exactlyOne
             
             attributeList
                 entity Settings
                     description = "Settings"
-                    #onlyOne
+                    #exactlyOne
                     type = "Link.EntityDefinition.Settings"
                     
                     attributeList
                         Attribute Patient
                             description = 'Patient'
-                            #onlyOne
+                            #exactlyOne
                             additionalDescription = 'Patient that is assigned to this case'
                             type = 'Link.Users(UmcgPatients)'
                             
                         Attribute CaseOwner
                             description = 'Case Owner'
-                            #onlyOne
+                            #exactlyOne
                             additionalDescription = 'The owner of this case'
                             type = 'Link.Users(UmcgClinicians)'
                     endAttributeList

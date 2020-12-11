@@ -59,7 +59,7 @@ Case:
         (
             responsibilities = Responsibilities
             setting = CaseSetting
-            ('Trigger' hook += HttpHook)?
+            ('Trigger' hook += CaseHook)?
 
         )#
         stage += Stage
@@ -150,13 +150,35 @@ AttributeProp:
 ***** HTTPHOOK ******
 ********************/
 
-HttpHook:
-    'on' event = HookEvent
+CaseHook:
+    'on' event = CaseHookEvent
     'invoke' url = STRING
 ;
 
-HookEvent:
-    BaseEvent | DualTaskEvent
+HttpHook:
+    'on' event = BaseEvent
+    (
+        ('invoke' url = STRING)
+        ('method' method = HttpMethod)
+        ('with failureMessage is' failureMessage = STRING )?
+    )#
+;
+
+DualTaskHttpHook:
+    'on' event = DualTaskEvent
+    (
+        ('invoke' url = STRING)
+        ('method' method = HttpMethod)
+        ('with failureMessage is' failureMessage = STRING )?
+    )#
+;
+
+
+CaseHookEvent:
+    'delete'
+    | 'activate'
+    | 'complete'
+    | 'terminate'
 ;
 
 BaseEvent:
@@ -170,7 +192,8 @@ BaseEvent:
 ;
 
 DualTaskEvent:
-    'activatehumanpart'
+    BaseEvent
+    | 'activatehumanpart'
     | 'activateautopart'
     | 'completehumanpart'
     | 'completeautopart'
@@ -218,27 +241,45 @@ Stage:
 ***********************/
 
 Task:
+
     HumanTask
     | AutomatedTask
     | DualTask
+
 ;
 
 HumanTask:
     'HumanTask' id = TextNoQuote
         directive = StageElementDirective
         attrList = SharedTaskAttrs
+        ('Trigger' hookList += HttpHook)?
+        formList += Form
 ;
 
 AutomatedTask:
     'AutoTask' id = TextNoQuote
         directive = StageElementDirective
-        attrList = SharedTaskAttrs
+        attrList = AutomatedTaskAttrs
+        ('Trigger' hookList += HttpHook)?
+        formList += Form
 ;
 
 DualTask:
     'DualTask' id = TextNoQuote
         directive = StageElementDirective
         attrList = SharedTaskAttrs
+        ('Trigger' hookList += DualTaskHttpHook)?
+        formList += Form
+;
+
+AutomatedTaskAttrs:
+    (
+        description = Description
+        (ownerPath = OwnerPath)?
+        (externalId = ExternalId)?
+        (dynamicDescriptionPath = DynamicDescriptionPath)?
+        (precondition = Precondition)?
+    )#
 ;
 
 SharedTaskAttrs:
@@ -248,7 +289,45 @@ SharedTaskAttrs:
         (dueDatePath = DueDatePath)?
         (externalId = ExternalId)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
+        (precondition = Precondition)?
     )#
+;
+
+Precondition:
+    'Precondition'
+    (
+        ('condition' Eq entryCondition = STRING)
+        ('previousStage' Eq entryStageList += STRING)+
+    )#
+;
+
+/***********************
+********* FORM *********
+***********************/
+
+Form:
+    'Form' id = TextNoQuote
+        directive = FormDirective
+        description = Description
+        fieldList += Field
+;
+
+Field:
+    'Field' id = TextNoQuote
+        directive = FieldDirective
+        (
+            description = Description
+            | question = Question
+        )
+;
+
+Question:
+    'question' Eq text=STRING
+     optionList += Option
+;
+
+Option:
+    'option' key = STRING 'value' Eq value = STRING
 ;
 
 /***********************
@@ -269,6 +348,24 @@ StageElementDirective:
     )#
 ;
 
+FormDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+    )#
+;
+
+FieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
+        (multiplicity = Multiplicity)?
+        (part = Part)?
+        type = Type
+    )#
+;
+
 /*TaskDirective:
     (
        (mandatory = Mandatory)?
@@ -281,7 +378,7 @@ StageElementDirective:
 Multiplicity:
     Hash (
         'maxOne'
-        | 'onlyOne'
+        | 'exactlyOne'
         | 'atLeastOne'
         // Default: | 'any'
     )
@@ -289,9 +386,10 @@ Multiplicity:
 
 Type:
     Hash (
-        DateType |
-        NumType |
-        'entity'
+        DateType
+        | NumType
+        | 'entity'
+        | 'selector'
         // TODO: Find other num types
     )
 ;
@@ -306,6 +404,13 @@ NumType:
     ')'
 ;
 
+Part:
+    Hash (
+        'humanDuty'
+        | 'systemDuty'
+    )
+;
+
 Repeatable:
     Hash (
         'repeatSerial'
@@ -317,24 +422,36 @@ Repeatable:
 Mandatory:
     Hash (
         'mandatory'
-        // Default: | 'notmandatory'
+        | 'notmandatory' // Default
     )
 ;
 
 Activation:
     Hash (
-        'manual'
-        | 'auto'
+        'manualActivate'
+        | 'autoActivate'
         | 'activateWhen' '(' STRING ')'
     )
 ;
 
-isReadOnly:
+ReadOnly:
     Hash (
         'readOnly'
         // Default: | 'notReadOnly'
     )
 ;
+
+Position:
+    Hash (
+        'stretched' // Default
+        | 'left'
+        | 'center'
+        | 'right'
+        | 'leftcenter'
+        | 'centerright'
+    )
+;
+
 
 /***********************
 ***** SHARED PROPS *****
@@ -397,6 +514,13 @@ ColorName:
 /*********************
 ******* TERMINAL *****
 *********************/
+
+HttpMethod:
+    'get'
+    | 'post'
+    | 'put'
+    | 'delete'
+;
 
 Comparator:
     '='

@@ -151,6 +151,12 @@ class Interpreter():
                 for task in stage.taskList:
                     directive = task.directive
                     attrList = task.attrList
+                    dueDatePath = None
+
+                    if util.cname(task) != 'AutomatedTask':
+                        if attrList.dueDatePath is not None:
+                            dueDatePath = attrList.dueDatePath.value
+
                     print("\n\tTask {}"
                           "\n\t\tDirectives "
                           "\n\t\t\tmandatory = {}"
@@ -169,7 +175,7 @@ class Interpreter():
                                   directive.multiplicity,
                                   attrList.description.value,
                                   ("None" if attrList.ownerPath is None else attrList.ownerPath.value ),
-                                  ("None" if attrList.dueDatePath is None else attrList.dueDatePath.value),
+                                  dueDatePath,
                                   ("None" if attrList.externalId is None else attrList.externalId.value),
                                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
             # print("Case Definition", case.caseDef.caseDefName)
