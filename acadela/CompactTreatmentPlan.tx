@@ -2,10 +2,9 @@ Start:
     versionTag = AcaVersion
     (importList *= Import)?
     (
-        (
-            (defWorkspace = DefWorkspace)
-            | (defObj *= DefineObj)
-        )
+        (defObj *= DefineObj)
+        | (defWorkspace = DefWorkspace)
+
     )#
 ;
 
@@ -20,10 +19,13 @@ Import:
 
 // Workspace Definition Level
 DefWorkspace:
-    (workspace=Workspace
-    workspaceProp=DefineCase)#
-
+    workspace=Workspace
+    (
+        (workspaceGlobalObj = DefineObj)?
+        workspaceProp = DefineCase
+    )#
 ;
+
 Workspace:
     'workspace' BasicIdentity
 ;
@@ -46,7 +48,7 @@ DefineObj:
 ;
 
 Obj:
-    (Case | Entity)
+    (Case | Stage | Task | Form | Hook | ValidAttribute)
 ;
 
 // Case Definition Level
@@ -112,28 +114,8 @@ User:
     'user' BasicIdentity
 ;
 
-Entity:
-    "entity" name=TextNoQuote
-    (
-        description = Description
-        (attrProp = AttributeProp)?
-    )#
-    (attrList += AttrList)?
-
-;
-
-AttrList:
-    'attributelist'
-    (attr += Entity | attr += Attribute)*
-    'endAttributeList'
-;
-
-Attribute:
-    "attribute" name=TextNoQuote
-    (
-        description = Description
-        attrProp = AttributeProp
-    )#
+ValidAttribute:
+    key=STRING Eq value=STRING
 ;
 
 AttributeProp:
@@ -149,6 +131,10 @@ AttributeProp:
 /********************
 ***** HTTPHOOK ******
 ********************/
+
+Hook:
+    CaseHook | HttpHook | DualTaskHttpHook
+;
 
 CaseHook:
     'on' event = CaseHookEvent
@@ -241,11 +227,9 @@ Stage:
 ***********************/
 
 Task:
-
     HumanTask
     | AutomatedTask
     | DualTask
-
 ;
 
 HumanTask:
@@ -380,7 +364,7 @@ Multiplicity:
         'maxOne'
         | 'exactlyOne'
         | 'atLeastOne'
-        // Default: | 'any'
+        | 'any'
     )
 ;
 
@@ -415,7 +399,7 @@ Repeatable:
     Hash (
         'repeatSerial'
         | 'repeatParallel'
-        // Default: | 'noRepeat'
+        | 'noRepeat' // default
     )
 ;
 
@@ -437,7 +421,7 @@ Activation:
 ReadOnly:
     Hash (
         'readOnly'
-        // Default: | 'notReadOnly'
+        | 'notReadOnly' // default
     )
 ;
 
@@ -535,16 +519,16 @@ Text:
     STRING
 ;
 
-
 TextNoQuote:
     /([a-zA-Z0-9-_])*/
 ;
 
+// Assignment Sign
 Eq:
     '='
 ;
 
-// DirectiveSign
+// Directive Sign
 Hash:
     '#'
 ;
@@ -558,4 +542,33 @@ Comment:
   | /\/\*.*$/
   | /\*.*$/
   | /.*[\*\/]$/ )
+;
+
+/*****************
+*** OLD SYNTAX ***
+******************/
+
+
+Entity:
+    "entity" name=TextNoQuote
+    (
+        description = Description
+        (attrProp = AttributeProp)?
+    )#
+    (attrList += AttrList)?
+
+;
+
+AttrList:
+    'attributelist'
+    (attr += Entity | attr += Attribute)*
+    'endAttributeList'
+;
+
+Attribute:
+    "attribute" name=TextNoQuote
+    (
+        description = Description
+        attrProp = AttributeProp
+    )#
 ;

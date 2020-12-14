@@ -41,8 +41,18 @@ def verifyImport(model):
 
 model_str = """
     #aca0.1
-    //import discharge from '/stages/discharge.aca' 
+    import discharge from '/stages/discharge.aca' 
     workspace Umcg
+    
+    define Form CharlsonForm 
+        #readonly #mandatory
+        description = 'Charlson Comorbidity Form'
+        Field CFactor1
+            #selector #mandatory
+            Question = 'Do you have diabetes?'
+                Option 'No' value = '0'
+                Option 'Yes' value = '1'
+    
     define case GCS1_Groningen
         prefix = 'GCS1'
         version = 1
