@@ -57,10 +57,10 @@ model_str = """
         prefix = 'GCS1'
         version = 1
         Responsibilities
-            group name = 'Umcg Physician' id = 'UmcgPhysicians'
-            group name = 'Umcg Clinician' id = 'UmcgClinicians'
-            group name = 'Umcg Professional' id = 'UmcgProfessionals'
-            group name = 'Umcg Patient' id = 'UmcgPatients'
+            group UmcgPhysicians name = 'Umcg Physician'
+            group UmcgClinicians name = 'Umcg Clinician'
+            group UmcgProfessionals name = 'Umcg Professional' 
+            group UmcgPatients name = 'Umcg Patient' 
 
             user matthijs
             user williamst
@@ -71,16 +71,14 @@ model_str = """
              */
              
         Setting
-            CaseOwner #exactlyOne
-                group = 'UmcgProfessionals'
+            CaseOwner UmcgProfessionals #exactlyOne
                 description = 'case owner is UMCG Professionals'
             
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
                 description = 'Workplan Due Date'
                 
-            CasePatient #exactlyOne
-                group = 'UmcgPatient'
+            CasePatient UmcgPatient #exactlyOne
                 description = 'the patient of this case'
             
             Attribute EvalDueDate
@@ -98,9 +96,9 @@ model_str = """
             dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             externalId = 'SelectPatient'
             
-            HumanTask HumanTask1
-                #mandatory
-                description = 'Human Task 1'
+            HumanTask MeasureBMI
+                #readOnly #mandatory
+                description = 'Measure BMI score'
                 ownerPath = 'Settings.UmcgProfessionals'
                 dueDateRef = 'Settings.WorkplanDueDate'
                 externalId = 'HumanTask1External'
@@ -109,9 +107,7 @@ model_str = """
                 Trigger
                     on activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
-                Form BMIForm
-                    #readOnly #mandatory
-                    description = 'BMI Info Collection'
+                Form 
                     Field Height
                         #number(0-150) #exactlyOne
                         description = 'Height of patient in cm'    
@@ -127,9 +123,12 @@ model_str = """
                             Option '10-30' value = '1.2'
                             Option '30-50' value = '1.5'
                             Option 'over 50' value = '1.7'
-                            
-                
-                        
+                    
+                    DynamicField BmiScore
+                        #mandatory
+                        description = 'BMI Calculation in kilogram and meters'
+                        expression = 'Height * Height'            
+                           
             AutoTask AutoTask1
                 #mandatory #exactlyOne
                 description = 'Automated Task 1'

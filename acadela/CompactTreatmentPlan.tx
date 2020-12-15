@@ -36,7 +36,11 @@ BasicIdentity:
 ;
 
 GroupIdentity:
-    (('staticId' Eq staticId=Text)? ('id' Eq id=Text) ('name' Eq name=Text))#
+    id = TextNoQuote
+    (
+        ('staticId' Eq staticId=STRING)?
+        ('name' Eq name=STRING)
+    )#
 ;
 
 DefineCase:
@@ -79,19 +83,18 @@ CaseSetting:
 ;
 
 CaseOwner:
-    'CaseOwner' (id=TextNoQuote)?
+    'CaseOwner' group = TextNoQuote
         attr = LinkUserGroupAttr
 ;
 
 CasePatient:
-    'CasePatient' (id=TextNoQuote)?
+    'CasePatient' group = TextNoQuote
         attr = LinkUserGroupAttr
 ;
 
 LinkUserGroupAttr:
     directive = AttributeDirective
     (
-        ('group' Eq group = Text)
         description = Description
         (attrProp = AttributeProp)?
     )#
@@ -290,10 +293,14 @@ Precondition:
 ***********************/
 
 Form:
-    'Form' id = TextNoQuote
-        directive = FormDirective
-        description = Description
-        fieldList += Field
+    'Form' (id = TextNoQuote)?
+        // directive = FormDirective
+        // description = Description
+        fieldList += FormField
+;
+
+FormField:
+    Field | DynamicField
 ;
 
 Field:
@@ -303,6 +310,16 @@ Field:
             description = Description
             | question = Question
         )
+;
+
+// TODO: Finalize this based on DerivedAttribute
+DynamicField:
+    'DynamicField' id = TextNoQuote
+        directive = DynamicFieldDirective
+        (
+            description = Description
+            expression = DynamicFieldExpression
+        )#
 ;
 
 Question:
@@ -335,7 +352,6 @@ StageElementDirective:
 FormDirective:
     (
         (mandatory = Mandatory)?
-        (readOnly = ReadOnly)?
     )#
 ;
 
@@ -347,6 +363,14 @@ FieldDirective:
         (multiplicity = Multiplicity)?
         (part = Part)?
         type = Type
+    )#
+;
+
+DynamicFieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
     )#
 ;
 
@@ -469,7 +493,6 @@ DueDatePath:
     'dueDateRef' Eq value=STRING
 ;
 
-// Valid Function For Expression
 ValidFunctionName:
     'number' | 'colors'
 ;
@@ -477,15 +500,32 @@ ValidFunctionName:
 Function:
     ValidFunctionName
     '('
-        (Expression | ParamPattern)
+        (CompareExpression | ParamPattern)
     ')'
+;
+
+DynamicFieldExpression:
+    // TODO: Create syntax for expression
+    'expression' Eq expression = STRING
+;
+
+FormulaExpression:
+    Predicate BasicArithmeticOperators Predicate
+
+;
+
+Predicate:
+    ( '(' FormulaExpression ')' )
+    | TextNoQuote
+    | INT
+    | FLOAT
 ;
 
 ParamPattern:
     Text (',' Text)*
 ;
 
-Expression:
+CompareExpression:
     INT (Comparator ColorName Comparator INT)+
 ;
 
@@ -513,6 +553,17 @@ Comparator:
     |'>='
     | '<'
     | '>'
+;
+
+BasicArithmeticOperators:
+    '+'
+    | '-'
+    | '*'
+    |'/'
+;
+
+Quote:
+    '"' | "'"
 ;
 
 Text:
@@ -556,7 +607,6 @@ Entity:
         (attrProp = AttributeProp)?
     )#
     (attrList += AttrList)?
-
 ;
 
 AttrList:
