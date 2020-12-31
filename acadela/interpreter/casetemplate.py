@@ -103,9 +103,9 @@ class Interpreter():
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspace.staticId, workspace.id))
 
-            for group in self.groupList:
-                print("\tgroup: staticId = {}, name = {}".
-                      format(group.staticId, group.name))
+            #for group in self.groupList:
+            #    print("\tgroup: staticId = {}, name = {}".
+            #          format(group.staticId, group.name))
 
             print()
 
@@ -116,8 +116,8 @@ class Interpreter():
             print()
 
             print("Setting Info")
-            print("Case Owner \n\tgroup = '{}' \n\tdesc = '{}'".format(
-                case.setting.caseOwner.attr.group,
+            print("\tCase Owner \n\t\tgroup = '{}' \n\t\tdesc = '{}'".format(
+                case.setting.caseOwner.group,
                 case.setting.caseOwner.attr.description.value
             ))
 

@@ -44,20 +44,29 @@ model_str = """
     import discharge from '/stages/discharge.aca' 
     workspace Umcg
     
-    define Form CharlsonForm 
-        #readonly #mandatory
+    define HumanTask TestCharlson
+        #manualActivate #mandatory
         description = 'Charlson Comorbidity Form'
-        Field CFactor1
-            #selector #mandatory
-            Question = 'Do you have diabetes?'
-                Option 'No' value = '0'
-                Option 'Yes' value = '1'
+        Form //CharlsonForm
+            Field Charlson1
+                #selector #mandatory
+                Question = 'Do you have diabetes?'
+                    Option 'No' value = '0'
+                    Option 'Yes' value = '1'
+
+            Field Charlson2
+                #selector #mandatory
+                Question = 'Do you have hearth attacks?'
+                    Option 'No' value = '0'
+                    Option 'Yes' value = '1'
+
     
     define case GCS1_Groningen
         prefix = 'GCS1'
         version = 1
+        description = 'a obesity treatment care plan'
         Responsibilities
-            group UmcgPhysicians name = 'Umcg Physician'
+            group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
@@ -89,17 +98,27 @@ model_str = """
             on activate invoke 'http://integration-producer:8081/v1/activate'
             on delete invoke 'http://integration-producer:8081/v1/delete'
                 
+        SummaryPanel
+            Section BMIHeightAndWeight #left
+                description = "Height and Weight of Patient"
+                InfoPath Identification.MeasureBMI.Height
+                InfoPath Identification.MeasureBMI.Weight
+            
+            Section BMIScore #center
+                description = "Height and Weight of Patient"
+                InfoPath Identification.MeasureBMI.BMIScore
+                
         Stage AdmitPatient
             #mandatory #manualActivate
-            ownerPath = 'Settings.CaseManager'
+            owner = 'Settings.CaseManager'
             description = 'Admit Patient into Treatment'
             dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             externalId = 'SelectPatient'
             
             HumanTask MeasureBMI
-                #readOnly #mandatory
+                #mandatory
                 description = 'Measure BMI score'
-                ownerPath = 'Settings.UmcgProfessionals'
+                owner = 'Settings.UmcgProfessionals'
                 dueDateRef = 'Settings.WorkplanDueDate'
                 externalId = 'HumanTask1External'
                 dynamicDescriptionRef = 'Settings.PatientNumber'
@@ -107,7 +126,7 @@ model_str = """
                 Trigger
                     on activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
-                Form 
+                Form //abc
                     Field Height
                         #number(0-150) #exactlyOne
                         description = 'Height of patient in cm'    
@@ -119,6 +138,7 @@ model_str = """
                     Field AgeRange
                         #selector #mandatory
                         Question = 'What is your age range?'
+                            additionalDescription = 'age range affect BMI'
                             Option 'less than 10' value = '1'
                             Option '10-30' value = '1.2'
                             Option '30-50' value = '1.5'
@@ -134,26 +154,20 @@ model_str = """
                 description = 'Automated Task 1'
                 
                 Trigger
-                    on delete invoke 'https://server1.com/api1' method post
+                    on activate invoke 'https://server1.com/api1' method post
                 
-                Form AutoForm
-                    #mandatory 
-                    description = 'AutoForm'
-                    
+                Form 
                     Field AutoField1
                         #number(<10) #mandatory
                         description = 'AutoField1'
                 
             DualTask DualTask1
                 #mandatory #repeatSerial #manualActivate
-                description = 'Dual task 1'
-                ownerPath = 'Settings.UmcgProfessionals'
+                description = 'Measure Blood Pressure and inform doctor in emergency situation'
+                owner = 'Settings.UmcgProfessionals'
                 externalId = 'HumanTask1External'
                 
-                Form BloodPressureMeasurement
-                    #mandatory #readonly
-                    description = 'Measure Blood Pressure and inform doctor in emergency situation'
-                    
+                Form 
                     Field Systolic 
                         #readonly #humanDuty #number(0-300)
                         description = 'Measure Systolic blood pressure'

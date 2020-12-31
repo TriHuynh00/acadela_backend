@@ -1,3 +1,6 @@
+// TODO: Create specific grammar for detecting function
+// uiReference, and expressions
+
 Start:
     versionTag = AcaVersion
     (importList *= Import)?
@@ -19,7 +22,7 @@ Import:
 
 // Workspace Definition Level
 DefWorkspace:
-    workspace=Workspace
+    workspace = Workspace
     (
         (workspaceGlobalObj = DefineObj)?
         workspaceProp = DefineCase
@@ -31,7 +34,7 @@ Workspace:
 ;
 
 BasicIdentity:
-    id=TextNoQuote
+    id = TextNoQuote
     ('staticId' Eq staticId=Text)?
 ;
 
@@ -55,18 +58,28 @@ Obj:
     (Case | Stage | Task | Form | Hook | ValidAttribute)
 ;
 
-// Case Definition Level
+/********************
+******* CASE ********
+********************/
 
 Case:
     'case' casename = TextNoQuote
     (
         casePrefix = CasePrefix
         ('version' Eq version = INT)
+        // clientPath and ownerPath is defined in CaseSetting
+        // Interpreter automatically finds the following attributes:
+        // 1. entityDefinitionId (rootEntityDefinitionId):
+        //   Case Schema: all entities of settings and stages
+        // 2. newEntityAttachPath (entityAttachPath): take path to Settings entity by default
+        // 3. newEntityDefinitionId (entityDefinitionId): take Settings entity by default
+        //
         (
+            description = Description
             responsibilities = Responsibilities
             setting = CaseSetting
             ('Trigger' hook += CaseHook)?
-
+            summary = SummaryPanel
         )#
         stage += Stage
     )#
@@ -121,6 +134,18 @@ ValidAttribute:
     key=STRING Eq value=STRING
 ;
 
+/*****************************
+***** ATTRIBUTE SECTION ******
+*****************************/
+
+Attribute:
+    "attribute" name=TextNoQuote
+    (
+        description = Description
+        attrProp = AttributeProp
+    )#
+;
+
 AttributeProp:
     directive = AttributeDirective
     (
@@ -129,6 +154,30 @@ AttributeProp:
         (uiRef = UiReference)?
         (defaultValues = DefaultValues)?
     )#
+;
+
+AttributeDirective:
+    (multiplicity = Multiplicity)?
+    (type = Type)?
+;
+
+/***************************
+***** SUMMARY SECTION ******
+****************************/
+
+SummaryPanel:
+    'SummaryPanel' sectionList += SummarySection
+;
+
+SummarySection:
+    'Section' id=TextNoQuote
+        directive = SummarySectionPosition
+        description = Description
+        paramList += SummaryParam
+;
+
+SummaryParam:
+    'InfoPath' path=TextNoQuote
 ;
 
 /********************
@@ -164,10 +213,10 @@ DualTaskHttpHook:
 
 
 CaseHookEvent:
-    'delete'
-    | 'activate'
+    'activate'
     | 'complete'
     | 'terminate'
+    | 'delete'
 ;
 
 BaseEvent:
@@ -177,7 +226,6 @@ BaseEvent:
     | 'complete'
     | 'terminate'
     | 'correct'
-    | 'delete'
 ;
 
 DualTaskEvent:
@@ -213,6 +261,10 @@ Description:
 ***********************/
 
 Stage:
+    // Interpreter creates a Stage entity & 2 attributes:
+    // 1. entityAttachPath: the Path to the Stage entity
+    // 2. entityDefinitionId: The name of the Stage entity
+    // activation attribute is "EXPRESSION" if #activateWhen is used
     'Stage' id=TextNoQuote
         directive = StageElementDirective
         (
@@ -221,7 +273,6 @@ Stage:
             (dynamicDescriptionPath = DynamicDescriptionPath)?
             (externalId = ExternalId)?
         )#
-
         taskList += Task
 ;
 
@@ -229,6 +280,8 @@ Stage:
 ******** TASK *********
 ***********************/
 
+// In a task, activation attribute is "EXPRESSION"
+// if #activateWhen is used
 Task:
     HumanTask
     | AutomatedTask
@@ -283,7 +336,9 @@ SharedTaskAttrs:
 Precondition:
     'Precondition'
     (
+        // aka. expression in Thesis
         ('condition' Eq entryCondition = STRING)
+        // aka. processDefinitionId in Thesis
         ('previousStage' Eq entryStageList += STRING)+
     )#
 ;
@@ -293,10 +348,15 @@ Precondition:
 ***********************/
 
 Form:
-    'Form' (id = TextNoQuote)?
-        // directive = FormDirective
-        // description = Description
+    'Form'
+        //(id = TextNoQuote)?
         fieldList += FormField
+;
+
+FormDirective:
+    (
+        (mandatory = Mandatory)?
+    )#
 ;
 
 FormField:
@@ -312,19 +372,51 @@ Field:
         )
 ;
 
-// TODO: Finalize this based on DerivedAttribute
+FieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
+        (multiplicity = Multiplicity)?
+        // There is no grammar for DualTask field
+        // to avoid overhead in computation, since
+        // we expect a large number of fields, and
+        // introducing a DualTaskField along with Field
+        // will result in longer parsing time
+        // The interpreter will check whether a part
+        // is included in the field instead.
+        (part = Part)?
+        type = Type
+    )#
+;
+
 DynamicField:
     'DynamicField' id = TextNoQuote
         directive = DynamicFieldDirective
         (
             description = Description
-            expression = DynamicFieldExpression
+            (additionalDescription = AdditionalDescription)?
+            (uiRef = UiReference)?
+            (expression = DynamicFieldExpression)?
+            (externalId = ExternalId)?
         )#
+;
+
+DynamicFieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
+        (explicitType = PrimitiveDataType)?
+    )#
 ;
 
 Question:
     'question' Eq text=STRING
-     optionList += Option
+     (
+        optionList += Option
+        (additionalDescription = AdditionalDescription)?
+     )#
 ;
 
 Option:
@@ -332,13 +424,8 @@ Option:
 ;
 
 /***********************
-****** DIRECTIVES ******
+****** COMMON DIRECTIVES ******
 ***********************/
-
-AttributeDirective:
-    (multiplicity = Multiplicity)?
-    (type = Type)?
-;
 
 StageElementDirective:
     (
@@ -349,30 +436,6 @@ StageElementDirective:
     )#
 ;
 
-FormDirective:
-    (
-        (mandatory = Mandatory)?
-    )#
-;
-
-FieldDirective:
-    (
-        (mandatory = Mandatory)?
-        (readOnly = ReadOnly)?
-        (position = Position)?
-        (multiplicity = Multiplicity)?
-        (part = Part)?
-        type = Type
-    )#
-;
-
-DynamicFieldDirective:
-    (
-        (mandatory = Mandatory)?
-        (readOnly = ReadOnly)?
-        (position = Position)?
-    )#
-;
 
 /*TaskDirective:
     (
@@ -392,18 +455,34 @@ Multiplicity:
     )
 ;
 
+PrimitiveDataType:
+    'text' // string and longtext combined
+    | 'boolean'
+    | NumType
+    | DateType
+;
+
 Type:
     Hash (
-        DateType
+        LinkType
+        | 'notype'
+        | 'text' // string and longtext combined
+        | 'boolean'
         | NumType
-        | 'entity'
-        | 'selector'
-        // TODO: Find other num types
+        | 'selector' // aka. 'enumeration' in Thesis
+        | DateType
+        | 'json'
     )
+;
+
+LinkType:
+    'link' '.' ('Users' | 'Entity')
+        '(' linkObj=TextNoQuote ')'
 ;
 
 DateType:
     'date.after(TODAY)'
+    | 'date'
 ;
 
 NumType:
@@ -449,6 +528,15 @@ ReadOnly:
     )
 ;
 
+SummarySectionPosition:
+    Hash (
+        'stretched' // Default
+        | 'left'
+        | 'center'
+        | 'right'
+    )
+;
+
 Position:
     Hash (
         'stretched' // Default
@@ -482,7 +570,7 @@ ExternalId:
 ;
 
 OwnerPath:
-    'ownerpath' Eq value = STRING
+    'owner' Eq value = STRING
 ;
 
 UiReference:
@@ -571,7 +659,7 @@ Text:
 ;
 
 TextNoQuote:
-    /([a-zA-Z0-9-_])*/
+    /([a-zA-Z0-9-_.])*/
 ;
 
 // Assignment Sign
@@ -615,10 +703,4 @@ AttrList:
     'endAttributeList'
 ;
 
-Attribute:
-    "attribute" name=TextNoQuote
-    (
-        description = Description
-        attrProp = AttributeProp
-    )#
-;
+
