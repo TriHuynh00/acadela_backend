@@ -7,8 +7,8 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\interpreter')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
 
-from acadela.interpreter.casetemplate import Interpreter
-from acadela.exceptionhandler.syntaxerrorhandler import SyntaxErrorHandler
+from acadela.interpreter.case_template import Interpreter
+from acadela.exceptionhandler.syntax_error_handler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
@@ -80,6 +80,7 @@ model_str = """
              */
              
         Setting
+            // description = "Case Configuration"
             CaseOwner UmcgProfessionals #exactlyOne
                 description = 'case owner is UMCG Professionals'
             

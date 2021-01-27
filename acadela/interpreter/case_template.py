@@ -4,12 +4,17 @@ from os.path import dirname
 from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.referencer.group import GroupReferencer
 from acadela.referencer.user import UserReferencer
+
 from acadela.interpreter.group import GroupInterpreter
 from acadela.interpreter.user import UserInterpreter
 from acadela.interpreter.workspace import WorkspaceInterpreter
-from acadela.httprequest import HttpRequest
-from acadela.interpreter import jsonutil
+import acadela.interpreter.attribute as attributeInterpreter
+import acadela.interpreter.entity_generator as entityGenerator
+from acadela.interpreter import json_util
 from acadela.interpreter import util
+
+from acadela.http_request import HttpRequest
+
 import json
 import requests
 import sys
@@ -31,9 +36,22 @@ class Interpreter():
         self.workspaceInterpreter = WorkspaceInterpreter()
         self.userFinder = UserReferencer()
         self.groupList = []
+        self.caseDefinition = None
         self.userList = []
+        self.entityList = []
+        self.stageList = []
+        self.attributeList = []
         self.jsonEntityList = []
         self.jsonAttributeList = []
+        self.caseObjectTree = [
+            {"groups": self.groupList},
+            {"users":  self.userList},
+            {"entities": self.entityList},
+            {"stages": self.stageList},
+            {"case": self.caseDefinition},
+            {"attributes": self.attributeList}
+        ]
+
 
     # Interpret the case object
     def interpret(self):
@@ -79,7 +97,7 @@ class Interpreter():
 
                 if runNetworkOp:
                     if self.groupInterpreter.\
-                            findStaticId(group, workspace.staticId) is not None:
+                            find_static_id(group, workspace.staticId) is not None:
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
@@ -99,7 +117,7 @@ class Interpreter():
             print()
 
             print('casePrefix = ' + case.casePrefix.value)
-
+            util.set_case_prefix(case.casePrefix.value)
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspace.staticId, workspace.id))
 
@@ -115,14 +133,17 @@ class Interpreter():
 
             print()
 
-            print("Setting Info")
-            print("\tCase Owner \n\t\tgroup = '{}' \n\t\tdesc = '{}'".format(
-                case.setting.caseOwner.group,
-                case.setting.caseOwner.attr.description.value
-            ))
+            # print("Setting Info")
+            # print("\tCase Owner \n\t\tgroup = '{}' \n\t\tdesc = '{}'".format(
+            #     case.setting.caseOwner.group,
+            #     case.setting.caseOwner.attr.description.value
+            # ))
+
+            entityGenerator.generate_case_data_entity(settingEntity = case.setting)
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
+                attributeInterpreter.interpret_attribute_object(attr)
                 print("Attr ID " + attr.name)
                 print("#Directives ", attr.attrProp.directive.type)
 
@@ -190,9 +211,9 @@ class Interpreter():
                 raise Exception("Invalid workspace {} with error: {}"
                                 .format(workspace.staticId, workspaceObjList["Error"]))
 
-            caseObjList['Group'] = jsonutil.basicIdentityListToJson(self.groupList)
+            caseObjList['Group'] = json_util.basicIdentityListToJson(self.groupList)
 
-            caseObjList['User'] = jsonutil.basicIdentityListToJson(self.userList)
+            caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
 
             caseDefJson = {"SACMDefinition": caseObjList}
 

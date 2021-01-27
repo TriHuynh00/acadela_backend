@@ -1,4 +1,4 @@
-from acadela.httprequest import HttpRequest
+from acadela.http_request import HttpRequest
 from acadela.referencer.workspace import WorkspaceReferencer
 import json
 

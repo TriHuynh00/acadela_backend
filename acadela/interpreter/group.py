@@ -5,14 +5,14 @@ class GroupInterpreter:
     def __init__(self):
         self.groupFinder = GroupReferencer()
 
-    def findStaticId(self, group, workspaceStaticId):
+    def find_static_id(self, group, workspaceStaticId):
         group.staticId = self.groupFinder.findGroupStaticIdByName(group.name, workspaceStaticId)
         if group.staticId is not "groupIdNotFound":
             return group
         else:
             return None
 
-    def groupListToJson(self, groupList):
+    def group_list_to_json(self, groupList):
         jsonGroupList = []
         for group in groupList:
             jsonGroupList.append({

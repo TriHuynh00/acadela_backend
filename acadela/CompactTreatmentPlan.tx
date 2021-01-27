@@ -87,6 +87,7 @@ Case:
 
 CaseSetting:
     'Setting'
+    (description = Description)?
     (
         caseOwner = CaseOwner
         (attrList += Attribute)?
