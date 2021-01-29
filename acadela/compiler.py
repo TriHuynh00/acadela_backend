@@ -7,7 +7,7 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\interpreter')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
 
-from acadela.interpreter.case_template import Interpreter
+from acadela.interpreter.case_template import CaseInterpreter
 from acadela.exceptionhandler.syntax_error_handler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
@@ -267,7 +267,7 @@ try:
     #     print (importedModel.defObj[0].object)
 
 
-    point_interpreter = Interpreter(mm, model)
+    point_interpreter = CaseInterpreter(mm, model)
 
     point_interpreter.interpret()
 

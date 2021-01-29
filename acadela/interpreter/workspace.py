@@ -1,5 +1,6 @@
 from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.interpreter import util
+from acadela.interpreter import entity_generator
 
 import json
 
@@ -75,13 +76,20 @@ class WorkspaceInterpreter:
         self.jsonEntityList.append(entityProp)
 
 
-    def workspacePropToJson(self, workspace, case):
+    def workspacePropToJson(self, workspace, case, entityList):
         workspaceObjList = {}
         workspaceObjList["$"] = \
             {
                 "staticId": workspace.staticId,
                 "id": workspace.id
             }
+        entityJsonList = []
+        for entity in entityList:
+            entityJsonList.append(
+                entity_generator.create_entity_json_object(entity))
+
+        workspaceObjList["EntityDefinition"] = entityJsonList
+
 
         # print("#entities = ", len(case.entityList))
         # for entity in case.entityList:

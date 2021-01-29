@@ -30,7 +30,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
             attrObj.type = attribute.attrProp.directive.type
 
         if attribute.attrProp.directive.multiplicity is not None:
-            attrObj.multiplicy = attribute.attrProp.directive.multiplicity
+            attrObj.multiplicity = attribute.attrProp.directive.multiplicity
 
     # interpret optional elements
     if hasattr(attribute, 'additionalDescription'):
@@ -48,7 +48,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
     if hasattr(attribute, 'defaultValues'):
         attrObj.defaultValues = attribute.defaultValues.value
 
-    return create_attribute_json_object(attrObj)
+    return attrObj
 
 def create_attribute_json_object(attribute):
     attrObj = {"$": {}}
@@ -73,3 +73,4 @@ def create_attribute_json_object(attribute):
 
     print("Attribute JSON")
     print(json.dumps(attrObj, indent=4))
+    return attrObj

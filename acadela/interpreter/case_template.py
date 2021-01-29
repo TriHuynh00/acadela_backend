@@ -24,7 +24,7 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 runNetworkOp = False;
 
-class Interpreter():
+class CaseInterpreter():
 
     def __init__(self, metamodel, model):
         self.metamodel = metamodel
@@ -44,6 +44,7 @@ class Interpreter():
         self.jsonEntityList = []
         self.jsonAttributeList = []
         self.caseObjectTree = [
+            {"workspace": ""},
             {"groups": self.groupList},
             {"users":  self.userList},
             {"entities": self.entityList},
@@ -52,6 +53,29 @@ class Interpreter():
             {"attributes": self.attributeList}
         ]
 
+    def compile_for_connecare(self, workspace, case):
+        caseObjList = {}
+        workspaceObjList = self.workspaceInterpreter \
+            .workspacePropToJson(workspace, case, self.entityList)
+
+        # Check if there is any Error being returned
+        if workspaceObjList.get("Error") is None:
+            caseObjList["Workspace"] = [workspaceObjList]
+        else:
+            raise Exception("Invalid workspace {} with error: {}"
+                            .format(workspace.staticId, workspaceObjList["Error"]))
+
+        caseObjList['Group'] = json_util.basicIdentityListToJson(self.groupList)
+
+        caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
+
+        caseDefJson = {"SACMDefinition": caseObjList}
+
+        caseDefJsonFinal = {"jsonTemplate": caseDefJson}
+
+        print(json.dumps(caseDefJsonFinal, indent=4))
+        print()
+        return caseDefJsonFinal
 
     # Interpret the case object
     def interpret(self):
@@ -67,8 +91,6 @@ class Interpreter():
                     for attr in obj.attr:
                        print('{} = {}'.format(util.cname(attr), attr.value))
         else:
-            caseObjList = {}
-
             acaversion = model.versionTag
 
             print("ACA v =", acaversion)
@@ -139,7 +161,7 @@ class Interpreter():
             #     case.setting.caseOwner.attr.description.value
             # ))
 
-            entityGenerator.generate_case_data_entity(settingEntity = case.setting)
+            self.entityList.extend(entityGenerator.generate_case_data_entities(settingObj = case.setting))
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
@@ -201,30 +223,11 @@ class Interpreter():
                                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
             # print("Case Definition", case.caseDef.caseDefName)
 
-            workspaceObjList = self.workspaceInterpreter\
-                                   .workspacePropToJson(workspace, case)
-
-            # Check if there is any Error being returned
-            if workspaceObjList.get("Error") is None:
-                caseObjList["Workspace"] = [workspaceObjList]
-            else:
-                raise Exception("Invalid workspace {} with error: {}"
-                                .format(workspace.staticId, workspaceObjList["Error"]))
-
-            caseObjList['Group'] = json_util.basicIdentityListToJson(self.groupList)
-
-            caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
-
-            caseDefJson = {"SACMDefinition": caseObjList}
-
-            caseDefJsonFinal = {"jsonTemplate": caseDefJson}
-
-            print(json.dumps(caseDefJsonFinal, indent=4))
-            print()
+            caseInJson = self.compile_for_connecare(workspace, case)
 
             if runNetworkOp:
                 response = requests.post(
                 HttpRequest.sacmUrl + "import/acadela/casedefinition?version=1&isExecute=false",
                 headers=HttpRequest.simulateUserHeader,
-                json=json.loads(json.dumps(caseDefJsonFinal)))
+                json=json.loads(json.dumps(caseInJson)))
 
