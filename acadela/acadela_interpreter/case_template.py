@@ -5,13 +5,13 @@ from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.referencer.group import GroupReferencer
 from acadela.referencer.user import UserReferencer
 
-from acadela.interpreter.group import GroupInterpreter
-from acadela.interpreter.user import UserInterpreter
-from acadela.interpreter.workspace import WorkspaceInterpreter
-import acadela.interpreter.attribute as attributeInterpreter
-import acadela.interpreter.entity_generator as entityGenerator
-from acadela.interpreter import json_util
-from acadela.interpreter import util
+from acadela.acadela_interpreter.group import GroupInterpreter
+from acadela.acadela_interpreter.user import UserInterpreter
+from acadela.acadela_interpreter.workspace import WorkspaceInterpreter
+import acadela.acadela_interpreter.attribute as attributeInterpreter
+import acadela.acadela_interpreter.entity_generator as entityGenerator
+from acadela.acadela_interpreter import json_util
+from acadela.acadela_interpreter import util
 
 from acadela.http_request import HttpRequest
 

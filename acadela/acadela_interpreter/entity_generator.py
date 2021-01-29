@@ -1,6 +1,6 @@
-from acadela.interpreter import json_util
-from acadela.interpreter import util
-import acadela.interpreter.attribute as attributeInterpreter
+from acadela.acadela_interpreter import json_util
+from acadela.acadela_interpreter import util
+import acadela.acadela_interpreter.attribute as attributeInterpreter
 
 from acadela.caseobject.entity import Entity
 

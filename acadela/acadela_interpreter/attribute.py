@@ -1,5 +1,5 @@
-from acadela.interpreter import json_util
-from acadela.interpreter import util
+from acadela.acadela_interpreter import json_util
+from acadela.acadela_interpreter import util
 
 import json
 import requests

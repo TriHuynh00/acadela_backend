@@ -1,6 +1,6 @@
 from acadela.referencer.workspace import WorkspaceReferencer
-from acadela.interpreter import util
-from acadela.interpreter import entity_generator
+from acadela.acadela_interpreter import util
+from acadela.acadela_interpreter import entity_generator
 
 import json
 
