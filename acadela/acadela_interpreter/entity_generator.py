@@ -1,8 +1,9 @@
 from acadela.acadela_interpreter import json_util
 from acadela.acadela_interpreter import util
+from acadela.case_object.attribute import Attribute
 import acadela.acadela_interpreter.attribute as attributeInterpreter
 
-from acadela.caseobject.entity import Entity
+from acadela.case_object.entity import Entity
 
 
 import json
@@ -14,24 +15,40 @@ from os.path import dirname
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-# TODO: Generate JSON from Entity & Attribute Objects
-# Generate all the entities needed to construct the case
-def generate_all_case_entities(settingObj,
-                                stageList = None):
-    allEntitiesList = []
-    allEntitiesList.extend(generate_case_data_entities(settingObj))
+caseOwnerAttr = None
+casePatientAttr = None
 
-    return allEntitiesList;
+# TODO: Generate JSON from Entity & Attribute Objects
 
 # Generate the Case Data Entity, containing settings, CaseDefinition
-def generate_case_data_entities(settingObj):
+def generate_case_data_entities_and_props(settingObj, stages):
     generatedEntities = []
+    entitiesAndCaseProp = {}
 
     settingEntity = interpret_setting_entity(settingObj)
 
+    caseDataEntity = Entity("CaseData",
+                            "Case Data");
+
+
+
+    caseDataEntity.attribute.append(settingEntity)
+
+    # TODO: Add other Tasks and Stages as entities
+    for stage in stages:
+        print("Stage Info "
+              "\n\tID: {}"
+              "\n\tDescription: {}"
+              .format(stage.id,
+                      stage.description.value))
+
     generatedEntities.append(settingEntity)
 
-    return generatedEntities
+    entitiesAndCaseProp['Entities'] = generatedEntities
+    entitiesAndCaseProp['CaseOwner'] = caseOwnerAttr
+    entitiesAndCaseProp['CasePatient'] = casePatientAttr
+
+    return entitiesAndCaseProp
 
 def interpret_setting_entity(settingObj):
     settingDescription = "Settings" \
@@ -40,17 +57,30 @@ def interpret_setting_entity(settingObj):
 
     settingEntity = Entity("Settings", settingDescription)
 
-    print("\tCase Owner \n\t\tgroup = '{}' \n\t\tdesc = '{}'".format(
-        settingObj.caseOwner.group,
-        settingObj.caseOwner.attr.description.value
-    ))
-
     for attr in settingObj.attrList:
         print("Attr ID " + attr.name)
-        print("#Directives ", attr.attrProp.directive.type)
+        print("#Directives ", attr.attrProp.directive)
         attrObj = attributeInterpreter.interpret_attribute_object(attr)
         settingEntity.attribute.append(attrObj)
 
+    print("\tCase Owner "
+          "\n\t\tgroup = '{}' "
+          "\n\t\tdesc = '{}' "
+          "\n\t\tdirective = '{}'".format(
+            settingObj.caseOwner.group,
+            settingObj.caseOwner.attrProp.description.value,
+            settingObj.caseOwner.attrProp.directive
+    ))
+
+    if settingObj.caseOwner is not None:
+       global caseOwnerAttr
+       caseOwnerAttr = attributeInterpreter.interpret_attribute_object(settingObj.caseOwner)
+       settingEntity.attribute.append(caseOwnerAttr)
+
+    if settingObj.casePatient is not None:
+        global casePatientAttr
+        casePatientAttr = attributeInterpreter.interpret_attribute_object(settingObj.casePatient)
+        settingEntity.attribute.append(casePatientAttr)
         # settingAttributeJson = []
         # attrObjJson = attributeInterpreter.create_attribute_json_object(attrObj)
         # settingAttributeJson.append(attrObjJson)
@@ -78,3 +108,4 @@ def create_entity_json_object(entity):
     entityJson["AttributeDefinition"] = attributeList
 
     return entityJson
+

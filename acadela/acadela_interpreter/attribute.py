@@ -1,10 +1,12 @@
 from acadela.acadela_interpreter import json_util
 from acadela.acadela_interpreter import util
+from acadela.default_state import config
 
 import json
 import requests
 import sys
-from acadela.caseobject.attribute import Attribute
+from acadela.case_object.attribute import Attribute
+import acadela.acadela_interpreter.directive as directive
 
 from os.path import dirname
 
@@ -17,20 +19,34 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 #   isIdPrefixed: True - the attribute ID is prepended with case prefix.
 #                 False - the attribute ID is kept in its original form
 def interpret_attribute_object(attribute, isIdPrefixed = False):
+    attrClassName = util.cname(attribute)
+    if attrClassName == 'CaseOwner':
+        attrId = 'CaseOwner'
+    elif attrClassName == 'CasePatient':
+        attrId = 'CasePatient'
+    else:
+        attrId = attribute.name
 
-    attrId = attribute.name
     if isIdPrefixed:
         attrId = util.prefixing(attrId)
 
-    attrObj = Attribute(id=attrId, description=attribute.description.value)
+    attrObj = Attribute(id=attrId, description=attribute.attrProp.description.value)
 
     # interpret directives
     if attribute.attrProp.directive is not None:
+
         if attribute.attrProp.directive.type is not None:
-            attrObj.type = attribute.attrProp.directive.type
+            attrObj.type = directive.interpret_directive(attribute.attrProp.directive.type)
+
+        elif attrClassName == 'CaseOwner'\
+                or attrClassName == 'CasePatient':
+            attrObj.type = 'links.users({})'.format(attribute.group)
+
+        else:
+            attrObj.type = config.defaultAttributeMap['type']
 
         if attribute.attrProp.directive.multiplicity is not None:
-            attrObj.multiplicity = attribute.attrProp.directive.multiplicity
+            attrObj.multiplicity = directive.interpret_directive(attribute.attrProp.directive.multiplicity)
 
     # interpret optional elements
     if hasattr(attribute, 'additionalDescription'):
@@ -55,20 +71,20 @@ def create_attribute_json_object(attribute):
     thisAttr = attrObj["$"]
     thisAttr['id'] = attribute.id
     thisAttr['description'] = attribute.description
-    if attribute.defaultValues is not None:
+    if hasattr(attribute, 'defaultValues'):
         thisAttr['defaultValues'] = attribute.defaultValues
 
-    if attribute.additionalDescription is not None:
+    if hasattr(attribute, 'additionalDescription'):
         thisAttr['additionalDescription'] = \
             attribute.additionalDescription
 
-    if attribute.externalId is not None:
+    if hasattr(attribute, 'externalId'):
         thisAttr['externalId'] = \
             attribute.externalId
 
-    if attribute.type is not None:
+    if hasattr(attribute, 'type'):
         thisAttr['type'] = attribute.type
-    if attribute.multiplicity is not None:
+    if hasattr(attribute, 'multiplicity'):
         thisAttr['multiplicity'] = attribute.multiplicity
 
     print("Attribute JSON")

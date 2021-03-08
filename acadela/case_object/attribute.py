@@ -1,4 +1,4 @@
-from acadela.interpreter import util
+from acadela.acadela_interpreter import util
 
 import json
 import requests

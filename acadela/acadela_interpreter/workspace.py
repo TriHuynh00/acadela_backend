@@ -19,7 +19,7 @@ class WorkspaceInterpreter:
         else:
             return workspaceStaticId
 
-    def interpretEntity(self, targetEntity, parentEntity):
+    def interpret_entity_sacm(self, targetEntity, parentEntity):
 
         # TODO: Crafting entityType based on casePrefix
         # if entity.attrProp.type is not None:
@@ -46,7 +46,7 @@ class WorkspaceInterpreter:
                 for entityAttr in attrElem.attr:
                     # If this entityAttr has an entity, append it to the entity list
                     if util.cname(entityAttr) == "Entity":
-                        self.interpretEntity(entityAttr, parentEntity)
+                        self.interpret_entity_sacm(entityAttr, parentEntity)
 
                     attrObj = {"$": {}}
                     entityAttrProp = entityAttr.attrProp

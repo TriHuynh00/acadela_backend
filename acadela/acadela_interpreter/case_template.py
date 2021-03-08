@@ -8,6 +8,7 @@ from acadela.referencer.user import UserReferencer
 from acadela.acadela_interpreter.group import GroupInterpreter
 from acadela.acadela_interpreter.user import UserInterpreter
 from acadela.acadela_interpreter.workspace import WorkspaceInterpreter
+import acadela.acadela_interpreter.task as taskInterpreter
 import acadela.acadela_interpreter.attribute as attributeInterpreter
 import acadela.acadela_interpreter.entity_generator as entityGenerator
 from acadela.acadela_interpreter import json_util
@@ -40,6 +41,7 @@ class CaseInterpreter():
         self.userList = []
         self.entityList = []
         self.stageList = []
+        self.taskList = []
         self.attributeList = []
         self.jsonEntityList = []
         self.jsonAttributeList = []
@@ -49,6 +51,7 @@ class CaseInterpreter():
             {"users":  self.userList},
             {"entities": self.entityList},
             {"stages": self.stageList},
+            {"tasks": self.taskList},
             {"case": self.caseDefinition},
             {"attributes": self.attributeList}
         ]
@@ -155,13 +158,28 @@ class CaseInterpreter():
 
             print()
 
-            # print("Setting Info")
-            # print("\tCase Owner \n\t\tgroup = '{}' \n\t\tdesc = '{}'".format(
-            #     case.setting.caseOwner.group,
-            #     case.setting.caseOwner.attr.description.value
-            # ))
+            # INTERPRET CLINICAL PATHWAYS ELEMENTS
 
-            self.entityList.extend(entityGenerator.generate_case_data_entities(settingObj = case.setting))
+            ###################
+            # INTERPRET TASKS #
+            ###################
+
+            for stage in case.stage:
+                taskInterpreter.interpret_task(stage.taskList)
+
+            #######################
+            # END INTERPRET TASKS #
+            #######################
+            caseEntitiesAndProps = entityGenerator.\
+                generate_case_data_entities_and_props(settingObj=case.setting,
+                                                      stages=case.stage)
+            self.entityList.extend(caseEntitiesAndProps['Entities'])
+
+            print("Case Owner: "
+                  "\n\tid: {}"
+                  "\n\ttype: {}".format(
+                    caseEntitiesAndProps["CaseOwner"].id,
+                    caseEntitiesAndProps["CaseOwner"].type))
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
@@ -191,36 +209,36 @@ class CaseInterpreter():
                 print("\tExternal ID: " + stage.externalId.value)
 
                 # Task interpret
-                for task in stage.taskList:
-                    directive = task.directive
-                    attrList = task.attrList
-                    dueDatePath = None
-
-                    if util.cname(task) != 'AutomatedTask':
-                        if attrList.dueDatePath is not None:
-                            dueDatePath = attrList.dueDatePath.value
-
-                    print("\n\tTask {}"
-                          "\n\t\tDirectives "
-                          "\n\t\t\tmandatory = {}"
-                          "\n\t\t\trepeatable = {}"
-                          "\n\t\t\tactivation = {}"
-                          "\n\t\t\tmultiplicity = {}"
-                          "\n\t\tdescription = {}"
-                          "\n\t\townerPath = {}"
-                          "\n\t\tdueDatePath = {}"
-                          "\n\t\texternalId = {}"
-                          "\n\t\tdynamicDescriptionPath = {}"
-                          .format(task.id,
-                                  directive.mandatory,
-                                  directive.repeatable,
-                                  directive.activation,
-                                  directive.multiplicity,
-                                  attrList.description.value,
-                                  ("None" if attrList.ownerPath is None else attrList.ownerPath.value ),
-                                  dueDatePath,
-                                  ("None" if attrList.externalId is None else attrList.externalId.value),
-                                  ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
+                # for task in stage.taskList:
+                #     directive = task.directive
+                #     attrList = task.attrList
+                #     dueDatePath = None
+                #
+                #     if util.cname(task) != 'AutomatedTask':
+                #         if attrList.dueDatePath is not None:
+                #             dueDatePath = attrList.dueDatePath.value
+                #
+                #     print("\n\tTask {}"
+                #           "\n\t\tDirectives "
+                #           "\n\t\t\tmandatory = {}"
+                #           "\n\t\t\trepeatable = {}"
+                #           "\n\t\t\tactivation = {}"
+                #           "\n\t\t\tmultiplicity = {}"
+                #           "\n\t\tdescription = {}"
+                #           "\n\t\townerPath = {}"
+                #           "\n\t\tdueDatePath = {}"
+                #           "\n\t\texternalId = {}"
+                #           "\n\t\tdynamicDescriptionPath = {}"
+                #           .format(task.id,
+                #                   directive.mandatory,
+                #                   directive.repeatable,
+                #                   directive.activation,
+                #                   directive.multiplicity,
+                #                   attrList.description.value,
+                #                   ("None" if attrList.ownerPath is None else attrList.ownerPath.value ),
+                #                   dueDatePath,
+                #                   ("None" if attrList.externalId is None else attrList.externalId.value),
+                #                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
             # print("Case Definition", case.caseDef.caseDefName)
 
             caseInJson = self.compile_for_connecare(workspace, case)

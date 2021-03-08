@@ -4,11 +4,11 @@ from os.path import join, dirname
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\interpreter')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exceptionhandler')
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\acadela_interpreter')
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exception_handler')
 
-from acadela.interpreter.case_template import CaseInterpreter
-from acadela.exceptionhandler.syntax_error_handler import SyntaxErrorHandler
+from acadela.acadela_interpreter.case_template import CaseInterpreter
+from acadela.exception_handler.syntax_error_handler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
@@ -87,13 +87,18 @@ model_str = """
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
                 description = 'Workplan Due Date'
+                externalId = 'dueDateConnie'
                 
             CasePatient UmcgPatient #exactlyOne
                 description = 'the patient of this case'
             
             Attribute EvalDueDate
-                #exactlyOne #date.after(TODAY)
+                #maxOne #date.after(TODAY)
                 description = 'Evaluation Due Date'
+                
+            Attribute MaxDoctor
+                #maxOne #number(3-5)
+                description = "Maximum number of doctor per patient"
                 
         Trigger
             on activate invoke 'http://integration-producer:8081/v1/activate'
@@ -274,7 +279,4 @@ try:
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)
 
-# Collect all points starting from the root of the model
-points = get_children_of_type("Point", model)
-for point in points:
-    print('Point: {}'.format(point))
+

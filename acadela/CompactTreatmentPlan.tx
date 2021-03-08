@@ -98,21 +98,21 @@ CaseSetting:
 
 CaseOwner:
     'CaseOwner' group = TextNoQuote
-        attr = LinkUserGroupAttr
+        attrProp = AttributeProp
 ;
 
 CasePatient:
     'CasePatient' group = TextNoQuote
-        attr = LinkUserGroupAttr
+        attrProp = AttributeProp
 ;
 
-LinkUserGroupAttr:
+/*LinkUserGroupAttr:
     directive = AttributeDirective
     (
-        description = Description
+        //description = Description
         (attrProp = AttributeProp)?
     )#
-;
+;*/
 
 
 Responsibilities:
@@ -141,15 +141,16 @@ ValidAttribute:
 
 Attribute:
     "attribute" name=TextNoQuote
-    (
-        description = Description
+    //(
+
         attrProp = AttributeProp
-    )#
+    //)#
 ;
 
 AttributeProp:
     directive = AttributeDirective
     (
+        description = Description
         (externalId = ExternalId)?
         (additionalDescription = AdditionalDescription)?
         (uiRef = UiReference)?
@@ -424,9 +425,9 @@ Option:
     'option' key = STRING 'value' Eq value = STRING
 ;
 
-/***********************
+/******************************
 ****** COMMON DIRECTIVES ******
-***********************/
+*******************************/
 
 StageElementDirective:
     (
@@ -467,7 +468,8 @@ Type:
     Hash (
         LinkType
         | 'notype'
-        | 'text' // string and longtext combined
+        | 'text' // string
+        | 'longtext'
         | 'boolean'
         | NumType
         | 'selector' // aka. 'enumeration' in Thesis
@@ -477,8 +479,8 @@ Type:
 ;
 
 LinkType:
-    'link' '.' ('Users' | 'Entity')
-        '(' linkObj=TextNoQuote ')'
+    'link' '.' (linkType='Users' | linkType='Entity')
+        '(' linkObj+=TextNoQuote (',' linkObj+=TextNoQuote)? ')'
 ;
 
 DateType:
@@ -488,7 +490,7 @@ DateType:
 
 NumType:
     'number' '('
-        ((Comparator INT) | (INT '-' INT))
+        ((comparator=Comparator num=INT) | (min=INT '-' max=INT))
     ')'
 ;
 
