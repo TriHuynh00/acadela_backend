@@ -1,4 +1,5 @@
 from acadela.acadela_interpreter import util
+from acadela.case_object.enumeration_option import EnumerationOption
 
 import json
 import requests
@@ -11,19 +12,46 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 
 class Attribute():
-    def __init__(self, id, description, # compulsory attributes
+    def __init__(self, id, content, # compulsory attributes
                  multiplicity='any', type='notype', # directives
                  additionalDescription = None, # below are optional
                  uiReference = None,
                  externalId = None,
                  defaultValues = None):
         self.id = id
-        self.description = description
+
+        self.enumerationOptions = []
+
+        if util.cname(content) == "Description":
+            self.description = content.value
+        elif util.cname(content) == "Question":
+            self.description = content.text
+
+            for option in content.optionList:
+                additionalDescription = \
+                    None if not hasattr(option, "additionalDescription") \
+                         else option.additionalDescription
+
+                externalId = \
+                    None if not hasattr(option, "externalId") \
+                        else option.additionalDescription
+
+                self.enumerationOptions.append(
+                    EnumerationOption(option.key, option.value,
+                                      additionalDescription,
+                                      externalId)
+                )
+
+
+
+        self.description = content
         self.multiplicity = multiplicity
         self.type = type
         self.additionalDescription = additionalDescription
         self.uiReference = uiReference
         self.externalId = externalId
         self.defaultValues = defaultValues
+
+
 
 

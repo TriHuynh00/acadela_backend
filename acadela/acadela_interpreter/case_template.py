@@ -9,6 +9,8 @@ from acadela.acadela_interpreter.group import GroupInterpreter
 from acadela.acadela_interpreter.user import UserInterpreter
 from acadela.acadela_interpreter.workspace import WorkspaceInterpreter
 import acadela.acadela_interpreter.task as taskInterpreter
+import acadela.acadela_interpreter.field as fieldInterpreter
+import acadela.acadela_interpreter.dynamic_field as dynamicFieldInterpreter
 import acadela.acadela_interpreter.attribute as attributeInterpreter
 import acadela.acadela_interpreter.entity_generator as entityGenerator
 from acadela.acadela_interpreter import json_util
@@ -157,19 +159,35 @@ class CaseInterpreter():
                       format(user.staticId, user.id))
 
             print()
-
-            # INTERPRET CLINICAL PATHWAYS ELEMENTS
-
-            ###################
-            # INTERPRET TASKS #
-            ###################
+            ########################################
+            # INTERPRET CLINICAL PATHWAYS ELEMENTS #
+            ########################################
 
             for stage in case.stage:
-                taskInterpreter.interpret_task(stage.taskList)
 
-            #######################
-            # END INTERPRET TASKS #
-            #######################
+                for task in stage.taskList:
+                    taskType = util.cname(task)
+
+                    for field in task.form.fieldList:
+
+                        if util.cname(field) == "Field":
+                            fieldPath = "{}.{}.{}".format(
+                                util.prefixing(stage.id),
+                                task.id,
+                                field.id)
+
+                            fieldInterpreter.interpret_field(field,
+                                                             fieldPath,
+                                                             taskType)
+                        elif util.cname(field) == "DynamicField":
+                            dynamicFieldInterpreter.interpret_dynamic_field(field)
+
+                    taskInterpreter.interpret_task(task)
+
+
+            ############################################
+            # END INTERPRET CLINICAL PATHWAYS ELEMENTS #
+            ############################################
             caseEntitiesAndProps = entityGenerator.\
                 generate_case_data_entities_and_props(settingObj=case.setting,
                                                       stages=case.stage)

@@ -293,25 +293,31 @@ Task:
 HumanTask:
     'HumanTask' id = TextNoQuote
         directive = StageElementDirective
-        attrList = SharedTaskAttrs
-        ('Trigger' hookList += HttpHook)?
-        formList += Form
+        (
+            attrList = SharedTaskAttrs
+            ('Trigger' hookList += HttpHook)?
+            form = Form
+        )#
 ;
 
 AutomatedTask:
     'AutoTask' id = TextNoQuote
         directive = StageElementDirective
-        attrList = AutomatedTaskAttrs
-        ('Trigger' hookList += HttpHook)?
-        formList += Form
+        (
+            attrList = AutomatedTaskAttrs
+            ('Trigger' hookList += HttpHook)?
+            form = Form
+        )#
 ;
 
 DualTask:
     'DualTask' id = TextNoQuote
         directive = StageElementDirective
-        attrList = SharedTaskAttrs
-        ('Trigger' hookList += DualTaskHttpHook)?
-        formList += Form
+        (
+            attrList = SharedTaskAttrs
+            ('Trigger' hookList += DualTaskHttpHook)?
+            form = Form
+        )#
 ;
 
 AutomatedTaskAttrs:
@@ -418,11 +424,12 @@ Question:
      (
         optionList += Option
         (additionalDescription = AdditionalDescription)?
+        (externalId = ExternalId)?
      )#
 ;
 
 Option:
-    'option' key = STRING 'value' Eq value = STRING
+    'option' key=STRING 'value' Eq value=STRING
 ;
 
 /******************************

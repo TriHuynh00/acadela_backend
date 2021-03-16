@@ -3,7 +3,7 @@ import sys
 defaultAttributeMap = {
     'multiplicity': 'any',
     'type': 'notype',
-    'mandatory': 'true',
+    'mandatory': None,
     'repeat': 'norepeat',
-    'activation': 'automatic'
+    'activation': 'automatic',
 }

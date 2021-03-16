@@ -30,7 +30,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
     if isIdPrefixed:
         attrId = util.prefixing(attrId)
 
-    attrObj = Attribute(id=attrId, description=attribute.attrProp.description.value)
+    attrObj = Attribute(id=attrId, content=attribute.attrProp.description.value)
 
     # interpret directives
     if attribute.attrProp.directive is not None:

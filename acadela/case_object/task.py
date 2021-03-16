@@ -34,7 +34,8 @@ class Task():
         self.mandatory = mandatory
         self.activation = activation
 
-        if activation.startswith("activateWhen"):
+        if activation is not None and \
+                activation.startswith("activateWhen"):
             self.manualActivationDescription = activation.split('(')[1][:-1]
         else:
             self.manualActivationDescription = None
