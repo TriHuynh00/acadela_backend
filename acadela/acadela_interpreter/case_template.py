@@ -176,11 +176,14 @@ class CaseInterpreter():
                                 task.id,
                                 field.id)
 
-                            fieldInterpreter.interpret_field(field,
+                            interpretedFieldTuple = fieldInterpreter.interpret_field(field,
                                                              fieldPath,
                                                              taskType)
+
                         elif util.cname(field) == "DynamicField":
                             dynamicFieldInterpreter.interpret_dynamic_field(field)
+
+                        # TODO: Add Field as Attribute of Stage Entity
 
                     taskInterpreter.interpret_task(task)
 
