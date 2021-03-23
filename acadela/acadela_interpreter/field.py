@@ -43,34 +43,6 @@ def interpret_field(field, fieldPath, taskType):
     print("Field as Attribute", vars(fieldAsAttribute))
     print("Field as TaskParam", vars(fieldAsTaskParam))
 
-    # print("\n\tField {}"
-    #       "\n\t\tfieldTypes = {}"
-    #       "\n\t\tDirectives "
-    #       "\n\t\t\tmandatory = {}"
-    #       "\n\t\t\treadOnly = {}"
-    #       "\n\t\t\tposition = {}"
-    #       "\n\t\t\tmultiplicity = {}"
-    #       "\n\t\t\tpart = {}"
-    #       "\n\t\t\ttype = {}"
-    #       "\n\t\tdescription = {}"
-    #       # "\n\t\townerPath = {}"
-    #       # "\n\t\tdueDatePath = {}"
-    #       # "\n\t\texternalId = {}"
-    #       # "\n\t\tdynamicDescriptionPath = {}"
-    #       .format(field.id,
-    #               util.cname(field),
-    #               directive.mandatory,
-    #               directive.readOnly,
-    #               "None" if directive.position is None else directive.position,
-    #               "None" if not hasattr(directive, "multiplicity") else directive.multiplicity,
-    #               "None" if directive.part is None else directive.part,
-    #               directive.type,
-    #               description))
-    #               # (None if attrList.ownerPath is None else attrList.ownerPath.value),
-    #               # dueDatePath,
-    #               # ("None" if attrList.externalId is None else attrList.externalId.value),
-    #               # ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
-
     return {"fieldAsAttribute": fieldAsAttribute, "fieldAsTaskParam": fieldAsTaskParam}
 
 def interpret_dynamic_field(field, fieldPath, taskType):
@@ -114,3 +86,31 @@ def check_part_for_dual_task(part, fieldId):
         return -1
 
     return 1
+
+    # print("\n\tField {}"
+    #       "\n\t\tfieldTypes = {}"
+    #       "\n\t\tDirectives "
+    #       "\n\t\t\tmandatory = {}"
+    #       "\n\t\t\treadOnly = {}"
+    #       "\n\t\t\tposition = {}"
+    #       "\n\t\t\tmultiplicity = {}"
+    #       "\n\t\t\tpart = {}"
+    #       "\n\t\t\ttype = {}"
+    #       "\n\t\tdescription = {}"
+    #       # "\n\t\townerPath = {}"
+    #       # "\n\t\tdueDatePath = {}"
+    #       # "\n\t\texternalId = {}"
+    #       # "\n\t\tdynamicDescriptionPath = {}"
+    #       .format(field.id,
+    #               util.cname(field),
+    #               directive.mandatory,
+    #               directive.readOnly,
+    #               "None" if directive.position is None else directive.position,
+    #               "None" if not hasattr(directive, "multiplicity") else directive.multiplicity,
+    #               "None" if directive.part is None else directive.part,
+    #               directive.type,
+    #               description))
+    #               # (None if attrList.ownerPath is None else attrList.ownerPath.value),
+    #               # dueDatePath,
+    #               # ("None" if attrList.externalId is None else attrList.externalId.value),
+    #               # ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))

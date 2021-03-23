@@ -173,6 +173,9 @@ model_str = """
                 owner = 'Settings.UmcgProfessionals'
                 externalId = 'HumanTask1External'
                 
+                Precondition
+                    previousStep = 'AdmitPatient' 
+                
                 Form 
                     Field Systolic 
                         #readonly #humanDuty #number(0-300)

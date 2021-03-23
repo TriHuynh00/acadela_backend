@@ -18,7 +18,9 @@ class Task():
                  activation = config.defaultAttributeMap['activation'],
                  externalId = None,
                  dynamicDescriptionPath = None,
-                 isPrefixed = True):
+                 isPrefixed = True,
+                 precondition = None,
+                 hook = None):
 
         if isPrefixed:
             self.id = util.prefixing(id)
@@ -42,5 +44,7 @@ class Task():
 
         self.externalId = externalId
         self.dynamicDescriptionPath = dynamicDescriptionPath
+        self.precondition = precondition
+        self.hook = hook
 
 

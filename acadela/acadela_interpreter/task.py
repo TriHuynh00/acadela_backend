@@ -1,7 +1,11 @@
 from acadela.acadela_interpreter import json_util
 from acadela.acadela_interpreter import util
+import acadela.acadela_interpreter.sentry as preconditionInterpreter
+import acadela.acadela_interpreter.hook as hookInterpreter
+
 from acadela.case_object.entity import Entity
 from acadela.case_object.task import Task
+
 
 import json
 import sys
@@ -9,6 +13,8 @@ import sys
 def interpret_task(task):
     taskEntityList = []
     taskObjectList = []
+    taskHookList = []
+    precondition = None
 
     directive = task.directive
     attrList = task.attrList
@@ -30,6 +36,22 @@ def interpret_task(task):
         if attrList.dynamicDescriptionPath is None \
         else attrList.dynamicDescriptionPath.value
 
+    preconditionObj = None \
+        if not hasattr(attrList, "precondition") \
+        else attrList.precondition
+
+    if preconditionObj is not None:
+
+        print("Precondition", [step for step in preconditionObj.stepList])
+        precondition = \
+            preconditionInterpreter.interpret_precondition(preconditionObj)
+
+    if hasattr(task, "hookList"):
+        for hook in task.hookList:
+            interpretedHook = hookInterpreter.interpret_http_hook(hook)
+            print("HttpHook", vars(interpretedHook))
+            taskHookList.append(interpretedHook)
+
     taskObject = Task(task.id, attrList.description.value,
                       util.cname(task),
                       None, # to be replaced by taskParamList
@@ -39,8 +61,8 @@ def interpret_task(task):
                       directive.mandatory,
                       directive.activation,
                       dynamicDescriptionPath,
-
-                      )
+                      precondition,
+                      taskHookList)
 
     print("\n\tTask {}"
           "\n\t\tDirectives "
@@ -54,14 +76,14 @@ def interpret_task(task):
           "\n\t\texternalId = {}"
           "\n\t\tdynamicDescriptionPath = {}"
           .format(task.id,
-              directive.mandatory,
-              directive.repeatable,
-              directive.activation,
-              directive.multiplicity,
-              attrList.description.value,
-              (None if attrList.ownerPath is None else attrList.ownerPath.value),
-              dueDatePath,
-              ("None" if attrList.externalId is None else attrList.externalId.value),
-              ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
+                  directive.mandatory,
+                  directive.repeatable,
+                  directive.activation,
+                  directive.multiplicity,
+                  attrList.description.value,
+                  (None if attrList.ownerPath is None else attrList.ownerPath.value),
+                  dueDatePath,
+                  ("None" if attrList.externalId is None else attrList.externalId.value),
+                  ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
 
     return {"taskEntity": taskEntityList, "taskObject": taskObjectList}

@@ -345,9 +345,9 @@ Precondition:
     'Precondition'
     (
         // aka. expression in Thesis
-        ('condition' Eq entryCondition = STRING)
+        ('condition' Eq entryCondition = STRING)?
         // aka. processDefinitionId in Thesis
-        ('previousStage' Eq entryStageList += STRING)+
+        ('previousStep' Eq stepList += STRING)+
     )#
 ;
 

@@ -1,6 +1,3 @@
-from acadela.acadela_interpreter import util
-from acadela.default_state import config
-
 from os.path import dirname
 import sys
 
