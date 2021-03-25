@@ -191,25 +191,25 @@ Hook:
 ;
 
 CaseHook:
-    'on' event = CaseHookEvent
+    'On' event = CaseHookEvent
     'invoke' url = STRING
 ;
 
 HttpHook:
-    'on' event = BaseEvent
+    'On' event = BaseEvent
     (
         ('invoke' url = STRING)
         ('method' method = HttpMethod)
-        ('with failureMessage is' failureMessage = STRING )?
+        ('with failureMessage' failureMessage = STRING)?
     )#
 ;
 
 DualTaskHttpHook:
-    'on' event = DualTaskEvent
+    'On' event = DualTaskEvent
     (
         ('invoke' url = STRING)
         ('method' method = HttpMethod)
-        ('with failureMessage is' failureMessage = STRING )?
+        ('with failureMessage' failureMessage = STRING)?
     )#
 ;
 
@@ -415,7 +415,8 @@ DynamicFieldDirective:
         (mandatory = Mandatory)?
         (readOnly = ReadOnly)?
         (position = Position)?
-        (explicitType = PrimitiveDataType)?
+        //(explicitType = PrimitiveDataType)?
+        (explicitType = Type)?
     )#
 ;
 
@@ -464,12 +465,15 @@ Multiplicity:
     )
 ;
 
-PrimitiveDataType:
-    'text' // string and longtext combined
-    | 'boolean'
-    | NumType
-    | DateType
-;
+/*PrimitiveDataType:
+    Hash (
+        'text' // string
+        | 'longtext'
+        | 'boolean'
+        | NumType
+        | DateType
+    )
+;*/
 
 Type:
     Hash (
@@ -496,9 +500,9 @@ DateType:
 ;
 
 NumType:
-    'number' '('
+    'number' ('('
         ((comparator=Comparator num=INT) | (min=INT '-' max=INT))
-    ')'
+    ')')?
 ;
 
 Part:
