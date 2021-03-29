@@ -1,14 +1,14 @@
-from textx import metamodel_from_str, metamodel_from_file, get_children_of_type, TextXSyntaxError
-import sys, os
+from textx import metamodel_from_file, TextXSyntaxError
+import sys
 from os.path import join, dirname
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\acadela_interpreter')
+sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\sacm')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exception_handler')
 
-from acadela.acadela_interpreter.case_template import CaseInterpreter
-from acadela.exception_handler.syntax_error_handler import SyntaxErrorHandler
+from acadela.sacm.interpreter.case_template import CaseInterpreter
+from acadela.sacm.exception_handler.syntax_error_handler import SyntaxErrorHandler
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
@@ -101,8 +101,8 @@ model_str = """
                 description = "Maximum number of doctor per patient"
                 
         Trigger
-            on activate invoke 'http://integration-producer:8081/v1/activate'
-            on delete invoke 'http://integration-producer:8081/v1/delete'
+            On activate invoke 'http://integration-producer:8081/v1/activate'
+            On delete invoke 'http://integration-producer:8081/v1/delete'
                 
         SummaryPanel
             Section BMIHeightAndWeight #left
@@ -130,7 +130,7 @@ model_str = """
                 dynamicDescriptionRef = 'Settings.PatientNumber'
                 
                 Trigger
-                    on activate invoke 'http://integration-producer:8081/v1/activate' method Post
+                    On activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
                 Form //abc
                     Field Height
@@ -153,14 +153,30 @@ model_str = """
                     DynamicField BmiScore
                         #mandatory
                         description = 'BMI Calculation in kilogram and meters'
-                        expression = 'Height * Height'            
+                        expression = 'Height * Height'
+                        
+                    DynamicField BmiScorePlus
+                        #mandatory #readOnly #left #number
+                        description = 'BMI Calculation with age counted'
+                        additionalDescription = 'full Derived Field'
+                        expression = '(Height * Height) + Age'
+                        uiRef = colors(5<red<10<green<25)
+                        externalId = 'BmiPlus'                                 
                            
             AutoTask AutoTask1
                 #mandatory #exactlyOne
                 description = 'Automated Task 1'
                 
                 Trigger
-                    on activate invoke 'https://server1.com/api1' method post
+                    On activate 
+                    invoke 'https://server1.com/api1' 
+                    method Post
+                    with failureMessage 'Cannot complete the task!'
+                
+                    On complete 
+                    invoke 'https://server1.com/api2' 
+                    method Post
+                    with failureMessage 'Cannot complete the task!'
                 
                 Form 
                     Field AutoField1

@@ -1,4 +1,5 @@
 import acadela.sacm.interpreter.attribute as attributeInterpreter
+import acadela.sacm.util as util
 
 from acadela.sacm.case_object.entity import Entity
 
@@ -95,9 +96,14 @@ def create_entity_json_object(entity):
     attributeList = []
     if hasattr(entity, "attribute"):
         for attribute in entity.attribute:
-            attributeList.append(
-                attributeInterpreter.
-                    create_attribute_json_object(attribute))
+            print ("Attribute type of ", attribute.id, "is", util.cname(attribute) )
+            if util.cname(attribute) == 'Attribute':
+                attributeList.append(
+                    attributeInterpreter.
+                        create_attribute_json_object(attribute))
+            elif util.cname(attribute) == 'DerivedAttribute':
+                # TODO: Compile Derived Attribute
+                pass
 
     entityJson["AttributeDefinition"] = attributeList
 

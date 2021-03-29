@@ -9,9 +9,9 @@ from acadela.sacm.interpreter.group import GroupInterpreter
 from acadela.sacm.interpreter.user import UserInterpreter
 from acadela.sacm.interpreter.workspace import WorkspaceInterpreter
 import acadela.sacm.interpreter.task as taskInterpreter
-import acadela.sacm.interpreter.field as fieldInterpreter
 import acadela.sacm.interpreter.attribute as attributeInterpreter
 import acadela.sacm.interpreter.entity_generator as entityGenerator
+from acadela.sacm.interpreter.stage import interpret_stage
 from acadela.sacm import util, json_util
 
 from acadela.http_request import HttpRequest
@@ -23,7 +23,7 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-runNetworkOp = False;
+runNetworkOp = False
 
 class CaseInterpreter():
 
@@ -161,39 +161,35 @@ class CaseInterpreter():
             # INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ########################################
 
-            for stage in case.stage:
+            for stage in case.stageList:
+
+                taskAsAttributeList = []
+                taskList = []
 
                 for task in stage.taskList:
-                    taskType = util.cname(task)
-                    interpretedFieldTuple = None
-                    for field in task.form.fieldList:
 
-                        if util.cname(field) == "Field":
-                            fieldPath = "{}.{}.{}".format(
-                                util.prefixing(stage.id),
-                                task.id,
-                                field.id)
+                    interpretedTask = \
+                        taskInterpreter\
+                            .interpret_task(task, stage.id)
 
-                            interpretedFieldTuple = fieldInterpreter.interpret_field(field,
-                                                             fieldPath,
-                                                             taskType)
+                    taskAsAttributeList\
+                        .append(interpretedTask['taskAsAttribute'])
 
-                        elif util.cname(field) == "DynamicField":
-                            interpretedFieldTuple = fieldInterpreter\
-                                .interpret_dynamic_field(field, fieldPath, taskType)
+                    taskList \
+                        .append(interpretedTask['task'])
 
-                        # TODO: Add Field as Attribute of Task Entity
+                    self.entityList\
+                        .append(interpretedTask['taskAsEntity'])
 
-
-                    taskInterpreter.interpret_task(task)
-
+                # TODO add task as stage attribute
+                interpret_stage(stage, taskAsAttributeList, taskList)
 
             ############################################
             # END INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ############################################
             caseEntitiesAndProps = entityGenerator.\
                 generate_case_data_entities_and_props(settingObj=case.setting,
-                                                      stages=case.stage)
+                                                      stages=case.stageList)
             self.entityList.extend(caseEntitiesAndProps['Entities'])
 
             print("Case Owner: "
@@ -212,7 +208,7 @@ class CaseInterpreter():
             for hook in case.hook:
                 print("On {} invoke {}".format(hook.event, hook.url))
 
-            for stage in case.stage:
+            for stage in case.stageList:
                 print("\n Stage Info")
                 directive = stage.directive
                 print("\tDirectives: "

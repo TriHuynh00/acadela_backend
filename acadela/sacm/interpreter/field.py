@@ -34,7 +34,7 @@ def interpret_field(field, fieldPath, taskType):
     position = default_state.defaultAttributeMap['position']\
         if not hasattr(directive, 'position')\
         else direc_intprtr\
-        .interpret_directive(directive.position)
+            .interpret_directive(directive.position)
 
     # Construct Attribute Object of TaskParam (Field)
     fieldAsAttribute = Attribute(field.id, description,
@@ -55,7 +55,8 @@ def interpret_field(field, fieldPath, taskType):
     print("Field as Attribute", vars(fieldAsAttribute))
     print("Field as TaskParam", vars(fieldAsTaskParam))
 
-    return {"fieldAsAttribute": fieldAsAttribute, "fieldAsTaskParam": fieldAsTaskParam}
+    return {"fieldAsAttribute": fieldAsAttribute,
+            "fieldAsTaskParam": fieldAsTaskParam}
 
 def interpret_dynamic_field(field, fieldPath, taskType):
     directive = field.directive
@@ -81,7 +82,8 @@ def interpret_dynamic_field(field, fieldPath, taskType):
                                   else directive.position,
                              part)
 
-    return {"fieldAsDerivedAttribute": fieldAsAttribute, "fieldAsTaskParam": fieldAsTaskParam}
+    return {"fieldAsAttribute": fieldAsAttribute,
+            "fieldAsTaskParam": fieldAsTaskParam}
 
 # Check if the part value is human (#humanDuty) or auto (#systemDuty)
 # Return -1 if part is neither #humanDuty or #systemDuty

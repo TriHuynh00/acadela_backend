@@ -1,6 +1,6 @@
 from acadela.sacm import util
 from acadela.sacm.case_object.enumeration_option import EnumerationOption
-
+from acadela.sacm.default_state import defaultAttributeMap
 import sys
 
 from os.path import dirname
@@ -11,7 +11,8 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 class Attribute():
     def __init__(self, id, content, # compulsory attributes
-                 multiplicity='any', type='notype', # directives
+                 multiplicity = defaultAttributeMap['multiplicity'],
+                 type = defaultAttributeMap['type'], # directives
                  additionalDescription = None, # below are optional
                  uiReference = None,
                  externalId = None,
@@ -19,7 +20,7 @@ class Attribute():
         self.id = id
 
         self.enumerationOptions = []
-
+        self.description = None
         if util.cname(content) == "Description":
             self.description = content.value
         elif util.cname(content) == "Question":
@@ -40,9 +41,6 @@ class Attribute():
                                       externalId)
                 )
 
-
-
-        self.description = content
         self.multiplicity = multiplicity
         self.type = type
         self.additionalDescription = additionalDescription

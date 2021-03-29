@@ -81,7 +81,7 @@ Case:
             ('Trigger' hook += CaseHook)?
             summary = SummaryPanel
         )#
-        stage += Stage
+        stageList += Stage
     )#
 ;
 
@@ -274,6 +274,7 @@ Stage:
             (ownerpath = OwnerPath)?
             (dynamicDescriptionPath = DynamicDescriptionPath)?
             (externalId = ExternalId)?
+            (additionalDescription = AdditionalDescription)?
         )#
         taskList += Task
 ;

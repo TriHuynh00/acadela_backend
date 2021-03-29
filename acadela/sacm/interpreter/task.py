@@ -2,29 +2,29 @@ from acadela.sacm import util
 import acadela.sacm.interpreter.sentry as preconditionInterpreter
 import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
+import acadela.sacm.interpreter.field as fieldInterpreter
+
 import acadela.sacm.default_state as default_state
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.task import Task
+from acadela.sacm.case_object.attribute import Attribute
 
 
-def interpret_task(task):
-    taskEntityList = []
-    taskObjectList = []
+def interpret_task(task, stageId):
     taskHookList = []
-    precondition = None
+    taskType = util.cname(task)
 
+    precondition = None
     directive = task.directive
     attrList = task.attrList
     dueDatePath = None
+    fieldAsTaskParamList = []
+    fieldAsAttributeList = []
 
     if util.cname(task) != 'AutomatedTask':
         if attrList.dueDatePath is not None:
             dueDatePath = attrList.dueDatePath.value
-
-    taskEntity = Entity(task.id, attrList.description.value)
-
-    #TODO add fields as task attributes
 
     ownerPath = None \
         if attrList.ownerPath is None \
@@ -75,9 +75,39 @@ def interpret_task(task):
         else direc_intprtr.\
             interpret_directive(directive.multiplicity)
 
+    externalId = None\
+        if attrList.externalId is None\
+        else attrList.externalId.value
+
+    # Interpret task fields (TaskParam)
+
+    for field in task.form.fieldList:
+        interpretedFieldTuple = None
+        if util.cname(field) == "Field":
+            fieldPath = "{}.{}.{}".format(
+                util.prefixing(stageId),
+                task.id,
+                field.id)
+
+            interpretedFieldTuple = fieldInterpreter\
+                .interpret_field(field, fieldPath, taskType)
+
+        elif util.cname(field) == "DynamicField":
+            interpretedFieldTuple = fieldInterpreter \
+                .interpret_dynamic_field(field, fieldPath, taskType)
+
+        fieldAsTaskParamList.append(interpretedFieldTuple['fieldAsTaskParam'])
+
+        fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
+
+    taskEntity = Entity(task.id, attrList.description.value,
+                        fieldAsAttributeList)
+
+    entityAttachPath = '{}.{}'.format(util.prefixing(stageId),\
+                                      task.id)
     taskObject = Task(task.id, attrList.description.value,
                       util.cname(task),
-                      None, # to be replaced by taskParamList
+                      fieldAsTaskParamList,
                       ownerPath,
                       dueDatePath,
                       repeatable,
@@ -86,7 +116,13 @@ def interpret_task(task):
                       manualActivationExpression,
                       dynamicDescriptionPath,
                       precondition,
-                      taskHookList)
+                      taskHookList,
+                      entityAttachPath)
+
+    taskAsAttribute = Attribute(task.id,
+                                attrList.description,
+                                multiplicity, type,
+                                externalId = externalId)
 
     print("\n\tTask {}"
           "\n\t\tDirectives "
@@ -110,4 +146,6 @@ def interpret_task(task):
                   ("None" if attrList.externalId is None else attrList.externalId.value),
                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
 
-    return {"taskEntity": taskEntityList, "taskObject": taskObjectList}
+    return { "taskAsEntity": taskEntity,
+             "task": taskObject,
+             "taskAsAttribute": taskAsAttribute }

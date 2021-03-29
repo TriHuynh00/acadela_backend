@@ -67,7 +67,11 @@ def create_attribute_json_object(attribute):
     attrObj = {"$": {}}
     thisAttr = attrObj["$"]
     thisAttr['id'] = attribute.id
+
+    print("Attr Description class name", util.cname(attribute.description))
+
     thisAttr['description'] = attribute.description
+
     if hasattr(attribute, 'defaultValues'):
         thisAttr['defaultValues'] = attribute.defaultValues
 
