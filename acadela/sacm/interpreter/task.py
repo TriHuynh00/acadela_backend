@@ -4,7 +4,7 @@ import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
 
-import acadela.sacm.default_state as default_state
+from acadela.sacm.default_state import defaultAttributeMap
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.task import Task
@@ -52,7 +52,7 @@ def interpret_task(task, stageId):
 
     # Interpret Directive
 
-    activation = default_state.defaultAttributeMap['activation']\
+    activation = defaultAttributeMap['activation']\
         if not hasattr(directive, 'activation')\
         else direc_intprtr.\
                 interpret_directive(directive.activation)
@@ -62,7 +62,7 @@ def interpret_task(task, stageId):
             activation.startswith("activateWhen"):
         manualActivationExpression = activation.split('(')[1][:-1]
 
-    repeatable = default_state.defaultAttributeMap['repeat'] \
+    repeatable = defaultAttributeMap['repeat'] \
         if not hasattr(directive, 'repeatable') \
         else direc_intprtr. \
             interpret_directive(directive.repeatable)
@@ -70,10 +70,15 @@ def interpret_task(task, stageId):
     mandatory = direc_intprtr.\
         interpret_directive(directive.mandatory)
 
-    multiplicity = default_state.defaultAttributeMap['multiplicity']\
+    multiplicity = defaultAttributeMap['multiplicity']\
         if directive.multiplicity is None\
         else direc_intprtr.\
             interpret_directive(directive.multiplicity)
+    
+    typeValue = defaultAttributeMap['type'] \
+        if not hasattr(directive, 'type') \
+        else direc_intprtr. \
+            interpret_directive(directive.type)
 
     externalId = None\
         if attrList.externalId is None\
@@ -121,7 +126,7 @@ def interpret_task(task, stageId):
 
     taskAsAttribute = Attribute(task.id,
                                 attrList.description,
-                                multiplicity, type,
+                                multiplicity, typeValue,
                                 externalId = externalId)
 
     print("\n\tTask {}"

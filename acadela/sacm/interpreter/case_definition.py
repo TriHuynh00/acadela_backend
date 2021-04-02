@@ -1,7 +1,10 @@
 import acadela.sacm.interpreter.attribute as attributeInterpreter
 import acadela.sacm.util as util
+import acadela.sacm.default_state as defaultState
 
 from acadela.sacm.case_object.entity import Entity
+from acadela.sacm.case_object.attribute import Attribute
+from acadela.sacm.case_object.case_definition import CaseDefinition
 
 import sys
 
@@ -13,44 +16,67 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 caseOwnerAttr = None
 casePatientAttr = None
 
-# TODO: Generate JSON from Entity & Attribute Objects
-
 # Generate the Case Data Entity, containing settings, CaseDefinition
-def generate_case_data_entities_and_props(settingObj, stages):
-    generatedEntities = []
-    entitiesAndCaseProp = {}
+def interpret_case_definition(id, description,
+                              summary, hookList,
+                              intprtSetting, stageAsAttributeList,
+                              notes = None):
+    global caseOwnerAttr
+    global casePatientAttr
 
-    settingEntity = interpret_setting_entity(settingObj)
+    settingEntity = intprtSetting['settingAsEntity']
 
-    caseDataEntity = Entity("CaseData",
-                            "Case Data");
+    caseOwnerPath = '{}.{}'.format(settingEntity.id,\
+                                   caseOwnerAttr.id)
 
+    caseClientPath = None\
+        if casePatientAttr is None\
+        else '{}.{}'.format(settingEntity.id,\
+                            casePatientAttr.id)
 
+    caseDataEntity = interpret_case_data(intprtSetting['settingAsAttribute'],
+                                         stageAsAttributeList)
 
-    caseDataEntity.attribute.append(settingEntity)
+    caseHookEvents = interpret_case_hook(hookList)
 
-    # TODO: Add other Tasks and Stages as entities
-    for stage in stages:
-        print("Stage Info "
-              "\n\tID: {}"
-              "\n\tDescription: {}"
-              .format(stage.id,
-                      stage.description.value))
+    print("Case Hook Events", caseHookEvents)
 
-    generatedEntities.append(settingEntity)
+    # TODO: CREATE SUMMARYSECTION INTERPRETER
 
-    entitiesAndCaseProp['Entities'] = generatedEntities
-    entitiesAndCaseProp['CaseOwner'] = caseOwnerAttr
-    entitiesAndCaseProp['CasePatient'] = casePatientAttr
+    caseDefinition = CaseDefinition(id, description,
+                        caseOwnerPath,
+                        caseDataEntity.id,
+                        summary,
+                        caseHookEvents,
+                        entityDefinitionId = settingEntity,
+                        entityAttachPath = settingEntity,
+                        clientPath = caseClientPath)
 
-    return entitiesAndCaseProp
+    return {
+        'caseDefinition': caseDefinition,
+        'caseDataEntity': caseDataEntity
+    }
+
+def interpret_case_data(settingAsAttribute, stageAsAttributes):
+
+    caseDataEntity = Entity("CaseData",\
+                            "Case Data")
+
+    caseDataEntity.attribute = stageAsAttributes
+
+    caseDataEntity.attribute.append(settingAsAttribute)
+
+    return caseDataEntity
 
 def interpret_setting_entity(settingObj):
     settingDescription = "Settings" \
-        if settingObj.description == None \
+        if settingObj.description is None \
         else settingObj.description.value
 
-    settingEntity = Entity("Settings", settingDescription)
+    settingName = util.prefixing("Settings")
+
+    settingEntity = Entity(settingName,
+                           settingDescription)
 
     for attr in settingObj.attrList:
         print("Attr ID " + attr.name)
@@ -80,10 +106,22 @@ def interpret_setting_entity(settingObj):
         # attrObjJson = attributeInterpreter.create_attribute_json_object(attrObj)
         # settingAttributeJson.append(attrObjJson)
 
+    settingType = defaultState.entityLinkType + "." \
+                  + settingName
+
+    settingAsAttribute = Attribute(settingName,
+                                   settingObj.description,
+                                   type=settingType)
+
+    print("Setting Attribute", vars(settingAsAttribute))
+
     # settingJson = create_entity_json_object(settingEntity)
     # settingJson["Attribute"] = settingAttributeJson
     # print("Setting Entity: \n", json.dumps(settingJson, indent=4))
-    return settingEntity
+    return {
+        'settingAsEntity': settingEntity,
+        'settingAsAttribute': settingAsAttribute
+    }
 
 # Create an EntityDefinition based on a given id & description
 def create_entity_json_object(entity):
@@ -109,3 +147,9 @@ def create_entity_json_object(entity):
 
     return entityJson
 
+def interpret_case_hook(hookList):
+    hookEvents = {}
+    for hook in hookList:
+        hookEvents[hook.event] = hook.url
+
+    return hookEvents

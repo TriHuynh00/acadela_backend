@@ -10,7 +10,7 @@ from acadela.sacm.interpreter.user import UserInterpreter
 from acadela.sacm.interpreter.workspace import WorkspaceInterpreter
 import acadela.sacm.interpreter.task as taskInterpreter
 import acadela.sacm.interpreter.attribute as attributeInterpreter
-import acadela.sacm.interpreter.entity_generator as entityGenerator
+import acadela.sacm.interpreter.case_definition as caseDefinition
 from acadela.sacm.interpreter.stage import interpret_stage
 from acadela.sacm import util, json_util
 
@@ -160,11 +160,10 @@ class CaseInterpreter():
             ########################################
             # INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ########################################
-
+            stageAsAttributeList = []
             for stage in case.stageList:
 
                 taskAsAttributeList = []
-                taskList = []
 
                 for task in stage.taskList:
 
@@ -175,28 +174,43 @@ class CaseInterpreter():
                     taskAsAttributeList\
                         .append(interpretedTask['taskAsAttribute'])
 
-                    taskList \
+                    self.taskList \
                         .append(interpretedTask['task'])
 
                     self.entityList\
                         .append(interpretedTask['taskAsEntity'])
 
-                # TODO add task as stage attribute
-                interpret_stage(stage, taskAsAttributeList, taskList)
+                interpretedStage = interpret_stage(stage, taskAsAttributeList, self.taskList)
+
+                self.entityList\
+                    .append(interpretedStage['stageAsEntity'])
+
+                self.stageList\
+                    .append(interpretedStage['stage'])
+
+                stageAsAttributeList\
+                    .append(interpretedStage['stageAsAttribute'])
 
             ############################################
             # END INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ############################################
-            caseEntitiesAndProps = entityGenerator.\
-                generate_case_data_entities_and_props(settingObj=case.setting,
-                                                      stages=case.stageList)
-            self.entityList.extend(caseEntitiesAndProps['Entities'])
 
-            print("Case Owner: "
-                  "\n\tid: {}"
-                  "\n\ttype: {}".format(
-                    caseEntitiesAndProps["CaseOwner"].id,
-                    caseEntitiesAndProps["CaseOwner"].type))
+            interpretedSetting = caseDefinition\
+                .interpret_setting_entity(case.setting)
+
+            settingEntity = interpretedSetting['settingAsEntity']
+            self.entityList.append(settingEntity)
+
+            interpretedCase = caseDefinition.interpret_case_definition(
+                case.casename, case.description,
+                case.summary, case.hookList,
+                interpretedSetting, stageAsAttributeList,
+                notes = case.notes)
+
+            self.entityList \
+                .append(interpretedCase['caseDataEntity'])
+
+            self.caseDefinition = interpretedCase['caseDefinition']
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
@@ -204,26 +218,23 @@ class CaseInterpreter():
                 print("Attr ID " + attr.name)
                 print("#Directives ", attr.attrProp.directive.type)
 
-            print("\n Hook Info")
-            for hook in case.hook:
-                print("On {} invoke {}".format(hook.event, hook.url))
 
-            for stage in case.stageList:
-                print("\n Stage Info")
-                directive = stage.directive
-                print("\tDirectives: "
-                      "\n\t\t mandatory = {}"
-                      "\n\t\t repeatable = {}"
-                      "\n\t\t activation = {}"
-                      "\n\t\t multiplicity = {}".
-                      format(directive.mandatory,
-                             directive.repeatable,
-                             directive.activation,
-                             directive.multiplicity,))
-                print("\tDescription: " + stage.description.value)
-                print("\tOwnerPath: " + stage.ownerpath.value)
-                print("\tDynamic Description Path: " + stage.dynamicDescriptionPath.value)
-                print("\tExternal ID: " + stage.externalId.value)
+            # for stage in case.stageList:
+            #     print("\n Stage Info")
+            #     directive = stage.directive
+            #     print("\tDirectives: "
+            #           "\n\t\t mandatory = {}"
+            #           "\n\t\t repeatable = {}"
+            #           "\n\t\t activation = {}"
+            #           "\n\t\t multiplicity = {}".
+            #           format(directive.mandatory,
+            #                  directive.repeatable,
+            #                  directive.activation,
+            #                  directive.multiplicity,))
+            #     print("\tDescription: " + stage.description.value)
+            #     print("\tOwnerPath: " + stage.ownerpath.value)
+            #     print("\tDynamic Description Path: " + stage.dynamicDescriptionPath.value)
+            #     print("\tExternal ID: " + stage.externalId.value)
 
                 # Task interpret
                 # for task in stage.taskList:

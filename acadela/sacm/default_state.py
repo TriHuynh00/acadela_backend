@@ -8,3 +8,5 @@ defaultAttributeMap = {
     'activation': 'automatic',
     'position': 'STRETCHED'
 }
+
+entityLinkType = 'Link.EntityDefinition'

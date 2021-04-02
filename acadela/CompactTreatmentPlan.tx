@@ -78,8 +78,11 @@ Case:
             description = Description
             responsibilities = Responsibilities
             setting = CaseSetting
-            ('Trigger' hook += CaseHook)?
+            ('Trigger' hookList += CaseHook)?
             summary = SummaryPanel
+            //(entityDefinitionId = STRING)?
+            //(entityAttachPath = STRING)?
+            (notes = STRING)?
         )#
         stageList += Stage
     )#

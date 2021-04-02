@@ -1,6 +1,6 @@
 from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.sacm import util
-from acadela.sacm.interpreter import entity_generator
+from acadela.sacm.interpreter import case_definition
 
 import json
 
@@ -86,7 +86,7 @@ class WorkspaceInterpreter:
         entityJsonList = []
         for entity in entityList:
             entityJsonList.append(
-                entity_generator.create_entity_json_object(entity))
+                case_definition.create_entity_json_object(entity))
 
         workspaceObjList["EntityDefinition"] = entityJsonList
 

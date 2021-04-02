@@ -66,7 +66,7 @@ def interpret_stage(stage, taskAsAttributeList, taskList):
     # print("\tExternal ID: " + stage.externalId.value)
 
     return {
-        'stageEntity': stageAsEntity,
+        'stageAsEntity': stageAsEntity,
         'stage': stageObject,
         'stageAsAttribute': stageAsAttribute
     }
