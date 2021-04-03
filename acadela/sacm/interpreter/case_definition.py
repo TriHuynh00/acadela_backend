@@ -1,6 +1,9 @@
-import acadela.sacm.interpreter.attribute as attributeInterpreter
+
 import acadela.sacm.util as util
 import acadela.sacm.default_state as defaultState
+
+import acadela.sacm.interpreter.attribute as attributeInterpreter
+import acadela.sacm.interpreter.summary as summaryInterpreter
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
@@ -42,11 +45,15 @@ def interpret_case_definition(id, description,
     print("Case Hook Events", caseHookEvents)
 
     # TODO: CREATE SUMMARYSECTION INTERPRETER
+    summarySectionList = []
+    for summarySection in summary.sectionList:
+        summarySectionList.append(
+            summaryInterpreter.interpret_summary(summarySection))
 
     caseDefinition = CaseDefinition(id, description,
                         caseOwnerPath,
                         caseDataEntity.id,
-                        summary,
+                        summarySectionList,
                         caseHookEvents,
                         entityDefinitionId = settingEntity,
                         entityAttachPath = settingEntity,
