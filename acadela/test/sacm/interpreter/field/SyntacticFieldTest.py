@@ -1,5 +1,5 @@
 import unittest
-from acadela.test.sacm.interpreter.InterpreterTestSuite import baseCodeWithoutField
+from acadela.test.sacm.interpreter.TestParam import baseCodeWithoutField
 import acadela.sacm.interpreter.stage as stageIntrprtr
 from acadela.sacm.interpreter.case_template import CaseInterpreter
 
