@@ -36,7 +36,7 @@ def interpret_field(field, fieldPath, taskType):
         else direc_intprtr\
             .interpret_directive(directive.position)
 
-    # Construct Attribute Object of TaskParam (Field)
+    # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = Attribute(field.id, description,
                                  multiplicity = multiplicity,
                                  type = type)
@@ -52,8 +52,8 @@ def interpret_field(field, fieldPath, taskType):
     fieldAsTaskParam = Field(fieldPath,
          readOnly, mandatory, position, part)
 
-    print("Field as Attribute", vars(fieldAsAttribute))
-    print("Field as TaskParam", vars(fieldAsTaskParam))
+    print("field as Attribute", vars(fieldAsAttribute))
+    print("field as TaskParam", vars(fieldAsTaskParam))
 
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": fieldAsTaskParam}
@@ -64,7 +64,7 @@ def interpret_dynamic_field(field, fieldPath, taskType):
     part = None if not hasattr(directive, "part")\
                 else directive.part
 
-    # Construct Attribute Object of TaskParam (Field)
+    # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = DerivedAttribute(field.id, field.description,
         field.additionalDescription,
         field.expression,

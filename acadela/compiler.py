@@ -48,13 +48,13 @@ model_str = """
         #manualActivate #mandatory
         description = 'Charlson Comorbidity Form'
         Form //CharlsonForm
-            Field Charlson1
+            field Charlson1
                 #selector #mandatory
                 Question = 'Do you have diabetes?'
                     Option 'No' value = '0'
                     Option 'Yes' value = '1'
 
-            Field Charlson2
+            field Charlson2
                 #selector #mandatory
                 Question = 'Do you have hearth attacks?'
                     Option 'No' value = '0'
@@ -133,15 +133,15 @@ model_str = """
                     On activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
                 Form //abc
-                    Field Height
+                    field Height
                         #number(0-150) #exactlyOne
                         description = 'Height of patient in cm'    
                         
-                    Field Weight
+                    field Weight
                         #number(0-300) #exactlyOne
                         description = 'Weight of patient in kg'
                         
-                    Field AgeRange
+                    field AgeRange
                         #selector #mandatory
                         Question = 'What is your age range?'
                             additionalDescription = 'age range affect BMI'
@@ -158,7 +158,7 @@ model_str = """
                     DynamicField BmiScorePlus
                         #mandatory #readOnly #left #number
                         description = 'BMI Calculation with age counted'
-                        additionalDescription = 'full Derived Field'
+                        additionalDescription = 'full Derived field'
                         expression = '(Height * Height) + Age'
                         uiRef = colors(5<red<10<green<25)
                         externalId = 'BmiPlus'                                 
@@ -179,7 +179,7 @@ model_str = """
                     with failureMessage 'Cannot complete the task!'
                 
                 Form 
-                    Field AutoField1
+                    field AutoField1
                         #number(<10) #mandatory
                         description = 'AutoField1'
                 
@@ -193,72 +193,17 @@ model_str = """
                     previousStep = 'AdmitPatient' 
                 
                 Form 
-                    Field Systolic 
+                    field Systolic 
                         #readonly #humanDuty #number(0-300)
                         description = 'Measure Systolic blood pressure'
                         
-                    Field Diastolic 
+                    field Diastolic 
                         #readonly #humanDuty #number(0-300)
                         description = 'Measure Diastolic blood pressure'
                         
-                    Field BloodPressureAnalysis
+                    field BloodPressureAnalysis
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
-"""
-
-str2="""
-    #aca0.1
-    //import discharge from '/stages/discharge.aca' 
-    workspace Umcg
-    define case GCS1_Groningen
-        prefix = 'GCS1'
-        version = 1
-        Responsibilities
-            group name = 'Umcg Physician' id = 'UmcgPhysicians'
-            group name = 'Umcg Clinician' id = 'UmcgClinicians'
-            group name = 'Umcg Professional' id = 'UmcgProfessionals'
-            group name = 'Umcg Patient' id = 'UmcgPatients'
-            
-            user matthijs
-            user williamst
-        
-        // A comment
-            /* a multiline
-             * Comment
-             */
-        
-        entity CaseData
-            description = 'Settings desc'
-            #exactlyOne
-            
-            attributeList
-                entity Settings
-                    description = "Settings"
-                    #exactlyOne
-                    type = "Link.EntityDefinition.Settings"
-                    
-                    attributeList
-                        Attribute Patient
-                            description = 'Patient'
-                            #exactlyOne
-                            additionalDescription = 'Patient that is assigned to this case'
-                            type = 'Link.Users(UmcgPatients)'
-                            
-                        Attribute CaseOwner
-                            description = 'Case Owner'
-                            #exactlyOne
-                            additionalDescription = 'The owner of this case'
-                            type = 'Link.Users(UmcgClinicians)'
-                    endAttributeList
-                    
-            endAttributeList
-                
-            
-        entity Identifications
-            description = 'Identitfication desc'
-            #atLeastOne
-            
-        CaseDefinition Leida
 """
 
 # workspace staticId = 'c023' id = 'Lleida_Cancer'
