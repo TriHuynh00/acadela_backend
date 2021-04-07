@@ -4,7 +4,7 @@ import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
 
-from acadela.sacm.default_state import defaultAttributeMap
+from acadela.sacm.default_state import attrMap
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.task import Task
@@ -19,7 +19,9 @@ def interpret_task(task, stageId):
     directive = task.directive
     attrList = task.attrList
     dueDatePath = None
-    fieldAsTaskParamList = []
+    fieldList = []
+    dynamicFieldList = []
+
     fieldAsAttributeList = []
 
     if util.cname(task) != 'AutomatedTask':
@@ -52,7 +54,7 @@ def interpret_task(task, stageId):
 
     # Interpret Directive
 
-    activation = defaultAttributeMap['activation']\
+    activation = attrMap['activation']\
         if not hasattr(directive, 'activation')\
         else direc_intprtr.\
                 interpret_directive(directive.activation)
@@ -62,7 +64,7 @@ def interpret_task(task, stageId):
             activation.startswith("activateWhen"):
         manualActivationExpression = activation.split('(')[1][:-1]
 
-    repeatable = defaultAttributeMap['repeat'] \
+    repeatable = attrMap['repeat'] \
         if not hasattr(directive, 'repeatable') \
         else direc_intprtr. \
             interpret_directive(directive.repeatable)
@@ -70,12 +72,12 @@ def interpret_task(task, stageId):
     mandatory = direc_intprtr.\
         interpret_directive(directive.mandatory)
 
-    multiplicity = defaultAttributeMap['multiplicity']\
+    multiplicity = attrMap['multiplicity']\
         if directive.multiplicity is None\
         else direc_intprtr.\
             interpret_directive(directive.multiplicity)
     
-    typeValue = defaultAttributeMap['type'] \
+    typeValue = attrMap['type'] \
         if not hasattr(directive, 'type') \
         else direc_intprtr. \
             interpret_directive(directive.type)
@@ -97,11 +99,12 @@ def interpret_task(task, stageId):
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath, taskType)
 
+            fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
+
         elif util.cname(field) == "DynamicField":
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath, taskType)
-
-        fieldAsTaskParamList.append(interpretedFieldTuple['fieldAsTaskParam'])
+            dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
 
@@ -112,7 +115,7 @@ def interpret_task(task, stageId):
                                       task.id)
     taskObject = Task(task.id, attrList.description.value,
                       util.cname(task),
-                      fieldAsTaskParamList,
+                      fieldList,
                       ownerPath,
                       dueDatePath,
                       repeatable,

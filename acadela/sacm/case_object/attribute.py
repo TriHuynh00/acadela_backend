@@ -1,6 +1,6 @@
 from acadela.sacm import util
 from acadela.sacm.case_object.enumeration_option import EnumerationOption
-from acadela.sacm.default_state import defaultAttributeMap
+from acadela.sacm.default_state import attrMap
 import sys
 
 from os.path import dirname
@@ -10,10 +10,10 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 
 class Attribute():
-    def __init__(self, id, content, # compulsory attributes
-                 multiplicity = defaultAttributeMap['multiplicity'],
-                 type = defaultAttributeMap['type'], # directives
-                 additionalDescription = None, # below are optional
+    def __init__(self, id, content,  # compulsory attributes
+                 multiplicity = attrMap['multiplicity'],
+                 type = attrMap['type'],  # directives
+                 additionalDescription = None,  # below are optional
                  uiReference = None,
                  externalId = None,
                  defaultValues = None):

@@ -9,12 +9,13 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 class Task():
     def __init__(self, id, description,
                  taskType,
-                 taskParamList = [],
+                 fieldList = [],
+                 dynamicFieldList = [],
                  ownerPath = None,
                  dueDatePath = None,
-                 repeatable = default_state.defaultAttributeMap['repeat'],
-                 mandatory = default_state.defaultAttributeMap['mandatory'],
-                 activation = default_state.defaultAttributeMap['activation'],
+                 repeatable = default_state.attrMap['repeat'],
+                 mandatory = default_state.attrMap['mandatory'],
+                 activation = default_state.attrMap['activation'],
                  manualActivationExpression = None,
                  externalId = None,
                  dynamicDescriptionPath = None,
@@ -36,7 +37,8 @@ class Task():
 
         self.taskType = taskType
         self.description = description
-        self.taskParamList = taskParamList
+        self.fieldList = fieldList
+        self.dynamicFieldList = dynamicFieldList
         self.ownerPath = ownerPath
         self.dueDatePath = dueDatePath
         self.repeatable = repeatable

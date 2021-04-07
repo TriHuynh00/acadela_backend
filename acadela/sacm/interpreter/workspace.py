@@ -2,6 +2,8 @@ from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.sacm import util
 from acadela.sacm.interpreter import case_definition
 
+import acadela.sacm.interpreter.attribute as attrIntrprtr
+
 import json
 
 class WorkspaceInterpreter:
@@ -76,7 +78,7 @@ class WorkspaceInterpreter:
         self.jsonEntityList.append(entityProp)
 
 
-    def workspacePropToJson(self, workspace, case, entityList):
+    def workspacePropToJson(self, workspace, caseObjTree, entityList):
         workspaceObjList = {}
         workspaceObjList["$"] = \
             {
@@ -87,6 +89,11 @@ class WorkspaceInterpreter:
         for entity in entityList:
             entityJsonList.append(
                 case_definition.create_entity_json_object(entity))
+
+
+        for task in caseObjTree["tasks"]:
+            for field in task.fieldList:
+                attrIntrprtr.create_attribute_json_object(field)
 
         workspaceObjList["EntityDefinition"] = entityJsonList
 

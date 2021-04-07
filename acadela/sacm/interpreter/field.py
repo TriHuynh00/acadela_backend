@@ -3,24 +3,45 @@ from acadela.sacm import default_state
 from acadela.sacm.case_object.attribute import Attribute
 from acadela.sacm.case_object.derived_attribute import DerivedAttribute
 from acadela.sacm.case_object.field import Field
+from acadela.sacm.case_object.dynamic_field import DynamicField
+from acadela.sacm.case_object.enumeration_option import EnumerationOption
+from acadela.sacm.case_object.enumeration import Enumeration
 
 import acadela.sacm.interpreter.directive as direc_intprtr
 
 def interpret_field(field, fieldPath, taskType):
     directive = field.directive
     part = directive.part
+    enumerationOptions = []
+    question = None
 
-    if field.description is None:
-        description = field.question
-    else:
-        description = field.description
+    if field.question is not None:
+        description = field.question.text
+        for option in field.question.optionList:
+            additionalDescription = \
+                None if not hasattr(option, "additionalDescription") \
+                    else option.additionalDescription
 
-    multiplicity = default_state.defaultAttributeMap['multiplicity'] \
+            externalId = \
+                None if not hasattr(option, "externalId") \
+                    else option.additionalDescription
+
+            enumerationOptions.append(
+                EnumerationOption(option.key, option.value,
+                                  additionalDescription,
+                                  externalId)
+            )
+        question = Enumeration(description, enumerationOptions)
+
+    elif field.description is not None:
+        description = field.description.value
+
+    multiplicity = default_state.attrMap['multiplicity'] \
         if not hasattr(directive, "multiplicity") \
         else direc_intprtr\
                 .interpret_directive(directive.multiplicity)
 
-    type = default_state.defaultAttributeMap['type'] \
+    type = default_state.attrMap['type'] \
         if not hasattr(directive, "type") \
         else direc_intprtr\
                     .interpret_directive(directive.type)
@@ -31,7 +52,7 @@ def interpret_field(field, fieldPath, taskType):
     readOnly = direc_intprtr.\
         interpret_directive(directive.readOnly)
 
-    position = default_state.defaultAttributeMap['position']\
+    position = default_state.attrMap['position']\
         if not hasattr(directive, 'position')\
         else direc_intprtr\
             .interpret_directive(directive.position)
@@ -49,8 +70,9 @@ def interpret_field(field, fieldPath, taskType):
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
 
-    fieldAsTaskParam = Field(fieldPath,
-         readOnly, mandatory, position, part)
+    fieldAsTaskParam = Field(field.id, description,
+         question, multiplicity, type,
+         fieldPath, readOnly, mandatory, position, part)
 
     print("field as Attribute", vars(fieldAsAttribute))
     print("field as TaskParam", vars(fieldAsTaskParam))
@@ -75,15 +97,20 @@ def interpret_dynamic_field(field, fieldPath, taskType):
     if taskType == 'DualTask':
         check_part_for_dual_task(directive.part, field.id)
 
-    fieldAsTaskParam = Field(fieldPath,
-                             directive.readOnly,
-                             directive.mandatory,
-                             None if directive.position is None
-                                  else directive.position,
-                             part)
+    position = None if directive.position is None\
+               else directive.position
+
+
+
+    dynamicField = DynamicField(field.id, field.description,
+        directive.explicitType, field.additionalDescription,
+        field.expression, field.uiRef, field.externalId,
+        # Dynamic field properties
+        fieldPath, directive.readOnly, directive.mandatory,
+        position, part)
 
     return {"fieldAsAttribute": fieldAsAttribute,
-            "fieldAsTaskParam": fieldAsTaskParam}
+            "fieldAsTaskParam": dynamicField}
 
 # Check if the part value is human (#humanDuty) or auto (#systemDuty)
 # Return -1 if part is neither #humanDuty or #systemDuty

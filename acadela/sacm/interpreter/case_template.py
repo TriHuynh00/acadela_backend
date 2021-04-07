@@ -45,21 +45,21 @@ class CaseInterpreter():
         self.attributeList = []
         self.jsonEntityList = []
         self.jsonAttributeList = []
-        self.caseObjectTree = [
-            {"workspace": ""},
-            {"groups": self.groupList},
-            {"users":  self.userList},
-            {"entities": self.entityList},
-            {"stages": self.stageList},
-            {"tasks": self.taskList},
-            {"case": self.caseDefinition},
-            {"attributes": self.attributeList}
-        ]
+        self.caseObjectTree = {
+            "workspace": "",
+            "groups": self.groupList,
+            "users":  self.userList,
+            "entities": self.entityList,
+            "stages": self.stageList,
+            "tasks": self.taskList,
+            "case": self.caseDefinition,
+            "attributes": self.attributeList
+        }
 
-    def compile_for_connecare(self, workspace, case):
+    def compile_for_connecare(self, workspace, caseObjTree):
         caseObjList = {}
         workspaceObjList = self.workspaceInterpreter \
-            .workspacePropToJson(workspace, case, self.entityList)
+            .workspacePropToJson(workspace, caseObjTree, self.entityList)
 
         # Check if there is any Error being returned
         if workspaceObjList.get("Error") is None:
@@ -177,13 +177,13 @@ class CaseInterpreter():
                     self.taskList \
                         .append(interpretedTask['task'])
 
-                    self.entityList\
-                        .append(interpretedTask['taskAsEntity'])
+                    # self.entityList\
+                    #     .append(interpretedTask['taskAsEntity'])
 
                 interpretedStage = interpret_stage(stage, taskAsAttributeList, self.taskList)
 
-                self.entityList\
-                    .append(interpretedStage['stageAsEntity'])
+                # self.entityList\
+                #     .append(interpretedStage['stageAsEntity'])
 
                 self.stageList\
                     .append(interpretedStage['stage'])
@@ -207,8 +207,8 @@ class CaseInterpreter():
                 interpretedSetting, stageAsAttributeList,
                 notes = case.notes)
 
-            self.entityList \
-                .append(interpretedCase['caseDataEntity'])
+            # self.entityList \
+            #     .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
 
@@ -217,6 +217,15 @@ class CaseInterpreter():
                 attributeInterpreter.interpret_attribute_object(attr)
                 print("Attr ID " + attr.name)
                 print("#Directives ", attr.attrProp.directive.type)
+
+            caseInJson = self.compile_for_connecare(
+                workspace, self.caseObjectTree)
+
+            if runNetworkOp:
+                response = requests.post(
+                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=1&isExecute=false",
+                headers=HttpRequest.simulateUserHeader,
+                json=json.loads(json.dumps(caseInJson)))
 
 
             # for stage in case.stageList:
@@ -268,12 +277,3 @@ class CaseInterpreter():
                 #                   ("None" if attrList.externalId is None else attrList.externalId.value),
                 #                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
             # print("Case Definition", case.caseDef.caseDefName)
-
-            caseInJson = self.compile_for_connecare(workspace, case)
-
-            if runNetworkOp:
-                response = requests.post(
-                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=1&isExecute=false",
-                headers=HttpRequest.simulateUserHeader,
-                json=json.loads(json.dumps(caseInJson)))
-

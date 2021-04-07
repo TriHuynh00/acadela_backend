@@ -12,9 +12,8 @@ def prefixing(name):
 
 # If an attribute of an object is empty
 # Assign None or a predefined value into it
-def assign_default_attribute_value(object, attribute, defaultValue = None):
-    if hasattr(object, attribute):
-        if defaultValue is None:
-            return None
-        else:
-            return defaultValue
+def set_value_if_null(attribute, defaultValue):
+    if attribute is None:
+        return defaultValue
+    else:
+        return attribute

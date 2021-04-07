@@ -8,4 +8,4 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 class Enumeration:
     def __init__(self, questionText, enumerationOptions):
         self.questionText = questionText
-        self.enumerationOptions = enumerationOptions
+        self.options = enumerationOptions

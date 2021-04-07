@@ -1,6 +1,6 @@
 import sys
 
-defaultAttributeMap = {
+attrMap = {
     'multiplicity': 'any',
     'type': 'notype',
     'mandatory': None,

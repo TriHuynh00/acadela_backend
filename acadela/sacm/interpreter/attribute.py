@@ -40,7 +40,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
             attrObj.type = 'links.users({})'.format(attribute.group)
 
         else:
-            attrObj.type = default_state.defaultAttributeMap['type']
+            attrObj.type = default_state.attrMap['type']
 
         if attribute.attrProp.directive.multiplicity is not None:
             attrObj.multiplicity = directive.interpret_directive(attribute.attrProp.directive.multiplicity)
@@ -72,6 +72,14 @@ def create_attribute_json_object(attribute):
 
     thisAttr['description'] = attribute.description
 
+    # if util.cname(attribute.description) == 'Description':
+    #     thisAttr['description'] = attribute.description.value
+    # elif util.cname(attribute.description) == 'Question':
+    #     thisAttr['description'] = attribute.description.text
+    #
+    # else:
+    #     thisAttr['description'] = attribute.description
+
     if hasattr(attribute, 'defaultValues'):
         thisAttr['defaultValues'] = attribute.defaultValues
 
@@ -85,6 +93,27 @@ def create_attribute_json_object(attribute):
 
     if hasattr(attribute, 'type'):
         thisAttr['type'] = attribute.type
+
+        if attribute.type == 'enumeration'\
+                and hasattr(attribute, 'question'):
+
+            optionList = []
+            for option in attribute.question.options:
+                optionJson = {}
+                optionJson['value'] = option.value
+                optionJson['description'] = option.description
+
+                if option.additionalDescription is not None:
+                    optionJson['additionalDescription']\
+                        = option.additionalDescription
+
+                if option.externalId is not None:
+                    optionJson['externalId']\
+                        = option.externalId
+
+                optionList.append({"$": optionJson})
+            attrObj['EnumerationOption'] = optionList
+
     if hasattr(attribute, 'multiplicity'):
         thisAttr['multiplicity'] = attribute.multiplicity
 
