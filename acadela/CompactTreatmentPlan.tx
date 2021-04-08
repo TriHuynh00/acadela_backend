@@ -218,7 +218,9 @@ DualTaskHttpHook:
 
 
 CaseHookEvent:
-    'activate'
+    'available'
+    | 'enable'
+    | 'activate'
     | 'complete'
     | 'terminate'
     | 'delete'
@@ -330,6 +332,7 @@ AutomatedTaskAttrs:
         (ownerPath = OwnerPath)?
         (externalId = ExternalId)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
+        (additionalDescription = AdditionalDescription)?
         (precondition = Precondition)?
     )#
 ;
@@ -340,6 +343,7 @@ SharedTaskAttrs:
         (ownerPath = OwnerPath)?
         (dueDatePath = DueDatePath)?
         (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
         (precondition = Precondition)?
     )#

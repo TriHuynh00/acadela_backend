@@ -8,17 +8,19 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 class Stage():
     def __init__(self, id, description,
-                 ownerPath = None,
-                 repeatable = default_state.attrMap['repeat'],
-                 mandatory = default_state.attrMap['mandatory'],
-                 activation = default_state.attrMap['activation'],
-                 multiplicity = default_state.attrMap['multiplicity'],
-                 manualActivationExpression = None,
-                 externalId = None,
-                 dynamicDescriptionPath = None,
-                 entityAttachPath = None,
-                 taskList = [],
+                 multiplicity,
+                 type,
+                 ownerPath,
+                 taskList,
+                 additionalDescription,
+                 externalId,
+                 repeatable,
+                 mandatory,
+                 activation,
+                 manualActivationExpression,
+                 dynamicDescriptionPath,
                  entityDefinitionId = None,
+                 entityAttachPath=None,
                  isPrefixed = True):
 
         if isPrefixed:
@@ -36,6 +38,7 @@ class Stage():
         else:
             self.entityAttachPath = entityAttachPath
 
+        self.type = type
         self.description = description
         self.ownerPath = ownerPath
         self.repeatable = repeatable

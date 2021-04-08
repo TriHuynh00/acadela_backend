@@ -8,19 +8,22 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 class Task():
     def __init__(self, id, description,
+                 multiplicity,
+                 valueType,
                  taskType,
-                 fieldList = [],
-                 dynamicFieldList = [],
-                 ownerPath = None,
-                 dueDatePath = None,
-                 repeatable = default_state.attrMap['repeat'],
-                 mandatory = default_state.attrMap['mandatory'],
-                 activation = default_state.attrMap['activation'],
-                 manualActivationExpression = None,
-                 externalId = None,
-                 dynamicDescriptionPath = None,
-                 precondition = None,
-                 hook = None,
+                 fieldList,
+                 dynamicFieldList,
+                 ownerPath,
+                 dueDatePath,
+                 repeatable,
+                 mandatory,
+                 activation,
+                 manualActivationExpression,
+                 externalId,
+                 addtionalDescription,
+                 dynamicDescriptionPath,
+                 precondition,
+                 hook,
                  entityAttachPath = None,
                  entityDefinitionId = None,
                  isPrefixed = True):
@@ -35,6 +38,9 @@ class Task():
         else:
             self.entityDefinitionId = entityDefinitionId
 
+        self.multiplicity = multiplicity
+        self.valueType = valueType
+
         self.taskType = taskType
         self.description = description
         self.fieldList = fieldList
@@ -47,6 +53,7 @@ class Task():
         self.manualActivationDescription = manualActivationExpression
         self.entityAttachPath = entityAttachPath
         self.externalId = externalId
+        self.addtionalDescription = addtionalDescription
         self.dynamicDescriptionPath = dynamicDescriptionPath
         self.precondition = precondition
         self.hook = hook

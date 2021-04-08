@@ -1,4 +1,4 @@
-from acadela.sacm.default_state import attrMap
+from acadela.sacm.default_state import defaultAttrMap
 
 from os.path import dirname
 import sys
@@ -13,4 +13,4 @@ class SummarySection:
         self.id = id
         self.description = description
         self.summaryParamList = summaryParamList
-        self.position = attrMap['position']
+        self.position = defaultAttrMap['position']

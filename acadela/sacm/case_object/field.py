@@ -1,5 +1,5 @@
 from os.path import dirname
-from acadela.sacm.default_state import attrMap
+from acadela.sacm.default_state import defaultAttrMap
 import acadela.sacm.util as util
 import sys
 

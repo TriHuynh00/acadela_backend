@@ -36,12 +36,12 @@ def interpret_field(field, fieldPath, taskType):
     elif field.description is not None:
         description = field.description.value
 
-    multiplicity = default_state.attrMap['multiplicity'] \
+    multiplicity = default_state.defaultAttrMap['multiplicity'] \
         if not hasattr(directive, "multiplicity") \
         else direc_intprtr\
                 .interpret_directive(directive.multiplicity)
 
-    type = default_state.attrMap['type'] \
+    type = default_state.defaultAttrMap['type'] \
         if not hasattr(directive, "type") \
         else direc_intprtr\
                     .interpret_directive(directive.type)
@@ -52,7 +52,7 @@ def interpret_field(field, fieldPath, taskType):
     readOnly = direc_intprtr.\
         interpret_directive(directive.readOnly)
 
-    position = default_state.attrMap['position']\
+    position = default_state.defaultAttrMap['position']\
         if not hasattr(directive, 'position')\
         else direc_intprtr\
             .interpret_directive(directive.position)

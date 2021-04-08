@@ -4,7 +4,7 @@ import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
 
-from acadela.sacm.default_state import attrMap
+from acadela.sacm.default_state import defaultAttrMap
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.task import Task
@@ -54,7 +54,7 @@ def interpret_task(task, stageId):
 
     # Interpret Directive
 
-    activation = attrMap['activation']\
+    activation = defaultAttrMap['activation']\
         if not hasattr(directive, 'activation')\
         else direc_intprtr.\
                 interpret_directive(directive.activation)
@@ -64,20 +64,22 @@ def interpret_task(task, stageId):
             activation.startswith("activateWhen"):
         manualActivationExpression = activation.split('(')[1][:-1]
 
-    repeatable = attrMap['repeat'] \
+    repeatable = defaultAttrMap['repeat'] \
         if not hasattr(directive, 'repeatable') \
         else direc_intprtr. \
-            interpret_directive(directive.repeatable)
+                interpret_directive(directive.repeatable)
 
-    mandatory = direc_intprtr.\
-        interpret_directive(directive.mandatory)
+    mandatory = defaultAttrMap['mandatory']\
+        if not hasattr(directive, 'mandatory')\
+        else direc_intprtr.\
+                interpret_directive(directive.mandatory)
 
-    multiplicity = attrMap['multiplicity']\
+    multiplicity = defaultAttrMap['multiplicity']\
         if directive.multiplicity is None\
         else direc_intprtr.\
-            interpret_directive(directive.multiplicity)
+                interpret_directive(directive.multiplicity)
     
-    typeValue = attrMap['type'] \
+    typeValue = defaultAttrMap['type'] \
         if not hasattr(directive, 'type') \
         else direc_intprtr. \
             interpret_directive(directive.type)
@@ -85,6 +87,10 @@ def interpret_task(task, stageId):
     externalId = None\
         if attrList.externalId is None\
         else attrList.externalId.value
+
+    extraDescription = None \
+        if attrList.additionalDescription is None \
+        else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
 
@@ -113,15 +119,20 @@ def interpret_task(task, stageId):
 
     entityAttachPath = '{}.{}'.format(util.prefixing(stageId),\
                                       task.id)
+
     taskObject = Task(task.id, attrList.description.value,
+                      multiplicity, typeValue,
                       util.cname(task),
                       fieldList,
+                      dynamicFieldList,
                       ownerPath,
                       dueDatePath,
                       repeatable,
                       mandatory,
                       activation,
                       manualActivationExpression,
+                      externalId,
+                      extraDescription,
                       dynamicDescriptionPath,
                       precondition,
                       taskHookList,
@@ -154,6 +165,4 @@ def interpret_task(task, stageId):
                   ("None" if attrList.externalId is None else attrList.externalId.value),
                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
 
-    return { "taskAsEntity": taskEntity,
-             "task": taskObject,
-             "taskAsAttribute": taskAsAttribute }
+    return taskObject

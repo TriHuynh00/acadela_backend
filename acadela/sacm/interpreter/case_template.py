@@ -36,25 +36,20 @@ class CaseInterpreter():
         self.userInterpreter = UserInterpreter()
         self.workspaceInterpreter = WorkspaceInterpreter()
         self.userFinder = UserReferencer()
+
+        self.workspace = ''
         self.groupList = []
-        self.caseDefinition = None
         self.userList = []
+
+        self.caseDefinition = None
         self.entityList = []
         self.stageList = []
         self.taskList = []
         self.attributeList = []
         self.jsonEntityList = []
         self.jsonAttributeList = []
-        self.caseObjectTree = {
-            "workspace": "",
-            "groups": self.groupList,
-            "users":  self.userList,
-            "entities": self.entityList,
-            "stages": self.stageList,
-            "tasks": self.taskList,
-            "case": self.caseDefinition,
-            "attributes": self.attributeList
-        }
+
+        self.caseObjectTree = None
 
     def compile_for_connecare(self, workspace, caseObjTree):
         caseObjList = {}
@@ -71,6 +66,11 @@ class CaseInterpreter():
         caseObjList['Group'] = json_util.basicIdentityListToJson(self.groupList)
 
         caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
+
+        caseDef = caseDefinition.\
+            sacm_compile_case_def(caseObjTree['case'])
+
+        caseObjList['CaseDefinition'] = caseDef
 
         caseDefJson = {"SACMDefinition": caseObjList}
 
@@ -102,6 +102,7 @@ class CaseInterpreter():
 
             if runNetworkOp:
                 workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.id)
+                self.workspace = workspace.id
 
             case = model.defWorkspace.workspaceProp.case
 
@@ -171,16 +172,15 @@ class CaseInterpreter():
                         taskInterpreter\
                             .interpret_task(task, stage.id)
 
-                    taskAsAttributeList\
-                        .append(interpretedTask['taskAsAttribute'])
+                    # taskAsAttributeList\
+                    #     .append(interpretedTask['taskAsAttribute'])
 
-                    self.taskList \
-                        .append(interpretedTask['task'])
+                    self.taskList.append(interpretedTask)
 
                     # self.entityList\
                     #     .append(interpretedTask['taskAsEntity'])
 
-                interpretedStage = interpret_stage(stage, taskAsAttributeList, self.taskList)
+                interpretedStage = interpret_stage(stage, self.taskList)
 
                 # self.entityList\
                 #     .append(interpretedStage['stageAsEntity'])
@@ -202,15 +202,23 @@ class CaseInterpreter():
             self.entityList.append(settingEntity)
 
             interpretedCase = caseDefinition.interpret_case_definition(
-                case.casename, case.description,
-                case.summary, case.hookList,
-                interpretedSetting, stageAsAttributeList,
-                notes = case.notes)
+                case, interpretedSetting, stageAsAttributeList)
 
             # self.entityList \
             #     .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
+
+            self.caseObjectTree = {
+                "workspace": self.workspace,
+                "groups": self.groupList,
+                "users": self.userList,
+                "entities": self.entityList,
+                "stages": self.stageList,
+                "tasks": self.taskList,
+                'case': self.caseDefinition,
+                "attributes": self.attributeList
+            }
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:

@@ -37,10 +37,11 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
 
         elif attrClassName == 'CaseOwner'\
                 or attrClassName == 'CasePatient':
+            attrObj.description = attribute.attrProp.description.value
             attrObj.type = 'links.users({})'.format(attribute.group)
 
         else:
-            attrObj.type = default_state.attrMap['type']
+            attrObj.type = default_state.defaultAttrMap['type']
 
         if attribute.attrProp.directive.multiplicity is not None:
             attrObj.multiplicity = directive.interpret_directive(attribute.attrProp.directive.multiplicity)

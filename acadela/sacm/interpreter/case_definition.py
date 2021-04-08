@@ -13,17 +13,33 @@ import sys
 
 from os.path import dirname
 
+from acadela.sacm.case_object.http_hook import HttpTrigger
+
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 caseOwnerAttr = None
 casePatientAttr = None
 
+hookEventMap = {
+    'available': 'onAvailableHTTPHookURL',
+    'enable': 'onEnableHttpHTTPHookURL',
+    'activate': 'onActivateHTTPHookURL',
+    'complete': 'onCompleteHTTPHookURL',
+    'terminate': 'onTerminateHTTPHookURL',
+    'delete': 'onDeleteHTTPHookURL'
+}
+
+# onAvailableHTTPHookURL: cd.$.onAvailableHTTPHookURL,
+# onEnableHttpHTTPHookURL: cd.$.onEnableHttpHTTPHookURL,
+# onActivateHTTPHookURL: cd.$.onActivateHTTPHookURL,
+# onCompleteHTTPHookURL: cd.$.onCompleteHTTPHookURL,
+# onTerminateHTTPHookURL: cd.$.onTerminateHTTPHookURL,
+# onDeleteHTTPHookURL: cd.$.onDeleteHTTPHookURL,
+
 # Generate the Case Data Entity, containing settings, CaseDefinition
-def interpret_case_definition(id, description,
-                              summary, hookList,
-                              intprtSetting, stageAsAttributeList,
-                              notes = None):
+def interpret_case_definition(case, intprtSetting,
+                              stageAsAttributeList):
     global caseOwnerAttr
     global casePatientAttr
 
@@ -40,24 +56,27 @@ def interpret_case_definition(id, description,
     caseDataEntity = interpret_case_data(intprtSetting['settingAsAttribute'],
                                          stageAsAttributeList)
 
-    caseHookEvents = interpret_case_hook(hookList)
+    caseHookEvents = interpret_case_hook(case.hookList)
 
     print("Case Hook Events", caseHookEvents)
 
     # TODO: CREATE SUMMARYSECTION INTERPRETER
     summarySectionList = []
-    for summarySection in summary.sectionList:
+    for summarySection in case.summary.sectionList:
         summarySectionList.append(
             summaryInterpreter.interpret_summary(summarySection))
 
-    caseDefinition = CaseDefinition(id, description,
+    caseDefinition = CaseDefinition(case.casename, case.description.value,
                         caseOwnerPath,
                         caseDataEntity.id,
                         summarySectionList,
                         caseHookEvents,
-                        entityDefinitionId = settingEntity,
-                        entityAttachPath = settingEntity,
-                        clientPath = caseClientPath)
+                        settingEntity.id,
+                        settingEntity.id,
+                        clientPath = caseClientPath,
+                        version = case.version,
+                        notesDefaultValue = case.notes,
+                        isPrefixed=False)
 
     return {
         'caseDefinition': caseDefinition,
@@ -80,7 +99,7 @@ def interpret_setting_entity(settingObj):
         if settingObj.description is None \
         else settingObj.description.value
 
-    settingName = util.prefixing("Settings")
+    settingName = 'Settings'
 
     settingEntity = Entity(settingName,
                            settingDescription)
@@ -155,8 +174,55 @@ def create_entity_json_object(entity):
     return entityJson
 
 def interpret_case_hook(hookList):
-    hookEvents = {}
+    hookEvents = []
     for hook in hookList:
-        hookEvents[hook.event] = hook.url
+        hookEvents.append(HttpTrigger(hook.event, hook.url,
+                                      None, None))
 
     return hookEvents
+
+
+def sacm_compile_case_def(case):
+    global hookEventMap
+    caseDefJson = {'$': {}}
+
+    caseDefAttr = caseDefJson['$']
+
+    # Mandatory Case Definition Attribute
+    caseDefAttr['id'] = case.id
+    caseDefAttr['description'] = case.description
+    caseDefAttr['ownerPath'] = case.ownerPath
+    caseDefAttr['entityDefinitionId'] = case.rootEntityId
+    caseDefAttr['newEntityDefinitionId'] = case.entityDefinitionId
+    caseDefAttr['newEntityAttachPath'] = case.entityAttachPath
+
+    # Optional Case Definition Attribute
+    if util.is_attribute_not_null(case, 'clientPath'):
+        caseDefAttr['clientPath'] = case.clientPath
+
+    if util.is_attribute_not_null(case, 'notesDefaultValue'):
+        caseDefAttr['notesDefaultValue'] = case.notesDefaultValue
+
+    # Parsing Hooks
+    if util.is_attribute_not_null(case, 'caseHookEvents'):
+        for hook in case.caseHookEvents:
+            hookEventSacm = hookEventMap[hook.on]
+            if hookEventSacm is not None:
+                caseDefAttr[hookEventSacm] = str(hook.url)
+
+    if util.is_attribute_not_null(case, 'version'):
+        caseDefAttr['version'] = case.version
+
+    return caseDefJson
+
+
+# "id": "GCS1_Groningen",
+# "description": "Groningen CS1",
+# "ownerPath": "GCS1_Settings.CaseOwner",
+# "clientPath": "GCS1_Settings.Patient",
+# "entityDefinitionId": "GCS1_CaseData",
+# "newEntityDefinitionId": "GCS1_Settings",
+# "newEntityAttachPath": "GCS1_Settings",
+# "onCompleteHTTPHookURL": "http://integration-producer:8081/v1/producer/point-to-point/sacm/case/terminate",
+# "onTerminateHTTPHookURL": "http://integration-producer:8081/v1/producer/point-to-point/sacm/case/terminate",
+# "onDeleteHTTPHookURL": "http://integration-producer:8081/v1/producer/point-to-point/sacm/case/terminate"

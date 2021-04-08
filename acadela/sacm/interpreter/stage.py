@@ -1,4 +1,5 @@
-from acadela.sacm import util, default_state
+from acadela.sacm import util
+from acadela.sacm.default_state import defaultAttrMap
 from acadela.sacm.case_object.stage import Stage
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
@@ -9,7 +10,7 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-def interpret_stage(stage, taskAsAttributeList, taskList):
+def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     print("\n Stage Info")
     directive = stage.directive
@@ -24,21 +25,35 @@ def interpret_stage(stage, taskAsAttributeList, taskList):
         manualActivationExpression = \
             directive.activation.split('(')[1][:-1]
 
-    attachPath = util.prefixing(stage.id)
+    extraDescription = util.set_default_value_if_null(
+        stage.additionalDescription, None)
+    # TODO add custom attach path
+    # attachPath = util.prefixing(stage.id)
 
     stageAsEntity = Entity(stage.id, stage.description.value,
                          taskAsAttributeList)
 
+    repeatable = util.set_default_value_if_null(directive.repeatable,
+                        defaultAttrMap['repeat'])
+
+    mandatory = util.set_default_value_if_null(directive.mandatory,
+                        defaultAttrMap['mandatory'])
+
+    activation = util.set_default_value_if_null(directive.activation,
+                        defaultAttrMap['activation'])
+
     stageObject = Stage(stage.id, stage.description.value,
-                        stage.ownerpath.value,
-                        directive.repeatable,
-                        directive.mandatory,
-                        directive.activation,
                         directive.multiplicity,
-                        manualActivationExpression,
+                        type,
+                        stage.ownerpath.value,
+                        taskList,
+                        extraDescription,
                         stage.externalId.value,
-                        stage.dynamicDescriptionPath.value,
-                        taskList = taskList)
+                        repeatable,
+                        mandatory,
+                        activation,
+                        manualActivationExpression,
+                        stage.dynamicDescriptionPath.value)
 
     stageAsAttribute = Attribute(stageObject.id,
                             stage.description,

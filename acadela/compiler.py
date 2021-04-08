@@ -64,7 +64,7 @@ model_str = """
     define case GCS1_Groningen
         prefix = 'GCS1'
         version = 1
-        description = 'a obesity treatment care plan'
+        description = 'an obesity treatment care plan'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'
