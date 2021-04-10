@@ -67,8 +67,8 @@ class CaseInterpreter():
 
         caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
 
-        caseDef = caseDefinition.\
-            sacm_compile_case_def(caseObjTree['case'])
+        caseDef = [caseDefinition.\
+            sacm_compile_case_def(caseObjTree['case'])]
 
         caseObjList['CaseDefinition'] = caseDef
 
@@ -143,6 +143,7 @@ class CaseInterpreter():
             print()
 
             print('casePrefix = ' + case.casePrefix.value)
+
             util.set_case_prefix(case.casePrefix.value)
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspace.staticId, workspace.id))
@@ -167,6 +168,7 @@ class CaseInterpreter():
                 taskAsAttributeList = []
 
                 for task in stage.taskList:
+
 
                     interpretedTask = \
                         taskInterpreter\
@@ -202,7 +204,7 @@ class CaseInterpreter():
             self.entityList.append(settingEntity)
 
             interpretedCase = caseDefinition.interpret_case_definition(
-                case, interpretedSetting, stageAsAttributeList)
+                case, interpretedSetting, stageAsAttributeList, self.stageList)
 
             # self.entityList \
             #     .append(interpretedCase['caseDataEntity'])

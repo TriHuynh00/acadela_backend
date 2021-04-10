@@ -12,6 +12,10 @@ from acadela.sacm.case_object.attribute import Attribute
 
 
 def interpret_task(task, stageId):
+    
+    taskId = util.prefixing(task.id)
+    stageId = util.prefixing(stageId)
+    
     taskHookList = []
     taskType = util.cname(task)
 
@@ -98,8 +102,8 @@ def interpret_task(task, stageId):
         interpretedFieldTuple = None
         if util.cname(field) == "Field":
             fieldPath = "{}.{}.{}".format(
-                util.prefixing(stageId),
-                task.id,
+                stageId,
+                taskId,
                 field.id)
 
             interpretedFieldTuple = fieldInterpreter\
@@ -114,13 +118,12 @@ def interpret_task(task, stageId):
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
 
-    taskEntity = Entity(task.id, attrList.description.value,
+    taskEntity = Entity(taskId, attrList.description.value,
                         fieldAsAttributeList)
 
-    entityAttachPath = '{}.{}'.format(util.prefixing(stageId),\
-                                      task.id)
+    entityAttachPath = '{}.{}'.format(stageId, taskId)
 
-    taskObject = Task(task.id, attrList.description.value,
+    taskObject = Task(taskId, attrList.description.value,
                       multiplicity, typeValue,
                       util.cname(task),
                       fieldList,
@@ -138,7 +141,7 @@ def interpret_task(task, stageId):
                       taskHookList,
                       entityAttachPath)
 
-    taskAsAttribute = Attribute(task.id,
+    taskAsAttribute = Attribute(taskId,
                                 attrList.description,
                                 multiplicity, typeValue,
                                 externalId = externalId)
@@ -154,7 +157,7 @@ def interpret_task(task, stageId):
           "\n\t\tdueDatePath = {}"
           "\n\t\texternalId = {}"
           "\n\t\tdynamicDescriptionPath = {}"
-          .format(task.id,
+          .format(taskId,
                   mandatory,
                   repeatable,
                   activation,

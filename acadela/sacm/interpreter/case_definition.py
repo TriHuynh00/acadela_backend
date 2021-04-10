@@ -4,6 +4,7 @@ import acadela.sacm.default_state as defaultState
 
 import acadela.sacm.interpreter.attribute as attributeInterpreter
 import acadela.sacm.interpreter.summary as summaryInterpreter
+import acadela.sacm.interpreter.stage as stageInterpreter
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
@@ -39,7 +40,8 @@ hookEventMap = {
 
 # Generate the Case Data Entity, containing settings, CaseDefinition
 def interpret_case_definition(case, intprtSetting,
-                              stageAsAttributeList):
+                              stageAsAttributeList,
+                              stageList):
     global caseOwnerAttr
     global casePatientAttr
 
@@ -60,11 +62,12 @@ def interpret_case_definition(case, intprtSetting,
 
     print("Case Hook Events", caseHookEvents)
 
-    # TODO: CREATE SUMMARYSECTION INTERPRETER
     summarySectionList = []
     for summarySection in case.summary.sectionList:
         summarySectionList.append(
             summaryInterpreter.interpret_summary(summarySection))
+
+
 
     caseDefinition = CaseDefinition(case.casename, case.description.value,
                         caseOwnerPath,
@@ -73,6 +76,7 @@ def interpret_case_definition(case, intprtSetting,
                         caseHookEvents,
                         settingEntity.id,
                         settingEntity.id,
+                        stageList,
                         clientPath = caseClientPath,
                         version = case.version,
                         notesDefaultValue = case.notes,
@@ -184,7 +188,12 @@ def interpret_case_hook(hookList):
 
 def sacm_compile_case_def(case):
     global hookEventMap
-    caseDefJson = {'$': {}}
+
+    caseDefJson = {
+        '$': {},
+        'SummarySectionDefinition': [],
+        'StageDefinition': []
+    }
 
     caseDefAttr = caseDefJson['$']
 
@@ -212,6 +221,16 @@ def sacm_compile_case_def(case):
 
     if util.is_attribute_not_null(case, 'version'):
         caseDefAttr['version'] = case.version
+
+    # Parsing SummarySection
+    caseDefJson['SummarySectionDefinition'] = \
+        summaryInterpreter.sacm_compile(case.summarySectionList)
+
+
+
+    # Parsing Stage
+    caseDefJson['StageDefinition'] = \
+        stageInterpreter.sacm_compile(case.stageList)
 
     return caseDefJson
 

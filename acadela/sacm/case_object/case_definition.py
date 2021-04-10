@@ -14,6 +14,7 @@ class CaseDefinition():
                  caseHookEvents,
                  entityDefinitionId,
                  entityAttachPath,
+                 stageList,
                  clientPath = None,
                  notesDefaultValue = None,
                  version = 0,
@@ -35,6 +36,8 @@ class CaseDefinition():
 
         self.entityDefinitionId = entityDefinitionId
         self.entityAttachPath = entityAttachPath
+
+        self.stageList = stageList
 
         self.notesDefaultValue = notesDefaultValue
         self.caseHookEvents = caseHookEvents
