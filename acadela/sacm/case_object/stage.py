@@ -19,6 +19,7 @@ class Stage():
                  activation,
                  manualActivationExpression,
                  dynamicDescriptionPath,
+                 preconditionList,
                  entityDefinitionId = None,
                  entityAttachPath=None,
                  isPrefixed = True):
@@ -40,6 +41,7 @@ class Stage():
 
         self.type = type
         self.description = description
+        self.additionalDescription = additionalDescription
         self.ownerPath = ownerPath
         self.repeatable = repeatable
         self.mandatory = mandatory
@@ -48,7 +50,8 @@ class Stage():
         self.manualActivationDescription = manualActivationExpression
         self.externalId = externalId
         self.dynamicDescriptionPath = dynamicDescriptionPath
-        self.taskList = taskList
 
+        self.taskList = taskList
+        self.preconditionList = preconditionList
 
 

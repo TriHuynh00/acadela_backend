@@ -4,7 +4,9 @@ from acadela.sacm.case_object.stage import Stage
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
 
+
 from acadela.sacm.interpreter.directive import interpret_directive
+from acadela.sacm.interpreter.sentry import interpret_precondition
 
 from os.path import dirname
 import sys
@@ -16,6 +18,8 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     print("\n Stage Info")
     directive = stage.directive
+
+    preconditionList = []
 
     type = None if not hasattr(directive, 'type')\
                 else directive.type
@@ -39,19 +43,22 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         if util.is_attribute_not_null(directive, 'repeatable')\
         else defaultAttrMap['repeatable']
 
-    #util.set_default_value_if_null(directive.repeatable,
-     #                   defaultAttrMap['repeat'])
-
-    # mandatory = util.set_default_value_if_null(\
-    #     directive.mandatory,
-    #     defaultAttrMap['mandatory'])
-
-    mandatory =  interpret_directive(directive.mandatory)\
+    mandatory = interpret_directive(directive.mandatory)\
         if util.is_attribute_not_null(directive, 'mandatory')\
         else defaultAttrMap['mandatory']
 
-    activation = util.set_default_value_if_null(directive.activation,
-                        defaultAttrMap['activation'])
+    activation = interpret_directive(directive.activation)\
+        if util.is_attribute_not_null(directive, 'activation')\
+        else defaultAttrMap['activation']
+
+    preconditionObj = stage.preconditionList \
+        if util.is_attribute_not_null(stage, 'preconditionList') \
+        else None
+
+    if preconditionObj is not None:
+        print("Stage Precondition", [sentry for sentry in preconditionObj])
+        for sentry in preconditionObj:
+            preconditionList.append(interpret_precondition(sentry))
 
     stageObject = Stage(stage.id, stage.description.value,
                         directive.multiplicity,
@@ -64,7 +71,8 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
                         mandatory,
                         activation,
                         manualActivationExpression,
-                        stage.dynamicDescriptionPath.value)
+                        stage.dynamicDescriptionPath.value,
+                        preconditionList)
 
     stageAsAttribute = Attribute(stageObject.id,
                             stage.description,
@@ -103,16 +111,54 @@ def sacm_compile(stageList):
     for stage in stageList:
         stageJson = {
             '$': {},
-            'HttpHookDefinition': []
+
         }
 
         stageAttr = stageJson['$']
 
         stageAttr['id'] = stage.id
         stageAttr['description'] = stage.description
-        stageAttr['mandatory'] = stage.mandatory
 
-        # TODO Parse HookDef and other stage elements
+        # if util.is_attribute_not_null(stage, 'repeatable'):
+        #     stageAttr['repeatable'] = stage.repeatable
+        #
+
+        util.compile_attributes(stageAttr, stage,
+                ['ownerPath', 'repeatable',
+                 'mandatory', 'activation',
+                 'manualActivationDescription',
+                'entityDefinitionId', 'entityAttachPath',
+                'externalId', 'dynamicDescriptionPath'])
+
+
+
+        # TODO Parse Sentry and other stage elements
+        if len(stage.preconditionList) > 0:
+            stageJson['SentryDefinition'] = []
+
+            for precondition in stage.preconditionList:
+
+                preconditionListJson = {
+                    'precondition': []
+                }
+
+                for processId in precondition.stepList:
+                    preconditionJson = \
+                    {
+                        'processDefinitionId': processId,
+                    }
+
+                    if precondition.stepList.index(processId) == 0:
+                        if util.is_attribute_not_null(precondition, 'expression'):
+                            preconditionJson['expression'] = precondition.expression
+
+                    preconditionListJson['precondition'].append(
+                        {
+                            '$': preconditionJson
+                        }
+                    )
+
+                stageJson['SentryDefinition'].append(preconditionListJson)
 
         stageJsonList.append(stageJson)
 

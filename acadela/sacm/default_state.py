@@ -4,7 +4,7 @@ defaultAttrMap = {
     'multiplicity': 'any',
     'type': 'notype',
     'mandatory': None,
-    'repeat': 'ONCE',
+    'repeatable': 'ONCE',
     'activation': 'automatic',
     'position': 'STRETCHED'
 }

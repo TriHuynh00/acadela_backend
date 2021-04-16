@@ -24,7 +24,18 @@ def set_default_value_if_null(attribute, defaultValue):
 def is_attribute_not_null(object, attrName):
     if not hasattr(object, attrName):
         return False
-    elif getattr(object, attrName) is '':
+    elif getattr(object, attrName) is '' or \
+            getattr(object, attrName) is None:
         return False
     else:
         return True
+
+# Interpreter only
+def compile_attribute(keyObject, object, attribute):
+    if is_attribute_not_null(object, attribute):
+        keyObject['mandatory'] = getattr(object, attribute)
+
+def compile_attributes(keyObject, object, attributeList):
+    for attribute in attributeList:
+        if is_attribute_not_null(object, attribute):
+            keyObject[attribute] = getattr(object, attribute)

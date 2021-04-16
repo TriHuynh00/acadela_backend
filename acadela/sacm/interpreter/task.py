@@ -1,5 +1,5 @@
 from acadela.sacm import util
-import acadela.sacm.interpreter.sentry as preconditionInterpreter
+from acadela.sacm.interpreter.sentry import interpret_precondition
 import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
@@ -19,7 +19,7 @@ def interpret_task(task, stageId):
     taskHookList = []
     taskType = util.cname(task)
 
-    precondition = None
+    precondition = []
     directive = task.directive
     attrList = task.attrList
     dueDatePath = None
@@ -47,8 +47,7 @@ def interpret_task(task, stageId):
     if preconditionObj is not None:
 
         print("Precondition", [step for step in preconditionObj.stepList])
-        precondition = \
-            preconditionInterpreter.interpret_precondition(preconditionObj)
+        precondition.append(interpret_precondition(preconditionObj))
 
     if hasattr(task, "hookList"):
         for hook in task.hookList:
