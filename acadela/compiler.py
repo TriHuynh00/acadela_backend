@@ -121,6 +121,11 @@ model_str = """
             dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             externalId = 'SelectPatient'
             
+            Precondition
+                previousStep = 'AdmitPatient' 
+                previousStep = 'Gogonzola' 
+                condition = 'Age < 60'
+            
             HumanTask MeasureBMI
                 #mandatory
                 description = 'Measure BMI score'
@@ -128,6 +133,11 @@ model_str = """
                 dueDateRef = 'Settings.WorkplanDueDate'
                 externalId = 'HumanTask1External'
                 dynamicDescriptionRef = 'Settings.PatientNumber'
+                
+                Precondition
+                    previousStep = 'PatientConsent' 
+                    previousStep = 'Golase' 
+                    condition = 'Age < 60'
                 
                 Trigger
                     On activate invoke 'http://integration-producer:8081/v1/activate' method Post

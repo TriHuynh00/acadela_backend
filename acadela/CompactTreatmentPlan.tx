@@ -280,6 +280,7 @@ Stage:
             (dynamicDescriptionPath = DynamicDescriptionPath)?
             (externalId = ExternalId)?
             (additionalDescription = AdditionalDescription)?
+            (preconditionList += Precondition)?
         )#
         taskList += Task
 ;
@@ -333,7 +334,7 @@ AutomatedTaskAttrs:
         (externalId = ExternalId)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
         (additionalDescription = AdditionalDescription)?
-        (precondition = Precondition)?
+        (preconditionList += Precondition)?
     )#
 ;
 
@@ -345,17 +346,18 @@ SharedTaskAttrs:
         (externalId = ExternalId)?
         (additionalDescription = AdditionalDescription)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
-        (precondition = Precondition)?
+        (preconditionList += Precondition)?
     )#
 ;
 
 Precondition:
     'Precondition'
     (
-        // aka. expression in Thesis
-        ('condition' Eq entryCondition = STRING)?
         // aka. processDefinitionId in Thesis
         ('previousStep' Eq stepList += STRING)+
+
+        // aka. expression in Thesis
+        ('condition' Eq entryCondition = STRING)?
     )#
 ;
 

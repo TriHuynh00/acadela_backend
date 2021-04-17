@@ -30,11 +30,6 @@ def is_attribute_not_null(object, attrName):
     else:
         return True
 
-# Interpreter only
-def compile_attribute(keyObject, object, attribute):
-    if is_attribute_not_null(object, attribute):
-        keyObject['mandatory'] = getattr(object, attribute)
-
 def compile_attributes(keyObject, object, attributeList):
     for attribute in attributeList:
         if is_attribute_not_null(object, attribute):

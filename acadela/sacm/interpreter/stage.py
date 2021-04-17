@@ -1,12 +1,14 @@
 from acadela.sacm import util
+from acadela.sacm.interpreter import util_intprtr
+
 from acadela.sacm.default_state import defaultAttrMap
 from acadela.sacm.case_object.stage import Stage
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
 
-
 from acadela.sacm.interpreter.directive import interpret_directive
 from acadela.sacm.interpreter.sentry import interpret_precondition
+from acadela.sacm.interpreter.task import sacm_compile as compile_task
 
 from os.path import dirname
 import sys
@@ -130,36 +132,50 @@ def sacm_compile(stageList):
                 'entityDefinitionId', 'entityAttachPath',
                 'externalId', 'dynamicDescriptionPath'])
 
-
-
-        # TODO Parse Sentry and other stage elements
         if len(stage.preconditionList) > 0:
-            stageJson['SentryDefinition'] = []
+             stageJson['SentryDefinition'] = \
+                 util_intprtr.parse_precondition(stage)
+            # []
+            #
+            # for precondition in stage.preconditionList:
+            #
+            #     sentryJson = {}
+            #
+            #     if util.is_attribute_not_null(precondition, 'expression'):
+            #         sentryJson['$'] = {
+            #             'expression': precondition.expression
+            #         }
+            #
+            #     sentryJson['precondition'] = []
+            #
+            #     for processId in precondition.stepList:
+            #
+            #         preconditionJson = \
+            #         {
+            #             'processDefinitionId': processId,
+            #         }
+            #
+            #         sentryJson['precondition'].append(
+            #             {
+            #                 '$': preconditionJson
+            #             }
+            #         )
+            #
+            #     stageJson['SentryDefinition'].append(sentryJson)
 
-            for precondition in stage.preconditionList:
+        # parse the tasks
+        jsonTasks = compile_task(stage.taskList)
 
-                preconditionListJson = {
-                    'precondition': []
-                }
+        if len(jsonTasks['humanTaskList']) > 0:
+            stageJson['HumanTaskDefinition'] = jsonTasks['humanTaskList']
 
-                for processId in precondition.stepList:
-                    preconditionJson = \
-                    {
-                        'processDefinitionId': processId,
-                    }
+        if len(jsonTasks['autoTaskList']) > 0:
+            stageJson['AutomatedTaskDefinition'] = jsonTasks['autoTaskList']
 
-                    if precondition.stepList.index(processId) == 0:
-                        if util.is_attribute_not_null(precondition, 'expression'):
-                            preconditionJson['expression'] = precondition.expression
-
-                    preconditionListJson['precondition'].append(
-                        {
-                            '$': preconditionJson
-                        }
-                    )
-
-                stageJson['SentryDefinition'].append(preconditionListJson)
+        if len(jsonTasks['dualTaskList']) > 0:
+            stageJson['DualTaskDefinition'] = jsonTasks['dualTaskList']
 
         stageJsonList.append(stageJson)
 
     return stageJsonList
+

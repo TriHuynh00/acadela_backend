@@ -1,3 +1,5 @@
+from acadela.sacm.interpreter import util_intprtr
+
 from acadela.sacm import util
 from acadela.sacm.interpreter.sentry import interpret_precondition
 import acadela.sacm.interpreter.hook as hookInterpreter
@@ -5,6 +7,8 @@ import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
 
 from acadela.sacm.default_state import defaultAttrMap
+
+import acadela.sacm.constant.task_type as TASKTYPE
 
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.task import Task
@@ -19,7 +23,7 @@ def interpret_task(task, stageId):
     taskHookList = []
     taskType = util.cname(task)
 
-    precondition = []
+    preconditionList = []
     directive = task.directive
     attrList = task.attrList
     dueDatePath = None
@@ -40,14 +44,13 @@ def interpret_task(task, stageId):
         if attrList.dynamicDescriptionPath is None \
         else attrList.dynamicDescriptionPath.value
 
-    preconditionObj = None \
-        if not hasattr(attrList, "precondition") \
-        else attrList.precondition
-
-    if preconditionObj is not None:
-
-        print("Precondition", [step for step in preconditionObj.stepList])
-        precondition.append(interpret_precondition(preconditionObj))
+    # preconditionObj = None \
+    #     if not hasattr(attrList, "preconditionList") \
+    #     else attrList.preconditionList
+    #
+    # if preconditionObj is not None:
+    #
+    #     precondition.append(interpret_precondition(preconditionObj))
 
     if hasattr(task, "hookList"):
         for hook in task.hookList:
@@ -55,6 +58,16 @@ def interpret_task(task, stageId):
             print("HttpHook", vars(interpretedHook))
             taskHookList.append(interpretedHook)
 
+    preconditionObj = attrList.preconditionList \
+        if util.is_attribute_not_null(attrList, 'preconditionList') \
+        else None
+
+    if preconditionObj is not None:
+        print("Task Precondition", [sentry for sentry in preconditionObj])
+        for sentry in preconditionObj:
+            preconditionList.append(interpret_precondition(sentry))
+
+    print("Task Sentry List", preconditionList)
     # Interpret Directive
 
     activation = defaultAttrMap['activation']\
@@ -136,7 +149,7 @@ def interpret_task(task, stageId):
                       externalId,
                       extraDescription,
                       dynamicDescriptionPath,
-                      precondition,
+                      preconditionList,
                       taskHookList,
                       entityAttachPath)
 
@@ -168,3 +181,41 @@ def interpret_task(task, stageId):
                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
 
     return taskObject
+
+def sacm_compile(taskList):
+    humanTaskList = []
+    autoTaskList = []
+    dualTaskList = []
+
+    for task in taskList:
+        taskJson = {
+            '$': {}
+        }
+
+        if task.taskType == TASKTYPE.HUMAN:
+            print("Task Type SACM is {}".format(task.taskType))
+            taskAttr = taskJson['$']
+
+            taskAttr['id'] = task.id
+            taskAttr['description'] = task.description
+
+            util.compile_attributes(taskAttr, task,
+                ['ownerPath', 'dueDatePath', 'repeatable',
+                 'isMandatory', 'activation',
+                 'manualActivationDescription',
+                 'entityDefinitionId', 'entityAttachPath',
+                 'externalId', 'dynamicDescriptionPath'])
+
+            if hasattr(task, 'preconditionList'):
+                taskJson['SentryDefinition'] = \
+                    util_intprtr.parse_precondition(task)
+
+            humanTaskList.append(taskJson)
+
+
+    return {
+        'humanTaskList': humanTaskList,
+        'autoTaskList': autoTaskList,
+        'dualTaskList': dualTaskList
+    }
+

@@ -22,7 +22,7 @@ class Task():
                  externalId,
                  addtionalDescription,
                  dynamicDescriptionPath,
-                 precondition,
+                 preconditionList,
                  hook,
                  entityAttachPath = None,
                  entityDefinitionId = None,
@@ -48,14 +48,14 @@ class Task():
         self.ownerPath = ownerPath
         self.dueDatePath = dueDatePath
         self.repeatable = repeatable
-        self.mandatory = mandatory
+        self.isMandatory = mandatory
         self.activation = activation
         self.manualActivationDescription = manualActivationExpression
         self.entityAttachPath = entityAttachPath
         self.externalId = externalId
         self.addtionalDescription = addtionalDescription
         self.dynamicDescriptionPath = dynamicDescriptionPath
-        self.precondition = precondition
+        self.preconditionList = preconditionList
         self.hook = hook
 
 
