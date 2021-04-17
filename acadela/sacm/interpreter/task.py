@@ -210,6 +210,11 @@ def sacm_compile(taskList):
                 taskJson['SentryDefinition'] = \
                     util_intprtr.parse_precondition(task)
 
+            if hasattr(task, 'hookList'):
+                if len(task.hookList) > 0:
+                    taskJson['HttpHookDefinition'] = \
+                        compile_hook_list_sacm(task.hookList)
+
             humanTaskList.append(taskJson)
 
 
@@ -219,3 +224,19 @@ def sacm_compile(taskList):
         'dualTaskList': dualTaskList
     }
 
+def compile_hook_list_sacm(hookList):
+
+    hooklistJson = []
+
+    for hook in hookList:
+        hookJson = {'$': {}}
+
+        hookJsonAttr = hookJson['$']
+
+        print('hook in task is {}', vars(hook))
+        util.compile_attributes(hookJsonAttr, hook,
+            ['on', 'url', 'method', 'failureMessage'])
+
+        hooklistJson.append(hookJson)
+
+    return hooklistJson

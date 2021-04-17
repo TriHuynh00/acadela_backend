@@ -7,7 +7,7 @@ def interpret_case_hook(hookObj):
     }
 
 def interpret_http_hook(httpHookObj):
-    return HttpTrigger(httpHookObj.event,
+    return HttpTrigger(str.upper(httpHookObj.event),
                        httpHookObj.url,
-                       httpHookObj.method,
+                       str.upper(httpHookObj.method),
                        httpHookObj.failureMessage)

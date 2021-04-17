@@ -23,7 +23,7 @@ class Task():
                  addtionalDescription,
                  dynamicDescriptionPath,
                  preconditionList,
-                 hook,
+                 hookList,
                  entityAttachPath = None,
                  entityDefinitionId = None,
                  isPrefixed = True):
@@ -56,6 +56,6 @@ class Task():
         self.addtionalDescription = addtionalDescription
         self.dynamicDescriptionPath = dynamicDescriptionPath
         self.preconditionList = preconditionList
-        self.hook = hook
+        self.hookList = hookList
 
 
