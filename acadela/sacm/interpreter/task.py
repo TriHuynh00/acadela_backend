@@ -112,11 +112,13 @@ def interpret_task(task, stageId):
 
     for field in task.form.fieldList:
         interpretedFieldTuple = None
+
+        fieldPath = "{}.{}.{}".format(
+            stageId,
+            taskId,
+            field.id)
+
         if util.cname(field) == "Field":
-            fieldPath = "{}.{}.{}".format(
-                stageId,
-                taskId,
-                field.id)
 
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath, taskType)
@@ -124,9 +126,13 @@ def interpret_task(task, stageId):
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
         elif util.cname(field) == "DynamicField":
+
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath, taskType)
+
             dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
+            # dynamicFieldList.append(dynamicFieldList)
+
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
 
@@ -217,8 +223,11 @@ def sacm_compile(taskList):
 
             # compile Task Params
             if len(task.fieldList) > 0:
+                taskFields = task.fieldList
+                for dynaField in task.dynamicFieldList:
+                    taskFields.append(dynaField)
                 taskJson['TaskParamDefinition'] = \
-                    fieldInterpreter.compile_task_param_sacm(task.fieldList)
+                    fieldInterpreter.compile_task_param_sacm(taskFields)
 
 
             humanTaskList.append(taskJson)

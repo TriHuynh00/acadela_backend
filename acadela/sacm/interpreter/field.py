@@ -92,12 +92,20 @@ def interpret_dynamic_field(field, fieldPath, taskType):
     part = None if not hasattr(directive, "part")\
                 else directive.part
 
+    externalId = None \
+        if field.externalId is None \
+        else field.externalId.value
+
+    extraDescription = None \
+        if field.additionalDescription is None \
+        else field.additionalDescription.value
+
     # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = DerivedAttribute(field.id, field.description,
-        field.additionalDescription,
+        extraDescription,
         field.expression,
         field.uiRef,
-        field.externalId,
+        externalId,
         directive.explicitType)
 
     if taskType == 'DualTask':
@@ -106,11 +114,9 @@ def interpret_dynamic_field(field, fieldPath, taskType):
     position = None if directive.position is None\
                else directive.position
 
-
-
-    dynamicField = DynamicField(field.id, field.description,
-                                directive.explicitType, field.additionalDescription,
-                                field.expression, field.uiRef, field.externalId,
+    dynamicField = DynamicField(field.id, field.description.value,
+                                directive.explicitType, extraDescription,
+                                field.expression, field.uiRef, externalId,
                                 # Dynamic field properties
                                 fieldPath, directive.readOnly, directive.mandatory,
                                 position, part)
@@ -143,8 +149,8 @@ def compile_task_param_sacm(fieldList):
         taskParamAttr = taskParam['$']
 
         util.compile_attributes(taskParamAttr, field,
-            ['path', 'isReadOnly', 'isMandatory',
-             'position', 'part'])
+                                ['path', 'isReadOnly', 'isMandatory',
+                                 'position', 'part'])
 
         taskParamList.append(taskParam)
 
