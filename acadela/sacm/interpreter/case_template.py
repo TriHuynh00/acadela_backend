@@ -5,6 +5,8 @@ from acadela.referencer.workspace import WorkspaceReferencer
 from acadela.referencer.group import GroupReferencer
 from acadela.referencer.user import UserReferencer
 
+from acadela.sacm import util, json_util
+
 from acadela.sacm.interpreter.group import GroupInterpreter
 from acadela.sacm.interpreter.user import UserInterpreter
 from acadela.sacm.interpreter.workspace import WorkspaceInterpreter
@@ -12,7 +14,8 @@ import acadela.sacm.interpreter.task as taskInterpreter
 import acadela.sacm.interpreter.attribute as attributeInterpreter
 import acadela.sacm.interpreter.case_definition as caseDefinition
 from acadela.sacm.interpreter.stage import interpret_stage
-from acadela.sacm import util, json_util
+
+from acadela.sacm.case_object.entity import Entity
 
 from acadela.http_request import HttpRequest
 
@@ -169,23 +172,23 @@ class CaseInterpreter():
 
                 for task in stage.taskList:
 
-
-                    interpretedTask = \
-                        taskInterpreter\
+                    iTask = taskInterpreter\
                             .interpret_task(task, stage.id)
 
-                    # taskAsAttributeList\
-                    #     .append(interpretedTask['taskAsAttribute'])
+                    taskAsAttributeList\
+                        .append(iTask['taskAsAttribute'])
 
-                    self.taskList.append(interpretedTask)
+                    self.taskList.append(iTask['task'])
 
-                    # self.entityList\
-                    #     .append(interpretedTask['taskAsEntity'])
+                    self.entityList\
+                        .append(iTask['taskAsEntity'])
 
-                interpretedStage = interpret_stage(stage, self.taskList)
+                interpretedStage = interpret_stage(stage,
+                                                   self.taskList,
+                                                   taskAsAttributeList)
 
-                # self.entityList\
-                #     .append(interpretedStage['stageAsEntity'])
+                self.entityList\
+                    .append(interpretedStage['stageAsEntity'])
 
                 self.stageList\
                     .append(interpretedStage['stage'])
@@ -206,8 +209,8 @@ class CaseInterpreter():
             interpretedCase = caseDefinition.interpret_case_definition(
                 case, interpretedSetting, stageAsAttributeList, self.stageList)
 
-            # self.entityList \
-            #     .append(interpretedCase['caseDataEntity'])
+            self.entityList \
+                .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
 

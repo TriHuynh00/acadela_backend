@@ -58,4 +58,27 @@ class Task():
         self.preconditionList = preconditionList
         self.hookList = hookList
 
+    # def print(self):
+    #     print("\n\tTask {}"
+    #           "\n\t\tDirectives "
+    #           "\n\t\t\tmandatory = {}"
+    #           "\n\t\t\trepeatable = {}"
+    #           "\n\t\t\tactivation = {}"
+    #           "\n\t\t\tmultiplicity = {}"
+    #           "\n\t\tdescription = {}"
+    #           "\n\t\townerPath = {}"
+    #           "\n\t\tdueDatePath = {}"
+    #           "\n\t\texternalId = {}"
+    #           "\n\t\tdynamicDescriptionPath = {}"
+    #           .format(self.id,
+    #                   mandatory,
+    #                   repeatable,
+    #                   activation,
+    #                   multiplicity,
+    #                   attrList.description.value,
+    #                   (None if attrList.ownerPath is None else attrList.ownerPath.value),
+    #                   dueDatePath,
+    #                   ("None" if attrList.externalId is None else attrList.externalId.value),
+    #                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
+
 

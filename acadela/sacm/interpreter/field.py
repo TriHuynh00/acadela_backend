@@ -142,7 +142,7 @@ def check_part_for_dual_task(part, fieldId):
 
     return 1
 
-def compile_task_param_sacm(fieldList):
+def sacm_compile(fieldList):
     taskParamList = []
     for field in fieldList:
         taskParam = {'$': {}}

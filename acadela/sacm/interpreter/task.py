@@ -74,6 +74,7 @@ def interpret_task(task, stageId):
         if not hasattr(directive, 'activation')\
         else direc_intprtr.\
                 interpret_directive(directive.activation)
+
     manualActivationExpression = None
 
     if activation is not None and \
@@ -136,8 +137,8 @@ def interpret_task(task, stageId):
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
 
-    taskEntity = Entity(taskId, attrList.description.value,
-                        fieldAsAttributeList)
+    taskAsEntity = Entity(taskId, attrList.description.value,
+                        fieldAsAttributeList, isPrefixed=False)
 
     entityAttachPath = '{}.{}'.format(stageId, taskId)
 
@@ -157,36 +158,19 @@ def interpret_task(task, stageId):
                       dynamicDescriptionPath,
                       preconditionList,
                       taskHookList,
-                      entityAttachPath)
+                      entityAttachPath,
+                      isPrefixed=False)
 
     taskAsAttribute = Attribute(taskId,
                                 attrList.description,
                                 multiplicity, typeValue,
                                 externalId = externalId)
 
-    print("\n\tTask {}"
-          "\n\t\tDirectives "
-          "\n\t\t\tmandatory = {}"
-          "\n\t\t\trepeatable = {}"
-          "\n\t\t\tactivation = {}"
-          "\n\t\t\tmultiplicity = {}"
-          "\n\t\tdescription = {}"
-          "\n\t\townerPath = {}"
-          "\n\t\tdueDatePath = {}"
-          "\n\t\texternalId = {}"
-          "\n\t\tdynamicDescriptionPath = {}"
-          .format(taskId,
-                  mandatory,
-                  repeatable,
-                  activation,
-                  multiplicity,
-                  attrList.description.value,
-                  (None if attrList.ownerPath is None else attrList.ownerPath.value),
-                  dueDatePath,
-                  ("None" if attrList.externalId is None else attrList.externalId.value),
-                  ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
-
-    return taskObject
+    return {
+        'task': taskObject,
+        'taskAsEntity': taskAsEntity,
+        'taskAsAttribute': taskAsAttribute
+    }
 
 def sacm_compile(taskList):
     humanTaskList = []
@@ -198,40 +182,44 @@ def sacm_compile(taskList):
             '$': {}
         }
 
+        print("Task Type SACM is {}".format(task.taskType))
+        taskAttr = taskJson['$']
+
+        taskAttr['id'] = task.id
+        taskAttr['description'] = task.description
+
+        util.compile_attributes(taskAttr, task,
+            ['ownerPath', 'dueDatePath', 'repeatable',
+             'isMandatory', 'activation',
+             'manualActivationDescription',
+             'entityDefinitionId', 'entityAttachPath',
+             'externalId', 'dynamicDescriptionPath'])
+
+        if hasattr(task, 'preconditionList'):
+            taskJson['SentryDefinition'] = \
+                util_intprtr.parse_precondition(task)
+
+        if hasattr(task, 'hookList'):
+            if len(task.hookList) > 0:
+                taskJson['HttpHookDefinition'] = \
+                    hookInterpreter.sacm_compile(task.hookList)
+
+        # compile Task Params
+        if len(task.fieldList) > 0:
+            taskFields = task.fieldList
+            for dynaField in task.dynamicFieldList:
+                taskFields.append(dynaField)
+            taskJson['TaskParamDefinition'] = \
+                fieldInterpreter.sacm_compile(taskFields)
+
         if task.taskType == TASKTYPE.HUMAN:
-            print("Task Type SACM is {}".format(task.taskType))
-            taskAttr = taskJson['$']
-
-            taskAttr['id'] = task.id
-            taskAttr['description'] = task.description
-
-            util.compile_attributes(taskAttr, task,
-                ['ownerPath', 'dueDatePath', 'repeatable',
-                 'isMandatory', 'activation',
-                 'manualActivationDescription',
-                 'entityDefinitionId', 'entityAttachPath',
-                 'externalId', 'dynamicDescriptionPath'])
-
-            if hasattr(task, 'preconditionList'):
-                taskJson['SentryDefinition'] = \
-                    util_intprtr.parse_precondition(task)
-
-            if hasattr(task, 'hookList'):
-                if len(task.hookList) > 0:
-                    taskJson['HttpHookDefinition'] = \
-                        compile_hook_list_sacm(task.hookList)
-
-            # compile Task Params
-            if len(task.fieldList) > 0:
-                taskFields = task.fieldList
-                for dynaField in task.dynamicFieldList:
-                    taskFields.append(dynaField)
-                taskJson['TaskParamDefinition'] = \
-                    fieldInterpreter.compile_task_param_sacm(taskFields)
-
-
             humanTaskList.append(taskJson)
 
+        elif task.taskType == TASKTYPE.AUTO:
+            autoTaskList.append(taskJson)
+
+        elif task.taskType == TASKTYPE.DUAL:
+            dualTaskList.append(taskJson)
 
     return {
         'humanTaskList': humanTaskList,
@@ -239,19 +227,3 @@ def sacm_compile(taskList):
         'dualTaskList': dualTaskList
     }
 
-def compile_hook_list_sacm(hookList):
-
-    hooklistJson = []
-
-    for hook in hookList:
-        hookJson = {'$': {}}
-
-        hookJsonAttr = hookJson['$']
-
-        print('hook in task is {}', vars(hook))
-        util.compile_attributes(hookJsonAttr, hook,
-            ['on', 'url', 'method', 'failureMessage'])
-
-        hooklistJson.append(hookJson)
-
-    return hooklistJson

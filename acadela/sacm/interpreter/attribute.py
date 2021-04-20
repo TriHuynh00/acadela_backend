@@ -59,7 +59,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
         attrObj.externalId = \
             attribute.additionalDescription.value
 
-    if hasattr(attribute, 'defaultValues'):
+    if util.is_attribute_not_null(attribute, 'defaultValues'):
         attrObj.defaultValues = attribute.defaultValues.value
 
     return attrObj
@@ -81,7 +81,7 @@ def create_attribute_json_object(attribute):
     # else:
     #     thisAttr['description'] = attribute.description
 
-    if hasattr(attribute, 'defaultValues'):
+    if util.is_attribute_not_null(attribute, 'defaultValues'):
         thisAttr['defaultValues'] = attribute.defaultValues
 
     if hasattr(attribute, 'additionalDescription'):

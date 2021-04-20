@@ -33,4 +33,4 @@ def parse_precondition(process):
 
             sentryList.append(sentryJson)
 
-    return sentryList
+        return sentryList

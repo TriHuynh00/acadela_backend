@@ -87,13 +87,14 @@ class WorkspaceInterpreter:
             }
         entityJsonList = []
         for entity in entityList:
+            print('Parse Entity', entity.id)
             entityJsonList.append(
                 case_definition.create_entity_json_object(entity))
 
 
-        for task in caseObjTree["tasks"]:
-            for field in task.fieldList:
-                attrIntrprtr.create_attribute_json_object(field)
+        # for task in caseObjTree["tasks"]:
+        #     for field in task.fieldList:
+        #         attrIntrprtr.create_attribute_json_object(field)
 
         workspaceObjList["EntityDefinition"] = entityJsonList
 
