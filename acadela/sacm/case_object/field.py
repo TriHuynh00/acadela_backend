@@ -22,8 +22,8 @@ class Field:
         self.description = description
         self.question = question
         self.path = path
-        self.readOnly = isReadOnly
-        self.mandatory = isMandatory
+        self.isReadOnly = isReadOnly
+        self.isMandatory = isMandatory
         self.position = position
         self.part = part
         self.multiplicity = multiplicity

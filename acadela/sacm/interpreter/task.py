@@ -215,6 +215,12 @@ def sacm_compile(taskList):
                     taskJson['HttpHookDefinition'] = \
                         compile_hook_list_sacm(task.hookList)
 
+            # compile Task Params
+            if len(task.fieldList) > 0:
+                taskJson['TaskParamDefinition'] = \
+                    fieldInterpreter.compile_task_param_sacm(task.fieldList)
+
+
             humanTaskList.append(taskJson)
 
 
