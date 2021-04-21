@@ -16,7 +16,9 @@ def interpret_field(field, fieldPath, taskType):
     enumerationOptions = []
     question = None
 
+
     if field.question is not None:
+        print("Field question len", len(field.question.optionList))
         description = field.question.text
         for option in field.question.optionList:
             additionalDescription = \
@@ -33,6 +35,7 @@ def interpret_field(field, fieldPath, taskType):
                                   externalId)
             )
         question = Enumeration(description, enumerationOptions)
+        description = question
 
     elif field.description is not None:
         description = field.description.value

@@ -21,12 +21,15 @@ class Attribute():
 
         self.enumerationOptions = []
         self.description = None
+
+        print('Attribute Content', util.cname(content))
+        if util.cname(content) == 'str':
+            self.description = content
         if util.cname(content) == "Description":
             self.description = content.value
-        elif util.cname(content) == "Question":
-            self.description = content.text
-
-            for option in content.optionList:
+        elif util.cname(content) == "Enumeration":
+            self.description = content.questionText
+            for option in content.options:
                 additionalDescription = \
                     None if not hasattr(option, "additionalDescription") \
                          else option.additionalDescription
@@ -36,7 +39,8 @@ class Attribute():
                         else option.additionalDescription
 
                 self.enumerationOptions.append(
-                    EnumerationOption(option.key, option.value,
+                    EnumerationOption(option.description,
+                                      option.value,
                                       additionalDescription,
                                       externalId)
                 )

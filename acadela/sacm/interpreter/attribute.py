@@ -81,25 +81,33 @@ def create_attribute_json_object(attribute):
     # else:
     #     thisAttr['description'] = attribute.description
 
-    if util.is_attribute_not_null(attribute, 'defaultValues'):
-        thisAttr['defaultValues'] = attribute.defaultValues
+    util.compile_attributes(thisAttr, attribute,
+        ['defaultValues', 'additionalDescription',
+         'mandatory', 'multiplicity'])
 
-    if hasattr(attribute, 'additionalDescription'):
-        thisAttr['additionalDescription'] = \
-            attribute.additionalDescription
+    # if util.is_attribute_not_null(attribute, 'defaultValues'):
+    #     thisAttr['defaultValues'] = attribute.defaultValues
+    #
+    # if hasattr(attribute, 'additionalDescription'):
+    #     thisAttr['additionalDescription'] = \
+    #         attribute.additionalDescription
+    #
+    # if hasattr(attribute, 'externalId'):
+    #     thisAttr['externalId'] = \
+    #         attribute.externalId
 
-    if hasattr(attribute, 'externalId'):
-        thisAttr['externalId'] = \
-            attribute.externalId
+    # if hasattr(attribute, 'multiplicity'):
+    #     thisAttr['multiplicity'] = attribute.multiplicity
 
-    if hasattr(attribute, 'type'):
+    if util.is_attribute_not_null(attribute, 'type'):
         thisAttr['type'] = attribute.type
-
-        if attribute.type == 'enumeration'\
-                and hasattr(attribute, 'question'):
+        print("Attribute Type", attribute.type)
+        print('enumeration Options length', len(attribute.enumerationOptions))
+        if attribute.type == 'enumeration':
 
             optionList = []
-            for option in attribute.question.options:
+            for option in attribute.enumerationOptions:
+
                 optionJson = {}
                 optionJson['value'] = option.value
                 optionJson['description'] = option.description
@@ -114,9 +122,8 @@ def create_attribute_json_object(attribute):
 
                 optionList.append({"$": optionJson})
             attrObj['EnumerationOption'] = optionList
-
-    if hasattr(attribute, 'multiplicity'):
-        thisAttr['multiplicity'] = attribute.multiplicity
+    else:
+        thisAttr['type'] = None
 
     print("Attribute JSON")
     print(json.dumps(attrObj, indent=4))
