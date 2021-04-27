@@ -72,7 +72,9 @@ def interpret_dynamic_directive(directiveObj, directiveType):
 
         numberType = "number"
 
-        if directiveObj.comparator != None:
+        if directiveObj.comparator is None:
+            return 'number'
+        if directiveObj.comparator is not None:
             # Parse min/max form
             comparator = directiveObj.comparator
             num = directiveObj.num
@@ -89,8 +91,8 @@ def interpret_dynamic_directive(directiveObj, directiveType):
                 return numberType
 
         # Parse min AND max form
-        elif directiveObj.min is not None and \
-            directiveObj.max is not None:
+        elif util.is_attribute_not_null(directiveObj, 'min') and \
+            util.is_attribute_not_null(directiveObj, 'max'):
             if int(str(directiveObj.min)) < int(str(directiveObj.max)):
                 minMaxStr = ".min({}).max({})".format(
                     directiveObj.min, directiveObj.max)

@@ -53,6 +53,14 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         if util.is_attribute_not_null(directive, 'activation')\
         else defaultAttrMap['activation']
 
+    dynamicDescPath = stage.dynamicDescriptionPath.value \
+        if util.is_attribute_not_null(stage.dynamicDescriptionPath, 'value') \
+        else None
+
+    externalId = stage.externalId.value \
+        if util.is_attribute_not_null(stage.externalId, 'value') \
+        else None
+
     preconditionObj = stage.preconditionList \
         if util.is_attribute_not_null(stage, 'preconditionList') \
         else None
@@ -68,12 +76,12 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
                         stage.ownerpath.value,
                         taskList,
                         extraDescription,
-                        stage.externalId.value,
+                        externalId,
                         repeatable,
                         mandatory,
                         activation,
                         manualActivationExpression,
-                        stage.dynamicDescriptionPath.value,
+                        dynamicDescPath,
                         preconditionList)
 
     stageAsAttribute = Attribute(stageObject.id,
@@ -82,7 +90,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
                             type,
                             #uiReference = stage.uiReference.value,
                             additionalDescription = stage.additionalDescription,
-                            externalId = stage.externalId.value)
+                            externalId = externalId)
 
     print('stageEntity', vars(stageAsEntity))
     print('stageAsAttribute', vars(stageAsAttribute))

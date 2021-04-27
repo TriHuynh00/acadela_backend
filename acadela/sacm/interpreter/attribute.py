@@ -64,7 +64,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
 
     return attrObj
 
-def create_attribute_json_object(attribute):
+def sacm_compile(attribute):
     attrObj = {"$": {}}
     thisAttr = attrObj["$"]
     thisAttr['id'] = attribute.id
@@ -85,24 +85,9 @@ def create_attribute_json_object(attribute):
         ['defaultValues', 'additionalDescription',
          'mandatory', 'multiplicity'])
 
-    # if util.is_attribute_not_null(attribute, 'defaultValues'):
-    #     thisAttr['defaultValues'] = attribute.defaultValues
-    #
-    # if hasattr(attribute, 'additionalDescription'):
-    #     thisAttr['additionalDescription'] = \
-    #         attribute.additionalDescription
-    #
-    # if hasattr(attribute, 'externalId'):
-    #     thisAttr['externalId'] = \
-    #         attribute.externalId
-
-    # if hasattr(attribute, 'multiplicity'):
-    #     thisAttr['multiplicity'] = attribute.multiplicity
-
     if util.is_attribute_not_null(attribute, 'type'):
         thisAttr['type'] = attribute.type
-        print("Attribute Type", attribute.type)
-        print('enumeration Options length', len(attribute.enumerationOptions))
+
         if attribute.type == 'enumeration':
 
             optionList = []

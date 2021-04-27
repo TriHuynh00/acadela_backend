@@ -103,13 +103,22 @@ def interpret_dynamic_field(field, fieldPath, taskType):
         if field.additionalDescription is None \
         else field.additionalDescription.value
 
+    explicitAttrType = None \
+        if not hasattr(directive, "explicitType") \
+        else direc_intprtr \
+        .interpret_directive(directive.explicitType)
+
+    uiRef = field.uiRef.value \
+        if util.is_attribute_not_null(field, "uiRef") \
+        else None
+
     # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = DerivedAttribute(field.id, field.description,
+    fieldAsAttribute = DerivedAttribute(field.id, field.description.value,
         extraDescription,
-        field.expression,
-        field.uiRef,
+        field.expression.value,
+        uiRef,
         externalId,
-        directive.explicitType)
+        explicitAttrType)
 
     if taskType == 'DualTask':
         check_part_for_dual_task(directive.part, field.id)

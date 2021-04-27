@@ -16,8 +16,8 @@ class DerivedAttribute:
         self.description = description
         self.additionalDescription = additionalDescription
         self.expression = expression
-        self.uiRef = uiRef
+        self.uiReference = uiRef
         self.externalId = externalId
-        self.explicitType = explicitType
+        self.explicitAttributeType = explicitType
 
 

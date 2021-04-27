@@ -3,6 +3,7 @@ import acadela.sacm.util as util
 import acadela.sacm.default_state as defaultState
 
 import acadela.sacm.interpreter.attribute as attributeInterpreter
+import acadela.sacm.interpreter.derived_attribute as derAttrInterpreter
 import acadela.sacm.interpreter.summary as summaryInterpreter
 import acadela.sacm.interpreter.stage as stageInterpreter
 
@@ -162,18 +163,24 @@ def create_entity_json_object(entity):
     }
 
     attributeList = []
+    derivedAttrList = []
+
     if hasattr(entity, "attribute"):
         for attribute in entity.attribute:
             print ("Attribute type of ", attribute.id, "is", util.cname(attribute) )
             if util.cname(attribute) == 'Attribute':
                 attributeList.append(
-                    attributeInterpreter.
-                        create_attribute_json_object(attribute))
+                    attributeInterpreter.sacm_compile(attribute)
+                )
             elif util.cname(attribute) == 'DerivedAttribute':
-                # TODO: Compile Derived Attribute
-                pass
+                derivedAttrList.append(
+                    derAttrInterpreter.sacm_compile(attribute)
+                )
 
     entityJson["AttributeDefinition"] = attributeList
+
+    if len(derivedAttrList) > 0:
+        entityJson["DerivedAttributeDefinition"] = derivedAttrList
 
     return entityJson
 
