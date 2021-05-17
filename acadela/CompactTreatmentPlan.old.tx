@@ -2,26 +2,31 @@
 // uiReference, and expressions
 
 Start:
-    (versionTag = AcaVersion)?
-    (importList *= Import)
+    versionTag = AcaVersion
+    (importList *= Import)?
+    (
+        (defObj *= DefineObj)
+        | (defWorkspace = DefWorkspace)
 
-    //(defWorkSpace = DefWorkspace)?
-    (objList *= Obj)
+    )#
 ;
 
 AcaVersion:
     /(#aca)\d\.\d/
 ;
 
+// Import Definition Level
+Import:
+    'import' importVar=ID 'from' path=STRING
+;
 
 // Workspace Definition Level
 DefWorkspace:
     workspace = Workspace
-
-    //workspaceProp = DefineCase
-    //(workspaceGlobalObjList *= DefineObj)
-    ('define' workspaceObj*=Obj)+
-
+    (
+        (workspaceGlobalObj = DefineObj)?
+        workspaceProp = DefineCase
+    )#
 ;
 
 Workspace:
@@ -29,12 +34,12 @@ Workspace:
 ;
 
 BasicIdentity:
-    name = ID
-    ('staticId' Eq staticId=STRING)?
+    id = TextNoQuote
+    ('staticId' Eq staticId=Text)?
 ;
 
 GroupIdentity:
-    name = ID
+    id = TextNoQuote
     (
         ('staticId' Eq staticId=STRING)?
         ('name' Eq name=STRING)
@@ -50,7 +55,7 @@ DefineObj:
 ;
 
 Obj:
-    (DefWorkspace | Case | Stage | Task | Form | Hook | ValidAttribute)
+    (Case | Stage | Task | Form | Hook | ValidAttribute)
 ;
 
 /********************
@@ -58,31 +63,29 @@ Obj:
 ********************/
 
 Case:
+    'case' casename = TextNoQuote
     (
-        'case' name=ID
+        casePrefix = CasePrefix
+        ('version' Eq version = INT)
+        // clientPath and ownerPath is defined in CaseSetting
+        // Interpreter automatically finds the following attributes:
+        // 1. entityDefinitionId (rootEntityDefinitionId):
+        //   Case Schema: all entities of settings and stages
+        // 2. newEntityAttachPath (entityAttachPath): take path to Settings entity by default
+        // 3. newEntityDefinitionId (entityDefinitionId): take Settings entity by default
+        //
         (
-            casePrefix = CasePrefix
-            ('version' Eq version = INT)
-            // clientPath and ownerPath is defined in CaseSetting
-            // Interpreter automatically finds the following attributes:
-            // 1. entityDefinitionId (rootEntityDefinitionId):
-            //   Case Schema: all entities of settings and stages
-            // 2. newEntityAttachPath (entityAttachPath): take path to Settings entity by default
-            // 3. newEntityDefinitionId (entityDefinitionId): take Settings entity by default
-            //
-            (
-                description = Description
-                responsibilities = Responsibilities
-                setting = CaseSetting
-                ('Trigger' hookList += CaseHook)?
-                summary = SummaryPanel
-                //(entityDefinitionId = STRING)?
-                //(entityAttachPath = STRING)?
-                (notes = STRING)?
-            )#
-            //stageList += Stage
+            description = Description
+            responsibilities = Responsibilities
+            setting = CaseSetting
+            ('Trigger' hookList += CaseHook)?
+            summary = SummaryPanel
+            //(entityDefinitionId = STRING)?
+            //(entityAttachPath = STRING)?
+            (notes = STRING)?
         )#
-    ) | (Ref ref=[Case|FQN])?
+        stageList += Stage
+    )#
 ;
 
 CaseSetting:
@@ -90,9 +93,9 @@ CaseSetting:
     (description = Description)?
     (
         caseOwner = CaseOwner
-        (attrList *= Attribute)
+        (attrList += Attribute)?
         (casePatient = CasePatient)?
-        (attrList *= Attribute)
+        (attrList += Attribute)?
     )#
 ;
 
@@ -118,8 +121,8 @@ CasePatient:
 Responsibilities:
     'Responsibilities'
     (
-        groupList *= Group
-        userList *= User
+        groupList += Group
+        userList += User
     )#
 ;
 
@@ -140,7 +143,7 @@ ValidAttribute:
 *****************************/
 
 Attribute:
-    "attribute" name = ID
+    "attribute" name=TextNoQuote
     //(
 
         attrProp = AttributeProp
@@ -172,14 +175,14 @@ SummaryPanel:
 ;
 
 SummarySection:
-    'Section' name = ID
+    'Section' id=TextNoQuote
         directive = SummarySectionPosition
         description = Description
         paramList += SummaryParam
 ;
 
 SummaryParam:
-    'InfoPath' path = TextNoQuote
+    'InfoPath' path=TextNoQuote
 ;
 
 /********************
@@ -243,11 +246,11 @@ DualTaskEvent:
 ;
 
 CaseDef:
-    'casedefinition' caseDefName = ID
+    'casedefinition' caseDefName=TextNoQuote
 ;
 
 CasePrefix:
-    'prefix' Eq value = STRING
+    'prefix' Eq value=Text
 ;
 
 MultiAttrModel:
@@ -257,7 +260,7 @@ MultiAttrModel:
 ;
 
 Description:
-    ('description' Eq value = STRING)
+    ('description' Eq value=Text)
 ;
 
 /***********************
@@ -269,8 +272,7 @@ Stage:
     // 1. entityAttachPath: the Path to the Stage entity
     // 2. entityDefinitionId: The name of the Stage entity
     // activation attribute is "EXPRESSION" if #activateWhen is used
-    (
-    'Stage' name = ID
+    'Stage' id=TextNoQuote
         directive = StageElementDirective
         (
             (description = Description)
@@ -278,12 +280,9 @@ Stage:
             (dynamicDescriptionPath = DynamicDescriptionPath)?
             (externalId = ExternalId)?
             (additionalDescription = AdditionalDescription)?
-            (preconditionList *= Precondition)
+            (preconditionList += Precondition)?
         )#
-        taskList *= Task
-    )
-    |
-    (Ref ref=[Stage|FQN])?
+        taskList += Task
 ;
 
 /***********************
@@ -299,31 +298,31 @@ Task:
 ;
 
 HumanTask:
-    'HumanTask' name = ID
+    'HumanTask' id = TextNoQuote
         directive = StageElementDirective
         (
             attrList = SharedTaskAttrs
-            ('Trigger' hookList *= HttpHook)?
+            ('Trigger' hookList += HttpHook)?
             form = Form
         )#
 ;
 
 AutomatedTask:
-    'AutoTask' name = ID
+    'AutoTask' id = TextNoQuote
         directive = StageElementDirective
         (
             attrList = AutomatedTaskAttrs
-            ('Trigger' hookList *= HttpHook)?
+            ('Trigger' hookList += HttpHook)?
             form = Form
         )#
 ;
 
 DualTask:
-    'DualTask' name = ID
+    'DualTask' id = TextNoQuote
         directive = StageElementDirective
         (
             attrList = SharedTaskAttrs
-            ('Trigger' hookList *= DualTaskHttpHook)?
+            ('Trigger' hookList += DualTaskHttpHook)?
             form = Form
         )#
 ;
@@ -335,7 +334,7 @@ AutomatedTaskAttrs:
         (externalId = ExternalId)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
         (additionalDescription = AdditionalDescription)?
-        (preconditionList *= Precondition)
+        (preconditionList += Precondition)?
     )#
 ;
 
@@ -347,7 +346,7 @@ SharedTaskAttrs:
         (externalId = ExternalId)?
         (additionalDescription = AdditionalDescription)?
         (dynamicDescriptionPath = DynamicDescriptionPath)?
-        (preconditionList *= Precondition)
+        (preconditionList += Precondition)?
     )#
 ;
 
@@ -368,7 +367,7 @@ Precondition:
 
 Form:
     'Form'
-        //(name = ID)?
+        //(id = TextNoQuote)?
         fieldList += FormField
 ;
 
@@ -383,7 +382,7 @@ FormField:
 ;
 
 Field:
-    'Field' name = ID
+    'Field' id = TextNoQuote
         directive = FieldDirective
         (
             description = Description
@@ -410,7 +409,7 @@ FieldDirective:
 ;
 
 DynamicField:
-    'DynamicField' name = ID
+    'DynamicField' id = TextNoQuote
         directive = DynamicFieldDirective
         (
             description = Description
@@ -503,7 +502,7 @@ Type:
 
 LinkType:
     'link' '.' (linkType='Users' | linkType='Entity')
-        '(' linkObj += TextNoQuote (',' linkObj += TextNoQuote)? ')'
+        '(' linkObj+=TextNoQuote (',' linkObj+=TextNoQuote)? ')'
 ;
 
 DateType:
@@ -702,19 +701,6 @@ WrapValue:
     '[' (Text | TextNoQuote) ']'
 ;
 
-Ref:
-    'use'
-;
-
-FQN: ID+['.'];
-FQNI: ID+['.']('.*')?;
-
-// Import Definition Level
-Import:
-    'import' importURI=FQNI ('as' name=ID)?
-    //'import' importVar=ID 'from' path=STRING
-;
-
 Comment:
   (/\/\/.*$/
   | /\/\*.*$/
@@ -728,7 +714,7 @@ Comment:
 
 
 Entity:
-    "entity" name = ID
+    "entity" name=TextNoQuote
     (
         description = Description
         (attrProp = AttributeProp)?
@@ -741,3 +727,5 @@ AttrList:
     (attr += Entity | attr += Attribute)*
     'endAttributeList'
 ;
+
+

@@ -1,6 +1,11 @@
-from textx import metamodel_from_file, TextXSyntaxError
+
+
 import sys
-from os.path import join, dirname
+import textx.scoping.providers as scoping_providers
+
+
+from textx import metamodel_from_file, TextXSyntaxError
+from os.path import join, dirname, abspath
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
@@ -13,35 +18,37 @@ from acadela.sacm.exception_handler.syntax_error_handler import SyntaxErrorHandl
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
 # the rule `pointmodel` from the grammar.
 
+def convert_import_path(i):
+    return i.replace(".", "/") + ".aca"
+
+
 this_folder = dirname(__file__)
-mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.tx'), classes=None, ignore_case=True)
 
-def verifyImport(model):
-    importList = model.importList
-    for importStmt in importList:
-        # print('import {} = get {} from {}'.format(
-        #     importStmt.importVar,
-        #     importStmt.objectId,
-        #     importStmt.path
-        # ))
-        print('import {} from {}'.format(
-            importStmt.importVar,
-            importStmt.path
-        ))
-        absImportPath = this_folder + importStmt.path
-        importedModel = mm.model_from_file(absImportPath)
-
-        print (importedModel.defObj[0].object)
+# def verifyImport(model):
+#     importList = model.importList
+#     for importStmt in importList:
+#         # print('import {} = get {} from {}'.format(
+#         #     importStmt.importVar,
+#         #     importStmt.objectId,
+#         #     importStmt.path
+#         # ))
+#         print('import {} from {}'.format(
+#             importStmt.importVar,
+#             importStmt.path
+#         ))
+#         absImportPath = this_folder + importStmt.path
+#         importedModel = mm.model_from_file(absImportPath)
+#
+#         print (importedModel.defObj[0].object)
 
 # model_str = """
 #     define entity Discharge
 #             description = 'Discharge Stage Definition'
 #             multiplicity = 'exactlyOne'
 # """
-
-model_str = """
+input_str = r"""
     #aca0.1
-    import discharge from '/stages/discharge.aca' 
+    import stages.discharge as istage  
     workspace Umcg
     
     define HumanTask TestCharlson
@@ -59,7 +66,6 @@ model_str = """
                 Question = 'Do you have hearth attacks?'
                     Option 'No' value = '0'
                     Option 'Yes' value = '1'
-
     
     define case GCS1_Groningen
         prefix = 'GCS1'
@@ -113,18 +119,15 @@ model_str = """
             Section BMIScore #center
                 description = "Height and Weight of Patient"
                 InfoPath Identification.MeasureBMI.BMIScore
-                
+        
+        
+        
         Stage AdmitPatient
             #mandatory #manualActivate
             owner = 'Settings.CaseManager'
             description = 'Admit Patient into Treatment'
-            dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
-            externalId = 'SelectPatient'
-            
-            Precondition
-                previousStep = 'AdmitPatient' 
-                previousStep = 'Gogonzola' 
-                condition = 'Age < 60'
+            //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
+            //externalId = 'SelectPatient'
             
             HumanTask MeasureBMI
                 #mandatory
@@ -136,8 +139,6 @@ model_str = """
                 
                 Precondition
                     previousStep = 'PatientConsent' 
-                    previousStep = 'Golase' 
-                    condition = 'Age < 60'
                 
                 Trigger
                     On activate invoke 'http://integration-producer:8081/v1/activate' method Post
@@ -154,14 +155,13 @@ model_str = """
                     field AgeRange
                         #selector #mandatory
                         Question = 'What is your age range?'
-                            additionalDescription = 'age range affect BMI'
-                            Option 'less than 10' value = '1'
+                            Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
                             Option '10-30' value = '1.2'
                             Option '30-50' value = '1.5'
                             Option 'over 50' value = '1.7'
                     
                     DynamicField BmiScore
-                        #mandatory
+                        #mandatory #number
                         description = 'BMI Calculation in kilogram and meters'
                         expression = 'Height * Height'
                         
@@ -172,7 +172,15 @@ model_str = """
                         expression = '(Height * Height) + Age'
                         uiRef = colors(5<red<10<green<25)
                         externalId = 'BmiPlus'                                 
-                           
+        
+        Stage Stage2
+            #mandatory #manualActivate
+            owner = 'Settings.CaseManager'
+            description = 'Perform Obesity Treatment'
+            
+            Precondition
+                previousStep = 'AdmitPatient' 
+            
             AutoTask AutoTask1
                 #mandatory #exactlyOne
                 description = 'Automated Task 1'
@@ -214,6 +222,8 @@ model_str = """
                     field BloodPressureAnalysis
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
+        
+                        
 """
 
 # workspace staticId = 'c023' id = 'Lleida_Cancer'
@@ -226,29 +236,47 @@ model_str = """
 model = None
 
 try:
-    input = model_str
-    if len(sys.argv) > 1:
-        input = sys.argv[1];
-
-    model = mm.model_from_str(input)
-    # verifyImport(model)
-    # importList = model.importList
-    #
-    # for importStmt in importList:
-    #     print('import {} = get {} from {}'.format(
-    #         importStmt.importVar,
-    #         importStmt.objectId,
-    #         importStmt.path
-    #     ))
-    #     absImportPath = this_folder + importStmt.path
-    #     importedModel = mm.model_from_file(absImportPath)
-    #
-    #     print (importedModel.defObj[0].object)
+    input = input_str
+    # if len(sys.argv) > 1:
+    #     input = sys.argv[1];
 
 
-    point_interpreter = CaseInterpreter(mm, model)
+    def importURI_to_scope_name(import_obj):
+        # this method is responsible to deduce the module name in the
+        # language from the importURI string
+        # e.g. here: import "file.ext" --> module name "file".
+        return import_obj.importURI.split('.')[0]
 
-    point_interpreter.interpret()
+
+    def custom_scope_redirection(obj):
+        from textx import textx_isinstance
+        if textx_isinstance(obj, mm["Stage"]):
+            if obj.ref is None:
+                from textx.scoping import Postponed
+                return Postponed()
+            return [obj.ref]
+        else:
+            return []
+
+
+    mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.old.tx'),
+                             ignore_case=True)
+
+    mm.register_scope_providers(
+        {
+            "*.*": scoping_providers\
+                .FQNImportURI(importURI_converter=convert_import_path,
+                          importAs=True)
+        }
+    )
+
+    rootImportPath = join(abspath(dirname(__file__)), '')
+    print("rootImportPart", rootImportPath)
+    model = mm.model_from_str(input, rootImportPath)
+    # model = mm.model_from_str(input)
+    acaInterpreter = CaseInterpreter(mm, model)
+
+    acaInterpreter.interpret()
 
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)
