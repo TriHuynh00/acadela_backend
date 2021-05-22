@@ -259,7 +259,7 @@ try:
             return []
 
 
-    mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.old.tx'),
+    mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.tx'),
                              ignore_case=True)
 
     mm.register_scope_providers(
@@ -270,7 +270,7 @@ try:
         }
     )
 
-    rootImportPath = join(abspath(dirname(__file__)), '')
+    rootImportPath = join(abspath(dirname(__file__)), 'aa')
     print("rootImportPart", rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
     # model = mm.model_from_str(input)

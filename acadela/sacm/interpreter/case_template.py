@@ -88,41 +88,55 @@ class CaseInterpreter():
         model = self.model
         workspace = model.defWorkspace
 
-        # Pure Object Import
-        if workspace == None:
-            for defObj in model.defObj:
-                if util.cname(defObj.object) == 'Entity':
-                    obj = defObj.object
-                    print(obj.name)
-                    for attr in obj.attr:
-                       print('{} = {}'.format(util.cname(attr), attr.value))
-        else:
+        print("WP type", util.cname(workspace))
+        print('importedObj', len(model.objList))
+        # # Pure Object Import
+        # if util.cname(workspace) != 'DefWorkSpace':
+        #     for defObj in model.objList:
+        #         if util.cname(defObj.object) == 'Entity':
+        #             obj = defObj.object
+        #             print(obj.name)
+        #             for attr in obj.attr:
+        #                print('{} = {}'.format(util.cname(attr), attr.value))
+        #else:
+        if util.cname(workspace) == 'DefWorkspace':
             acaversion = model.versionTag
 
             print("ACA v =", acaversion)
 
-            workspace = model.defWorkspace.workspace
-
             if runNetworkOp:
-                workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.id)
-                self.workspace = workspace.id
+                workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.name)
+                self.workspace = workspace.name
 
-            case = model.defWorkspace.workspaceProp.case
+            case = None
 
-            # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.id)
+            caseCount = 0
+            for wpObj in workspace.workspaceObj:
+                print('wpObj cname = ', util.cname(wpObj))
+                if util.cname(wpObj) == 'Case':
+                    case = wpObj
+                    caseCount += 1
+
+            if caseCount > 1:
+                raise Exception('Error: Multiple Case Definitions' \
+                                'There are %d cases in the case definition.' \
+                                'Only one case is allowed.'.format(caseCount))
+
+
+            # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.name)
 
 
             # if "Error" in returnedMsg:
             #     raise Exception("StaticID not found for workspace {}, Reason: {}"
-            #                     .format(workspace.id, returnedMsg))
+            #                     .format(workspace.name, returnedMsg))
             # else:
             #     workspace.staticId = returnedMsg
 
             if util.cname(case) == 'Case':
-                print('Case', case.casename)
+                print('Case', case.name)
 
             for group in case.responsibilities.groupList:
-                print("Group", group.id)
+                print("Group", group.name)
 
                 if runNetworkOp:
                     if self.groupInterpreter.\
@@ -130,10 +144,10 @@ class CaseInterpreter():
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
-                                        .format(group.id, group.name, workspace.staticId))
+                                        .format(group.name, group.name, workspace.staticId))
 
             for user in case.responsibilities.userList:
-                print("User", user.id)
+                print("User", user.name)
                 if runNetworkOp:
                     if self.userInterpreter.\
                             findStaticId(user, self.groupList) is not None:
@@ -141,7 +155,7 @@ class CaseInterpreter():
                     else:
                         raise Exception(("cannot find static ID for user with reference ID {0}. " +
                                         "Please verify if the user reference ID is correct.")
-                                        .format(user.id))
+                                        .format(user.name))
 
             print()
 
@@ -149,7 +163,7 @@ class CaseInterpreter():
 
             util.set_case_prefix(case.casePrefix.value)
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
-                workspace.staticId, workspace.id))
+                workspace.workspace.staticId, workspace.workspace.name))
 
             #for group in self.groupList:
             #    print("\tgroup: staticId = {}, name = {}".
@@ -159,7 +173,7 @@ class CaseInterpreter():
 
             for user in self.userList:
                 print("\tuser: staticId = {}, id = {}".
-                      format(user.staticId, user.id))
+                      format(user.staticId, user.name))
 
             print()
             ########################################
@@ -173,7 +187,7 @@ class CaseInterpreter():
                 for task in stage.taskList:
 
                     iTask = taskInterpreter\
-                            .interpret_task(task, stage.id)
+                            .interpret_task(task, stage.name)
 
                     taskAsAttributeList\
                         .append(iTask['taskAsAttribute'])
@@ -213,6 +227,12 @@ class CaseInterpreter():
                 .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
+
+            # Swap Entity so that the objects at higher
+            # hierarchy are placed first. This avoid
+            # creating non-existing parent entity when a
+            # child entity is generated
+            self.entityList.reverse()
 
             self.caseObjectTree = {
                 "workspace": self.workspace,
@@ -279,7 +299,7 @@ class CaseInterpreter():
                 #           "\n\t\tdueDatePath = {}"
                 #           "\n\t\texternalId = {}"
                 #           "\n\t\tdynamicDescriptionPath = {}"
-                #           .format(task.id,
+                #           .format(task.name,
                 #                   directive.mandatory,
                 #                   directive.repeatable,
                 #                   directive.activation,

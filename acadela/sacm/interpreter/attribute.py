@@ -1,4 +1,5 @@
-from acadela.sacm import util, default_state
+from acadela.sacm import util
+from acadela.sacm.default_state import defaultAttrMap
 
 import json
 import sys
@@ -22,7 +23,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
     elif attrClassName == 'CasePatient':
         attrId = 'CasePatient'
     else:
-        attrId = attribute.name
+        attrId = attribute.id
 
     if isIdPrefixed:
         attrId = util.prefixing(attrId)
@@ -38,10 +39,10 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
         elif attrClassName == 'CaseOwner'\
                 or attrClassName == 'CasePatient':
             attrObj.description = attribute.attrProp.description.value
-            attrObj.type = 'links.users({})'.format(attribute.group)
+            attrObj.type = 'Links.Users({})'.format(attribute.group)
 
         else:
-            attrObj.type = default_state.defaultAttrMap['type']
+            attrObj.type = defaultAttrMap['type']
 
         if attribute.attrProp.directive.multiplicity is not None:
             attrObj.multiplicity = directive.interpret_directive(attribute.attrProp.directive.multiplicity)
@@ -108,7 +109,7 @@ def sacm_compile(attribute):
                 optionList.append({"$": optionJson})
             attrObj['EnumerationOption'] = optionList
     else:
-        thisAttr['type'] = None
+        thisAttr['type'] = defaultAttrMap['type']
 
     print("Attribute JSON")
     print(json.dumps(attrObj, indent=4))

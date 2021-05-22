@@ -110,7 +110,7 @@ def interpret_setting_entity(settingObj):
                            settingDescription)
 
     for attr in settingObj.attrList:
-        print("Attr ID " + attr.name)
+        print("Attr ID " + attr.id)
         print("#Directives ", attr.attrProp.directive)
         attrObj = attributeInterpreter.interpret_attribute_object(attr)
         settingEntity.attribute.append(attrObj)
@@ -167,7 +167,7 @@ def create_entity_json_object(entity):
 
     if hasattr(entity, "attribute"):
         for attribute in entity.attribute:
-            print ("Attribute type of ", attribute.id, "is", util.cname(attribute) )
+            print("Attribute type of ", attribute.id, "is", util.cname(attribute) )
             if util.cname(attribute) == 'Attribute':
                 attributeList.append(
                     attributeInterpreter.sacm_compile(attribute)

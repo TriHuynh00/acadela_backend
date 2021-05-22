@@ -6,7 +6,7 @@ import acadela.sacm.interpreter.hook as hookInterpreter
 import acadela.sacm.interpreter.directive as direc_intprtr
 import acadela.sacm.interpreter.field as fieldInterpreter
 
-from acadela.sacm.default_state import defaultAttrMap
+from acadela.sacm import default_state
 
 import acadela.sacm.constant.task_type as TASKTYPE
 
@@ -70,7 +70,7 @@ def interpret_task(task, stageId):
     print("Task Sentry List", preconditionList)
     # Interpret Directive
 
-    activation = defaultAttrMap['activation']\
+    activation = default_state.defaultAttrMap['activation']\
         if not hasattr(directive, 'activation')\
         else direc_intprtr.\
                 interpret_directive(directive.activation)
@@ -81,25 +81,22 @@ def interpret_task(task, stageId):
             activation.startswith("activateWhen"):
         manualActivationExpression = activation.split('(')[1][:-1]
 
-    repeatable = defaultAttrMap['repeat'] \
+    repeatable = default_state.defaultAttrMap['repeat'] \
         if not hasattr(directive, 'repeatable') \
         else direc_intprtr. \
                 interpret_directive(directive.repeatable)
 
-    mandatory = defaultAttrMap['mandatory']\
+    mandatory = default_state.defaultAttrMap['mandatory']\
         if not hasattr(directive, 'mandatory')\
         else direc_intprtr.\
                 interpret_directive(directive.mandatory)
 
-    multiplicity = defaultAttrMap['multiplicity']\
+    multiplicity = default_state.defaultAttrMap['multiplicity']\
         if directive.multiplicity is None\
         else direc_intprtr.\
                 interpret_directive(directive.multiplicity)
     
-    typeValue = defaultAttrMap['type'] \
-        if not hasattr(directive, 'type') \
-        else direc_intprtr. \
-            interpret_directive(directive.type)
+    typeValue = default_state.entityLinkType + '.' + taskId
 
     externalId = None\
         if attrList.externalId is None\
@@ -133,7 +130,6 @@ def interpret_task(task, stageId):
 
             dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
             # dynamicFieldList.append(dynamicFieldList)
-
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
 

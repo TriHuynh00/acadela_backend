@@ -1,5 +1,3 @@
-
-
 def basicIdentityListToJson(objList):
     jsonObjList = []
     # TODO: Check if the staticId and id exist
@@ -7,7 +5,7 @@ def basicIdentityListToJson(objList):
         jsonObjList.append({
             "$": {
                 "staticId": str(obj.staticId),
-                "id": str(obj.id)
+                "id": str(obj.name)
             }
         })
     return jsonObjList

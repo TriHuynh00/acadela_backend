@@ -54,7 +54,7 @@ class WorkspaceInterpreter:
                     entityAttrProp = entityAttr.attrProp
 
                     thisAttr = attrObj["$"]
-                    thisAttr['id'] = entityAttr.name
+                    thisAttr['id'] = entityAttr.id
                     thisAttr['description'] = entityAttr.description.value
                     if entityAttrProp.defaultValues is not None:
                         thisAttr['defaultValues'] = entityAttrProp.defaultValues.value

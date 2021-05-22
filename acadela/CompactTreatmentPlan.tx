@@ -5,8 +5,10 @@ Start:
     (versionTag = AcaVersion)?
     (importList *= Import)
 
-    //(defWorkSpace = DefWorkspace)?
-    (objList *= Obj)
+    (
+        (defWorkspace = DefWorkspace)
+        | (objList *= Obj)
+    )
 ;
 
 AcaVersion:
@@ -17,10 +19,12 @@ AcaVersion:
 // Workspace Definition Level
 DefWorkspace:
     workspace = Workspace
+    /*(
+        (workspaceGlobalObjList *= DefineObj)?
+        workspaceProp = DefineCase
 
-    //workspaceProp = DefineCase
-    //(workspaceGlobalObjList *= DefineObj)
-    ('define' workspaceObj*=Obj)+
+    )#*/
+    ('define' workspaceObj*=Obj)*
 
 ;
 
@@ -37,7 +41,7 @@ GroupIdentity:
     name = ID
     (
         ('staticId' Eq staticId=STRING)?
-        ('name' Eq name=STRING)
+        ('name' Eq groupName=STRING)
     )#
 ;
 
@@ -50,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    (DefWorkspace | Case | Stage | Task | Form | Hook | ValidAttribute)
+    ( Case | Stage | Task | Form | Hook | ValidAttribute)
 ;
 
 /********************
@@ -80,7 +84,7 @@ Case:
                 //(entityAttachPath = STRING)?
                 (notes = STRING)?
             )#
-            //stageList += Stage
+            stageList += Stage
         )#
     ) | (Ref ref=[Case|FQN])?
 ;

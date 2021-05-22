@@ -21,13 +21,13 @@ def interpret_field(field, fieldPath, taskType):
         print("Field question len", len(field.question.optionList))
         description = field.question.text
         for option in field.question.optionList:
-            additionalDescription = \
-                None if not hasattr(option, "additionalDescription") \
-                    else option.additionalDescription
+            additionalDescription = option.additionalDescription.value \
+                if util.is_attribute_not_null(option, "additionalDescription") \
+                else None
 
-            externalId = \
-                None if not hasattr(option, "externalId") \
-                    else option.additionalDescription
+            externalId = option.externalId.value\
+                if util.is_attribute_not_null(option, "externalId") \
+                else None
 
             enumerationOptions.append(
                 EnumerationOption(option.key, option.value,

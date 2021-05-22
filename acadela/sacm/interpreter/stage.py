@@ -1,7 +1,7 @@
 from acadela.sacm import util
 from acadela.sacm.interpreter import util_intprtr
 
-from acadela.sacm.default_state import defaultAttrMap
+from acadela.sacm import default_state
 from acadela.sacm.case_object.stage import Stage
 from acadela.sacm.case_object.entity import Entity
 from acadela.sacm.case_object.attribute import Attribute
@@ -23,8 +23,8 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     preconditionList = []
 
-    type = None if not hasattr(directive, 'type')\
-                else directive.type
+    type = default_state.entityLinkType + '.' \
+           + util.prefixing(stage.id)
 
     manualActivationExpression = None
 
@@ -43,15 +43,15 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     repeatable = interpret_directive(directive.repeatable)\
         if util.is_attribute_not_null(directive, 'repeatable')\
-        else defaultAttrMap['repeatable']
+        else default_state.defaultAttrMap['repeatable']
 
     mandatory = interpret_directive(directive.mandatory)\
         if util.is_attribute_not_null(directive, 'mandatory')\
-        else defaultAttrMap['mandatory']
+        else default_state.defaultAttrMap['mandatory']
 
     activation = interpret_directive(directive.activation)\
         if util.is_attribute_not_null(directive, 'activation')\
-        else defaultAttrMap['activation']
+        else default_state.defaultAttrMap['activation']
 
     dynamicDescPath = stage.dynamicDescriptionPath.value \
         if util.is_attribute_not_null(stage.dynamicDescriptionPath, 'value') \
