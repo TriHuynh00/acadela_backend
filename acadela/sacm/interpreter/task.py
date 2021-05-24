@@ -54,6 +54,7 @@ def interpret_task(task, stageId):
 
     if hasattr(task, "hookList"):
         for hook in task.hookList:
+            hook = util.getRefOfObject(hook)
             interpretedHook = hookInterpreter.interpret_http_hook(hook)
             print("HttpHook", vars(interpretedHook))
             taskHookList.append(interpretedHook)
@@ -107,8 +108,10 @@ def interpret_task(task, stageId):
         else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
+    taskForm = util.getRefOfObject(task.form)
 
-    for field in task.form.fieldList:
+    for field in taskForm.fieldList:
+        field = util.getRefOfObject(field)
         interpretedFieldTuple = None
 
         fieldPath = "{}.{}.{}".format(

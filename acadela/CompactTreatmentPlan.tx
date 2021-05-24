@@ -86,7 +86,7 @@ Case:
             )#
             stageList += Stage
         )#
-    ) | (RefCase ref=[Case|FQN])?
+    ) | (Ref 'Case' ref=[Case|FQN])?
 ;
 
 CaseSetting:
@@ -195,26 +195,35 @@ Hook:
 ;
 
 CaseHook:
-    'On' event = CaseHookEvent
-    'invoke' url = STRING
+    (
+        ('Hook' name = ID)?
+        'On' event = CaseHookEvent
+        'invoke' url = STRING
+    ) | (RefHook ref=[CaseHook|FQN])?
 ;
 
 HttpHook:
-    'On' event = BaseEvent
     (
-        ('invoke' url = STRING)
-        ('method' method = HttpMethod)
-        ('with failureMessage' failureMessage = STRING)?
-    )#
+        ('Hook' name = ID)?
+        'On' event = BaseEvent
+        (
+            ('invoke' url = STRING)
+            ('method' method = HttpMethod)
+            ('with failureMessage' failureMessage = STRING)?
+        )#
+    ) | (RefHook ref=[HttpHook|FQN])?
 ;
 
 DualTaskHttpHook:
-    'On' event = DualTaskEvent
     (
-        ('invoke' url = STRING)
-        ('method' method = HttpMethod)
-        ('with failureMessage' failureMessage = STRING)?
-    )#
+        ('Hook' name = ID)?
+        'On' event = DualTaskEvent
+        (
+            ('invoke' url = STRING)
+            ('method' method = HttpMethod)
+            ('with failureMessage' failureMessage = STRING)?
+        )#
+    ) | (RefHook ref=[DualTaskHttpHook|FQN])?
 ;
 
 
@@ -275,7 +284,7 @@ Stage:
     // activation attribute is "EXPRESSION" if #activateWhen is used
 
     (
-        StageTerm name = ID
+        'Stage' name = ID
             directive = StageElementDirective
             (
                 (description = Description)
@@ -288,7 +297,7 @@ Stage:
             taskList *= Task
     )
     |
-    (RefStage ref=[Stage|FQN])?
+    (Ref 'Stage' ref=[Stage|FQN])?
 ;
 
 /***********************
@@ -379,9 +388,11 @@ Precondition:
 ***********************/
 
 Form:
-    'Form' name = ID
-        fieldList += FormField
-    //'endForm'
+    (
+        'Form' name = ID
+            fieldList += FormField
+    ) | (Ref 'Form' ref=[Form|FQN])?
+
 ;
 
 FormDirective:
@@ -395,12 +406,14 @@ FormField:
 ;
 
 Field:
-    'Field' name = ID
-        directive = FieldDirective
-        (
-            description = Description
-            | question = Question
-        )
+    (
+        'Field' name = ID
+            directive = FieldDirective
+            (
+                description = Description
+                | question = Question
+            )
+    ) | (Ref 'Field' ref=[Field|FQN])?
 ;
 
 FieldDirective:
@@ -422,15 +435,17 @@ FieldDirective:
 ;
 
 DynamicField:
-    'DynamicField' name = ID
-        directive = DynamicFieldDirective
-        (
-            description = Description
-            (additionalDescription = AdditionalDescription)?
-            (uiRef = UiReference)?
-            (expression = DynamicFieldExpression)?
-            (externalId = ExternalId)?
-        )#
+    (
+        'DynamicField' name = ID
+            directive = DynamicFieldDirective
+            (
+                description = Description
+                (additionalDescription = AdditionalDescription)?
+                (uiRef = UiReference)?
+                (expression = DynamicFieldExpression)?
+                (externalId = ExternalId)?
+            )#
+    ) | (Ref ('Field'|'DynamicField') ref=[DynamicField|FQN])?
 ;
 
 DynamicFieldDirective:
@@ -718,16 +733,16 @@ Ref:
     'use'
 ;
 
-RefCase:
-    Ref CaseTerm
-;
-
-RefStage:
-    Ref StageTerm
-;
-
 RefTask:
     Ref TaskTerm
+;
+
+RefField:
+    Ref FieldTerm
+;
+
+RefHook:
+    Ref HookTerm
 ;
 
 FQN: ID+['.'];
@@ -774,7 +789,17 @@ DualTaskTerm:
     'DualTask'
 ;
 
+FormTerm:
+    'Form'
+;
 
+FieldTerm:
+    'Field'
+;
+
+HookTerm:
+    'Hook'
+;
 
 /*****************
 *** OLD SYNTAX ***

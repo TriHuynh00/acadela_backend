@@ -1,5 +1,3 @@
-
-
 import sys
 import textx.scoping.providers as scoping_providers
 
@@ -28,7 +26,10 @@ input_str = r"""
     #aca0.1
     import extfile.caseGCS1 as caseG
     import extfile.discharge as dStage
+    import extfile.form as iForm
     import extfile.taskCharlsonTest
+    import extfile.field
+    import extfile.hook
       
     workspace Umcg
     
@@ -108,37 +109,40 @@ input_str = r"""
                     previousStep = 'PatientConsent' 
                 
                 Trigger
-                    On activate invoke 'http://integration-producer:8081/v1/activate' method Post
+                    use Hook hook1
+                //    On activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
-                Form BMIForm
-                    field Height
-                        #number(0-150) #exactlyOne
-                        description = 'Height of patient in cm'    
-                        
-                    field Weight
-                        #number(0-300) #exactlyOne
-                        description = 'Weight of patient in kg'
-                        
-                    field AgeRange
-                        #selector #mandatory
-                        Question = 'What is your age range?'
-                            Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
-                            Option '10-30' value = '1.2'
-                            Option '30-50' value = '1.5'
-                            Option 'over 50' value = '1.7'
-                    
-                    DynamicField BmiScore
-                        #mandatory #number
-                        description = 'BMI Calculation in kilogram and meters'
-                        expression = 'Height * Height'
-                        
-                    DynamicField BmiScorePlus
-                        #mandatory #readOnly #left #number
-                        description = 'BMI Calculation with age counted'
-                        additionalDescription = 'full Derived field'
-                        expression = '(Height * Height) + Age'
-                        uiRef = colors(5<red<10<green<25)
-                        externalId = 'BmiPlus'                                 
+                use Form iForm.BMIForm
+                
+                /*Form BMIForm
+                    * field Height
+                    *     #number(0-150) #exactlyOne
+                    *     description = 'Height of patient in cm'    
+                    *     
+                    * field Weight
+                    *     #number(0-300) #exactlyOne
+                    *     description = 'Weight of patient in kg'
+                    *     
+                    * field AgeRange
+                    *     #selector #mandatory
+                    *     Question = 'What is your age range?'
+                    *         Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
+                    *         Option '10-30' value = '1.2'
+                    *         Option '30-50' value = '1.5'
+                    *         Option 'over 50' value = '1.7'
+                    * 
+                    * DynamicField BmiScore
+                    *     #mandatory #number
+                    *     description = 'BMI Calculation in kilogram and meters'
+                    *     expression = 'Height * Height'
+                    *     
+                    * DynamicField BmiScorePlus
+                    *     #mandatory #readOnly #left #number
+                    *     description = 'BMI Calculation with age counted'
+                    *     additionalDescription = 'full Derived field'
+                    *     expression = '(Height * Height) + Age'
+                    *     uiRef = colors(5<red<10<green<25)
+                    */     externalId = 'BmiPlus'                                
         
         Stage Stage2
             #mandatory #manualActivate
@@ -167,6 +171,7 @@ input_str = r"""
                     field AutoField1
                         #number(<10) #mandatory
                         description = 'AutoField1'
+                    
                 
             DualTask DualTask1
                 #mandatory #repeatSerial #manualActivate
@@ -189,6 +194,7 @@ input_str = r"""
                     field BloodPressureAnalysis
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
+                    
         
         use stage dStage.Discharge
         

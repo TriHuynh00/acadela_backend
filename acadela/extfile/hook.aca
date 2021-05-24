@@ -1,0 +1,2 @@
+define Hook hook1
+    On activate method Post invoke 'http://integration-producer:8081/v1/activate'
