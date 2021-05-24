@@ -24,7 +24,7 @@ DefWorkspace:
         (workspaceGlobalObjList *= DefineObj)?
         workspaceProp = DefineCase
     )#*/
-    ('define' workspaceObj*=Obj)+
+    ('define')? (workspaceObj*=Obj)+
 
 ;
 
@@ -63,7 +63,7 @@ Obj:
 
 Case:
     (
-        'case' name=ID
+        CaseTerm name=ID
         (
             casePrefix = CasePrefix
             ('version' Eq version = INT)
@@ -86,7 +86,7 @@ Case:
             )#
             stageList += Stage
         )#
-    ) | (Ref ref=[Case|FQN])?
+    ) | (RefCase ref=[Case|FQN])?
 ;
 
 CaseSetting:
@@ -275,7 +275,7 @@ Stage:
     // activation attribute is "EXPRESSION" if #activateWhen is used
 
     (
-        'Stage' name = ID
+        StageTerm name = ID
             directive = StageElementDirective
             (
                 (description = Description)
@@ -305,7 +305,7 @@ Task:
 
 HumanTask:
     (
-        'HumanTask' name = ID
+        HumanTaskTerm name = ID
             directive = StageElementDirective
             (
                 attrList = SharedTaskAttrs
@@ -318,7 +318,7 @@ HumanTask:
 
 AutomatedTask:
     (
-        'AutoTask' name = ID
+        AutoTaskTerm name = ID
             directive = StageElementDirective
             (
                 attrList = AutomatedTaskAttrs
@@ -330,7 +330,7 @@ AutomatedTask:
 
 DualTask:
     (
-        'DualTask' name = ID
+        DualTaskTerm name = ID
             directive = StageElementDirective
             (
                 attrList = SharedTaskAttrs
@@ -444,12 +444,12 @@ DynamicFieldDirective:
 ;
 
 Question:
-    'question' Eq text=STRING
+    'Question' Eq text=STRING
     optionList += Option
 ;
 
 Option:
-    'option' (
+    'Option' (
         (key=STRING)
         ('value' Eq value=STRING)
         (additionalDescription = AdditionalDescription)?
@@ -718,12 +718,16 @@ Ref:
     'use'
 ;
 
+RefCase:
+    Ref CaseTerm
+;
+
 RefStage:
-    'use stage'
+    Ref StageTerm
 ;
 
 RefTask:
-    'use task'
+    Ref TaskTerm
 ;
 
 FQN: ID+['.'];
@@ -741,6 +745,36 @@ Comment:
   | /\*.*$/
   | /.*[\*\/]$/ )
 ;
+
+/**************************
+******* I18N TERMINAL *****
+***************************/
+
+CaseTerm:
+    'Case'
+;
+
+StageTerm:
+    'Stage'
+;
+
+TaskTerm:
+    'Task'
+;
+
+HumanTaskTerm:
+    'HumanTask'
+;
+
+AutoTaskTerm:
+    'AutoTask'
+;
+
+DualTaskTerm:
+    'DualTask'
+;
+
+
 
 /*****************
 *** OLD SYNTAX ***

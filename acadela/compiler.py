@@ -32,7 +32,7 @@ input_str = r"""
       
     workspace Umcg
     
-    // define use caseG.GCS1_Groningen
+    // define use case caseG.GCS1_Groningen
     
     define case GCS1_Groningen
         prefix = 'GCS1'
@@ -94,7 +94,7 @@ input_str = r"""
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
             
-            use Task TestCharlson
+            use task TestCharlson
             
             HumanTask MeasureBMI
                 #mandatory
@@ -190,7 +190,7 @@ input_str = r"""
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
         
-        use Stage dStage.Discharge
+        use stage dStage.Discharge
         
         
 """
