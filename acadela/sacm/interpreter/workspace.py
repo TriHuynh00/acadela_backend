@@ -83,7 +83,7 @@ class WorkspaceInterpreter:
         workspaceObjList["$"] = \
             {
                 "staticId": workspace.staticId,
-                "id": workspace.id
+                "id": workspace.name
             }
         entityJsonList = []
         for entity in entityList:

@@ -6,7 +6,7 @@ class UserInterpreter():
         self.userFinder = UserReferencer()
 
     def findStaticId(self, user, groupList):
-        user.staticId = self.userFinder.findUserStaticIdByRefIdAndGroupID(user.id, groupList)
+        user.staticId = self.userFinder.findUserStaticIdByRefIdAndGroupID(user.name, groupList)
         if user.staticId is not "userStaticIdNotFound":
             return user
         else:

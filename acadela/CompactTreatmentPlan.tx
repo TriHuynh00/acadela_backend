@@ -3,11 +3,12 @@
 
 Start:
     (versionTag = AcaVersion)?
-    (importList *= Import)
+    (importList *= Import)?
 
     (
         (defWorkspace = DefWorkspace)
-        | (objList *= Obj)
+        | 'define' (objList *= Obj)
+        // | (objList *= Obj)
     )
 ;
 
@@ -22,9 +23,8 @@ DefWorkspace:
     /*(
         (workspaceGlobalObjList *= DefineObj)?
         workspaceProp = DefineCase
-
     )#*/
-    ('define' workspaceObj*=Obj)*
+    ('define' workspaceObj*=Obj)+
 
 ;
 
@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | Stage | Task | Form | Hook | ValidAttribute)
+    ( Case | Stage | Task | Form | Field | Hook | ValidAttribute)
 ;
 
 /********************
@@ -273,21 +273,22 @@ Stage:
     // 1. entityAttachPath: the Path to the Stage entity
     // 2. entityDefinitionId: The name of the Stage entity
     // activation attribute is "EXPRESSION" if #activateWhen is used
+
     (
-    'Stage' name = ID
-        directive = StageElementDirective
-        (
-            (description = Description)
-            (ownerpath = OwnerPath)?
-            (dynamicDescriptionPath = DynamicDescriptionPath)?
-            (externalId = ExternalId)?
-            (additionalDescription = AdditionalDescription)?
-            (preconditionList *= Precondition)
-        )#
-        taskList *= Task
+        'Stage' name = ID
+            directive = StageElementDirective
+            (
+                (description = Description)
+                (ownerpath = OwnerPath)?
+                (dynamicDescriptionPath = DynamicDescriptionPath)?
+                (externalId = ExternalId)?
+                (additionalDescription = AdditionalDescription)?
+                (preconditionList *= Precondition)
+            )#
+            taskList *= Task
     )
     |
-    (Ref ref=[Stage|FQN])?
+    (RefStage ref=[Stage|FQN])?
 ;
 
 /***********************
@@ -303,33 +304,40 @@ Task:
 ;
 
 HumanTask:
-    'HumanTask' name = ID
-        directive = StageElementDirective
-        (
-            attrList = SharedTaskAttrs
-            ('Trigger' hookList *= HttpHook)?
-            form = Form
-        )#
+    (
+        'HumanTask' name = ID
+            directive = StageElementDirective
+            (
+                attrList = SharedTaskAttrs
+                ('Trigger' hookList *= HttpHook)?
+                form = Form
+            )#
+    )
+    | (RefTask ref=[HumanTask|FQN])?
 ;
 
 AutomatedTask:
-    'AutoTask' name = ID
-        directive = StageElementDirective
-        (
-            attrList = AutomatedTaskAttrs
-            ('Trigger' hookList *= HttpHook)?
-            form = Form
-        )#
+    (
+        'AutoTask' name = ID
+            directive = StageElementDirective
+            (
+                attrList = AutomatedTaskAttrs
+                ('Trigger' hookList *= HttpHook)?
+                form = Form
+            )#
+    ) | (RefTask ref=[AutomatedTask|FQN])?
 ;
 
 DualTask:
-    'DualTask' name = ID
-        directive = StageElementDirective
-        (
-            attrList = SharedTaskAttrs
-            ('Trigger' hookList *= DualTaskHttpHook)?
-            form = Form
-        )#
+    (
+        'DualTask' name = ID
+            directive = StageElementDirective
+            (
+                attrList = SharedTaskAttrs
+                ('Trigger' hookList *= DualTaskHttpHook)?
+                form = Form
+            )#
+    ) | (RefTask ref=[DualTask|FQN])?
 ;
 
 AutomatedTaskAttrs:
@@ -371,9 +379,9 @@ Precondition:
 ***********************/
 
 Form:
-    'Form'
-        //(name = ID)?
+    'Form' name = ID
         fieldList += FormField
+    //'endForm'
 ;
 
 FormDirective:
@@ -708,6 +716,14 @@ WrapValue:
 
 Ref:
     'use'
+;
+
+RefStage:
+    'use stage'
+;
+
+RefTask:
+    'use task'
 ;
 
 FQN: ID+['.'];

@@ -24,48 +24,15 @@ def convert_import_path(i):
 
 this_folder = dirname(__file__)
 
-# def verifyImport(model):
-#     importList = model.importList
-#     for importStmt in importList:
-#         # print('import {} = get {} from {}'.format(
-#         #     importStmt.importVar,
-#         #     importStmt.objectId,
-#         #     importStmt.path
-#         # ))
-#         print('import {} from {}'.format(
-#             importStmt.importVar,
-#             importStmt.path
-#         ))
-#         absImportPath = this_folder + importStmt.path
-#         importedModel = mm.model_from_file(absImportPath)
-#
-#         print (importedModel.defObj[0].object)
-
-# model_str = """
-#     define entity Discharge
-#             description = 'Discharge Stage Definition'
-#             multiplicity = 'exactlyOne'
-# """
 input_str = r"""
     #aca0.1
-    import stages.discharge as istage  
+    import extfile.caseGCS1 as caseG
+    import extfile.discharge as dStage
+    import extfile.taskCharlsonTest
+      
     workspace Umcg
     
-    define HumanTask TestCharlson
-        #manualActivate #mandatory
-        description = 'Charlson Comorbidity Form'
-        Form //CharlsonForm
-            field Charlson1
-                #selector #mandatory
-                Question = 'Do you have diabetes?'
-                    Option 'No' value = '0'
-                    Option 'Yes' value = '1'
-
-            field Charlson2
-                #selector #mandatory
-                Question = 'Do you have hearth attacks?'
-                    Option 'No' value = '0'
-                    Option 'Yes' value = '1'
+    // define use caseG.GCS1_Groningen
     
     define case GCS1_Groningen
         prefix = 'GCS1'
@@ -120,14 +87,14 @@ input_str = r"""
                 description = "Height and Weight of Patient"
                 InfoPath Identification.MeasureBMI.BMIScore
         
-        
-        
         Stage AdmitPatient
             #mandatory #manualActivate
             owner = 'Settings.CaseManager'
             description = 'Admit Patient into Treatment'
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
+            
+            use Task TestCharlson
             
             HumanTask MeasureBMI
                 #mandatory
@@ -143,7 +110,7 @@ input_str = r"""
                 Trigger
                     On activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
-                Form //abc
+                Form BMIForm
                     field Height
                         #number(0-150) #exactlyOne
                         description = 'Height of patient in cm'    
@@ -196,7 +163,7 @@ input_str = r"""
                     method Post
                     with failureMessage 'Cannot complete the task!'
                 
-                Form 
+                Form AutoForm1
                     field AutoField1
                         #number(<10) #mandatory
                         description = 'AutoField1'
@@ -210,7 +177,7 @@ input_str = r"""
                 Precondition
                     previousStep = 'AdmitPatient' 
                 
-                Form 
+                Form BloodPressureForm
                     field Systolic 
                         #readonly #humanDuty #number(0-300)
                         description = 'Measure Systolic blood pressure'
@@ -223,7 +190,9 @@ input_str = r"""
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
         
-                        
+        use Stage dStage.Discharge
+        
+        
 """
 
 # workspace staticId = 'c023' id = 'Lleida_Cancer'

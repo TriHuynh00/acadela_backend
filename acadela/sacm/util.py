@@ -34,3 +34,9 @@ def compile_attributes(keyObject, object, attributeList):
     for attribute in attributeList:
         if is_attribute_not_null(object, attribute):
             keyObject[attribute] = getattr(object, attribute)
+
+def getRefOfObject(object):
+    if is_attribute_not_null(object, 'ref'):
+        return object.ref
+    else:
+        return object

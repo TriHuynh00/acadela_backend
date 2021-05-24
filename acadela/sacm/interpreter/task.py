@@ -16,8 +16,8 @@ from acadela.sacm.case_object.attribute import Attribute
 
 
 def interpret_task(task, stageId):
-    
-    taskId = util.prefixing(task.id)
+
+    taskId = util.prefixing(task.name)
     stageId = util.prefixing(stageId)
     
     taskHookList = []
@@ -114,7 +114,7 @@ def interpret_task(task, stageId):
         fieldPath = "{}.{}.{}".format(
             stageId,
             taskId,
-            field.id)
+            field.name)
 
         if util.cname(field) == "Field":
 

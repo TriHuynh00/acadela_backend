@@ -12,10 +12,10 @@ this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 def interpret_summary(summary, isPrefixed = True):
-    summaryId = summary.id
+    summaryId = summary.name
 
     if isPrefixed:
-        summaryId = util.prefixing(summary.id)
+        summaryId = util.prefixing(summary.name)
 
     position = None\
         if not hasattr(summary.directive, 'position')\

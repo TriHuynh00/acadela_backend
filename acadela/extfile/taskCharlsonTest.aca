@@ -1,0 +1,15 @@
+define HumanTask TestCharlson
+    #manualActivate #mandatory
+    description = 'Charlson Comorbidity Form'
+    Form CharlsonForm
+        field Charlson1
+            #selector #mandatory
+            Question = 'Do you have diabetes?'
+                Option 'No' value = '0'
+                Option 'Yes' value = '1'
+
+        field Charlson2
+            #selector #mandatory
+            Question = 'Do you have hearth attacks?'
+                Option 'No' value = '0'
+                Option 'Yes' value = '1'

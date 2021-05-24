@@ -68,19 +68,19 @@ def interpret_field(field, fieldPath, taskType):
             .interpret_directive(directive.position)
 
     # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = Attribute(field.id, description,
+    fieldAsAttribute = Attribute(field.name, description,
                                  multiplicity = multiplicity,
                                  type = type)
 
     # Construct TaskParam Object
     if taskType == 'DualTask':
         partValidCode = check_part_for_dual_task(\
-            part, field.id)
+            part, field.name)
 
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
 
-    fieldAsTaskParam = Field(field.id, description, question, multiplicity, type, fieldPath, readOnly, mandatory,
+    fieldAsTaskParam = Field(field.name, description, question, multiplicity, type, fieldPath, readOnly, mandatory,
                              position, part)
 
     print("field as Attribute", vars(fieldAsAttribute))
@@ -113,7 +113,7 @@ def interpret_dynamic_field(field, fieldPath, taskType):
         else None
 
     # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = DerivedAttribute(field.id, field.description.value,
+    fieldAsAttribute = DerivedAttribute(field.name, field.description.value,
         extraDescription,
         field.expression.value,
         uiRef,
@@ -121,12 +121,12 @@ def interpret_dynamic_field(field, fieldPath, taskType):
         explicitAttrType)
 
     if taskType == 'DualTask':
-        check_part_for_dual_task(directive.part, field.id)
+        check_part_for_dual_task(directive.part, field.name)
 
     position = None if directive.position is None\
                else directive.position
 
-    dynamicField = DynamicField(field.id, field.description.value,
+    dynamicField = DynamicField(field.name, field.description.value,
                                 directive.explicitType, extraDescription,
                                 field.expression, field.uiRef, externalId,
                                 # Dynamic field properties

@@ -24,7 +24,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
     preconditionList = []
 
     type = default_state.entityLinkType + '.' \
-           + util.prefixing(stage.id)
+           + util.prefixing(stage.name)
 
     manualActivationExpression = None
 
@@ -36,9 +36,9 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
     extraDescription = util.set_default_value_if_null(
         stage.additionalDescription, None)
     # TODO add custom attach path
-    # attachPath = util.prefixing(stage.id)
+    # attachPath = util.prefixing(stage.name)
 
-    stageAsEntity = Entity(stage.id, stage.description.value,
+    stageAsEntity = Entity(stage.name, stage.description.value,
                          taskAsAttributeList)
 
     repeatable = interpret_directive(directive.repeatable)\
@@ -70,7 +70,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         for sentry in preconditionObj:
             preconditionList.append(interpret_precondition(sentry))
 
-    stageObject = Stage(stage.id, stage.description.value,
+    stageObject = Stage(stage.name, stage.description.value,
                         directive.multiplicity,
                         type,
                         stage.ownerpath.value,

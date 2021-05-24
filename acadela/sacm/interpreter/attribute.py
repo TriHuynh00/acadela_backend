@@ -23,7 +23,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
     elif attrClassName == 'CasePatient':
         attrId = 'CasePatient'
     else:
-        attrId = attribute.id
+        attrId = attribute.name
 
     if isIdPrefixed:
         attrId = util.prefixing(attrId)

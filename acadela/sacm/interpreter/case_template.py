@@ -86,9 +86,9 @@ class CaseInterpreter():
     # Interpret the case object
     def interpret(self):
         model = self.model
-        workspace = model.defWorkspace
+        workspaceDef = model.defWorkspace
 
-        print("WP type", util.cname(workspace))
+        print("WP type", util.cname(workspaceDef))
         print('importedObj', len(model.objList))
         # # Pure Object Import
         # if util.cname(workspace) != 'DefWorkSpace':
@@ -99,23 +99,25 @@ class CaseInterpreter():
         #             for attr in obj.attr:
         #                print('{} = {}'.format(util.cname(attr), attr.value))
         #else:
-        if util.cname(workspace) == 'DefWorkspace':
+        if util.cname(workspaceDef) == 'DefWorkspace':
             acaversion = model.versionTag
 
             print("ACA v =", acaversion)
 
             if runNetworkOp:
-                workspace.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspace.name)
-                self.workspace = workspace.name
+                workspaceDef.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspaceDef.name)
+                self.workspace = workspaceDef.name
 
             case = None
 
             caseCount = 0
-            for wpObj in workspace.workspaceObj:
+            for wpObj in workspaceDef.workspaceObj:
                 print('wpObj cname = ', util.cname(wpObj))
+
                 if util.cname(wpObj) == 'Case':
-                    case = wpObj
-                    caseCount += 1
+                    case = util.getRefOfObject(wpObj)
+
+                caseCount += 1
 
             if caseCount > 1:
                 raise Exception('Error: Multiple Case Definitions' \
@@ -140,11 +142,11 @@ class CaseInterpreter():
 
                 if runNetworkOp:
                     if self.groupInterpreter.\
-                            find_static_id(group, workspace.staticId) is not None:
+                            find_static_id(group, workspaceDef.staticId) is not None:
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
-                                        .format(group.name, group.name, workspace.staticId))
+                                        .format(group.name, group.name, workspaceDef.staticId))
 
             for user in case.responsibilities.userList:
                 print("User", user.name)
@@ -163,7 +165,7 @@ class CaseInterpreter():
 
             util.set_case_prefix(case.casePrefix.value)
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
-                workspace.workspace.staticId, workspace.workspace.name))
+                workspaceDef.workspace.staticId, workspaceDef.workspace.name))
 
             #for group in self.groupList:
             #    print("\tgroup: staticId = {}, name = {}".
@@ -182,9 +184,15 @@ class CaseInterpreter():
             stageAsAttributeList = []
             for stage in case.stageList:
 
+                stage = util.getRefOfObject(stage)
+
                 taskAsAttributeList = []
 
+                stageTasks = []
+
                 for task in stage.taskList:
+
+                    task = util.getRefOfObject(task)
 
                     iTask = taskInterpreter\
                             .interpret_task(task, stage.name)
@@ -192,13 +200,15 @@ class CaseInterpreter():
                     taskAsAttributeList\
                         .append(iTask['taskAsAttribute'])
 
+                    stageTasks.append(iTask['task'])
+
                     self.taskList.append(iTask['task'])
 
                     self.entityList\
                         .append(iTask['taskAsEntity'])
 
                 interpretedStage = interpret_stage(stage,
-                                                   self.taskList,
+                                                   stageTasks,
                                                    taskAsAttributeList)
 
                 self.entityList\
@@ -239,7 +249,7 @@ class CaseInterpreter():
                 "groups": self.groupList,
                 "users": self.userList,
                 "entities": self.entityList,
-                "stages": self.stageList,
+                "extfile": self.stageList,
                 "tasks": self.taskList,
                 'case': self.caseDefinition,
                 "attributes": self.attributeList
@@ -252,7 +262,7 @@ class CaseInterpreter():
                 print("#Directives ", attr.attrProp.directive.type)
 
             caseInJson = self.compile_for_connecare(
-                workspace, self.caseObjectTree)
+                workspaceDef.workspace, self.caseObjectTree)
 
             if runNetworkOp:
                 response = requests.post(

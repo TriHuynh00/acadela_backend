@@ -1,0 +1,21 @@
+define stage Discharge
+    #mandatory #manualActivate
+    owner = 'Settings.CaseManager'
+    description = 'Admit Patient into Treatment'
+
+    HumanTask fillDischargeForm
+        #mandatory
+        description = 'Fill Discharge Form to finish treatment'
+        owner = 'Settings.UmcgProfessionals'
+        dueDateRef = 'Settings.WorkplanDueDate'
+
+        Precondition
+            previousStep = 'Stage2'
+
+        Trigger
+            On activate invoke 'http://integration-producer:8081/v1/discharge' method Post
+
+        Form DischargeForm
+            field dischargeSigned
+                #boolean #exactlyOne
+                description = 'Discharge Form is signed?'

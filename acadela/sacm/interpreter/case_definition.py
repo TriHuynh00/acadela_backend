@@ -70,7 +70,7 @@ def interpret_case_definition(case, intprtSetting,
 
 
 
-    caseDefinition = CaseDefinition(case.casename, case.description.value,
+    caseDefinition = CaseDefinition(case.name, case.description.value,
                         caseOwnerPath,
                         caseDataEntity.id,
                         summarySectionList,
@@ -110,7 +110,7 @@ def interpret_setting_entity(settingObj):
                            settingDescription)
 
     for attr in settingObj.attrList:
-        print("Attr ID " + attr.id)
+        print("Attr ID " + attr.name)
         print("#Directives ", attr.attrProp.directive)
         attrObj = attributeInterpreter.interpret_attribute_object(attr)
         settingEntity.attribute.append(attrObj)

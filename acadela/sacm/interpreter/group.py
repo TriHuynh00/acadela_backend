@@ -18,7 +18,7 @@ class GroupInterpreter:
             jsonGroupList.append({
                 "$": {
                     "staticId": str(group.staticId),
-                    "id": str(group.id)
+                    "id": str(group.name)
                 }
             })
         return jsonGroupList
