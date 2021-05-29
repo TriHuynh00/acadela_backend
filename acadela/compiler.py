@@ -24,12 +24,13 @@ this_folder = dirname(__file__)
 
 input_str = r"""
     #aca0.1
-    import extfile.caseGCS1 as caseG
+    //import extfile.caseGCS1 as caseG
     import extfile.discharge as dStage
     import extfile.form as iForm
     import extfile.taskCharlsonTest
     import extfile.field
     import extfile.hook
+    import extfile.redGreenUiRef as rgu
       
     workspace Umcg
     
@@ -141,7 +142,7 @@ input_str = r"""
                     *     description = 'BMI Calculation with age counted'
                     *     additionalDescription = 'full Derived field'
                     *     expression = '(Height * Height) + Age'
-                    *     uiRef = colors(5<red<10<green<25)
+                    *     uiRef = 'colors(5<red<10<green<25)'
                     */     externalId = 'BmiPlus'                                
         
         Stage Stage2
@@ -171,6 +172,14 @@ input_str = r"""
                     field AutoField1
                         #number(<10) #mandatory
                         description = 'AutoField1'
+                        
+                    DynamicField DynaAutoField1
+                        #mandatory #readOnly #left #number
+                        description = 'Dynacalculation'
+                        
+                        expression = 'AutoField1 + 2'
+                        uiRef = use rgu.redGreenUiRef
+                        externalId = 'BmiPlus'   
                     
                 
             DualTask DualTask1
@@ -194,6 +203,7 @@ input_str = r"""
                     field BloodPressureAnalysis
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
+                        
                     
         
         use stage dStage.Discharge

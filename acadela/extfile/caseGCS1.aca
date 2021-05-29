@@ -101,7 +101,7 @@ define case GCS1_Groningen
                     description = 'BMI Calculation with age counted'
                     additionalDescription = 'full Derived field'
                     expression = '(Height * Height) + Age'
-                    uiRef = colors(5<red<10<green<25)
+                    uiRef = 'colors(5<red<10<green<25)'
                     externalId = 'BmiPlus'
 
     Stage Stage2

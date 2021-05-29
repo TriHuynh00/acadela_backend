@@ -105,7 +105,13 @@ class CaseInterpreter():
             print("ACA v =", acaversion)
 
             if runNetworkOp:
-                workspaceDef.staticId = self.refFinder.findWorkspaceStaticIdByRefId(workspaceDef.name)
+                workspaceStaticId = self.refFinder.findWorkspaceStaticIdByRefId(workspaceDef.name)
+
+                if workspaceStaticId is None:
+                    raise Exception('Workspace {} not found or not accessible'.format(workspaceStaticId))
+                else:
+                    workspaceDef.staticId = workspaceStaticId
+
                 self.workspace = workspaceDef.name
 
             case = None

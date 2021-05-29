@@ -16,7 +16,6 @@ def interpret_field(field, fieldPath, taskType):
     enumerationOptions = []
     question = None
 
-
     if field.question is not None:
         print("Field question len", len(field.question.optionList))
         description = field.question.text
@@ -108,8 +107,13 @@ def interpret_dynamic_field(field, fieldPath, taskType):
         else direc_intprtr \
         .interpret_directive(directive.explicitType)
 
-    uiRef = field.uiRef.value \
-        if util.is_attribute_not_null(field, "uiRef") \
+    uiRefObj = util.getRefOfObject(field.uiRef)
+
+    print("UIRef of ", field.name, "is", uiRefObj,
+          'as type', util.cname(uiRefObj))
+
+    uiRef = uiRefObj.value \
+        if util.is_attribute_not_null(uiRefObj, "value") \
         else None
 
     # Construct Attribute Object of TaskParam (field)

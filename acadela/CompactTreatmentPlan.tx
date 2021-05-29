@@ -7,7 +7,7 @@ Start:
 
     (
         (defWorkspace = DefWorkspace)
-        | 'define' (objList *= Obj)
+        | ('define' objList *= Obj)*
         // | (objList *= Obj)
     )
 ;
@@ -136,7 +136,7 @@ User:
 ;
 
 ValidAttribute:
-    key=STRING Eq value=STRING
+    name=ID Eq value=STRING|("'" Function "'")|INT|FLOAT
 ;
 
 /*****************************
@@ -627,7 +627,15 @@ OwnerPath:
 ;
 
 UiReference:
-    'uiRef' Eq value=Function
+    'uiRef' Eq
+    (
+        (
+            ("'" value=Function "'")
+            | ('"' value=Function '"')
+        )
+        |
+        (Ref ref=[ValidAttribute|FQN])
+    )
 ;
 
 DueDatePath:
