@@ -26,7 +26,7 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-runNetworkOp = False
+runNetworkOp = True
 
 class CaseInterpreter():
 
@@ -105,14 +105,14 @@ class CaseInterpreter():
             print("ACA v =", acaversion)
 
             if runNetworkOp:
-                workspaceStaticId = self.refFinder.findWorkspaceStaticIdByRefId(workspaceDef.name)
+                workspaceStaticId = self.refFinder.findWorkspaceStaticIdByRefId(workspaceDef.workspace.name)
 
                 if workspaceStaticId is None:
                     raise Exception('Workspace {} not found or not accessible'.format(workspaceStaticId))
                 else:
-                    workspaceDef.staticId = workspaceStaticId
+                    workspaceDef.workspace.staticId = workspaceStaticId
 
-                self.workspace = workspaceDef.name
+                self.workspace = workspaceDef
 
             case = None
 
@@ -148,11 +148,11 @@ class CaseInterpreter():
 
                 if runNetworkOp:
                     if self.groupInterpreter.\
-                            find_static_id(group, workspaceDef.staticId) is not None:
+                            find_static_id(group, workspaceDef.workspace.staticId) is not None:
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
-                                        .format(group.name, group.name, workspaceDef.staticId))
+                                        .format(group.name, group.groupName, workspaceDef.workspace.staticId))
 
             for user in case.responsibilities.userList:
                 print("User", user.name)

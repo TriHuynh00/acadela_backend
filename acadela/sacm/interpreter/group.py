@@ -6,7 +6,7 @@ class GroupInterpreter:
         self.groupFinder = GroupReferencer()
 
     def find_static_id(self, group, workspaceStaticId):
-        group.staticId = self.groupFinder.findGroupStaticIdByName(group.name, workspaceStaticId)
+        group.staticId = self.groupFinder.findGroupStaticIdByName(group.groupName, workspaceStaticId)
         if group.staticId is not "groupIdNotFound":
             return group
         else:

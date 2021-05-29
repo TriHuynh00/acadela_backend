@@ -204,11 +204,7 @@ input_str = r"""
                         #readonly #systemDuty #number(0-300)
                         description = 'Automatically alert when blood pressure is critically high'
                         
-                    
-        
         use stage dStage.Discharge
-        
-        
 """
 
 # workspace staticId = 'c023' id = 'Lleida_Cancer'
