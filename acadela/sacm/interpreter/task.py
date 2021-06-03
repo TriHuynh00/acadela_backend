@@ -33,12 +33,16 @@ def interpret_task(task, stageId):
     fieldAsAttributeList = []
 
     if util.cname(task) != 'AutomatedTask':
-        if attrList.dueDatePath is not None:
-            dueDatePath = attrList.dueDatePath.value
+        if util.is_attribute_not_null(attrList, 'dueDatePath'):
+            dueDatePath = util.prefixingSetting( \
+                attrList.dueDatePath.value)
+
 
     ownerPath = None \
         if attrList.ownerPath is None \
         else attrList.ownerPath.value
+
+    ownerPath = util.prefixingSetting(ownerPath)
 
     dynamicDescriptionPath = None \
         if attrList.dynamicDescriptionPath is None \

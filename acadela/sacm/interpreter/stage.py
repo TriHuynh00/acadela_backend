@@ -70,10 +70,13 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         for sentry in preconditionObj:
             preconditionList.append(interpret_precondition(sentry))
 
+    ownerPathvalue = str(stage.ownerpath.value)\
+        .replace(default_state.settingName + ".", util.prefixing(default_state.settingName + "."))
+
     stageObject = Stage(stage.name, stage.description.value,
                         directive.multiplicity,
                         type,
-                        stage.ownerpath.value,
+                        ownerPathvalue,
                         taskList,
                         extraDescription,
                         externalId,
@@ -121,7 +124,7 @@ def sacm_compile(stageList):
     for stage in stageList:
         stageJson = {
             '$': {},
-
+            '$$': []
         }
 
         stageAttr = stageJson['$']
@@ -143,33 +146,6 @@ def sacm_compile(stageList):
         if len(stage.preconditionList) > 0:
              stageJson['SentryDefinition'] = \
                  util_intprtr.parse_precondition(stage)
-            # []
-            #
-            # for precondition in stage.preconditionList:
-            #
-            #     sentryJson = {}
-            #
-            #     if util.is_attribute_not_null(precondition, 'expression'):
-            #         sentryJson['$'] = {
-            #             'expression': precondition.expression
-            #         }
-            #
-            #     sentryJson['precondition'] = []
-            #
-            #     for processId in precondition.stepList:
-            #
-            #         preconditionJson = \
-            #         {
-            #             'processDefinitionId': processId,
-            #         }
-            #
-            #         sentryJson['precondition'].append(
-            #             {
-            #                 '$': preconditionJson
-            #             }
-            #         )
-            #
-            #     stageJson['SentryDefinition'].append(sentryJson)
 
         # parse the tasks
         jsonTasks = compile_task(stage.taskList)

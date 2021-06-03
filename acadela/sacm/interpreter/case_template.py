@@ -26,7 +26,7 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-runNetworkOp = True
+
 
 class CaseInterpreter():
 
@@ -56,12 +56,18 @@ class CaseInterpreter():
 
     def compile_for_connecare(self, workspace, caseObjTree):
         caseObjList = {}
+
+        caseDef = [caseDefinition. \
+                       sacm_compile_case_def(caseObjTree['case'])]
+
         workspaceObjList = self.workspaceInterpreter \
-            .workspacePropToJson(workspace, caseObjTree, self.entityList)
+            .workspacePropToJson(workspace, caseObjTree, self.entityList, caseDef)
 
         # Check if there is any Error being returned
         if workspaceObjList.get("Error") is None:
             caseObjList["Workspace"] = [workspaceObjList]
+            # caseWorkspace = caseObjList["Workspace"]
+
         else:
             raise Exception("Invalid workspace {} with error: {}"
                             .format(workspace.staticId, workspaceObjList["Error"]))
@@ -70,10 +76,10 @@ class CaseInterpreter():
 
         caseObjList['User'] = json_util.basicIdentityListToJson(self.userList)
 
-        caseDef = [caseDefinition.\
-            sacm_compile_case_def(caseObjTree['case'])]
-
-        caseObjList['CaseDefinition'] = caseDef
+        # caseDef = [caseDefinition. \
+        #                sacm_compile_case_def(caseObjTree['case'])]
+        #
+        # caseObjList['CaseDefinition'] = caseDef
 
         caseDefJson = {"SACMDefinition": caseObjList}
 
@@ -84,7 +90,7 @@ class CaseInterpreter():
         return caseDefJsonFinal
 
     # Interpret the case object
-    def interpret(self):
+    def interpret(self, runNetworkOp):
         model = self.model
         workspaceDef = model.defWorkspace
 
@@ -100,8 +106,8 @@ class CaseInterpreter():
         #                print('{} = {}'.format(util.cname(attr), attr.value))
         #else:
         if util.cname(workspaceDef) == 'DefWorkspace':
-            acaversion = model.versionTag
 
+            acaversion = model.versionTag
             print("ACA v =", acaversion)
 
             if runNetworkOp:
@@ -130,6 +136,8 @@ class CaseInterpreter():
                                 'There are %d cases in the case definition.' \
                                 'Only one case is allowed.'.format(caseCount))
 
+            print('casePrefix = ' + case.casePrefix.value)
+            util.set_case_prefix(case.casePrefix.value)
 
             # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.name)
 
@@ -167,9 +175,7 @@ class CaseInterpreter():
 
             print()
 
-            print('casePrefix = ' + case.casePrefix.value)
 
-            util.set_case_prefix(case.casePrefix.value)
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspaceDef.workspace.staticId, workspaceDef.workspace.name))
 
@@ -272,7 +278,8 @@ class CaseInterpreter():
 
             if runNetworkOp:
                 response = requests.post(
-                HttpRequest.sacmUrl + "import/acadela/casedefinition?version=1&isExecute=false",
+                HttpRequest.sacmUrl + \
+                "import/acadela/casedefinition?version={}&isExecute=false".format(self.caseDefinition.version),
                 headers=HttpRequest.simulateUserHeader,
                 json=json.loads(json.dumps(caseInJson)))
 

@@ -27,6 +27,6 @@ define Form BMIForm
         #mandatory #readOnly #left #number
         description = 'BMI Calculation with age counted'
         additionalDescription = 'full Derived field'
-        expression = '(Height * Height) + Age'
+        expression = '(Height * Height) + number(AgeRange, 0)'
         uiRef = 'colors(5<red<10<green<25)'
         externalId = 'BmiPlus'

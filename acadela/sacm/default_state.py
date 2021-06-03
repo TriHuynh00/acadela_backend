@@ -10,3 +10,5 @@ defaultAttrMap = {
 }
 
 entityLinkType = 'Link.EntityDefinition'
+userOrGroupLinkType = 'Link.Users'
+settingName = 'Setting'

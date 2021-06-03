@@ -1,3 +1,5 @@
+from acadela.sacm.default_state import settingName
+
 prefix = ""
 
 def cname(o):
@@ -9,6 +11,10 @@ def set_case_prefix(casePrefix):
 
 def prefixing(name):
     return str(prefix + name)
+
+def prefixingSetting(name):
+    return str(name).replace(settingName + '.', \
+                             prefixing(settingName) + '.')
 
 # If an attribute of an object is empty
 # Assign None or a predefined value into it

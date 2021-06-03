@@ -22,6 +22,7 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 caseOwnerAttr = None
 casePatientAttr = None
+settingName = defaultState.settingName
 
 hookEventMap = {
     'available': 'onAvailableHTTPHookURL',
@@ -68,8 +69,6 @@ def interpret_case_definition(case, intprtSetting,
         summarySectionList.append(
             summaryInterpreter.interpret_summary(summarySection))
 
-
-
     caseDefinition = CaseDefinition(case.name, case.description.value,
                         caseOwnerPath,
                         caseDataEntity.id,
@@ -100,11 +99,13 @@ def interpret_case_data(settingAsAttribute, stageAsAttributes):
     return caseDataEntity
 
 def interpret_setting_entity(settingObj):
-    settingDescription = "Settings" \
+    global settingName
+
+    print("Setting name is ", settingName)
+
+    settingDescription = settingName \
         if settingObj.description is None \
         else settingObj.description.value
-
-    settingName = 'Settings'
 
     settingEntity = Entity(settingName,
                            settingDescription)
@@ -137,11 +138,13 @@ def interpret_setting_entity(settingObj):
         # attrObjJson = attributeInterpreter.create_attribute_json_object(attrObj)
         # settingAttributeJson.append(attrObjJson)
 
+    settingName = util.prefixing(settingName)
+
     settingType = defaultState.entityLinkType + "." \
                   + settingName
 
     settingAsAttribute = Attribute(settingName,
-                                   settingObj.description,
+                                   settingDescription,
                                    type=settingType)
 
     print("Setting Attribute", vars(settingAsAttribute))
@@ -232,8 +235,6 @@ def sacm_compile_case_def(case):
     # Parsing SummarySection
     caseDefJson['SummarySectionDefinition'] = \
         summaryInterpreter.sacm_compile(case.summarySectionList)
-
-
 
     # Parsing Stage
     caseDefJson['StageDefinition'] = \

@@ -78,7 +78,7 @@ class WorkspaceInterpreter:
         self.jsonEntityList.append(entityProp)
 
 
-    def workspacePropToJson(self, workspace, caseObjTree, entityList):
+    def workspacePropToJson(self, workspace, caseObjTree, entityList, caseDef):
         workspaceObjList = {}
         workspaceObjList["$"] = \
             {
@@ -97,6 +97,8 @@ class WorkspaceInterpreter:
         #         attrIntrprtr.create_attribute_json_object(field)
 
         workspaceObjList["EntityDefinition"] = entityJsonList
+
+        workspaceObjList["CaseDefinition"] = caseDef
 
 
         # print("#entities = ", len(case.entityList))

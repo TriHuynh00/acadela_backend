@@ -38,7 +38,7 @@ input_str = r"""
     
     define case GCS1_Groningen
         prefix = 'GCS1'
-        version = 1
+        version = 16
         description = 'an obesity treatment care plan'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
@@ -64,7 +64,7 @@ input_str = r"""
                 description = 'Workplan Due Date'
                 externalId = 'dueDateConnie'
                 
-            CasePatient UmcgPatient #exactlyOne
+            CasePatient UmcgPatients #exactlyOne
                 description = 'the patient of this case'
             
             Attribute EvalDueDate
@@ -82,16 +82,16 @@ input_str = r"""
         SummaryPanel
             Section BMIHeightAndWeight #left
                 description = "Height and Weight of Patient"
-                InfoPath Identification.MeasureBMI.Height
-                InfoPath Identification.MeasureBMI.Weight
+                InfoPath AdmitPatient.MeasureBMI.Height
+                InfoPath AdmitPatient.MeasureBMI.Weight
             
             Section BMIScore #center
                 description = "Height and Weight of Patient"
-                InfoPath Identification.MeasureBMI.BMIScore
+                InfoPath AdmitPatient.MeasureBMI.BMIScore
         
         Stage AdmitPatient
             #mandatory #manualActivate
-            owner = 'Settings.CaseManager'
+            owner = 'Setting.CaseManager'
             description = 'Admit Patient into Treatment'
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
@@ -101,10 +101,10 @@ input_str = r"""
             HumanTask MeasureBMI
                 #mandatory
                 description = 'Measure BMI score'
-                owner = 'Settings.UmcgProfessionals'
-                dueDateRef = 'Settings.WorkplanDueDate'
+                owner = 'Setting.UmcgProfessionals'
+                dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'HumanTask1External'
-                dynamicDescriptionRef = 'Settings.PatientNumber'
+                dynamicDescriptionRef = 'Setting.PatientNumber'
                 
                 Precondition
                     previousStep = 'PatientConsent' 
@@ -145,47 +145,47 @@ input_str = r"""
                     *     uiRef = 'colors(5<red<10<green<25)'
                     */     externalId = 'BmiPlus'                                
         
-        Stage Stage2
+        Stage Treatment
             #mandatory #manualActivate
-            owner = 'Settings.CaseManager'
+            owner = 'Setting.CaseManager'
             description = 'Perform Obesity Treatment'
             
             Precondition
                 previousStep = 'AdmitPatient' 
             
-            AutoTask AutoTask1
+            AutoTask RecordPatientData
                 #mandatory #exactlyOne
-                description = 'Automated Task 1'
+                description = 'Record Basic Patient Info'
                 
                 Trigger
                     On activate 
                     invoke 'https://server1.com/api1' 
                     method Post
-                    with failureMessage 'Cannot complete the task!'
+                    with failureMessage 'Cannot complete the data creation task!'
                 
                     On complete 
                     invoke 'https://server1.com/api2' 
                     method Post
-                    with failureMessage 'Cannot complete the task!'
+                    with failureMessage 'Cannot complete the completion of data creation!'
                 
-                Form AutoForm1
-                    field AutoField1
+                Form RecordInfoForm
+                    field AdmittedTimes
                         #number(<10) #mandatory
-                        description = 'AutoField1'
+                        description = 'How many times have the patient been admitted to our hospitals'
                         
-                    DynamicField DynaAutoField1
+                    DynamicField AdtimePlus
                         #mandatory #readOnly #left #number
-                        description = 'Dynacalculation'
+                        description = 'Admitted Times Plus 1'
                         
-                        expression = 'AutoField1 + 2'
+                        expression = 'AdmittedTimes + 1'
                         uiRef = use rgu.redGreenUiRef
                         externalId = 'BmiPlus'   
                     
                 
-            DualTask DualTask1
+            DualTask MeasureBloodPressure
                 #mandatory #repeatSerial #manualActivate
                 description = 'Measure Blood Pressure and inform doctor in emergency situation'
-                owner = 'Settings.UmcgProfessionals'
+                owner = 'Setting.UmcgProfessionals'
                 externalId = 'HumanTask1External'
                 
                 Precondition
@@ -257,7 +257,8 @@ try:
     # model = mm.model_from_str(input)
     acaInterpreter = CaseInterpreter(mm, model)
 
-    acaInterpreter.interpret()
+    runNetworkOp = True
+    acaInterpreter.interpret(runNetworkOp)
 
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)

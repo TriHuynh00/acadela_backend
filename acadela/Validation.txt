@@ -1,0 +1,3 @@
+Check ID of a CaseOwner/Client should be a ref
+
+Check if an element before a dot in an attribute value maps to an existing case element
