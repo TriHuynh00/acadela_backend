@@ -390,6 +390,7 @@ Precondition:
 Form:
     (
         'Form' name = ID
+            (directive = FormDirective)?
             fieldList += FormField
     ) | (Ref 'Form' ref=[Form|FQN])?
 
@@ -398,6 +399,7 @@ Form:
 FormDirective:
     (
         (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
     )#
 ;
 

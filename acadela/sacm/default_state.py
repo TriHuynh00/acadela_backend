@@ -3,7 +3,8 @@ import sys
 defaultAttrMap = {
     'multiplicity': 'any',
     'type': 'notype',
-    'mandatory': None,
+    'mandatory': 'false',
+    'readOnly': 'false',
     'repeatable': 'ONCE',
     'activation': 'automatic',
     'position': 'STRETCHED'
@@ -11,4 +12,8 @@ defaultAttrMap = {
 
 entityLinkType = 'Link.EntityDefinition'
 userOrGroupLinkType = 'Link.Users'
+
 settingName = 'Setting'
+HumanTaskDef = 'HumanTaskDefinition'
+DualTaskDef = 'DualTaskDefinition'
+AutoTaskDef = 'AutomatedTaskDefinition'

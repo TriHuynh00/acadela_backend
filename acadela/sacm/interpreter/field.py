@@ -1,4 +1,4 @@
-from acadela.sacm import default_state
+from acadela.sacm.default_state import defaultAttrMap
 from acadela.sacm import util
 
 from acadela.sacm.case_object.attribute import Attribute
@@ -10,7 +10,7 @@ from acadela.sacm.case_object.enumeration import Enumeration
 
 import acadela.sacm.interpreter.directive as direc_intprtr
 
-def interpret_field(field, fieldPath, taskType):
+def interpret_field(field, fieldPath, taskType, formDirective):
     directive = field.directive
     part = directive.part
     enumerationOptions = []
@@ -39,29 +39,38 @@ def interpret_field(field, fieldPath, taskType):
     elif field.description is not None:
         description = field.description.value
 
-    multiplicity = default_state.defaultAttrMap['multiplicity'] \
+    multiplicity = defaultAttrMap['multiplicity'] \
         if not hasattr(directive, "multiplicity") \
         else direc_intprtr\
                 .interpret_directive(directive.multiplicity)
 
-    type = default_state.defaultAttrMap['type'] \
+    type = defaultAttrMap['type'] \
         if not hasattr(directive, "type") \
         else direc_intprtr\
                     .interpret_directive(directive.type)
 
-    mandatory = direc_intprtr.\
-        interpret_directive(directive.mandatory)
+    # mandatory = direc_intprtr.\
+    #     interpret_directive(directive.mandatory)
 
     # if mandatory is None:
     #     mandatory = default_state.defaultAttrMap['mandatory']
 
-    readOnly = direc_intprtr\
-        .interpret_directive(directive.readOnly)
+
+
+    readOnly = assign_form_directive_to_field('readOnly',
+                                              directive,
+                                              formDirective)
+
+    mandatory = assign_form_directive_to_field('mandatory',
+                                               directive,
+                                               formDirective)
+    # readOnly = direc_intprtr \
+    #     .interpret_directive(directive.readOnly)
 
     # if readOnly is None:
     #     readOnly = default_state.defaultAttrMap['readOnly']
 
-    position = default_state.defaultAttrMap['position']\
+    position = defaultAttrMap['position']\
         if not hasattr(directive, 'position')\
         else direc_intprtr\
             .interpret_directive(directive.position)
@@ -88,7 +97,8 @@ def interpret_field(field, fieldPath, taskType):
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": fieldAsTaskParam}
 
-def interpret_dynamic_field(field, fieldPath, taskType):
+def interpret_dynamic_field(field, fieldPath,
+                            taskType, formDirective):
     directive = field.directive
 
     part = None if not hasattr(directive, "part")\
@@ -130,15 +140,66 @@ def interpret_dynamic_field(field, fieldPath, taskType):
     position = None if directive.position is None\
                else directive.position
 
+    readOnly = assign_form_directive_to_field('readOnly',
+                                              directive,
+                                              formDirective)
+
+    mandatory = assign_form_directive_to_field('mandatory',
+                                              directive,
+                                              formDirective)
+
+    # if util.is_attribute_not_null(directive.readOnly):
+    #     readOnly = direc_intprtr\
+    #         .interpret_directive(directive.readOnly)
+    # elif util.is_attribute_not_null(formDirective.readOnly):
+    #     readOnly = direc_intprtr \
+    #         .interpret_directive(formDirective.readOnly)
+
+    # mandatory = defaultAttrMap['mandatory']
+    #
+    # if util.is_attribute_not_null(directive.mandatory):
+    #     mandatory = direc_intprtr \
+    #         .interpret_directive(directive.mandatory)
+    # elif util.is_attribute_not_null(formDirective.mandatory):
+    #     mandatory = direc_intprtr \
+    #         .interpret_directive(formDirective.mandatory)
+
     dynamicField = DynamicField(field.name, field.description.value,
                                 directive.explicitType, extraDescription,
                                 field.expression, field.uiRef, externalId,
                                 # Dynamic field properties
-                                fieldPath, directive.readOnly, directive.mandatory,
+                                fieldPath, readOnly,
+                                mandatory,
                                 position, part)
 
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": dynamicField}
+
+def assign_form_directive_to_field(directiveName,
+                                   fieldDirective,
+                                   formDirective):
+
+    directiveVal = defaultAttrMap[directiveName]
+
+    formDirectiveVal = getattr(formDirective, directiveName) \
+        if util.is_attribute_not_null(formDirective, directiveName) \
+        else None
+
+    fieldDirectiveVal = getattr(fieldDirective, directiveName) \
+        if util.is_attribute_not_null(fieldDirective, directiveName) \
+        else None
+
+    if fieldDirectiveVal is not None:
+        directiveVal = direc_intprtr \
+            .interpret_directive(fieldDirectiveVal)
+    elif formDirectiveVal is not None:
+        directiveVal = direc_intprtr \
+            .interpret_directive(formDirectiveVal)
+    else:
+        if hasattr(defaultAttrMap, directiveName):
+            directiveVal = defaultAttrMap[directiveName]
+
+    return directiveVal
 
 # Check if the part value is human (#humanDuty) or auto (#systemDuty)
 # Return -1 if part is neither #humanDuty or #systemDuty

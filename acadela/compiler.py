@@ -38,7 +38,7 @@ input_str = r"""
     
     define case GCS1_Groningen
         prefix = 'GCS1'
-        version = 16
+        version = 2
         description = 'an obesity treatment care plan'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
@@ -257,8 +257,10 @@ try:
     # model = mm.model_from_str(input)
     acaInterpreter = CaseInterpreter(mm, model)
 
-    runNetworkOp = True
+    runNetworkOp = False
     acaInterpreter.interpret(runNetworkOp)
+
+
 
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)

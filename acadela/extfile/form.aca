@@ -1,5 +1,6 @@
 import field
 define Form BMIForm
+    #readonly #mandatory
     field Height
         #number(0-150) #exactlyOne
         description = 'Height of patient in cm'
@@ -9,7 +10,7 @@ define Form BMIForm
         description = 'Weight of patient in kg'
 
     field AgeRange
-        #selector #mandatory
+        #selector #notmandatory #notReadOnly
         Question = 'What is your age range?'
             Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
             Option '10-30' value = '1.2'

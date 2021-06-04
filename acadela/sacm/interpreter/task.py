@@ -116,6 +116,7 @@ def interpret_task(task, stageId):
 
     for field in taskForm.fieldList:
         field = util.getRefOfObject(field)
+        formDirective = taskForm.directive
         interpretedFieldTuple = None
 
         fieldPath = "{}.{}.{}".format(
@@ -126,14 +127,16 @@ def interpret_task(task, stageId):
         if util.cname(field) == "Field":
 
             interpretedFieldTuple = fieldInterpreter\
-                .interpret_field(field, fieldPath, taskType)
+                .interpret_field(field, fieldPath,\
+                                 taskType, formDirective)
 
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
         elif util.cname(field) == "DynamicField":
 
             interpretedFieldTuple = fieldInterpreter \
-                .interpret_dynamic_field(field, fieldPath, taskType)
+                .interpret_dynamic_field(field, fieldPath,
+                                         taskType, formDirective)
 
             dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
             # dynamicFieldList.append(dynamicFieldList)
@@ -176,9 +179,10 @@ def interpret_task(task, stageId):
     }
 
 def sacm_compile(taskList):
-    humanTaskList = []
-    autoTaskList = []
-    dualTaskList = []
+    jsonTaskList = []
+    # humanTaskList = []
+    # autoTaskList = []
+    # dualTaskList = []
 
     for task in taskList:
         taskJson = {
@@ -198,6 +202,15 @@ def sacm_compile(taskList):
              'entityDefinitionId', 'entityAttachPath',
              'externalId', 'dynamicDescriptionPath'])
 
+        if task.taskType == TASKTYPE.HUMAN:
+            taskJson['#name'] = default_state.HumanTaskDef
+
+        elif task.taskType == TASKTYPE.AUTO:
+            taskJson['#name'] = default_state.AutoTaskDef
+
+        elif task.taskType == TASKTYPE.DUAL:
+            taskJson['#name'] = default_state.DualTaskDef
+
         if hasattr(task, 'preconditionList'):
             taskJson['SentryDefinition'] = \
                 util_intprtr.parse_precondition(task)
@@ -215,18 +228,13 @@ def sacm_compile(taskList):
             taskJson['TaskParamDefinition'] = \
                 fieldInterpreter.sacm_compile(taskFields)
 
-        if task.taskType == TASKTYPE.HUMAN:
-            humanTaskList.append(taskJson)
 
-        elif task.taskType == TASKTYPE.AUTO:
-            autoTaskList.append(taskJson)
 
-        elif task.taskType == TASKTYPE.DUAL:
-            dualTaskList.append(taskJson)
+        jsonTaskList.append(taskJson)
 
-    return {
-        'humanTaskList': humanTaskList,
-        'autoTaskList': autoTaskList,
-        'dualTaskList': dualTaskList
-    }
+    return jsonTaskList
+        # 'humanTaskList': humanTaskList,
+        # 'autoTaskList': autoTaskList,
+        # 'dualTaskList': dualTaskList
+
 

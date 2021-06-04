@@ -8,7 +8,7 @@ from acadela.sacm.case_object.attribute import Attribute
 
 from acadela.sacm.interpreter.directive import interpret_directive
 from acadela.sacm.interpreter.sentry import interpret_precondition
-from acadela.sacm.interpreter.task import sacm_compile as compile_task
+import acadela.sacm.interpreter.task as taskIntprtr
 
 from os.path import dirname
 import sys
@@ -128,6 +128,7 @@ def sacm_compile(stageList):
         }
 
         stageAttr = stageJson['$']
+        stageElements = stageJson['$$']
 
         stageAttr['id'] = stage.id
         stageAttr['description'] = stage.description
@@ -148,16 +149,20 @@ def sacm_compile(stageList):
                  util_intprtr.parse_precondition(stage)
 
         # parse the tasks
-        jsonTasks = compile_task(stage.taskList)
+        print('len stageTaskList', len(stage.taskList))
+        jsonTasks = taskIntprtr.sacm_compile(stage.taskList)
 
-        if len(jsonTasks['humanTaskList']) > 0:
-            stageJson['HumanTaskDefinition'] = jsonTasks['humanTaskList']
+        # if len(jsonTasks['humanTaskList']) > 0:
+        #     stageJson['HumanTaskDefinition'] = jsonTasks['humanTaskList']
+        #
+        # if len(jsonTasks['autoTaskList']) > 0:
+        #     stageJson['AutomatedTaskDefinition'] = jsonTasks['autoTaskList']
+        #
+        # if len(jsonTasks['dualTaskList']) > 0:
+        #     stageJson['DualTaskDefinition'] = jsonTasks['dualTaskList']
 
-        if len(jsonTasks['autoTaskList']) > 0:
-            stageJson['AutomatedTaskDefinition'] = jsonTasks['autoTaskList']
-
-        if len(jsonTasks['dualTaskList']) > 0:
-            stageJson['DualTaskDefinition'] = jsonTasks['dualTaskList']
+        if len(jsonTasks) > 0:
+            stageElements.append(jsonTasks)
 
         stageJsonList.append(stageJson)
 

@@ -29,8 +29,8 @@ class DynamicField:
         self.externalId = externalId
         # Task Param
         self.path = path
-        self.readOnly = isReadOnly
-        self.mandatory = isMandatory
+        self.isReadOnly = isReadOnly
+        self.isMandatory = isMandatory
         self.position = position
         self.part = part
 

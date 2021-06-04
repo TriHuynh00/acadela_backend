@@ -283,53 +283,5 @@ class CaseInterpreter():
                 headers=HttpRequest.simulateUserHeader,
                 json=json.loads(json.dumps(caseInJson)))
 
-
-            # for stage in case.stageList:
-            #     print("\n Stage Info")
-            #     directive = stage.directive
-            #     print("\tDirectives: "
-            #           "\n\t\t mandatory = {}"
-            #           "\n\t\t repeatable = {}"
-            #           "\n\t\t activation = {}"
-            #           "\n\t\t multiplicity = {}".
-            #           format(directive.mandatory,
-            #                  directive.repeatable,
-            #                  directive.activation,
-            #                  directive.multiplicity,))
-            #     print("\tDescription: " + stage.description.value)
-            #     print("\tOwnerPath: " + stage.ownerpath.value)
-            #     print("\tDynamic Description Path: " + stage.dynamicDescriptionPath.value)
-            #     print("\tExternal ID: " + stage.externalId.value)
-
-                # Task interpret
-                # for task in stage.taskList:
-                #     directive = task.directive
-                #     attrList = task.attrList
-                #     dueDatePath = None
-                #
-                #     if util.cname(task) != 'AutomatedTask':
-                #         if attrList.dueDatePath is not None:
-                #             dueDatePath = attrList.dueDatePath.value
-                #
-                #     print("\n\tTask {}"
-                #           "\n\t\tDirectives "
-                #           "\n\t\t\tmandatory = {}"
-                #           "\n\t\t\trepeatable = {}"
-                #           "\n\t\t\tactivation = {}"
-                #           "\n\t\t\tmultiplicity = {}"
-                #           "\n\t\tdescription = {}"
-                #           "\n\t\townerPath = {}"
-                #           "\n\t\tdueDatePath = {}"
-                #           "\n\t\texternalId = {}"
-                #           "\n\t\tdynamicDescriptionPath = {}"
-                #           .format(task.name,
-                #                   directive.mandatory,
-                #                   directive.repeatable,
-                #                   directive.activation,
-                #                   directive.multiplicity,
-                #                   attrList.description.value,
-                #                   ("None" if attrList.ownerPath is None else attrList.ownerPath.value ),
-                #                   dueDatePath,
-                #                   ("None" if attrList.externalId is None else attrList.externalId.value),
-                #                   ("None" if attrList.dynamicDescriptionPath is None else attrList.dynamicDescriptionPath.value)))
-            # print("Case Definition", case.caseDef.caseDefName)
+                # TODO [Validation]: Delete Created Case Version in
+                # Sociocortex when an error is returned from SACM
