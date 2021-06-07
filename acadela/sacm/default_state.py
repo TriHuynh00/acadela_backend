@@ -6,7 +6,7 @@ defaultAttrMap = {
     'mandatory': 'false',
     'readOnly': 'false',
     'repeatable': 'ONCE',
-    'activation': 'automatic',
+    'activation': 'AUTOMATIC',
     'position': 'STRETCHED'
 }
 

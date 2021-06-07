@@ -36,10 +36,10 @@ input_str = r"""
     
     // define use case caseG.GCS1_Groningen
     
-    define case GCS1_Groningen
-        prefix = 'GCS1'
+    define case MT1_Groningen
+        prefix = 'MT1'
         version = 2
-        description = 'an obesity treatment care plan'
+        description = 'MockTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'
@@ -48,6 +48,7 @@ input_str = r"""
 
             user matthijs
             user williamst
+            user michelf
 
         // A comment
             /* a multiline
@@ -90,9 +91,9 @@ input_str = r"""
                 InfoPath AdmitPatient.MeasureBMI.BMIScore
         
         Stage AdmitPatient
-            #mandatory #manualActivate
+            #mandatory
             owner = 'Setting.CaseManager'
-            description = 'Admit Patient into Treatment'
+            description = 'Admit Patient'
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
             
@@ -106,49 +107,16 @@ input_str = r"""
                 externalId = 'HumanTask1External'
                 dynamicDescriptionRef = 'Setting.PatientNumber'
                 
-                Precondition
-                    previousStep = 'PatientConsent' 
-                
                 Trigger
                     use Hook hook1
                 //    On activate invoke 'http://integration-producer:8081/v1/activate' method Post
                 
-                use Form iForm.BMIForm
-                
-                /*Form BMIForm
-                    * field Height
-                    *     #number(0-150) #exactlyOne
-                    *     description = 'Height of patient in cm'    
-                    *     
-                    * field Weight
-                    *     #number(0-300) #exactlyOne
-                    *     description = 'Weight of patient in kg'
-                    *     
-                    * field AgeRange
-                    *     #selector #mandatory
-                    *     Question = 'What is your age range?'
-                    *         Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
-                    *         Option '10-30' value = '1.2'
-                    *         Option '30-50' value = '1.5'
-                    *         Option 'over 50' value = '1.7'
-                    * 
-                    * DynamicField BmiScore
-                    *     #mandatory #number
-                    *     description = 'BMI Calculation in kilogram and meters'
-                    *     expression = 'Height * Height'
-                    *     
-                    * DynamicField BmiScorePlus
-                    *     #mandatory #readOnly #left #number
-                    *     description = 'BMI Calculation with age counted'
-                    *     additionalDescription = 'full Derived field'
-                    *     expression = '(Height * Height) + Age'
-                    *     uiRef = 'colors(5<red<10<green<25)'
-                    */     externalId = 'BmiPlus'                                
+                use Form iForm.BMIForm                              
         
         Stage Treatment
             #mandatory #manualActivate
             owner = 'Setting.CaseManager'
-            description = 'Perform Obesity Treatment'
+            description = 'Treatment'
             
             Precondition
                 previousStep = 'AdmitPatient' 
@@ -257,10 +225,8 @@ try:
     # model = mm.model_from_str(input)
     acaInterpreter = CaseInterpreter(mm, model)
 
-    runNetworkOp = False
+    runNetworkOp = True
     acaInterpreter.interpret(runNetworkOp)
-
-
 
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)
