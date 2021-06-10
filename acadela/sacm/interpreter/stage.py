@@ -123,12 +123,11 @@ def sacm_compile(stageList):
 
     for stage in stageList:
         stageJson = {
-            '$': {},
-            '$$': []
+            '$': {}
         }
 
         stageAttr = stageJson['$']
-        stageElements = stageJson['$$']
+
 
         stageAttr['id'] = stage.id
         stageAttr['description'] = stage.description
@@ -162,7 +161,7 @@ def sacm_compile(stageList):
         #     stageJson['DualTaskDefinition'] = jsonTasks['dualTaskList']
 
         if len(jsonTasks) > 0:
-            stageElements.append(jsonTasks)
+            stageJson['$$'] = jsonTasks
 
         stageJsonList.append(stageJson)
 

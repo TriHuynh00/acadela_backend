@@ -70,10 +70,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
     # if readOnly is None:
     #     readOnly = default_state.defaultAttrMap['readOnly']
 
-    position = defaultAttrMap['position']\
-        if not hasattr(directive, 'position')\
-        else direc_intprtr\
-            .interpret_directive(directive.position)
+    position = interpret_position(directive)
 
     # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = Attribute(field.name, description,
@@ -137,8 +134,7 @@ def interpret_dynamic_field(field, fieldPath,
     if taskType == 'DualTask':
         check_part_for_dual_task(directive.part, field.name)
 
-    position = None if directive.position is None\
-               else directive.position
+    position = interpret_position(directive)
 
     readOnly = assign_form_directive_to_field('readOnly',
                                               directive,
@@ -232,3 +228,9 @@ def sacm_compile(fieldList):
         taskParamList.append(taskParam)
 
     return taskParamList
+
+def interpret_position(directiveObj):
+    positionValue = defaultAttrMap['position'] \
+        if not util.is_attribute_not_null(directiveObj, "position") \
+        else direc_intprtr.interpret_directive(directiveObj.position)
+    return str(positionValue).upper()

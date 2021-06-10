@@ -211,11 +211,12 @@ def sacm_compile(taskList):
         elif task.taskType == TASKTYPE.DUAL:
             taskJson['#name'] = default_state.DualTaskDef
 
-        if hasattr(task, 'preconditionList'):
-            taskJson['SentryDefinition'] = \
-                util_intprtr.parse_precondition(task)
+        if util.is_attribute_not_null(task, 'preconditionList'):
+            if len(task.preconditionList) > 0 is not None:
+                taskJson['SentryDefinition'] = \
+                    util_intprtr.parse_precondition(task)
 
-        if hasattr(task, 'hookList'):
+        if util.is_attribute_not_null(task, 'hookList'):
             if len(task.hookList) > 0:
                 taskJson['HttpHookDefinition'] = \
                     hookInterpreter.sacm_compile(task.hookList)

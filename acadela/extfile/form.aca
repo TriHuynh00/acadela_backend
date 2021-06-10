@@ -1,6 +1,6 @@
 import field
 define Form BMIForm
-    #readonly #mandatory
+    #notreadonly #mandatory
     field Height
         #number(0-150) #exactlyOne
         description = 'Height of patient in cm'
@@ -25,7 +25,7 @@ define Form BMIForm
         expression = 'Height * Height'
 
     DynamicField BmiScorePlus
-        #mandatory #readOnly #left #number
+        #mandatory #left #number
         description = 'BMI Calculation with age counted'
         additionalDescription = 'full Derived field'
         expression = '(Height * Height) + number(AgeRange, 0)'

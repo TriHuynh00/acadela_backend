@@ -1,7 +1,7 @@
 define stage Discharge
     #mandatory #manualActivate
     owner = 'Setting.CaseManager'
-    description = 'Admit Patient into Treatment'
+    description = 'Discharge'
 
     HumanTask FillDischargeForm
         #mandatory
