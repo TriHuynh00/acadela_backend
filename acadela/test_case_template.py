@@ -2,12 +2,13 @@ inputStrSimple = """
     #aca0.1
     import extfile.form as iForm
     import extfile.taskCharlsonTest
+    import extfile.redGreenUiRef as rgu
     
     workspace Umcg
 
     define case MT1_Groningen
         prefix = 'MT1'
-        version = 5
+        version = 4
         description = 'MockTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
@@ -48,7 +49,7 @@ inputStrSimple = """
 
         Trigger
             On activate invoke 'http://integration-producer:8081/v1/activate'
-            On delete invoke 'http://integration-producer:8081/v1/delete'
+            On complete invoke 'http://integration-producer:8081/v1/delete'
 
         SummaryPanel
             Section BMIHeightAndWeight #left
@@ -81,6 +82,68 @@ inputStrSimple = """
                     On activate invoke 'http://integration-producer:8081/v1/activate' method Post
 
                 use Form iForm.BMIForm
+                
+        Stage Treatment
+            #mandatory
+            owner = 'Setting.CaseOwner'
+            description = 'Treatment'
+
+            Precondition
+                previousStep = 'AdmitPatient' 
+
+            HumanTask RecordPatientData
+                #mandatory #exactlyOne
+                description = 'Record Basic Patient Info'
+                owner = 'Setting.CaseOwner'
+
+                Trigger
+                    On activate 
+                    invoke 'https://server1.com/api1' 
+                    method Post
+                    with failureMessage 'Cannot complete the data creation task!'
+
+                    On complete 
+                    invoke 'https://server1.com/api2' 
+                    method Post
+                    with failureMessage 'Cannot complete the completion of data creation!'
+
+                Form RecordInfoForm
+                    field AdmittedTimes
+                        #number(<10) #mandatory
+                        description = 'How many times have the patient been admitted to our hospitals'
+
+                    DynamicField AdtimePlus
+                        #mandatory #left #number
+                        description = 'Admitted Times Plus 1'
+
+                        expression = 'AdmittedTimes + 1'
+                        uiRef = use rgu.redGreenUiRef
+                        externalId = 'BmiPlus'   
+
+
+            DualTask MeasureBloodPressure
+                #mandatory #repeatSerial //#manualActivate
+                description = 'Measure Blood Pressure and inform doctor in emergency situation'
+                owner = 'Setting.CaseOwner'
+                externalId = 'HumanTask1External'
+
+                Precondition
+                    previousStep = 'AdmitPatient' 
+
+                Form BloodPressureForm
+                    #readOnly
+                    
+                    field Systolic 
+                        #humanDuty #number(0-300)
+                        description = 'Measure Systolic blood pressure'
+
+                    field Diastolic 
+                        #humanDuty #number(0-300)
+                        description = 'Measure Diastolic blood pressure'
+
+                    field BloodPressureAnalysis
+                        #systemDuty #number(0-300)
+                        description = 'Automatically alert when blood pressure is critically high'
 """
 
 input_str2 = r"""
