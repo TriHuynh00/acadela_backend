@@ -6,6 +6,8 @@ Check if an element before a dot in an attribute value maps to an existing case 
 
 Check Sentry ID matches with Stage/Task/Field Object
 
+Hook URL is KNOWN to the system
+
 Warning:
 
 If Readonly or mandatory are not defined at Form Level AND at Field Level, there is no readonly or mandatory definition, then issue a warning

@@ -8,7 +8,7 @@ inputStrSimple = """
 
     define case MT1_Groningen
         prefix = 'MT1'
-        version = 4
+        version = 3
         description = 'MockTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
@@ -49,7 +49,7 @@ inputStrSimple = """
 
         Trigger
             On activate invoke 'http://integration-producer:8081/v1/activate'
-            On complete invoke 'http://integration-producer:8081/v1/delete'
+            On complete invoke 'localhost:3001/connecare'
 
         SummaryPanel
             Section BMIHeightAndWeight #left
@@ -79,12 +79,12 @@ inputStrSimple = """
                 //dynamicDescriptionRef = ''
 
                 Trigger
-                    On activate invoke 'http://integration-producer:8081/v1/activate' method Post
+                    On complete invoke 'http://127.0.0.1:3001/connecare' method Post
 
                 use Form iForm.BMIForm
                 
         Stage Treatment
-            #mandatory
+            #mandatory #autoActivate
             owner = 'Setting.CaseOwner'
             description = 'Treatment'
 
