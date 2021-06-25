@@ -71,7 +71,7 @@ def interpret_dynamic_directive(directiveObj, directiveType):
     elif directiveType == "NumType":
 
         numberType = "number"
-
+        #TODO: check min-max not displayed correctly
         if directiveObj.comparator is None:
             return 'number'
         if directiveObj.comparator is not None:

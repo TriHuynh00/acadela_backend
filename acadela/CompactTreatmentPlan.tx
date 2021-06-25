@@ -86,7 +86,7 @@ Case:
             )#
             stageList += Stage
         )#
-    ) | (Ref 'Case' ref=[Case|FQN])?
+    ) | (Ref 'Case' ref=[Case|FQN|])?
 ;
 
 CaseSetting:

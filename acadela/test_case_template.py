@@ -7,9 +7,9 @@ inputStrSimple = """
     workspace Umcg
 
     define case MT1_Groningen
-        prefix = 'MT1'
-        version = 3
-        description = 'MockTreatment'
+        prefix = 'OT1'
+        version = 2
+        description = 'ObesityTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'

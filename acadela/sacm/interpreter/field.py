@@ -96,6 +96,10 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 
 def interpret_dynamic_field(field, fieldPath,
                             taskType, formDirective):
+
+    #TODO: Check the expression
+    #number should be rounded with round()
+    #string should be converted to number with number(string, 0)
     directive = field.directive
 
     part = None if not hasattr(directive, "part")\

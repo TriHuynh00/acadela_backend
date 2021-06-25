@@ -1,8 +1,10 @@
 import sys
-import textx.scoping.providers as scoping_providers
-import acadela.test_case_template as caseTemplateStr
 
-from textx import metamodel_from_file, TextXSyntaxError
+import textx.scoping.providers as scoping_providers
+import test_case_template as caseTemplateStr
+import pprint
+
+from textx import *
 from os.path import join, dirname, abspath
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
@@ -13,23 +15,18 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\excep
 from acadela.sacm.interpreter.case_template import CaseInterpreter
 from acadela.sacm.exception_handler.syntax_error_handler import SyntaxErrorHandler
 
-# Create meta-model from the grammar. Provide `pointmodel` class to be used for
-# the rule `pointmodel` from the grammar.
-
-def convert_import_path(i):
-    return i.replace(".", "/") + ".aca"
-
-
 this_folder = dirname(__file__)
 
 # Meta-model knows how to parse and instantiate models.
 model = None
 
-try:
-    input = caseTemplateStr.inputStrSimple
-    # if len(sys.argv) > 1:
-    #     input = sys.argv[1];
+runNetworkOp = True
 
+# Create meta-model from the grammar. Provide `pointmodel` class to be used for
+# the rule `pointmodel` from the grammar.
+
+def convert_import_path(i):
+    return i.replace(".", "/") + ".aca"
 
     def importURI_to_scope_name(import_obj):
         # this method is responsible to deduce the module name in the
@@ -37,19 +34,14 @@ try:
         # e.g. here: import "file.ext" --> module name "file".
         return import_obj.importURI.split('.')[0]
 
+try:
+    input = caseTemplateStr.inputStrSimple
+    if len(sys.argv) > 1:
+        input = sys.argv[1]
 
-    def custom_scope_redirection(obj):
-        from textx import textx_isinstance
-        if textx_isinstance(obj, mm["Stage"]):
-            if obj.ref is None:
-                from textx.scoping import Postponed
-                return Postponed()
-            return [obj.ref]
-        else:
-            return []
+    metamodelPath = join(this_folder, 'CompactTreatmentPlan.tx')
 
-
-    mm = metamodel_from_file(join(this_folder, 'CompactTreatmentPlan.tx'),
+    mm = metamodel_from_file(metamodelPath,
                              ignore_case=True)
 
     mm.register_scope_providers(
@@ -63,13 +55,24 @@ try:
     rootImportPath = join(abspath(dirname(__file__)), 'aa')
     print("rootImportPart", rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
-    # model = mm.model_from_str(input)
+
+    # analyze_dsl_language(metamodelPath, model, mm)
+
     acaInterpreter = CaseInterpreter(mm, model)
 
-    runNetworkOp = True
     acaInterpreter.interpret(runNetworkOp)
 
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)
+    # print(vars(e.expected_rules[0]))
+
+
+def analyze_dsl_language(metamodelPath, model, metamodel):
+    pass
+# pprint.pprint(vars(metamodel.namespaces['CompactTreatmentPlan']['Attribute']))
+
+# mm = get_metamodel(model)
+# print (vars(mm['Case']._tx_attrs['hookList']))
+# print (mm.namespaces['CompactTreatmentPlan']['Case']._tx_attrs)
 
 
