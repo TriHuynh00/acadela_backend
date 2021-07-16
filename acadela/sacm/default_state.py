@@ -10,10 +10,12 @@ defaultAttrMap = {
     'position': 'STRETCHED'
 }
 
-entityLinkType = 'Link.EntityDefinition'
-userOrGroupLinkType = 'Link.Users'
+CUSTOM_TYPE = 'custom'
 
-settingName = 'Setting'
-HumanTaskDef = 'HumanTaskDefinition'
-DualTaskDef = 'DualTaskDefinition'
-AutoTaskDef = 'AutomatedTaskDefinition'
+ENTITY_LINK_TYPE = 'Link.EntityDefinition'
+USER_OR_GROUP_LINK_TYPE = 'Link.Users'
+
+SETTING_NAME = 'Setting'
+HUMAN_TASK_DEF = 'HumanTaskDefinition'
+DUAL_TASK_DEF = 'DualTaskDefinition'
+AUTO_TASK_DEF = 'AutomatedTaskDefinition'

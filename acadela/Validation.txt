@@ -11,3 +11,16 @@ Hook URL is KNOWN to the system
 Warning:
 
 If Readonly or mandatory are not defined at Form Level AND at Field Level, there is no readonly or mandatory definition, then issue a warning
+
+
+Syntax Error:
+
+1. Typo
+
+2. Unexpected element: a Case Element is not placed in the correct position. Example: Import inside a Stage
+
+3. Translating technical terms. Example: INT => Number; STRING => Text in quote; Eq = Equal sign
+
+4. Validating a specific string pattern. Example, validating HTML value inside the defaultValue of an attribute
+
+ 

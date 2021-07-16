@@ -7,9 +7,9 @@ inputStrSimple = """
     workspace Umcg
 
     define case MT1_Groningen
-        prefix = 'OT1'
+        prefix = 'TT1'
         version = 2
-        description = 'ObesityTreatment'
+        label = 'TestTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'
@@ -27,25 +27,25 @@ inputStrSimple = """
              */
 
         Setting
-            // description = "Case Configuration"
+            // label = "Case Configuration"
             CaseOwner UmcgProfessionals #exactlyOne
-                description = 'case owner is UMCG Professionals'
+                label = 'case owner is UMCG Professionals'
 
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
-                description = 'Workplan Due Date'
+                label = 'Workplan Due Date'
                 externalId = 'dueDateConnie'
 
             CasePatient UmcgPatients #exactlyOne
-                description = 'CasePatient'
+                label = 'CasePatient'
 
             Attribute EvalDueDate
                 #maxOne #date.after(TODAY)
-                description = 'Evaluation Due Date'
+                label = 'Evaluation Due Date'
 
             Attribute MaxDoctor
                 #maxOne #number(3-5)
-                description = "Maximum number of doctor per patient"
+                label = "Maximum number of doctor per patient"
 
         Trigger
             On activate invoke 'http://integration-producer:8081/v1/activate'
@@ -53,18 +53,19 @@ inputStrSimple = """
 
         SummaryPanel
             Section BMIHeightAndWeight #left
-                description = "Height and Weight of Patient"
+                label = "Height and Weight of Patient"
                 InfoPath AdmitPatient.MeasureBMI.Height
                 InfoPath AdmitPatient.MeasureBMI.Weight
 
             Section BMIScore #center
-                description = "Height and Weight of Patient"
+                label = "Height and Weight of Patient"
                 InfoPath AdmitPatient.MeasureBMI.BMIScore
 
         Stage AdmitPatient
+            
             #mandatory
             owner = 'Setting.CaseOwner'
-            description = 'Admit Patient'
+            label = 'Admit Patient'
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
 
@@ -72,7 +73,7 @@ inputStrSimple = """
 
             HumanTask MeasureBMI
                 #mandatory
-                description = 'Measure BMI score'
+                label = 'Measure BMI score'
                 owner = 'Setting.CaseOwner'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'HumanTask1External'
@@ -86,14 +87,14 @@ inputStrSimple = """
         Stage Treatment
             #mandatory #autoActivate
             owner = 'Setting.CaseOwner'
-            description = 'Treatment'
-
+            label = 'Treatment'
+            
             Precondition
                 previousStep = 'AdmitPatient' 
 
             HumanTask RecordPatientData
                 #mandatory #exactlyOne
-                description = 'Record Basic Patient Info'
+                label = 'Record Basic Patient Info'
                 owner = 'Setting.CaseOwner'
 
                 Trigger
@@ -110,11 +111,11 @@ inputStrSimple = """
                 Form RecordInfoForm
                     field AdmittedTimes
                         #number(<10) #mandatory
-                        description = 'How many times have the patient been admitted to our hospitals'
+                        label = 'How many times have the patient been admitted to our hospitals'
 
                     DynamicField AdtimePlus
                         #mandatory #left #number
-                        description = 'Admitted Times Plus 1'
+                        label = 'Admitted Times Plus 1'
 
                         expression = 'AdmittedTimes + 1'
                         uiRef = use rgu.redGreenUiRef
@@ -123,7 +124,7 @@ inputStrSimple = """
 
             DualTask MeasureBloodPressure
                 #mandatory #repeatSerial //#manualActivate
-                description = 'Measure Blood Pressure and inform doctor in emergency situation'
+                label = 'Measure Blood Pressure and inform doctor in emergency situation'
                 owner = 'Setting.CaseOwner'
                 externalId = 'HumanTask1External'
 
@@ -135,15 +136,15 @@ inputStrSimple = """
                     
                     field Systolic 
                         #humanDuty #number(0-300)
-                        description = 'Measure Systolic blood pressure'
+                        label = 'Measure Systolic blood pressure'
 
                     field Diastolic 
                         #humanDuty #number(0-300)
-                        description = 'Measure Diastolic blood pressure'
+                        label = 'Measure Diastolic blood pressure'
 
                     field BloodPressureAnalysis
                         #systemDuty #number(0-300)
-                        description = 'Automatically alert when blood pressure is critically high'
+                        label = 'Automatically alert when blood pressure is critically high'
 """
 
 input_str2 = r"""
@@ -161,7 +162,7 @@ input_str2 = r"""
     define case MT1_Groningen
         prefix = 'MT1'
         version = 1
-        description = 'MockTreatment'
+        label = 'MockTreatment'
         Responsibilities
             group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
             group UmcgClinicians name = 'Umcg Clinician'
@@ -179,25 +180,25 @@ input_str2 = r"""
              */
 
         Setting
-            // description = "Case Configuration"
+            // label = "Case Configuration"
             CaseOwner UmcgProfessionals #exactlyOne
-                description = 'case owner is UMCG Professionals'
+                label = 'case owner is UMCG Professionals'
 
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
-                description = 'Workplan Due Date'
+                label = 'Workplan Due Date'
                 externalId = 'dueDateConnie'
 
             CasePatient UmcgPatients #exactlyOne
-                description = 'CasePatient'
+                label = 'CasePatient'
 
             Attribute EvalDueDate
                 #maxOne #date.after(TODAY)
-                description = 'Evaluation Due Date'
+                label = 'Evaluation Due Date'
 
             Attribute MaxDoctor
                 #maxOne #number(3-5)
-                description = "Maximum number of doctor per patient"
+                label = "Maximum number of doctor per patient"
 
         Trigger
             On activate invoke 'http://integration-producer:8081/v1/activate'
@@ -205,18 +206,18 @@ input_str2 = r"""
 
         SummaryPanel
             Section BMIHeightAndWeight #left
-                description = "Height and Weight of Patient"
+                label = "Height and Weight of Patient"
                 InfoPath AdmitPatient.MeasureBMI.Height
                 InfoPath AdmitPatient.MeasureBMI.Weight
 
             Section BMIScore #center
-                description = "Height and Weight of Patient"
+                label = "Height and Weight of Patient"
                 InfoPath AdmitPatient.MeasureBMI.BMIScore
 
         Stage AdmitPatient
             #mandatory
             owner = 'Setting.CaseOwner'
-            description = 'Admit Patient'
+            label = 'Admit Patient'
             //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
             //externalId = 'SelectPatient'
 
@@ -224,7 +225,7 @@ input_str2 = r"""
 
             HumanTask MeasureBMI
                 #mandatory
-                description = 'Measure BMI score'
+                label = 'Measure BMI score'
                 owner = 'Setting.UmcgProfessionals'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'HumanTask1External'
@@ -239,14 +240,14 @@ input_str2 = r"""
         Stage Treatment
             #mandatory #manualActivate
             owner = 'Setting.CaseManager'
-            description = 'Treatment'
+            label = 'Treatment'
 
             Precondition
                 previousStep = 'AdmitPatient' 
 
             AutoTask RecordPatientData
                 #mandatory #exactlyOne
-                description = 'Record Basic Patient Info'
+                label = 'Record Basic Patient Info'
 
                 Trigger
                     On activate 
@@ -262,11 +263,11 @@ input_str2 = r"""
                 Form RecordInfoForm
                     field AdmittedTimes
                         #number(<10) #mandatory
-                        description = 'How many times have the patient been admitted to our hospitals'
+                        label = 'How many times have the patient been admitted to our hospitals'
 
                     DynamicField AdtimePlus
                         #mandatory #readOnly #left #number
-                        description = 'Admitted Times Plus 1'
+                        label = 'Admitted Times Plus 1'
 
                         expression = 'AdmittedTimes + 1'
                         uiRef = use rgu.redGreenUiRef
@@ -275,7 +276,7 @@ input_str2 = r"""
 
             DualTask MeasureBloodPressure
                 #mandatory #repeatSerial #manualActivate
-                description = 'Measure Blood Pressure and inform doctor in emergency situation'
+                label = 'Measure Blood Pressure and inform doctor in emergency situation'
                 owner = 'Setting.UmcgProfessionals'
                 externalId = 'HumanTask1External'
 
@@ -285,15 +286,15 @@ input_str2 = r"""
                 Form BloodPressureForm
                     field Systolic 
                         #readonly #humanDuty #number(0-300)
-                        description = 'Measure Systolic blood pressure'
+                        label = 'Measure Systolic blood pressure'
 
                     field Diastolic 
                         #readonly #humanDuty #number(0-300)
-                        description = 'Measure Diastolic blood pressure'
+                        label = 'Measure Diastolic blood pressure'
 
                     field BloodPressureAnalysis
                         #readonly #systemDuty #number(0-300)
-                        description = 'Automatically alert when blood pressure is critically high'
+                        label = 'Automatically alert when blood pressure is critically high'
 
         use stage dStage.Discharge
 """

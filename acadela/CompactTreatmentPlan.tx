@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | Stage | Task | Form | Field | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task | Form | Field | Hook | ValidAttribute)
 ;
 
 /********************
@@ -90,14 +90,16 @@ Case:
 ;
 
 CaseSetting:
-    'Setting'
-    (description = Description)?
     (
-        caseOwner = CaseOwner
-        (attrList *= Attribute)
-        (casePatient = CasePatient)?
-        (attrList *= Attribute)
-    )#
+        SettingTerm
+        (description = Description)?
+        (
+            caseOwner = CaseOwner
+            (attrList *= Attribute)
+            (casePatient = CasePatient)?
+            (attrList *= Attribute)
+        )#
+    ) | (RefSetting ref=[CaseSetting|FQN])?
 ;
 
 CaseOwner:
@@ -270,8 +272,9 @@ MultiAttrModel:
 ;
 
 Description:
-    ('description' Eq value = STRING)
+    ('label' Eq value = STRING)
 ;
+
 
 /***********************
 ******** STAGE *********
@@ -284,7 +287,7 @@ Stage:
     // activation attribute is "EXPRESSION" if #activateWhen is used
 
     (
-        'Stage' name = ID
+        StageTerm name = ID
             directive = StageElementDirective
             (
                 (description = Description)
@@ -298,7 +301,7 @@ Stage:
             taskList *= Task
     )
     |
-    (Ref 'Stage' ref=[Stage|FQN])?
+    (RefStage ref=[Stage|FQN])?
 ;
 
 /***********************
@@ -394,7 +397,6 @@ Form:
             (directive = FormDirective)?
             fieldList += FormField
     ) | (Ref 'Form' ref=[Form|FQN])?
-
 ;
 
 FormDirective:
@@ -413,10 +415,18 @@ Field:
         'Field' name = ID
             directive = FieldDirective
             (
-                description = Description
-                | question = Question
-            )
-    ) | (Ref 'Field' ref=[Field|FQN])?
+                (
+                    description = Description
+                    | question = Question
+                )
+                (path = FieldPath)?
+            )#
+    )
+    | (Ref 'Field' ref=[Field|FQN])?
+;
+
+FieldPath:
+    'CustomFieldValue' Eq value=STRING
 ;
 
 FieldDirective:
@@ -433,7 +443,7 @@ FieldDirective:
         // The interpreter will check whether a part
         // is included in the field instead.
         (part = Part)?
-        type = Type
+        type = FieldType
     )#
 ;
 
@@ -529,6 +539,10 @@ Type:
         | DateType
         | 'json'
     )
+;
+
+FieldType:
+    Type | (Hash 'custom')
 ;
 
 LinkType:
@@ -640,8 +654,9 @@ UiReference:
             ("'" value=Function "'")
             | ('"' value=Function '"')
         )
-        |
-        (Ref ref=[ValidAttribute|FQN])
+        | 'privatelink'
+        | 'hidden'
+        | (Ref ref=[ValidAttribute|FQN])
     )
 ;
 
@@ -667,7 +682,6 @@ DynamicFieldExpression:
 
 FormulaExpression:
     Predicate BasicArithmeticOperators Predicate
-
 ;
 
 Predicate:
@@ -748,6 +762,14 @@ Ref:
     'use'
 ;
 
+RefSetting:
+    Ref SettingTerm
+;
+
+RefStage:
+    Ref StageTerm
+;
+
 RefTask:
     Ref TaskTerm
 ;
@@ -782,6 +804,10 @@ Comment:
 
 CaseTerm:
     'Case'
+;
+
+SettingTerm:
+    'Setting'
 ;
 
 StageTerm:

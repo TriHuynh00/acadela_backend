@@ -1,4 +1,4 @@
-from acadela.sacm.default_state import settingName
+from acadela.sacm.default_state import SETTING_NAME
 
 prefix = ""
 
@@ -13,8 +13,8 @@ def prefixing(name):
     return str(prefix + name)
 
 def prefixingSetting(name):
-    return str(name).replace(settingName + '.', \
-                             prefixing(settingName) + '.')
+    return str(name).replace(SETTING_NAME + '.', \
+                             prefixing(SETTING_NAME) + '.')
 
 # If an attribute of an object is empty
 # Assign None or a predefined value into it
