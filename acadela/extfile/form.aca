@@ -3,11 +3,11 @@ define Form BMIForm
     #notreadonly #mandatory
     field Height
         #number(0-3) #exactlyOne
-        description = 'Height of patient in m'
+        label ='Height of patient in m'
 
     field Weight
         #number(0-300) #exactlyOne
-        description = 'Weight of patient in kg'
+        label ='Weight of patient in kg'
 
     field AgeRange
         #selector #notmandatory #notReadOnly
@@ -21,12 +21,12 @@ define Form BMIForm
 
     DynamicField BmiScore
         #mandatory #number
-        description = 'BMI Calculation in kilogram and meters'
+        label ='BMI Calculation in kilogram and meters'
         expression = 'round(Weight / (Height * Height))'
 
     DynamicField BmiScorePlus
         #mandatory #left #number
-        description = 'BMI Calculation with age counted'
+        label = 'BMI Calculation with age counted'
         additionalDescription = 'full Derived field'
         expression = 'round(BmiScore + number(AgeRange, 2))'
         uiRef = 'colors(5<red<10<green<25)'

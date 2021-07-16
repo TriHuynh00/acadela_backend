@@ -1,11 +1,11 @@
 define stage Discharge
     #mandatory #manualActivate
     owner = 'Setting.CaseManager'
-    description = 'Discharge'
+    label = 'Discharge'
 
     HumanTask FillDischargeForm
         #mandatory
-        description = 'Fill Discharge Form to finish treatment'
+        label = 'Fill Discharge Form to finish treatment'
         owner = 'Setting.UmcgProfessionals'
         dueDateRef = 'Setting.WorkplanDueDate'
 
@@ -18,4 +18,4 @@ define stage Discharge
         Form DischargeForm
             field dischargeSigned
                 #boolean #exactlyOne
-                description = 'Discharge Form is signed?'
+                label = 'Discharge Form is signed?'

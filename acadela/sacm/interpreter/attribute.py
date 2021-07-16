@@ -1,5 +1,5 @@
 from acadela.sacm import util
-from acadela.sacm.default_state import defaultAttrMap, userOrGroupLinkType
+from acadela.sacm.default_state import defaultAttrMap, USER_OR_GROUP_LINK_TYPE
 
 import json
 import sys
@@ -39,7 +39,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
         elif attrClassName == 'CaseOwner'\
                 or attrClassName == 'CasePatient':
             attrObj.description = attribute.attrProp.description.value
-            attrObj.type = userOrGroupLinkType + '({})'.format(attribute.group)
+            attrObj.type = USER_OR_GROUP_LINK_TYPE + '({})'.format(attribute.group)
 
         else:
             attrObj.type = defaultAttrMap['type']

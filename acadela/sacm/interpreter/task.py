@@ -101,7 +101,7 @@ def interpret_task(task, stageId):
         else direc_intprtr.\
                 interpret_directive(directive.multiplicity)
     
-    typeValue = default_state.entityLinkType + '.' + taskId
+    typeValue = default_state.ENTITY_LINK_TYPE + '.' + taskId
 
     externalId = None\
         if attrList.externalId is None\
@@ -203,16 +203,16 @@ def sacm_compile(taskList):
              'externalId', 'dynamicDescriptionPath'])
 
         if task.taskType == TASKTYPE.HUMAN:
-            taskJson['#name'] = default_state.HumanTaskDef
+            taskJson['#name'] = default_state.HUMAN_TASK_DEF
 
         elif task.taskType == TASKTYPE.AUTO:
-            taskJson['#name'] = default_state.AutoTaskDef
+            taskJson['#name'] = default_state.AUTO_TASK_DEF
 
         elif task.taskType == TASKTYPE.DUAL:
-            taskJson['#name'] = default_state.DualTaskDef
+            taskJson['#name'] = default_state.DUAL_TASK_DEF
 
         if util.is_attribute_not_null(task, 'preconditionList'):
-            if len(task.preconditionList) > 0 is not None:
+            if len(task.preconditionList) > 0 != None:
                 taskJson['SentryDefinition'] = \
                     util_intprtr.parse_precondition(task)
 

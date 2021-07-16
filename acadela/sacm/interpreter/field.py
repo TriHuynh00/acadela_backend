@@ -1,4 +1,4 @@
-from acadela.sacm.default_state import defaultAttrMap
+from acadela.sacm.default_state import defaultAttrMap, CUSTOM_TYPE
 from acadela.sacm import util
 
 from acadela.sacm.case_object.attribute import Attribute
@@ -49,13 +49,11 @@ def interpret_field(field, fieldPath, taskType, formDirective):
         else direc_intprtr\
                     .interpret_directive(directive.type)
 
-    # mandatory = direc_intprtr.\
-    #     interpret_directive(directive.mandatory)
-
-    # if mandatory is None:
-    #     mandatory = default_state.defaultAttrMap['mandatory']
-
-
+    # If field type is custom, set the field path to custom path
+    if type == CUSTOM_TYPE:
+        fieldPath = field.path.value
+        #TODO [Validation]: check field path is pointed to a valid source
+        print("custom field path", fieldPath)
 
     readOnly = assign_form_directive_to_field('readOnly',
                                               directive,
@@ -64,18 +62,17 @@ def interpret_field(field, fieldPath, taskType, formDirective):
     mandatory = assign_form_directive_to_field('mandatory',
                                                directive,
                                                formDirective)
-    # readOnly = direc_intprtr \
-    #     .interpret_directive(directive.readOnly)
-
-    # if readOnly is None:
-    #     readOnly = default_state.defaultAttrMap['readOnly']
 
     position = interpret_position(directive)
 
-    # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = Attribute(field.name, description,
-                                 multiplicity = multiplicity,
-                                 type = type)
+    # For a field with custom path, do not create new attribute
+    if type != CUSTOM_TYPE:
+        fieldAsAttribute = Attribute(field.name, description,
+                                     multiplicity=multiplicity,
+                                     type=type)
+        print("field as Attribute", vars(fieldAsAttribute))
+    else:
+        fieldAsAttribute = None
 
     # Construct TaskParam Object
     if taskType == 'DualTask':
@@ -88,7 +85,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
     fieldAsTaskParam = Field(field.name, description, question, multiplicity, type, fieldPath, readOnly, mandatory,
                              position, part)
 
-    print("field as Attribute", vars(fieldAsAttribute))
+
     print("field as TaskParam", vars(fieldAsTaskParam))
 
     return {"fieldAsAttribute": fieldAsAttribute,
@@ -97,7 +94,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 def interpret_dynamic_field(field, fieldPath,
                             taskType, formDirective):
 
-    #TODO: Check the expression
+    #TODO [Validation]: Check the expression
     #number should be rounded with round()
     #string should be converted to number with number(string, 0)
     directive = field.directive

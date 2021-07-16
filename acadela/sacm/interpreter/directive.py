@@ -31,7 +31,8 @@ staticDirectivesDict = {
     # Activation (#activateWhen (aka. Expression)
     # is a dynamic directive)
     '#manualActivate': 'MANUAL',
-    '#autoActivate': 'AUTOMATIC'
+    '#autoActivate': 'AUTOMATIC',
+    '#custom': 'custom'
 }
 
 def interpret_directive(directiveObj):
@@ -71,7 +72,6 @@ def interpret_dynamic_directive(directiveObj, directiveType):
     elif directiveType == "NumType":
 
         numberType = "number"
-        #TODO: check min-max not displayed correctly
         if directiveObj.comparator is None:
             return 'number'
         if directiveObj.comparator is not None:

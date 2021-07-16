@@ -1,7 +1,7 @@
 define case GCS1_Groningen
     prefix = 'GCS1'
     version = 1
-    description = 'an obesity treatment care plan'
+    label = 'an obesity treatment care plan'
     Responsibilities
         group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234'
         group UmcgClinicians name = 'Umcg Clinician'
@@ -17,25 +17,25 @@ define case GCS1_Groningen
          */
 
     Setting
-        // description = "Case Configuration"
+        // label = "Case Configuration"
         CaseOwner UmcgProfessionals #exactlyOne
-            description = 'case owner is UMCG Professionals'
+            label = 'case owner is UMCG Professionals'
 
         Attribute WorkplanDueDate
             #exactlyOne #date.after(TODAY)
-            description = 'Workplan Due Date'
+            label = 'Workplan Due Date'
             externalId = 'dueDateConnie'
 
         CasePatient UmcgPatient #exactlyOne
-            description = 'the patient of this case'
+            label = 'the patient of this case'
 
         Attribute EvalDueDate
             #maxOne #date.after(TODAY)
-            description = 'Evaluation Due Date'
+            label = 'Evaluation Due Date'
 
         Attribute MaxDoctor
             #maxOne #number(3-5)
-            description = "Maximum number of doctor per patient"
+            label = "Maximum number of doctor per patient"
 
     Trigger
         On activate invoke 'http://integration-producer:8081/v1/activate'
@@ -43,12 +43,12 @@ define case GCS1_Groningen
 
     SummaryPanel
         Section BMIHeightAndWeight #left
-            description = "Height and Weight of Patient"
+            label = "Height and Weight of Patient"
             InfoPath Identification.MeasureBMI.Height
             InfoPath Identification.MeasureBMI.Weight
 
         Section BMIScore #center
-            description = "Height and Weight of Patient"
+            label = "Height and Weight of Patient"
             InfoPath Identification.MeasureBMI.BMIScore
 
     //use dStage.Discharge
@@ -56,13 +56,13 @@ define case GCS1_Groningen
     Stage AdmitPatient
         #mandatory #manualActivate
         owner = 'Settings.CaseManager'
-        description = 'Admit Patient into Treatment'
+        label = 'Admit Patient into Treatment'
         //dynamicDescriptionRef = 'Setting.WorkPlanDueDate'
         //externalId = 'SelectPatient'
 
         HumanTask MeasureBMI
             #mandatory
-            description = 'Measure BMI score'
+            label = 'Measure BMI score'
             owner = 'Settings.UmcgProfessionals'
             dueDateRef = 'Settings.WorkplanDueDate'
             externalId = 'HumanTask1External'
@@ -77,11 +77,11 @@ define case GCS1_Groningen
             Form BMIForm
                 field Height
                     #number(0-150) #exactlyOne
-                    description = 'Height of patient in cm'
+                    label = 'Height of patient in cm'
 
                 field Weight
                     #number(0-300) #exactlyOne
-                    description = 'Weight of patient in kg'
+                    label = 'Weight of patient in kg'
 
                 field AgeRange
                     #selector #mandatory
@@ -93,12 +93,12 @@ define case GCS1_Groningen
 
                 DynamicField BmiScore
                     #mandatory #number
-                    description = 'BMI Calculation in kilogram and meters'
+                    label = 'BMI Calculation in kilogram and meters'
                     expression = 'Height * Height'
 
                 DynamicField BmiScorePlus
                     #mandatory #readOnly #left #number
-                    description = 'BMI Calculation with age counted'
+                    label = 'BMI Calculation with age counted'
                     additionalDescription = 'full Derived field'
                     expression = '(Height * Height) + Age'
                     uiRef = 'colors(5<red<10<green<25)'
@@ -107,14 +107,14 @@ define case GCS1_Groningen
     Stage Stage2
         #mandatory #manualActivate
         owner = 'Settings.CaseManager'
-        description = 'Perform Obesity Treatment'
+        label = 'Perform Obesity Treatment'
 
         Precondition
             previousStep = 'AdmitPatient'
 
         AutoTask AutoTask1
             #mandatory #exactlyOne
-            description = 'Automated Task 1'
+            label = 'Automated Task 1'
 
             Trigger
                 On activate
@@ -130,11 +130,11 @@ define case GCS1_Groningen
             Form AutoForm1
                 field AutoField1
                     #number(<10) #mandatory
-                    description = 'AutoField1'
+                    label = 'AutoField1'
 
         DualTask DualTask1
             #mandatory #repeatSerial #manualActivate
-            description = 'Measure Blood Pressure and inform doctor in emergency situation'
+            label = 'Measure Blood Pressure and inform doctor in emergency situation'
             owner = 'Settings.UmcgProfessionals'
             externalId = 'HumanTask1External'
 
@@ -144,13 +144,13 @@ define case GCS1_Groningen
             Form BloodPressureForm
                 field Systolic
                     #readonly #humanDuty #number(0-300)
-                    description = 'Measure Systolic blood pressure'
+                    label = 'Measure Systolic blood pressure'
 
                 field Diastolic
                     #readonly #humanDuty #number(0-300)
-                    description = 'Measure Diastolic blood pressure'
+                    label = 'Measure Diastolic blood pressure'
 
                 field BloodPressureAnalysis
                     #readonly #systemDuty #number(0-300)
-                    description = 'Automatically alert when blood pressure is critically high'
+                    label = 'Automatically alert when blood pressure is critically high'
 

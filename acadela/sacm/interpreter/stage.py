@@ -23,7 +23,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     preconditionList = []
 
-    type = default_state.entityLinkType + '.' \
+    type = default_state.ENTITY_LINK_TYPE + '.' \
            + util.prefixing(stage.name)
 
     manualActivationExpression = None
@@ -71,7 +71,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
             preconditionList.append(interpret_precondition(sentry))
 
     ownerPathvalue = str(stage.ownerpath.value)\
-        .replace(default_state.settingName + ".", util.prefixing(default_state.settingName + "."))
+        .replace(default_state.SETTING_NAME + ".", util.prefixing(default_state.SETTING_NAME + "."))
 
     stageObject = Stage(stage.name, stage.description.value,
                         directive.multiplicity,

@@ -22,7 +22,7 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
 caseOwnerAttr = None
 casePatientAttr = None
-settingName = defaultState.settingName
+settingName = defaultState.SETTING_NAME
 
 hookEventMap = {
     'available': 'onAvailableHTTPHookURL',
@@ -140,7 +140,7 @@ def interpret_setting_entity(settingObj):
 
     settingName = util.prefixing(settingName)
 
-    settingType = defaultState.entityLinkType + "." \
+    settingType = defaultState.ENTITY_LINK_TYPE + "." \
                   + settingName
 
     settingAsAttribute = Attribute(settingName,
@@ -170,15 +170,19 @@ def create_entity_json_object(entity):
 
     if hasattr(entity, "attribute"):
         for attribute in entity.attribute:
-            print("Attribute type of ", attribute.id, "is", util.cname(attribute) )
-            if util.cname(attribute) == 'Attribute':
-                attributeList.append(
-                    attributeInterpreter.sacm_compile(attribute)
-                )
-            elif util.cname(attribute) == 'DerivedAttribute':
-                derivedAttrList.append(
-                    derAttrInterpreter.sacm_compile(attribute)
-                )
+            if attribute is not None:
+                print("Attribute type of ", attribute.id,
+                      "is", util.cname(attribute))
+
+                if util.cname(attribute) == 'Attribute':
+                    attributeList.append(
+                        attributeInterpreter.sacm_compile(attribute)
+                    )
+
+                elif util.cname(attribute) == 'DerivedAttribute':
+                    derivedAttrList.append(
+                        derAttrInterpreter.sacm_compile(attribute)
+                    )
 
     entityJson["AttributeDefinition"] = attributeList
 
