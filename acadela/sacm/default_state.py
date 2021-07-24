@@ -19,3 +19,6 @@ SETTING_NAME = 'Setting'
 HUMAN_TASK_DEF = 'HumanTaskDefinition'
 DUAL_TASK_DEF = 'DualTaskDefinition'
 AUTO_TASK_DEF = 'AutomatedTaskDefinition'
+
+ACTIVATE_WHEN = 'activateWhen'
+EXPRESSION = 'EXPRESSION'

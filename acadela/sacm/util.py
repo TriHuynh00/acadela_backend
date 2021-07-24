@@ -30,7 +30,8 @@ def set_default_value_if_null(attribute, defaultValue):
 def is_attribute_not_null(object, attrName):
     if not hasattr(object, attrName):
         return False
-    elif getattr(object, attrName) is '' or \
+    elif getattr(object, attrName) == '' or \
+            getattr(object, attrName) == 'None' or \
             getattr(object, attrName) is None:
         return False
     else:

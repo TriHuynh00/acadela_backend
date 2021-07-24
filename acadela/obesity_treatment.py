@@ -8,7 +8,7 @@ obesityTreatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 18
+        version = 26
         label = 'ObesityTreatment'
         
         Responsibilities
@@ -64,14 +64,14 @@ obesityTreatmentPlanStr = """
                 InfoPath Evaluation.MeasureBMI.Weight
 
             Section BMIScore #center
-                label = "Height and Weight of Patient"
+                label = "BMI Score"
                 InfoPath Evaluation.MeasureBMI.BMIScore
                 
-            Section CaloriesIntake #right
+            Section CaloriesIntake #left
                 label = "Today Intake Calories"
                 InfoPath Treatment.PlanDiet.TotalIntakeCalo
                 
-            Section CaloriesIntake #right
+            Section CaloriesIntake #left
                 label = "Today Consumed Calories"
                 InfoPath Treatment.PlanExercise.CaloBurn
 
@@ -148,11 +148,11 @@ obesityTreatmentPlanStr = """
                         label = 'BMI Calculation with age counted'
                         additionalDescription = 'full Derived field'
                         expression = 'round(BmiScore + number(AgeRange, 2))'
-                        uiRef = 'colors(5<red<10<green<25)'
-                        externalId = 'BmiPlus' 
+                        uiRef = 'colors(5<red<10<=green<=25<red<100)'
+                        
 
         Stage Treatment
-            #mandatory #manualActivate #repeatParallel
+            #mandatory #repeatSerial
             owner = 'Setting.CaseOwner'
             label = 'Treatment'
 
@@ -160,11 +160,11 @@ obesityTreatmentPlanStr = """
                 previousStep = 'AdmitPatient' 
                 
             HumanTask PlanDiet
-                #mandatory #repeatSerial
+                #mandatory
                 label = 'Plan Diet'
                 owner = 'Setting.CaseOwner'
                 dueDateRef = 'Setting.EvalDueDate'
-                externalId = 'DietDefinition'
+                externalId = 'PlanDiet'
 
                 Form Diet
                     #mandatory
@@ -211,19 +211,19 @@ obesityTreatmentPlanStr = """
                                 additionalDescription = "Roasted Mediterranean vegetables, puy lentils, & tahini dressing"
 
                     DynamicField TotalIntakeCalo
-                        #number(1200-1600)
+                        #number
                         label = 'Total Intake Calories (kCal):'
                         
                         expression = 'round(number(Breakfast, 2) + number(Lunch, 2) + number(Dinner, 2))'
-                        uiRef = "colors(0<=red<=1200<=green<=1600<=red<=10000)"
-                        externalId = 'TotalDailyCaloIntake'  
+                        uiRef = "colors(0<red<1200<=green<=1600<red<10000)"
+                        
                         
             HumanTask PlanExercise
-                #mandatory #exactlyOne #repeatSerial
+                #mandatory #exactlyOne
                 label = 'Daily Exercise'
                 owner = 'Setting.CaseOwner'
                 dueDateRef = 'Setting.EvalDueDate'
-                externalId = 'ExerciseDefinition'
+                externalId = 'PlanExercise'
 
                 Form RecordInfoForm
                     Field Exercise
@@ -240,12 +240,12 @@ obesityTreatmentPlanStr = """
                         label = "Duration (minute):"
                                             
                     DynamicField CaloBurn
-                        #mandatory #left #number
+                        #mandatory #number
                         label = 'Estimated Burned Calories'
 
                         expression = 'round(Duration * number(Exercise, 2))'
                         uiRef = 'colors(0<=red<=1400<=green<=1800<=red<=10000)'
-                        externalId = 'MorningCaloBurn'
+                        
         
         Stage Discharge
             #mandatory #manualActivate
