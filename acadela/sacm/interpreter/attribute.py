@@ -34,6 +34,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
     if attribute.attrProp.directive is not None:
 
         if attribute.attrProp.directive.type is not None:
+            print("Attr ID {}, type {}".format(attrId, attribute.attrProp.directive.type))
             attrObj.type = directive.interpret_directive(attribute.attrProp.directive.type)
 
         elif attrClassName == 'CaseOwner'\

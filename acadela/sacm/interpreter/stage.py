@@ -28,11 +28,6 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     manualActivationExpression = None
 
-    if directive.activation is not None and \
-            directive.activation.startswith("activateWhen"):
-        manualActivationExpression = \
-            directive.activation.split('(')[1][:-1]
-
     extraDescription = util.set_default_value_if_null(
         stage.additionalDescription, None)
     # TODO add custom attach path
@@ -49,9 +44,22 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         if util.is_attribute_not_null(directive, 'mandatory')\
         else default_state.defaultAttrMap['mandatory']
 
-    activation = interpret_directive(directive.activation)\
-        if util.is_attribute_not_null(directive, 'activation')\
-        else default_state.defaultAttrMap['activation']
+    activation = default_state.defaultAttrMap['activation']
+
+    if directive.activation is not None and \
+            directive.activation.startswith('#' + default_state.ACTIVATE_WHEN):
+
+        manualActivationExpression = \
+            directive.activation[len(default_state.ACTIVATE_WHEN) + 2:-1]
+
+
+        activation = default_state.EXPRESSION
+
+        print ("activation mode", activation, "value", manualActivationExpression)
+    else:
+        activation = interpret_directive(directive.activation)\
+            if util.is_attribute_not_null(directive, 'activation')\
+            else default_state.defaultAttrMap['activation']
 
     dynamicDescPath = stage.dynamicDescriptionPath.value \
         if util.is_attribute_not_null(stage.dynamicDescriptionPath, 'value') \

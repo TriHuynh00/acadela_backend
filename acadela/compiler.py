@@ -21,7 +21,7 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = False
+runNetworkOp = True
 
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
@@ -52,6 +52,7 @@ def convert_import_path(i):
 
 try:
     input = caseTemplateStr.obesityTreatmentPlanStr
+
     if len(sys.argv) > 1:
         input = sys.argv[1]
 
@@ -72,7 +73,7 @@ try:
     print("rootImportPart", rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
 
-    analyze_dsl_language(metamodelPath, model, mm)
+    # analyze_dsl_language(metamodelPath, model, mm)
 
     acaInterpreter = CaseInterpreter(mm, model)
 

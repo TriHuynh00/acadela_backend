@@ -222,14 +222,15 @@ def sacm_compile(taskList):
                     hookInterpreter.sacm_compile(task.hookList)
 
         # compile Task Params
+        print (task.id, "fields size:", len(task.fieldList))
         if len(task.fieldList) > 0:
             taskFields = task.fieldList
+
             for dynaField in task.dynamicFieldList:
                 taskFields.append(dynaField)
+
             taskJson['TaskParamDefinition'] = \
                 fieldInterpreter.sacm_compile(taskFields)
-
-
 
         jsonTaskList.append(taskJson)
 

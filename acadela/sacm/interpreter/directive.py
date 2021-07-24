@@ -14,7 +14,7 @@ staticDirectivesDict = {
     '#maxOne': 'maximalOne',
     # Type
     '#text': 'string',
-    '#selector': 'enumeration',
+    '#singlechoice': 'enumeration',
     # Mandatory
     '#mandatory': 'true',
     '#notmandatory': 'false',
@@ -41,13 +41,22 @@ def interpret_directive(directiveObj):
 
     # Static directives do not have parentheses
     # while dynamic ones have
-    if util.cname(directiveObj) == "str":
-        if directiveObj.find("(") > -1:
+    print("directiveObj is {} with Type {}".format(directiveObj, util.cname(directiveObj)))
+    directiveObjType = util.cname(directiveObj)
+
+    if directiveObjType == "LinkType":
+        return interpret_dynamic_directive(directiveObj,
+                                           util.cname(directiveObj))
+
+    elif directiveObjType == "str" :
+        if str(directiveObj).find("(") > -1:
             return interpret_dynamic_directive(directiveObj, util.cname(directiveObj))
         else:
             return interpret_static_directive(directiveObj)
-    elif util.cname(directiveObj) == "NumType":
+
+    elif directiveObjType == "NumType":
         return interpret_dynamic_directive(directiveObj, util.cname(directiveObj))
+
 
 # translate directive in Acadela to SACM value
 def interpret_static_directive(directive):
@@ -61,13 +70,28 @@ def interpret_static_directive(directive):
 # Parse parameterized directives
 def interpret_dynamic_directive(directiveObj, directiveType):
     # Type directives
-    if directiveType == "str":
-        if directiveObj.startswith('link.'):
-            typeAndValue = directiveObj.split('.')[1]
-            if typeAndValue.startswith('Entity'):
-                typeAndValue.replace('Entity', 'EntityDefinition', 1)
 
-            return "Link." + typeAndValue
+    if directiveType == "LinkType": #"str":
+        print(vars(directiveObj))
+
+        if str(directiveObj.linkType).lower() == 'users':
+            return 'Link.Users({})'.format(
+                directiveObj.linkObj[0])
+
+        elif str(directiveObj.linkType).lower() == 'entity':
+            return 'Link.EntityDefinition.{}'.format(
+                directiveObj.linkObj[0])
+
+                # if directiveObj.startswith('link.'):
+        #     typeAndValue = directiveObj.split('.')[1]
+        #     # typeAndValue = directiveObj.split('.')[1]
+        #     #
+        #     # if typeAndValue.startswith('entity'):
+        #     #     typeAndValue.replace('entity', 'EntityDefinition', 1)
+        #     # if typeAndValue.startswith('users'):
+        #     #     typeAndValue = typeAndValue.capitalize()
+        #
+        #     return "Link." + typeAndValue
 
     elif directiveType == "NumType":
 
@@ -101,8 +125,9 @@ def interpret_dynamic_directive(directiveObj, directiveType):
                 raise Exception("The minimum number should be smaller than maximum number")
                 return None
 
+
     else:
-        return directiveObj.replace('#', '')
+        return str(directiveObj).replace('#', '')
 
 def interpret_num_type(directiveObj):
     numberType = "number"

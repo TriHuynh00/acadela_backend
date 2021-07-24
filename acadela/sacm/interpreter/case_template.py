@@ -128,12 +128,11 @@ class CaseInterpreter():
 
                 if util.cname(wpObj) == 'Case':
                     case = util.getRefOfObject(wpObj)
-
-                caseCount += 1
+                    caseCount += 1
 
             if caseCount > 1:
                 raise Exception('Error: Multiple Case Definitions' \
-                                'There are %d cases in the case definition.' \
+                                'There are {} cases in the case definition.' \
                                 'Only one case is allowed.'.format(caseCount))
 
             print('casePrefix = ' + case.casePrefix.value)
@@ -194,9 +193,11 @@ class CaseInterpreter():
             # INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ########################################
             stageAsAttributeList = []
-            for stage in case.stageList:
+            for caseStage in case.stageList:
 
-                stage = util.getRefOfObject(stage)
+                print("Stage", caseStage.name, "Task List size before parse", len(caseStage.taskList))
+
+                stage = util.getRefOfObject(caseStage)
 
                 taskAsAttributeList = []
 
@@ -282,6 +283,8 @@ class CaseInterpreter():
                 "import/acadela/casedefinition?version={}&isExecute=false".format(self.caseDefinition.version),
                 headers=HttpRequest.simulateUserHeader,
                 json=json.loads(json.dumps(caseInJson)))
+
+                print("response", response._content)
 
                 # TODO [Validation]: Delete Created Case Version in
                 # Sociocortex when an error is returned from SACM

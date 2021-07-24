@@ -86,7 +86,7 @@ Case:
             )#
             stageList += Stage
         )#
-    ) | (Ref 'Case' ref=[Case|FQN|])?
+    ) | (Ref 'Case' ref=[Case|FQN])?
 ;
 
 CaseSetting:
@@ -289,6 +289,7 @@ Stage:
     (
         StageTerm name = ID
             directive = StageElementDirective
+
             (
                 (description = Description)
                 (ownerpath = OwnerPath)?
@@ -297,8 +298,11 @@ Stage:
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
                 (preconditionList *= Precondition)
+
             )#
-            taskList *= Task
+
+            taskList += Task
+
     )
     |
     (RefStage ref=[Stage|FQN])?
@@ -535,7 +539,7 @@ Type:
         | 'longtext'
         | 'boolean'
         | NumType
-        | 'selector' // aka. 'enumeration' in Thesis
+        | 'singlechoice' // aka. 'enumeration' in Thesis
         | DateType
         | 'json'
     )
@@ -696,13 +700,15 @@ ParamPattern:
 ;
 
 CompareExpression:
-    INT (Comparator ColorName Comparator INT)+
+    NUMBER (Comparator ColorName Comparator NUMBER)+
 ;
 
 ColorName:
     'red'
     | 'blue'
     | 'green'
+    | 'orange'
+    | 'yellow'
 ;
 
 /*********************
