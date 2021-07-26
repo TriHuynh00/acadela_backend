@@ -8,7 +8,7 @@ obesityTreatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 26
+        version = 13
         label = 'ObesityTreatment'
         
         Responsibilities
@@ -110,7 +110,7 @@ obesityTreatmentPlanStr = """
                 previousStep = 'AdmitPatient'
                 
             HumanTask MeasureBMI
-                #mandatory #repeatParallel #manualActivate
+                #mandatory #manualActivate #repeatParallel 
                 label = 'Measure BMI score'
                 owner = 'Setting.CaseOwner'
                 dueDateRef = 'Setting.WorkplanDueDate'
@@ -146,13 +146,11 @@ obesityTreatmentPlanStr = """
                     DynamicField BmiScorePlus
                         #mandatory #left #number
                         label = 'BMI Calculation with age counted'
-                        additionalDescription = 'full Derived field'
                         expression = 'round(BmiScore + number(AgeRange, 2))'
-                        uiRef = 'colors(5<red<10<=green<=25<red<100)'
-                        
-
+                        uiRef = 'colors(5<orange<=18<green<=25<red<100)'
+            
         Stage Treatment
-            #mandatory #repeatSerial
+            #mandatory #repeatParallel
             owner = 'Setting.CaseOwner'
             label = 'Treatment'
 
@@ -210,22 +208,7 @@ obesityTreatmentPlanStr = """
                         option "Saucy Veggie Lentil" value = "650"
                                 additionalDescription = "Roasted Mediterranean vegetables, puy lentils, & tahini dressing"
 
-                    DynamicField TotalIntakeCalo
-                        #number
-                        label = 'Total Intake Calories (kCal):'
-                        
-                        expression = 'round(number(Breakfast, 2) + number(Lunch, 2) + number(Dinner, 2))'
-                        uiRef = "colors(0<red<1200<=green<=1600<red<10000)"
-                        
-                        
-            HumanTask PlanExercise
-                #mandatory #exactlyOne
-                label = 'Daily Exercise'
-                owner = 'Setting.CaseOwner'
-                dueDateRef = 'Setting.EvalDueDate'
-                externalId = 'PlanExercise'
-
-                Form RecordInfoForm
+                    
                     Field Exercise
                         #singlechoice #mandatory
                         
@@ -238,15 +221,43 @@ obesityTreatmentPlanStr = """
                     Field Duration 
                         #number(1-60) #mandatory
                         label = "Duration (minute):"
+                               
+                    DynamicField TotalIntakeCalo
+                        #number
+                        label = 'Total Intake Calories (kCal):'
+                        
+                        expression = 'round(number(Breakfast, 2) + number(Lunch, 2) + number(Dinner, 2))'
+                        uiRef = "colors(0<=orange<1200<green<=1600<red<=10000)"
+                        
                                             
                     DynamicField CaloBurn
                         #mandatory #number
                         label = 'Estimated Burned Calories'
 
                         expression = 'round(Duration * number(Exercise, 2))'
-                        uiRef = 'colors(0<=red<=1400<=green<=1800<=red<=10000)'
+                        uiRef = 'colors(0<=orange<=1400<green<=1800<red<=10000)'
                         
-        
+                    
+            HumanTask MeasureBloodSugar
+                #mandatory #exactlyOne
+                label = 'Measure Blood Sugar'
+                owner = 'Setting.CaseOwner'
+                dueDateRef = 'Setting.EvalDueDate'
+                externalId = 'BloodSugar'
+
+                Form BloodSugarForm
+                    field BloodGlucose
+                        #mandatory #number(0-40)
+                        label = 'Measure Blood Glucose (mmol/L)'
+                        
+                    DynamicField BloodSugarAnalysis
+                        #mandatory #number
+                        label = 'Blood Sugar Score'
+                        
+                        expression = 'BloodGlucose'
+                        uiRef = 'colors(0<green<=6.3<orange<=10<red<=40)'
+                        
+
         Stage Discharge
             #mandatory #manualActivate
             owner = 'Setting.CaseOwner'
@@ -260,8 +271,12 @@ obesityTreatmentPlanStr = """
                 owner = 'Setting.CaseOwner'
                 label = "Discharge Patient"
                 
+                Precondition
+                    previousStep = 'Evaluation.MeasureBMI'
+                    // condition = 'OT1_Evaluation.OT1_MeasureBMI.BmiScore <= 23'
+                
                 Form DischargeForm
                     Field DoctorNote 
                         #text #mandatory
-                        label = "Discharge Note:"
+                        label = "Post-Treatment Recommendation:"
 """

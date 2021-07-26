@@ -73,18 +73,12 @@ def interpret_task(task, stageId):
             preconditionList.append(interpret_precondition(sentry))
 
     print("Task Sentry List", preconditionList)
-    # Interpret Directive
 
-    activation = default_state.defaultAttrMap['activation']\
-        if not hasattr(directive, 'activation')\
-        else direc_intprtr.\
-                interpret_directive(directive.activation)
+    activationParse = util_intprtr.parse_activation(directive)
 
-    manualActivationExpression = None
-
-    if activation is not None and \
-            activation.startswith("activateWhen"):
-        manualActivationExpression = activation.split('(')[1][:-1]
+    activation = activationParse['activation']
+    manualActivationExpression = \
+        activationParse['manualActivationExpression']
 
     repeatable = default_state.defaultAttrMap['repeat'] \
         if not hasattr(directive, 'repeatable') \
