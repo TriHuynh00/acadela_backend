@@ -26,8 +26,6 @@ import sys
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-
-
 class CaseInterpreter():
 
     def __init__(self, metamodel, model):
@@ -220,9 +218,10 @@ class CaseInterpreter():
                     self.entityList\
                         .append(iTask['taskAsEntity'])
 
-                interpretedStage = interpret_stage(stage,
-                                                   stageTasks,
-                                                   taskAsAttributeList)
+                interpretedStage = \
+                    interpret_stage(stage,
+                                   stageTasks,
+                                   taskAsAttributeList)
 
                 self.entityList\
                     .append(interpretedStage['stageAsEntity'])
@@ -262,11 +261,19 @@ class CaseInterpreter():
                 "groups": self.groupList,
                 "users": self.userList,
                 "entities": self.entityList,
-                "extfile": self.stageList,
+                "stages": self.stageList,
                 "tasks": self.taskList,
                 'case': self.caseDefinition,
                 "attributes": self.attributeList
             }
+
+            # TODO [Validation]: Check valid path value here
+            # 1. Check Sentry ID & Condition match with any existing
+            #    Stage.Task.Field Object
+            #
+            # 2. Check Field with custom path is pointed to a valid source
+            #    Need to prefix the path afterward (using
+            #    prefix_path_value() function in interpreter/util_intprtr
 
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:

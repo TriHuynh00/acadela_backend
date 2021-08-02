@@ -29,7 +29,8 @@ def interpret_field(field, fieldPath, taskType, formDirective):
                 else None
 
             enumerationOptions.append(
-                EnumerationOption(option.key, option.value,
+                EnumerationOption(option.key,
+                                  option.value,
                                   additionalDescription,
                                   externalId)
             )
@@ -52,7 +53,6 @@ def interpret_field(field, fieldPath, taskType, formDirective):
     # If field type is custom, set the field path to custom path
     if type == CUSTOM_TYPE:
         fieldPath = field.path.value
-        #TODO [Validation]: check field path is pointed to a valid source
         print("custom field path", fieldPath)
 
     readOnly = assign_form_directive_to_field('readOnly',
@@ -82,9 +82,14 @@ def interpret_field(field, fieldPath, taskType, formDirective):
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
 
-    fieldAsTaskParam = Field(field.name, description, question, multiplicity, type, fieldPath, readOnly, mandatory,
+    fieldAsTaskParam = Field(field.name, description,
+                             question,
+                             multiplicity,
+                             type,
+                             fieldPath,
+                             readOnly,
+                             mandatory,
                              position, part)
-
 
     print("field as TaskParam", vars(fieldAsTaskParam))
 
@@ -94,9 +99,6 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 def interpret_dynamic_field(field, fieldPath,
                             taskType, formDirective):
 
-    #TODO [Validation]: Check the expression
-    #number should be rounded with round()
-    #string should be converted to number with number(string, 0)
     directive = field.directive
 
     part = None if not hasattr(directive, "part")\
@@ -161,11 +163,16 @@ def interpret_dynamic_field(field, fieldPath,
     #     mandatory = direc_intprtr \
     #         .interpret_directive(formDirective.mandatory)
 
-    dynamicField = DynamicField(field.name, field.description.value,
-                                directive.explicitType, extraDescription,
-                                field.expression, field.uiRef, externalId,
+    dynamicField = DynamicField(field.name,
+                                field.description.value,
+                                directive.explicitType,
+                                extraDescription,
+                                field.expression.value,
+                                field.uiRef,
+                                externalId,
                                 # Dynamic field properties
-                                fieldPath, readOnly,
+                                fieldPath,
+                                readOnly,
                                 mandatory,
                                 position, part)
 
@@ -216,6 +223,51 @@ def check_part_for_dual_task(part, fieldId):
 
     return 1
 
+# number should be rounded with round()
+# string should be converted to number with number(string, 0)
+def auto_convert_expression(dynamicField, fieldList):
+    mathOperators = ['+', '-', '*', '/']
+
+    expression = str(dynamicField.expression)
+
+    # If there is no math operators in the uiReference,
+    # it is something else and no need to convert them to number
+    if not any(operand in expression\
+               for operand in mathOperators):
+        return expression
+
+    # If math operators is in uiReference, process it
+    for operand in mathOperators:
+        expression = expression.replace(operand, ' ' + operand + ' ') \
+
+    expression = expression.replace('\n', ' ')
+
+    expressionElements = expression.split(' ')
+
+    # Loop from the end of string to remove redundant chars
+    # along the way without affecting the array index order
+    for i in range(len(expressionElements) - 1, -1, -1):
+        element = expressionElements[i].strip()
+
+        if element == '' or element == ' ':
+            expressionElements.remove(element)
+
+        for field in fieldList:
+            fieldType = str(field.type)
+
+            if element == field.id\
+                and (fieldType == 'text'
+                    or fieldType == 'enumeration'
+                    or fieldType == 'longtext'
+                    or fieldType == 'notype'):
+
+                expressionElements[i] = 'number({}, 2)'.format(element)
+
+    dynamicField.expression = \
+        'round({})'.format(' '.join(expressionElements))
+
+    return dynamicField.expression
+
 def sacm_compile(fieldList):
     taskParamList = []
     for field in fieldList:
@@ -223,8 +275,11 @@ def sacm_compile(fieldList):
         taskParamAttr = taskParam['$']
 
         util.compile_attributes(taskParamAttr, field,
-                                ['path', 'isReadOnly', 'isMandatory',
-                                 'position', 'part'])
+                                ['path',
+                                 'isReadOnly',
+                                 'isMandatory',
+                                 'position',
+                                 'part'])
 
         taskParamList.append(taskParam)
 

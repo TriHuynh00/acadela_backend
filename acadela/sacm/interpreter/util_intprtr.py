@@ -1,8 +1,9 @@
-import acadela.sacm.util as util
 import sys
 
-from acadela.sacm import default_state
+
+from acadela.sacm import default_state, util
 from acadela.sacm.interpreter.directive import interpret_directive
+
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
@@ -63,3 +64,29 @@ def parse_activation(directive):
         'activation': activation,
         'manualActivationExpression': manualActivationExpression
     }
+
+def prefix_path_value(pathValue, isAllValuePrefixed = True):
+    pathSections = pathValue.split('.')
+
+    print("Path Sections =", pathSections)
+
+    prependedPath = util.prefixing(pathSections[0])
+
+    prefixScope = len(pathSections) \
+                    if isAllValuePrefixed \
+                    else len(pathSections) - 1
+
+    print("Prepended Path =", prependedPath)
+
+    for i in range(1, prefixScope):
+
+        prependedPath += str('.' + util.prefixing(pathSections[i]))
+
+    if isAllValuePrefixed is False:
+        prependedPath += str('.' + pathSections[-1])
+
+    return prependedPath
+
+
+
+

@@ -34,9 +34,9 @@ def interpret_task(task, stageId):
 
     if util.cname(task) != 'AutomatedTask':
         if util.is_attribute_not_null(attrList, 'dueDatePath'):
-            dueDatePath = util.prefixingSetting( \
-                attrList.dueDatePath.value)
-
+            dueDatePath = util_intprtr.prefix_path_value(
+                attrList.dueDatePath.value, False
+            )
 
     ownerPath = None \
         if attrList.ownerPath is None \
@@ -70,7 +70,9 @@ def interpret_task(task, stageId):
     if preconditionObj is not None:
         print("Task Precondition", [sentry for sentry in preconditionObj])
         for sentry in preconditionObj:
-            preconditionList.append(interpret_precondition(sentry))
+            preconditionList.append(
+                interpret_precondition(sentry)
+            )
 
     print("Task Sentry List", preconditionList)
 
@@ -136,6 +138,23 @@ def interpret_task(task, stageId):
             # dynamicFieldList.append(dynamicFieldList)
 
         fieldAsAttributeList.append(interpretedFieldTuple['fieldAsAttribute'])
+
+    # For DynamicFields (DerivedAttribute), number should be rounded with round()
+    # string should be converted to number with number(string, 0)
+    for dynamicField in dynamicFieldList:
+        dynaExpression = fieldInterpreter\
+            .auto_convert_expression(
+                dynamicField,
+                fieldList
+            )
+
+        for attrField in fieldAsAttributeList:
+            if attrField.id == dynamicField.id:
+                attrField.expression = dynaExpression
+                break
+
+        print("dynaExpression =", dynaExpression)
+
 
     taskAsEntity = Entity(taskId, attrList.description.value,
                         fieldAsAttributeList, isPrefixed=False)

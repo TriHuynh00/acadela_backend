@@ -8,7 +8,7 @@ obesityTreatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 13
+        version = 7
         label = 'ObesityTreatment'
         
         Responsibilities
@@ -101,7 +101,7 @@ obesityTreatmentPlanStr = """
                         label = "Assigned Clinician"
 
         Stage Evaluation
-            #mandatory
+            #mandatory #repeatSerial
             
             owner = 'Setting.CaseOwner'
             label = 'Evaluation'
@@ -141,12 +141,12 @@ obesityTreatmentPlanStr = """
                     DynamicField BmiScore
                         #mandatory #number
                         label ='BMI Calculation in kilogram and meters'
-                        expression = 'round(Weight / (Height * Height))'
+                        expression = 'Weight / (Height * Height)'
                 
                     DynamicField BmiScorePlus
                         #mandatory #left #number
                         label = 'BMI Calculation with age counted'
-                        expression = 'round(BmiScore + number(AgeRange, 2))'
+                        expression = 'BmiScore + AgeRange'
                         uiRef = 'colors(5<orange<=18<green<=25<red<100)'
             
         Stage Treatment
@@ -226,7 +226,7 @@ obesityTreatmentPlanStr = """
                         #number
                         label = 'Total Intake Calories (kCal):'
                         
-                        expression = 'round(number(Breakfast, 2) + number(Lunch, 2) + number(Dinner, 2))'
+                        expression = 'Breakfast + Lunch + Dinner'
                         uiRef = "colors(0<=orange<1200<green<=1600<red<=10000)"
                         
                                             
@@ -234,7 +234,7 @@ obesityTreatmentPlanStr = """
                         #mandatory #number
                         label = 'Estimated Burned Calories'
 
-                        expression = 'round(Duration * number(Exercise, 2))'
+                        expression = 'Duration * Exercise'
                         uiRef = 'colors(0<=orange<=1400<green<=1800<red<=10000)'
                         
                     
@@ -253,7 +253,6 @@ obesityTreatmentPlanStr = """
                     DynamicField BloodSugarAnalysis
                         #mandatory #number
                         label = 'Blood Sugar Score'
-                        
                         expression = 'BloodGlucose'
                         uiRef = 'colors(0<green<=6.3<orange<=10<red<=40)'
                         
@@ -273,7 +272,7 @@ obesityTreatmentPlanStr = """
                 
                 Precondition
                     previousStep = 'Evaluation.MeasureBMI'
-                    // condition = 'OT1_Evaluation.OT1_MeasureBMI.BmiScore <= 23'
+                    // condition = 'Evaluation.MeasureBMI.BmiScore <= 23'
                 
                 Form DischargeForm
                     Field DoctorNote 

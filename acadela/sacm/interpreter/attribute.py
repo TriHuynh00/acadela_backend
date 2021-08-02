@@ -59,7 +59,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
 
     if hasattr(attribute, 'externalId'):
         attrObj.externalId = \
-            attribute.additionalDescription.value
+            attribute.externalId.value
 
     if util.is_attribute_not_null(attribute, 'defaultValues'):
         attrObj.defaultValues = attribute.defaultValues.value
@@ -84,7 +84,7 @@ def sacm_compile(attribute):
     #     thisAttr['description'] = attribute.description
 
     util.compile_attributes(thisAttr, attribute,
-        ['defaultValues', 'additionalDescription',
+        ['defaultValues', 'additionalDescription', 'externalId'
          'mandatory', 'multiplicity'])
 
     if util.is_attribute_not_null(attribute, 'type'):

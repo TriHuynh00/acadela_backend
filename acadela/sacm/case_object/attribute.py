@@ -36,7 +36,7 @@ class Attribute():
 
                 externalId = \
                     None if not hasattr(option, "externalId") \
-                        else option.additionalDescription
+                        else option.externalId
 
                 self.enumerationOptions.append(
                     EnumerationOption(option.description,
