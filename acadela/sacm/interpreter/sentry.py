@@ -2,7 +2,7 @@ from acadela.sacm.case_object.sentry import Precondition
 import acadela.sacm.util as util
 import acadela.sacm.interpreter.util_intprtr as util_intprtr
 
-def interpret_precondition(preconditionObj):
+def interpret_precondition(preconditionObj, process=None):
     sentryStepList = []
     entryCondition = None
 
@@ -14,7 +14,7 @@ def interpret_precondition(preconditionObj):
         #                         util.prefixing(stepObj))
 
         stepStr = util_intprtr.prefix_path_value(str(step), True)
-
+        # stepStr = str(step)
         sentryStepList.append(stepStr)
 
     if util.is_attribute_not_null(preconditionObj, 'entryCondition'):

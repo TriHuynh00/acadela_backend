@@ -1,5 +1,6 @@
 from acadela.sacm.default_state import defaultAttrMap, CUSTOM_TYPE
 from acadela.sacm import util
+from acadela.sacm.interpreter import util_intprtr
 
 from acadela.sacm.case_object.attribute import Attribute
 from acadela.sacm.case_object.derived_attribute import DerivedAttribute
@@ -52,7 +53,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 
     # If field type is custom, set the field path to custom path
     if type == CUSTOM_TYPE:
-        fieldPath = field.path.value
+        fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
         print("custom field path", fieldPath)
 
     readOnly = assign_form_directive_to_field('readOnly',
@@ -65,11 +66,19 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 
     position = interpret_position(directive)
 
+    uiRef = interpret_uiRef(field)
+
+    externalId = None \
+        if field.externalId is None \
+        else field.externalId.value
+
     # For a field with custom path, do not create new attribute
     if type != CUSTOM_TYPE:
         fieldAsAttribute = Attribute(field.name, description,
                                      multiplicity=multiplicity,
-                                     type=type)
+                                     type=type,
+                                     uiReference=uiRef,
+                                     externalId=externalId)
         print("field as Attribute", vars(fieldAsAttribute))
     else:
         fieldAsAttribute = None
@@ -89,7 +98,10 @@ def interpret_field(field, fieldPath, taskType, formDirective):
                              fieldPath,
                              readOnly,
                              mandatory,
-                             position, part)
+                             position,
+                             uiRef,
+                             externalId,
+                             part)
 
     print("field as TaskParam", vars(fieldAsTaskParam))
 
@@ -117,19 +129,26 @@ def interpret_dynamic_field(field, fieldPath,
         else direc_intprtr \
         .interpret_directive(directive.explicitType)
 
-    uiRefObj = util.getRefOfObject(field.uiRef)
+    # uiRefObj = util.getRefOfObject(field.uiRef)
+    #
+    # print("UIRef of ", field.name, "is", uiRefObj,
+    #       'as type', util.cname(uiRefObj))
+    #
+    # uiRef = uiRefObj.value \
+    #     if util.is_attribute_not_null(uiRefObj, "value") \
+    #     else None
+    uiRef = interpret_uiRef(field)
 
-    print("UIRef of ", field.name, "is", uiRefObj,
-          'as type', util.cname(uiRefObj))
+    expression = str(field.expression.value)
 
-    uiRef = uiRefObj.value \
-        if util.is_attribute_not_null(uiRefObj, "value") \
-        else None
+    expression = ' '.join(expression.split())
+
+    print ("expression is", expression)
 
     # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = DerivedAttribute(field.name, field.description.value,
         extraDescription,
-        field.expression.value,
+        expression,
         uiRef,
         externalId,
         explicitAttrType)
@@ -167,8 +186,8 @@ def interpret_dynamic_field(field, fieldPath,
                                 field.description.value,
                                 directive.explicitType,
                                 extraDescription,
-                                field.expression.value,
-                                field.uiRef,
+                                expression,
+                                uiRef,
                                 externalId,
                                 # Dynamic field properties
                                 fieldPath,
@@ -290,3 +309,15 @@ def interpret_position(directiveObj):
         if not util.is_attribute_not_null(directiveObj, "position") \
         else direc_intprtr.interpret_directive(directiveObj.position)
     return str(positionValue).upper()
+
+def interpret_uiRef(field):
+    uiRefObj = util.getRefOfObject(field.uiRef)
+
+    print("UIRef of ", field.name, "is", uiRefObj,
+          'as type', util.cname(uiRefObj))
+
+    uiRef = uiRefObj.value \
+        if util.is_attribute_not_null(uiRefObj, "value") \
+        else None
+
+    return uiRef

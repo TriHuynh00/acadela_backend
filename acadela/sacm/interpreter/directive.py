@@ -8,7 +8,7 @@ from os.path import dirname
 this_folder = dirname(__file__)
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
-# Acadela-SACM Dictionary: Fast Lookup than if-else statement
+# Acadela-SACM Dictionary: Faster Lookup than if-else statement
 staticDirectivesDict = {
     # Multiplicity
     '#maxOne': 'maximalOne',
@@ -32,7 +32,15 @@ staticDirectivesDict = {
     # is a dynamic directive)
     '#manualActivate': 'MANUAL',
     '#autoActivate': 'AUTOMATIC',
-    '#custom': 'custom'
+    '#custom': 'custom',
+    # Position
+    '#left': 'LEFT',
+    '#right': 'RIGHT',
+    '#center': 'CENTER',
+    '#stretched': 'STRETCHED',
+    '#leftcenter': 'LEFTCENTER',
+    '#centerright': 'CENTERRIGHT',
+
 }
 
 def interpret_directive(directiveObj):

@@ -71,7 +71,7 @@ def interpret_task(task, stageId):
         print("Task Precondition", [sentry for sentry in preconditionObj])
         for sentry in preconditionObj:
             preconditionList.append(
-                interpret_precondition(sentry)
+                interpret_precondition(sentry, process = task)
             )
 
     print("Task Sentry List", preconditionList)

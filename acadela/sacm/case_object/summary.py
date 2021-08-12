@@ -9,8 +9,8 @@ sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 class SummarySection:
     def __init__(self, id, description,
                  summaryParamList,
-                 position = None):
+                 position=defaultAttrMap['position']):
         self.id = id
         self.description = description
         self.summaryParamList = summaryParamList
-        self.position = defaultAttrMap['position']
+        self.position = position

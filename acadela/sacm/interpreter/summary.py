@@ -1,4 +1,5 @@
 from acadela.sacm import util, default_state
+from acadela.sacm.default_state import defaultAttrMap
 
 import json
 import sys
@@ -17,14 +18,18 @@ def interpret_summary(summary, isPrefixed = True):
     if isPrefixed:
         summaryId = util.prefixing(summary.name)
 
-    position = None\
-        if not hasattr(summary.directive, 'position')\
-        else directiveInterpreter.interpret_directive(summary.directive.position)
+    print("Summary Section directive", summary.directive)
+
+    position = directiveInterpreter.interpret_directive(summary.directive) \
+        if util.is_attribute_not_null(summary, 'directive') \
+        else defaultAttrMap['position']
+
+    print("Summary Section position", position)
 
     summaryParamList = []
 
     for summaryParam in summary.paramList:
-        # TODO VERIFY if each level in the summaryParam is accessible
+        # TODO [Validation]: if each level in the summaryParam is accessible
         summaryParamPathLvl = str(summaryParam.path).split('.')
         sacmSummaryParamPath = ''
         for i in range(0, len(summaryParamPathLvl) - 1):

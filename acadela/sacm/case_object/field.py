@@ -16,6 +16,8 @@ class Field:
                  isReadOnly,
                  isMandatory,
                  position,
+                 uiRef,
+                 externalId,
                  part):
 
         self.id = id
@@ -27,4 +29,6 @@ class Field:
         self.position = position
         self.part = part
         self.multiplicity = multiplicity
+        self.uiRef = uiRef
+        self.externalId = externalId
         self.type = type
