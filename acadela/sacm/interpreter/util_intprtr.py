@@ -1,9 +1,7 @@
 import sys
 
-
 from acadela.sacm import default_state, util
 from acadela.sacm.interpreter.directive import interpret_directive
-
 
 sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
 
@@ -16,10 +14,10 @@ def parse_precondition(process):
 
             sentryJson = {}
 
-            if util.is_attribute_not_null(precondition, 'expression'):
-                sentryJson['$'] = {
-                    'expression': precondition.expression
-                }
+            # if util.is_attribute_not_null(precondition, 'expression'):
+            #     sentryJson['$'] = {
+            #         'expression': precondition.expression
+            #     }
 
             sentryJson['precondition'] = []
 
@@ -29,6 +27,10 @@ def parse_precondition(process):
                         'processDefinitionId': processId,
                     }
 
+                if util.is_attribute_not_null(precondition, 'expression'):
+                    preconditionJson['expression'] = \
+                        precondition.expression
+
                 sentryJson['precondition'].append(
                     {
                         '$': preconditionJson
@@ -37,25 +39,27 @@ def parse_precondition(process):
 
             sentryList.append(sentryJson)
 
+
         return sentryList
     
 def parse_activation(directive):
     manualActivationExpression = None
 
-    activation = default_state.defaultAttrMap['activation'] \
-        if not hasattr(directive, 'activation') \
-        else interpret_directive(directive.activation)
+    activation = interpret_directive(directive.activation) \
+        if util.is_attribute_not_null(directive, 'activation') \
+        else default_state.defaultAttrMap['activation']
 
     if activation is not None and \
             activation\
                 .startswith(default_state.ACTIVATE_WHEN):
 
         manualActivationExpression = \
-            directive \
+            prefix_path_value(directive \
                 .activation[
-                    len(default_state.ACTIVATE_WHEN) + 2
-                    :-1
-                ]
+                    len(default_state.ACTIVATE_WHEN) + 2 :-1
+                ],
+                False
+            )
         activation = default_state.EXPRESSION
 
         print("activation mode", activation, "value", manualActivationExpression)

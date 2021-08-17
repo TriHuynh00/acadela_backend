@@ -50,22 +50,6 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
     manualActivationExpression = \
         activationParse['manualActivationExpression']
 
-    # activation = default_state.defaultAttrMap['activation']
-    # if directive.activation is not None and \
-    #         directive.activation.startswith('#' + default_state.ACTIVATE_WHEN):
-    #
-    #     manualActivationExpression = \
-    #         directive.activation[len(default_state.ACTIVATE_WHEN) + 2:-1]
-    #
-    #
-    #     activation = default_state.EXPRESSION
-    #
-    #     print ("activation mode", activation, "value", manualActivationExpression)
-    # else:
-    #     activation = interpret_directive(directive.activation)\
-    #         if util.is_attribute_not_null(directive, 'activation')\
-    #         else default_state.defaultAttrMap['activation']
-
     dynamicDescPath = stage.dynamicDescriptionPath.value \
         if util.is_attribute_not_null(stage.dynamicDescriptionPath, 'value') \
         else None

@@ -1,7 +1,8 @@
 import sys
 
 import textx.scoping.providers as scoping_providers
-import acadela.obesity_treatment as caseTemplateStr
+#import acadela.obesity_treatment as caseTemplateStr
+import acadela.obesity_treatment_taskPrecondition as caseTemplateStr
 import pprint
 
 from textx import *
@@ -22,7 +23,6 @@ model = None
 
 # True = run User/Group validation check in SACM
 runNetworkOp = True
-
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
 
@@ -51,7 +51,7 @@ def convert_import_path(i):
         return import_obj.importURI.split('.')[0]
 
 try:
-    input = caseTemplateStr.obesityTreatmentPlanStr
+    input = caseTemplateStr.treatmentPlanStr
 
     if len(sys.argv) > 1:
         input = sys.argv[1]

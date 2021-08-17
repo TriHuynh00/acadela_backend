@@ -1,4 +1,4 @@
-obesityTreatmentPlanStr = """
+treatmentPlanStr = """
     #aca0.1
     //import extfile.form as iForm
     //import extfile.taskCharlsonTest
@@ -8,7 +8,7 @@ obesityTreatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 7
+        version = 2
         label = 'ObesityTreatment'
         
         Responsibilities
@@ -92,12 +92,12 @@ obesityTreatmentPlanStr = """
                     
                     Field SelectPatient
                         #custom
-                        CustomFieldValue = "OT1_Setting.CasePatient"
+                        CustomFieldValue = "Setting.CasePatient"
                         label = "Assigned Patient"
                         
                     Field SelectDoctor
                         #custom
-                        CustomFieldValue = "OT1_Setting.Clinicians"
+                        CustomFieldValue = "Setting.Clinicians"
                         label = "Assigned Clinician"
 
         Stage Evaluation

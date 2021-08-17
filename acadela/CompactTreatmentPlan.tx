@@ -179,7 +179,7 @@ SummaryPanel:
 
 SummarySection:
     'Section' name = ID
-        directive = SummarySectionPosition
+        (directive = SummarySectionPosition)?
         description = Description
         paramList += SummaryParam
 ;
@@ -384,7 +384,7 @@ Precondition:
     'Precondition'
     (
         // aka. processDefinitionId in Thesis
-        ('previousStep' Eq stepList += STRING)+
+        ('previousStep' Eq stepList += STRING)*
 
         // aka. expression in Thesis
         ('condition' Eq entryCondition = STRING)?
@@ -424,6 +424,8 @@ Field:
                     | question = Question
                 )
                 (path = FieldPath)?
+                (uiRef = UiReference)?
+                (externalId = ExternalId)?
             )#
     )
     | (Ref 'Field' ref=[Field|FQN])?

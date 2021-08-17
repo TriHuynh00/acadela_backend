@@ -211,7 +211,7 @@ def sacm_compile(taskList):
         util.compile_attributes(taskAttr, task,
             ['ownerPath', 'dueDatePath', 'repeatable',
              'isMandatory', 'activation',
-             'manualActivationDescription',
+             'manualActivationExpression',
              'entityDefinitionId', 'entityAttachPath',
              'externalId', 'dynamicDescriptionPath'])
 

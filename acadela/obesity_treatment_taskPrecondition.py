@@ -1,4 +1,4 @@
-obesityTreatmentPlanStr = """
+treatmentPlanStr = """
     #aca0.1
     //import extfile.form as iForm
     //import extfile.taskCharlsonTest
@@ -8,7 +8,7 @@ obesityTreatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 7
+        version = 17
         label = 'ObesityTreatment'
         
         Responsibilities
@@ -17,10 +17,10 @@ obesityTreatmentPlanStr = """
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
 
-            user matthijs
-            user williamst
-            user michelf
-            user hopkinsc
+            //user matthijs
+            //user williamst
+            //user michelf
+            //user hopkinsc
 
         // A comment
             /* a multiline
@@ -92,16 +92,16 @@ obesityTreatmentPlanStr = """
                     
                     Field SelectPatient
                         #custom
-                        CustomFieldValue = "OT1_Setting.CasePatient"
+                        CustomFieldValue = "Setting.CasePatient"
                         label = "Assigned Patient"
                         
                     Field SelectDoctor
                         #custom
-                        CustomFieldValue = "OT1_Setting.Clinicians"
+                        CustomFieldValue = "Setting.Clinicians"
                         label = "Assigned Clinician"
 
         Stage Evaluation
-            #mandatory #repeatSerial
+            #mandatory
             
             owner = 'Setting.CaseOwner'
             label = 'Evaluation'
@@ -148,6 +148,28 @@ obesityTreatmentPlanStr = """
                         label = 'BMI Calculation with age counted'
                         expression = 'BmiScore + AgeRange'
                         uiRef = 'colors(5<orange<=18<green<=25<red<100)'
+                        
+            HumanTask FinalBMI
+                #mandatory #noRepeat 
+                label = 'Health Check'
+                owner = 'Setting.CaseOwner'
+                dueDateRef = 'Setting.WorkplanDueDate'
+                externalId = 'HealthCheck'
+                
+                Precondition
+                    previousStep = 'MeasureBMI'
+                    //condition = 'Evaluation.MeasureBMI.BmiScore <= 23'
+                    
+                Form HealthEvalForm
+                    #mandatory
+                    
+                    field GeneralHealthEvaluation
+                        #text #exactlyOne
+                        label ='General Health Examination:'
+                        
+                    field HealthCode
+                        #number(0-5) #exactlyOne
+                        label ='Health Status Code:'
             
         Stage Treatment
             #mandatory #repeatParallel
@@ -258,21 +280,24 @@ obesityTreatmentPlanStr = """
                         
 
         Stage Discharge
-            #mandatory #manualActivate
+            // Using manualActivationExpression + activation = EXPRESSION does not 
+            // help trigger a stage/task conditionally
+            #mandatory #exactlyOne #manualActivate
             owner = 'Setting.CaseOwner'
             label = 'Discharge'
-            
-            precondition
-                previousStep = 'AdmitPatient'
+                            
+            Precondition
+                previousStep = 'FinalBMI'
+                
             
             HumanTask DischargePatient
-                #mandatory
+                #mandatory //#activateWhen('Evaluation.FinalBMI.HealthCode<3')
                 owner = 'Setting.CaseOwner'
                 label = "Discharge Patient"
                 
-                Precondition
-                    previousStep = 'Evaluation.MeasureBMI'
-                    // condition = 'Evaluation.MeasureBMI.BmiScore <= 23'
+                //Precondition
+                    //previousStep = 'FinalBMI'
+                    //condition = 'Evaluation.FinalBMI.HealthCode<3'
                 
                 Form DischargeForm
                     Field DoctorNote 

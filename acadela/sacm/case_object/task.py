@@ -50,7 +50,7 @@ class Task():
         self.repeatable = repeatable
         self.isMandatory = mandatory
         self.activation = activation
-        self.manualActivationDescription = manualActivationExpression
+        self.manualActivationExpression = manualActivationExpression
         self.entityAttachPath = entityAttachPath
         self.externalId = externalId
         self.addtionalDescription = addtionalDescription

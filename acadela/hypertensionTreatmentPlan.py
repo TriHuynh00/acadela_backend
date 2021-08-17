@@ -8,7 +8,7 @@ treatmentPlanStr = """
 
     define case ST1_Hypertension
         prefix = 'ST1'
-        version = 4
+        version = 1
         label = 'Hypertension Treatment'
         
         Responsibilities
@@ -130,7 +130,6 @@ treatmentPlanStr = """
                         expression = 'if (Systolic < 120) then "Normal"
                                       else if (Systolic < 130) then "Elevated" 
                                       else "High"'
-                        
                         
                     DynamicField DiastolicAnalysis
                         #left 
