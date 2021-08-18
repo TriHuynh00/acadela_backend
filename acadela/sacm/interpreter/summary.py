@@ -1,16 +1,16 @@
-from acadela.sacm import util, default_state
-from acadela.sacm.default_state import defaultAttrMap
+from sacm import util, default_state
+from sacm.default_state import defaultAttrMap
 
 import json
 import sys
 
-from acadela.sacm.case_object.summary import SummarySection
-import acadela.sacm.interpreter.directive as directiveInterpreter
+from sacm.case_object.summary import SummarySection
+import sacm.interpreter.directive as directiveInterpreter
 
 from os.path import dirname
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 def interpret_summary(summary, isPrefixed = True):
     summaryId = summary.name

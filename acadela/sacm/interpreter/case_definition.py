@@ -1,24 +1,24 @@
 
-import acadela.sacm.util as util
-import acadela.sacm.default_state as defaultState
+import sacm.util as util
+import sacm.default_state as defaultState
 
-import acadela.sacm.interpreter.attribute as attributeInterpreter
-import acadela.sacm.interpreter.derived_attribute as derAttrInterpreter
-import acadela.sacm.interpreter.summary as summaryInterpreter
-import acadela.sacm.interpreter.stage as stageInterpreter
+import sacm.interpreter.attribute as attributeInterpreter
+import sacm.interpreter.derived_attribute as derAttrInterpreter
+import sacm.interpreter.summary as summaryInterpreter
+import sacm.interpreter.stage as stageInterpreter
 
-from acadela.sacm.case_object.entity import Entity
-from acadela.sacm.case_object.attribute import Attribute
-from acadela.sacm.case_object.case_definition import CaseDefinition
+from sacm.case_object.entity import Entity
+from sacm.case_object.attribute import Attribute
+from sacm.case_object.case_definition import CaseDefinition
 
 import sys
 
 from os.path import dirname
 
-from acadela.sacm.case_object.http_hook import HttpTrigger
+from sacm.case_object.http_hook import HttpTrigger
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 caseOwnerAttr = None
 casePatientAttr = None

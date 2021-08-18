@@ -1,15 +1,15 @@
-from acadela.sacm import util
-from acadela.sacm.default_state import defaultAttrMap, USER_OR_GROUP_LINK_TYPE
+from sacm import util
+from sacm.default_state import defaultAttrMap, USER_OR_GROUP_LINK_TYPE
 
 import json
 import sys
-from acadela.sacm.case_object.attribute import Attribute
-import acadela.sacm.interpreter.directive as directive
+from sacm.case_object.attribute import Attribute
+import sacm.interpreter.directive as directive
 
 from os.path import dirname
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 # TODO: check if attribute ID already exists in case template's attribute list
 # Params:

@@ -1,5 +1,5 @@
-from acadela.http_request import HttpRequest
-from acadela.referencer.group import GroupReferencer
+from http_request import HttpRequest
+from referencer.group import GroupReferencer
 import json
 
 class UserReferencer:

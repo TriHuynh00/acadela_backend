@@ -1,10 +1,10 @@
-from acadela.sacm import util, default_state
+from sacm import util, default_state
 
 from os.path import dirname
 import sys
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 class Task():
     def __init__(self, id, description,

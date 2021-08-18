@@ -1,20 +1,20 @@
-from acadela.sacm import util
-from acadela.sacm.interpreter import util_intprtr
+from sacm import util
+from sacm.interpreter import util_intprtr
 
-from acadela.sacm import default_state
-from acadela.sacm.case_object.stage import Stage
-from acadela.sacm.case_object.entity import Entity
-from acadela.sacm.case_object.attribute import Attribute
+from sacm import default_state
+from sacm.case_object.stage import Stage
+from sacm.case_object.entity import Entity
+from sacm.case_object.attribute import Attribute
 
-from acadela.sacm.interpreter.directive import interpret_directive
-from acadela.sacm.interpreter.sentry import interpret_precondition
-import acadela.sacm.interpreter.task as taskIntprtr
+from sacm.interpreter.directive import interpret_directive
+from sacm.interpreter.sentry import interpret_precondition
+import sacm.interpreter.task as taskIntprtr
 
 from os.path import dirname
 import sys
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 

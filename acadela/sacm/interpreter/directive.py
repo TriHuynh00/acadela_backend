@@ -1,12 +1,12 @@
-from acadela.sacm import util
-import acadela.sacm.default_state as default_state
+from sacm import util
+import sacm.default_state as default_state
 
 import sys
 
 from os.path import dirname
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 # Acadela-SACM Dictionary: Faster Lookup than if-else statement
 staticDirectivesDict = {

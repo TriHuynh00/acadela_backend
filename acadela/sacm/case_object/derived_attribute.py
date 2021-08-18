@@ -2,7 +2,7 @@ from os.path import dirname
 import sys
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 class DerivedAttribute:
     def __init__(self, id, description,

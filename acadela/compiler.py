@@ -1,20 +1,17 @@
 import sys
+import pprint
+import logging
 
 import textx.scoping.providers as scoping_providers
-#import acadela.obesity_treatment as caseTemplateStr
-import acadela.obesity_treatment_taskPrecondition as caseTemplateStr
-import pprint
+#import obesity_treatment as caseTemplateStr
+import obesity_treatment_taskPrecondition as caseTemplateStr
+import config.general_config as generalConf
 
 from textx import *
 from os.path import join, dirname, abspath
 
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\sacm')
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela\\exception_handler')
-
-from acadela.sacm.interpreter.case_template import CaseInterpreter
-from acadela.sacm.exception_handler.syntax_error_handler import SyntaxErrorHandler
+from sacm.interpreter.case_template import CaseInterpreter
+from sacm.exception_handler.syntax_error_handler import SyntaxErrorHandler
 
 this_folder = dirname(__file__)
 
@@ -22,7 +19,7 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = True
+runNetworkOp = generalConf.CONN_SOCIOCORTEX
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
 
@@ -50,7 +47,10 @@ def convert_import_path(i):
         # e.g. here: import "file.ext" --> module name "file".
         return import_obj.importURI.split('.')[0]
 
+
 try:
+    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_CRITICAL)
+
     input = caseTemplateStr.treatmentPlanStr
 
     if len(sys.argv) > 1:
@@ -70,7 +70,7 @@ try:
     )
 
     rootImportPath = join(abspath(dirname(__file__)), 'aa')
-    print("rootImportPart", rootImportPath)
+    logging.info("rootImportPart" + rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
 
     # analyze_dsl_language(metamodelPath, model, mm)
@@ -79,6 +79,7 @@ try:
 
     acaInterpreter.interpret(runNetworkOp)
 
+    print("")
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e)
     # print(vars(e.expected_rules[0]))

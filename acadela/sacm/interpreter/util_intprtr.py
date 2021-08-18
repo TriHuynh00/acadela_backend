@@ -1,9 +1,9 @@
 import sys
 
-from acadela.sacm import default_state, util
-from acadela.sacm.interpreter.directive import interpret_directive
+from sacm import default_state, util
+from sacm.interpreter.directive import interpret_directive
 
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 # Parse the sentry of a stage or task
 def parse_precondition(process):

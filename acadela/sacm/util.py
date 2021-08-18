@@ -1,4 +1,4 @@
-from acadela.sacm.default_state import SETTING_NAME
+from sacm.default_state import SETTING_NAME
 
 prefix = ""
 

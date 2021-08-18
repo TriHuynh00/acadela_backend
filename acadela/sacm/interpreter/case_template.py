@@ -1,30 +1,30 @@
 # At this point model is a plain Python object graph with instances of
 # dynamically created classes and attributes following the grammar.
 from os.path import dirname
-from acadela.referencer.workspace import WorkspaceReferencer
-from acadela.referencer.group import GroupReferencer
-from acadela.referencer.user import UserReferencer
+from referencer.workspace import WorkspaceReferencer
+from referencer.group import GroupReferencer
+from referencer.user import UserReferencer
 
-from acadela.sacm import util, json_util
+from sacm import util, json_util
 
-from acadela.sacm.interpreter.group import GroupInterpreter
-from acadela.sacm.interpreter.user import UserInterpreter
-from acadela.sacm.interpreter.workspace import WorkspaceInterpreter
-import acadela.sacm.interpreter.task as taskInterpreter
-import acadela.sacm.interpreter.attribute as attributeInterpreter
-import acadela.sacm.interpreter.case_definition as caseDefinition
-from acadela.sacm.interpreter.stage import interpret_stage
+from sacm.interpreter.group import GroupInterpreter
+from sacm.interpreter.user import UserInterpreter
+from sacm.interpreter.workspace import WorkspaceInterpreter
+import sacm.interpreter.task as taskInterpreter
+import sacm.interpreter.attribute as attributeInterpreter
+import sacm.interpreter.case_definition as caseDefinition
+from sacm.interpreter.stage import interpret_stage
 
-from acadela.sacm.case_object.entity import Entity
+from sacm.case_object.entity import Entity
 
-from acadela.http_request import HttpRequest
+from http_request import HttpRequest
 
 import json
 import requests
 import sys
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 class CaseInterpreter():
 

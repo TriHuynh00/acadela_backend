@@ -1,5 +1,5 @@
-from acadela.http_request import HttpRequest
-from acadela.referencer.workspace import WorkspaceReferencer
+from http_request import HttpRequest
+from referencer.workspace import WorkspaceReferencer
 import json
 
 class GroupReferencer:

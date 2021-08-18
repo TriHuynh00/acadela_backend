@@ -1,4 +1,3 @@
-import sys
 
 defaultAttrMap = {
     'multiplicity': 'any',

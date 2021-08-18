@@ -1,6 +1,6 @@
-from acadela.sacm.case_object.sentry import Precondition
-import acadela.sacm.util as util
-import acadela.sacm.interpreter.util_intprtr as util_intprtr
+from sacm.case_object.sentry import Precondition
+import sacm.util as util
+import sacm.interpreter.util_intprtr as util_intprtr
 
 def interpret_precondition(preconditionObj, process=None):
     sentryStepList = []

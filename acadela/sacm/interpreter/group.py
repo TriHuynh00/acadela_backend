@@ -1,4 +1,4 @@
-from acadela.referencer.group import GroupReferencer
+from referencer.group import GroupReferencer
 
 class GroupInterpreter:
 

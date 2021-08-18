@@ -1,15 +1,15 @@
-from acadela.sacm.default_state import defaultAttrMap, CUSTOM_TYPE
-from acadela.sacm import util
-from acadela.sacm.interpreter import util_intprtr
+from sacm.default_state import defaultAttrMap, CUSTOM_TYPE
+from sacm import util
+from sacm.interpreter import util_intprtr
 
-from acadela.sacm.case_object.attribute import Attribute
-from acadela.sacm.case_object.derived_attribute import DerivedAttribute
-from acadela.sacm.case_object.field import Field
-from acadela.sacm.case_object.dynamic_field import DynamicField
-from acadela.sacm.case_object.enumeration_option import EnumerationOption
-from acadela.sacm.case_object.enumeration import Enumeration
+from sacm.case_object.attribute import Attribute
+from sacm.case_object.derived_attribute import DerivedAttribute
+from sacm.case_object.field import Field
+from sacm.case_object.dynamic_field import DynamicField
+from sacm.case_object.enumeration_option import EnumerationOption
+from sacm.case_object.enumeration import Enumeration
 
-import acadela.sacm.interpreter.directive as direc_intprtr
+import sacm.interpreter.directive as direc_intprtr
 
 def interpret_field(field, fieldPath, taskType, formDirective):
     directive = field.directive

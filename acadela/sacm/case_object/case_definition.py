@@ -1,10 +1,10 @@
-from acadela.sacm import util
+from sacm import util
 
 import sys
 from os.path import dirname
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 class CaseDefinition():
     def __init__(self, id, description,

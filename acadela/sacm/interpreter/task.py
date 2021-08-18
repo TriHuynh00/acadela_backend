@@ -1,18 +1,18 @@
-from acadela.sacm.interpreter import util_intprtr
+from sacm.interpreter import util_intprtr
 
-from acadela.sacm import util
-from acadela.sacm.interpreter.sentry import interpret_precondition
-import acadela.sacm.interpreter.hook as hookInterpreter
-import acadela.sacm.interpreter.directive as direc_intprtr
-import acadela.sacm.interpreter.field as fieldInterpreter
+from sacm import util
+from sacm.interpreter.sentry import interpret_precondition
+import sacm.interpreter.hook as hookInterpreter
+import sacm.interpreter.directive as direc_intprtr
+import sacm.interpreter.field as fieldInterpreter
 
-from acadela.sacm import default_state
+from sacm import default_state
 
-import acadela.sacm.constant.task_type as TASKTYPE
+import sacm.constant.task_type as TASKTYPE
 
-from acadela.sacm.case_object.entity import Entity
-from acadela.sacm.case_object.task import Task
-from acadela.sacm.case_object.attribute import Attribute
+from sacm.case_object.entity import Entity
+from sacm.case_object.task import Task
+from sacm.case_object.attribute import Attribute
 
 
 def interpret_task(task, stageId):

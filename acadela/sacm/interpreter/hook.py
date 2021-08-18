@@ -1,5 +1,5 @@
-from acadela.sacm.case_object.http_hook import HttpTrigger
-from acadela.sacm import util
+from sacm.case_object.http_hook import HttpTrigger
+from sacm import util
 
 def interpret_case_hook(hookObj):
     return {

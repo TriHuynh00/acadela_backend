@@ -1,8 +1,8 @@
-from acadela.referencer.workspace import WorkspaceReferencer
-from acadela.sacm import util
-from acadela.sacm.interpreter import case_definition
+from referencer.workspace import WorkspaceReferencer
+from sacm import util
+from sacm.interpreter import case_definition
 
-import acadela.sacm.interpreter.attribute as attrIntrprtr
+import sacm.interpreter.attribute as attrIntrprtr
 
 import json
 

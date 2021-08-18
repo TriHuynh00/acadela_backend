@@ -1,4 +1,4 @@
-from acadela.referencer.user import UserReferencer
+from referencer.user import UserReferencer
 
 class UserInterpreter():
 

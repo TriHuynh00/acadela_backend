@@ -1,12 +1,12 @@
-from acadela.sacm import util
-from acadela.sacm.case_object.enumeration_option import EnumerationOption
-from acadela.sacm.default_state import defaultAttrMap
+from sacm import util
+from sacm.case_object.enumeration_option import EnumerationOption
+from sacm.default_state import defaultAttrMap
 import sys
 
 from os.path import dirname
 
 this_folder = dirname(__file__)
-sys.path.append('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\')
+
 
 
 class Attribute():
