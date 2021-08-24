@@ -39,10 +39,6 @@ treatmentPlanStr = """
 
             CasePatient UmcgPatients #exactlyOne
                 label = 'CasePatient'
-
-            Attribute EvalDueDate
-                #maxOne #date.after(TODAY)
-                label = 'Evaluation Due Date'
                 
             Attribute Clinicians
                 #exactlyOne #Link.Users(UmcgClinicians) 

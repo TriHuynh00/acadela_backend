@@ -449,7 +449,7 @@ FieldDirective:
         // The interpreter will check whether a part
         // is included in the field instead.
         (part = Part)?
-        type = FieldType
+        (type = FieldType)?
     )#
 ;
 

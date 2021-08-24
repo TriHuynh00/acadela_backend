@@ -19,7 +19,7 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = generalConf.CONN_SOCIOCORTEX
+runNetworkOp = not generalConf.CONN_SOCIOCORTEX
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
 
@@ -49,7 +49,7 @@ def convert_import_path(i):
 
 
 try:
-    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_CRITICAL)
+    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
 
     input = caseTemplateStr.treatmentPlanStr
 

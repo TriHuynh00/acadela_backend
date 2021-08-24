@@ -3,8 +3,6 @@ import sys
 from sacm import default_state, util
 from sacm.interpreter.directive import interpret_directive
 
-
-
 # Parse the sentry of a stage or task
 def parse_precondition(process):
     if len(process.preconditionList) > 0:
