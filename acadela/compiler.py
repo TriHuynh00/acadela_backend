@@ -19,7 +19,7 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = not generalConf.CONN_SOCIOCORTEX
+runNetworkOp = generalConf.CONN_SOCIOCORTEX
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
 

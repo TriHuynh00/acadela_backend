@@ -141,8 +141,10 @@ def sacm_compile(stageList):
                 'externalId', 'dynamicDescriptionPath'])
 
         if len(stage.preconditionList) > 0:
+            # TODO: Parse the subject of the expression & prefix them
+            # based on their hierarchy
              stageJson['SentryDefinition'] = \
-                 util_intprtr.parse_precondition(stage)
+                 util_intprtr.parse_precondition(stage, stageList)
 
         # parse the tasks
         print('len stageTaskList', len(stage.taskList))

@@ -3,7 +3,7 @@ workspace Umcg
 
 define case OT1_ObesityTreatment
     prefix = 'OT1'
-    version = 1
+    version = 16
     label = 'ObesityTreatment'
     
     Responsibilities
@@ -23,9 +23,9 @@ define case OT1_ObesityTreatment
         CasePatient UmcgPatients #exactlyOne
             label = 'CasePatient'
 
-        Attribute Age
-            #maxOne #number(0-120)
-            label = 'Patient Age'
+        //Attribute Age
+            //#maxOne #number(0-120)
+            //label = 'Patient Age'
         
         Attribute Clinicians
             #exactlyOne #Link.Users(UmcgClinicians) 
@@ -74,10 +74,18 @@ define case OT1_ObesityTreatment
                     CustomFieldValue = 'Setting.Clinicians'
                     label = 'Assigned Clinician'
 
+                //Field PatientAge
+                    //#custom
+                    //CustomFieldValue = 'Setting.Age'
+                    //label = 'Patient Age:'
+                    
                 Field PatientAge
-                    #custom
-                    CustomFieldValue = 'Setting.Age'
-                    label = 'Patient Age:'
+                    #singlechoice
+                    Question = 'What is your age range?'
+                        Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
+                        Option '10-30' value = '2'
+                        Option '30-50' value = '3'
+                        Option 'over 50' value = '4'
 
     Stage Evaluation
         #mandatory
@@ -87,9 +95,10 @@ define case OT1_ObesityTreatment
         
         Precondition
             previousStep = 'AdmitPatient'
+            condition = 'AdmitPatient.SelectPatient.PatientAge > 2'
             
         HumanTask MeasureBMI
-            #mandatory #manualActivate #repeatParallel 
+            #mandatory 
             label = 'Measure BMI score'
             owner = 'Setting.CaseOwner'
             dueDateRef = 'Setting.WorkplanDueDate'
@@ -101,15 +110,15 @@ define case OT1_ObesityTreatment
                 #mandatory
                 
                 field Height
-                    #number(0-3) #exactlyOne
+                    #number(0-3)
                     label ='Height of patient in m'
             
                 field Weight
-                    #number(0-300) #exactlyOne
+                    #number(0-300)
                     label ='Weight of patient in kg'
             
                 field AgeRange
-                    #singlechoice #exactlyOne
+                    #singlechoice
                     Question = 'What is your age range?'
                         Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
                         Option '10-30' value = '1.2'
@@ -128,7 +137,7 @@ define case OT1_ObesityTreatment
                     uiRef = 'colors(5<orange<=18<green<=25<red<100)'
                     
         HumanTask FinalBMI
-            #mandatory #noRepeat 
+            #mandatory #noRepeat
             label = 'Health Check'
             owner = 'Setting.CaseOwner'
             dueDateRef = 'Setting.WorkplanDueDate'
@@ -145,12 +154,12 @@ define case OT1_ObesityTreatment
                     #text #exactlyOne
                     label ='General Health Examination:'
                     
-                field HealthCode
-                    #number(0-5) #exactlyOne
+                field healthcode
+                    #exactlyOne
                     label ='Health Status Code:'
         
     Stage Treatment
-        #mandatory #repeatParallel
+        #mandatory
         owner = 'Setting.CaseOwner'
         label = 'Treatment'
 
@@ -256,16 +265,15 @@ define case OT1_ObesityTreatment
                     uiRef = 'colors(0<green<=6.3<orange<=10<red<=40)'
                     
     Stage Discharge
-        // Using manualActivationExpression + activation = EXPRESSION does not 
-        // help trigger a stage/task conditionally
+        // Using manualActivationExpression & activation=EXPRESSION  
+        // does not help trigger a stage/task conditionally
         #mandatory #exactlyOne 
         owner = 'Setting.CaseOwner'
         label = 'Discharge'
                         
         Precondition
-            previousStep = 'FinalBMI'
-            // TODO: Try Setting condition, does not work
-            condition = 'Evaluation.FinalBMI.HealthCode<3'
+            previousStep = 'Evaluation'
+            condition = 'Evaluation.FinalBMI.healthcode>2'
             
         HumanTask DischargePatient
             #mandatory 

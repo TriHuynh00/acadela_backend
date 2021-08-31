@@ -146,7 +146,8 @@ def interpret_dynamic_field(field, fieldPath,
     print ("expression is", expression)
 
     # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = DerivedAttribute(field.name, field.description.value,
+    fieldAsAttribute = DerivedAttribute(field.name,
+        field.description.value,
         extraDescription,
         expression,
         uiRef,
@@ -193,7 +194,8 @@ def interpret_dynamic_field(field, fieldPath,
                                 fieldPath,
                                 readOnly,
                                 mandatory,
-                                position, part)
+                                position,
+                                part)
 
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": dynamicField}
