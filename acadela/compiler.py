@@ -4,7 +4,7 @@ import logging
 
 import textx.scoping.providers as scoping_providers
 #import obesity_treatment as caseTemplateStr
-import obesity_treatment_taskPrecondition as caseTemplateStr
+import sample_case_def.obesity_treatment_taskPrecondition as caseTemplateStr
 import config.general_config as generalConf
 
 from textx import *
