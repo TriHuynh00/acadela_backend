@@ -2,7 +2,7 @@ import re
 
 from sacm.case_object.sentry import Precondition
 import sacm.util as util
-import sacm.interpreter.util_intprtr as util_intprtr
+from sacm.interpreter import util_intprtr
 
 def interpret_precondition(preconditionObj, process=None):
     sentryStepList = []
@@ -30,17 +30,22 @@ def interpret_precondition(preconditionObj, process=None):
 def auto_parse_conditional_expression(entryCondition):
     subjAndPredicate = re.split('[<>(<=)(>=)==]', entryCondition)
 
+    subject = re.findall('[\w+\.]+\w+', subjAndPredicate[0])[0]
+
     predicate = str.strip(subjAndPredicate[1])
     operator = re.findall('[<>(<=)(>=)==]', entryCondition)[-1]
 
-    print("operator=", operator, "predicate=", predicate)
+    print("entryCond=", entryCondition,
+          "subject=", subject,
+          "operator=", operator,
+          "predicate=", predicate)
 
     if str.isdigit(predicate):
-        subjAndPredicate[0] = 'number(' + subjAndPredicate[0] + ', 0)'
+        subject = 'number(' + subject + ', 0)'
     elif str.isdecimal(predicate):
-        subjAndPredicate[0] = 'number(' + subjAndPredicate[0] + ', 2)'
+        subject = 'number(' + subject + ', 2)'
 
-    entryCondition = subjAndPredicate[0] + operator + predicate
+    entryCondition = subject + operator + predicate
 
     print("Entry Condition after parse to number:", entryCondition)
     return entryCondition

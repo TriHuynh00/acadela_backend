@@ -5,7 +5,7 @@ from sacm.interpreter import sentry
 from sacm.interpreter.directive import interpret_directive
 
 # Parse the sentry of a stage or task
-def parse_precondition(process, stageList):
+def parse_precondition(process, stageList = None):
     if len(process.preconditionList) > 0:
         sentryList = []
 

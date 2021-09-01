@@ -141,8 +141,8 @@ def sacm_compile(stageList):
                 'externalId', 'dynamicDescriptionPath'])
 
         if len(stage.preconditionList) > 0:
-            # TODO: Parse the subject of the expression & prefix them
-            # based on their hierarchy
+            # TODO: Parse the subject of the expression
+            # & prefix them based on their hierarchy level
              stageJson['SentryDefinition'] = \
                  util_intprtr.parse_precondition(stage, stageList)
 

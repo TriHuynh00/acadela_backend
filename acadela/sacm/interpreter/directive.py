@@ -12,6 +12,7 @@ this_folder = dirname(__file__)
 staticDirectivesDict = {
     # Multiplicity
     '#maxOne': 'maximalOne',
+    '#exactlyOne': 'exactlyOne',
     # Type
     '#text': 'string',
     '#singlechoice': 'enumeration',
