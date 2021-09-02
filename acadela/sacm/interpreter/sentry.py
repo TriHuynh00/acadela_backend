@@ -27,7 +27,7 @@ def interpret_precondition(preconditionObj, process=None):
 
     return Precondition(sentryStepList, entryCondition)
 
-def auto_parse_conditional_expression(entryCondition):
+def auto_parse_conditional_expression(entryCondition, stageList):
     subjAndPredicate = re.split('[<>(<=)(>=)==]', entryCondition)
 
     subject = re.findall('[\w+\.]+\w+', subjAndPredicate[0])[0]
@@ -39,6 +39,23 @@ def auto_parse_conditional_expression(entryCondition):
           "subject=", subject,
           "operator=", operator,
           "predicate=", predicate)
+
+    subElements = subject.split(".")
+
+    if len(subElements) <= 2:
+        for element in subElements:
+            subject = util_intprtr.prefix_path_value(subject, True)
+    else:
+        for stage in stageList:
+            if stage.id == subElements[-1]:
+                subject = util_intprtr.prefix_path_value(subject, True)
+                break
+            for task in stage.taskList:
+                if task.id == subElements[-1]:
+                    subject = util_intprtr.prefix_path_value(subject, True)
+                    break
+        # No task or stage matches the path element, so this is a field
+        subject = util_intprtr.prefix_path_value(subject, False)
 
     if str.isdigit(predicate):
         subject = 'number(' + subject + ', 0)'
