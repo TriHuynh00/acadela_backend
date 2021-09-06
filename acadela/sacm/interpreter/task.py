@@ -191,7 +191,7 @@ def interpret_task(task, stageId):
         'taskAsAttribute': taskAsAttribute
     }
 
-def sacm_compile(taskList):
+def sacm_compile(taskList, stageList):
     jsonTaskList = []
     # humanTaskList = []
     # autoTaskList = []
@@ -227,7 +227,7 @@ def sacm_compile(taskList):
         if util.is_attribute_not_null(task, 'preconditionList'):
             if len(task.preconditionList) > 0 != None:
                 taskJson['SentryDefinition'] = \
-                    util_intprtr.parse_precondition(task)
+                    util_intprtr.parse_precondition(task, stageList)
 
         if util.is_attribute_not_null(task, 'hookList'):
             if len(task.hookList) > 0:

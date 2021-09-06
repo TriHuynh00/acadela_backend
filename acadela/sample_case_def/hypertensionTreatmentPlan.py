@@ -8,7 +8,7 @@ treatmentPlanStr = """
 
     define case ST1_Hypertension
         prefix = 'ST1'
-        version = 1
+        version = 20
         label = 'Hypertension Treatment'
         
         Responsibilities
@@ -17,10 +17,6 @@ treatmentPlanStr = """
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
 
-            user matthijs
-            user williamst
-            user michelf
-            user hopkinsc
 
         // A comment
             /* a multiline
@@ -68,7 +64,7 @@ treatmentPlanStr = """
                 InfoPath Discharge.DischargePatient.DoctorNote
 
         Stage AdmitPatient
-            #mandatory #noRepeat
+            #mandatory
             owner = 'Setting.CaseOwner'
             label = 'Admit Patient'
 
@@ -76,7 +72,7 @@ treatmentPlanStr = """
                 #mandatory
                 label = 'Assign Patient'
                 owner = 'Setting.CaseOwner'
-                dueDateRef = 'Setting.EvalDueDate'
+                dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'SelectPatient'
                 
                 Form PatientAssignForm
@@ -91,10 +87,9 @@ treatmentPlanStr = """
                         #custom
                         CustomFieldValue = "Setting.Clinicians"
                         label = "Assigned Clinician"
-
+                      
         Stage Evaluation
             #mandatory
-            
             owner = 'Setting.CaseOwner'
             label = 'Evaluation'
             
@@ -133,7 +128,40 @@ treatmentPlanStr = """
                         expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
                                       else if (Systolic < 80 and Systolic < 130) then "Elevated" 
                                       else "High"'
+                
+                HumanTask ExtraExamination
+                    #mandatory
+                    owner = 'Setting.CaseOwner'
+                    dueDateRef = 'Setting.WorkplanDueDate'
+                    label = 'Additional Examination'
+                    
+                    Form CgiForm
+                        Field CgiTest
+                        #singlechoice
+                            question = 'Perform ECG Test?'
+                            Option 'No' value='0'
+                            Option 'Yes' value='1'
+                        
+        Stage EcgTest
+            #mandatory #autoActivate
+            owner = 'Setting.CaseOwner'
+            label = 'ECG Test'        
             
+            Precondition
+                previousStep = 'Evaluation'
+                condition = 'Evaluation.ExtraExamination.CgiTest>0'
+                
+            HumanTask MeasureECG
+                #mandatory
+                owner = 'Setting.CaseOwner'
+                label = 'Measure ECG'    
+                
+                Form PrescriptionForm
+                    
+                    Field ECG
+                        #text #left
+                        label = "ECG Value:" 
+    
         Stage Treatment
             #mandatory
             owner = 'Setting.CaseOwner'
@@ -142,49 +170,41 @@ treatmentPlanStr = """
             Precondition
                 previousStep = 'Evaluation' 
                 
-            HumanTask Prescription
-                #mandatory 
-                label = 'Prescribe Antihypertensive Drugs'
+            HumanTask Prescribe
+                #mandatory #atLeastOne #repeatParallel #manualActivate
+                label = 'Prescribe'
                 owner = 'Setting.CaseOwner'
-                dueDateRef = 'Setting.EvalDueDate'
-
+                dueDateRef = 'Setting.WorkplanDueDate'
+                
                 Form PrescriptionForm
+                    #mandatory
+                    Field AntihypertensiveDrug
+                        #text #left
+                        label = "Medicine Name:"
                     
-                    Field AntihypertensiveDrug1
-                        #mandatory #text #left 
-                        label = "Antihypertensive medicine 1:"
-                    
-                    Field DailyDose1
-                        #mandatory #number #center 
-                        label = "Daily Dose:"
-                    
-                    Field AntihypertensiveDrug2
-                        #notmandatory #text #left 
-                        label = "Antihypertensive medicine 2:"
-                        
-                    Field DailyDose2
+                    Field DailyDose
                         #number #center 
                         label = "Daily Dose:"
                         
-                    Field AntihypertensiveDrug3
-                        #notmandatory #text #left 
-                        label = "Antihypertensive medicine 3:"
+                    Field Frequency
+                        #number #left
+                        label = "Frequency"
+                    
+                    Field FrequencyUnit
+                        #text #center
+                        label = "Frequency Unit"
                         
-                    Field DailyDose3
-                        #number #center 
-                        label = "Daily Dose:"
-                                            
-                    Field ExtraDrugs
-                        #longtext #left
-                        label = 'Additional Medicine'
-
+                    Field Comment
+                        #notmandatory #stretched
+                        label = "Comment:"
+                        
         Stage Discharge
-            #mandatory
+            #mandatory #manualActivate
             owner = 'Setting.CaseOwner'
             label = 'Discharge'
             
             precondition
-                previousStep = 'Treatment'
+                previousStep = 'Evaluation'
             
             HumanTask DischargePatient
                 #mandatory

@@ -148,7 +148,7 @@ def sacm_compile(stageList):
 
         # parse the tasks
         print('len stageTaskList', len(stage.taskList))
-        jsonTasks = taskIntprtr.sacm_compile(stage.taskList)
+        jsonTasks = taskIntprtr.sacm_compile(stage.taskList, stageList)
 
         # if len(jsonTasks['humanTaskList']) > 0:
         #     stageJson['HumanTaskDefinition'] = jsonTasks['humanTaskList']

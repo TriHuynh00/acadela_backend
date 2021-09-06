@@ -28,12 +28,12 @@ def interpret_precondition(preconditionObj, process=None):
     return Precondition(sentryStepList, entryCondition)
 
 def auto_parse_conditional_expression(entryCondition, stageList):
-    subjAndPredicate = re.split('[<>(<=)(>=)==]', entryCondition)
+    subjAndPredicate = re.split('[<>=][=]*', entryCondition)
 
     subject = re.findall('[\w+\.]+\w+', subjAndPredicate[0])[0]
 
     predicate = str.strip(subjAndPredicate[1])
-    operator = re.findall('[<>(<=)(>=)==]', entryCondition)[-1]
+    operator = re.findall('[<>=][=]*', entryCondition)[-1]
 
     print("entryCond=", entryCondition,
           "subject=", subject,
