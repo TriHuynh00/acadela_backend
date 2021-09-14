@@ -8,7 +8,7 @@ treatmentPlanStr = """
 
     define case ST1_Hypertension
         prefix = 'ST1'
-        version = 20
+        version = 1
         label = 'Hypertension Treatment'
         
         Responsibilities
@@ -16,7 +16,7 @@ treatmentPlanStr = """
             group UmcgClinicians name = 'Umcg Clinician'
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
-
+            group UmcgNurses name = 'Umcg Nurse' 
 
         // A comment
             /* a multiline
@@ -34,11 +34,15 @@ treatmentPlanStr = """
                 externalId = 'dueDateConnie'
 
             CasePatient UmcgPatients #exactlyOne
-                label = 'CasePatient'
+                label = 'Patient'
                 
-            Attribute Clinicians
+            Attribute Clinician
                 #exactlyOne #Link.Users(UmcgClinicians) 
                 label = 'Clinician'
+                
+            Attribute Nurse
+                #exactlyOne #Link.Users(UmcgNurses) 
+                label = 'Nurse'
 
         SummaryPanel
             Section BloodPressureMeasurement #left
@@ -49,29 +53,19 @@ treatmentPlanStr = """
                 label = "Diastolic"
                 InfoPath Evaluation.MeasureBloodPressure.Diastolic 
                 
-            Section PrescriptionDrugName #left
-                label = "Prescription Drugs"
-                InfoPath Treatment.Prescription.AntihypertensiveDrug1
-                InfoPath Treatment.Prescription.AntihypertensiveDrug2
-                InfoPath Treatment.Prescription.AntihypertensiveDrug3
-                
-            Section PrescriptionDrugDose #center
-                label = "Patient Comorbidities"
-                InfoPath Treatment.Prescription.Comorbidities
-                
             Section DoctorNote #left
                 label = "Recommendations"
                 InfoPath Discharge.DischargePatient.DoctorNote
 
-        Stage AdmitPatient
+        Stage Identification
             #mandatory
             owner = 'Setting.CaseOwner'
-            label = 'Admit Patient'
+            label = 'Identification'
 
             HumanTask SelectPatient
                 #mandatory
                 label = 'Assign Patient'
-                owner = 'Setting.CaseOwner'
+                owner = 'Setting.Nurse'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'SelectPatient'
                 
@@ -85,21 +79,21 @@ treatmentPlanStr = """
                         
                     Field SelectDoctor
                         #custom
-                        CustomFieldValue = "Setting.Clinicians"
+                        CustomFieldValue = "Setting.Clinician"
                         label = "Assigned Clinician"
                       
         Stage Evaluation
             #mandatory
-            owner = 'Setting.CaseOwner'
+            owner = 'Setting.Clinician'
             label = 'Evaluation'
             
             Precondition
-                previousStep = 'AdmitPatient'
+                previousStep = 'Identification'
                 
             HumanTask MeasureBloodPressure
-                #mandatory   
-                label = 'Description of Illness'
-                owner = 'Setting.CaseOwner'
+                #mandatory #exactlyOne
+                label = 'Measure Blood Pressure'
+                owner = 'Setting.Clinician'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'IllnessDescription'
                 
@@ -126,54 +120,61 @@ treatmentPlanStr = """
                         #left 
                         label = 'Diastolic Assessment:'
                         expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
-                                      else if (Systolic < 80 and Systolic < 130) then "Elevated" 
+                                      else if (Diastolic < 80 and Systolic < 130) then "Elevated" 
                                       else "High"'
                 
-                HumanTask ExtraExamination
-                    #mandatory
-                    owner = 'Setting.CaseOwner'
+                HumanTask RequestMedicalTest
+                    #notmandatory
+                    owner = 'Setting.Clinician'
                     dueDateRef = 'Setting.WorkplanDueDate'
-                    label = 'Additional Examination'
+                    label = 'Request Medical Test'
+                    
+                    Precondition
+                        previousStep = 'MeasureBloodPressure'
                     
                     Form CgiForm
-                        Field CgiTest
+                        Field CholesterolTest
                         #singlechoice
-                            question = 'Perform ECG Test?'
+                            question = 'Perform Blood Cholesterol Test?'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
                         
-        Stage EcgTest
-            #mandatory #autoActivate
-            owner = 'Setting.CaseOwner'
-            label = 'ECG Test'        
+        Stage MedicalTest
+            #mandatory
+            label = 'Medical Test'        
+            owner = 'Setting.Nurse'
             
             Precondition
                 previousStep = 'Evaluation'
-                condition = 'Evaluation.ExtraExamination.CgiTest>0'
+                condition = 'Evaluation.RequestMedicalTest.CholesterolTest>0'
                 
-            HumanTask MeasureECG
+            HumanTask MeasureBloodCholesterol
                 #mandatory
-                owner = 'Setting.CaseOwner'
-                label = 'Measure ECG'    
+                owner = 'Setting.Nurse'
+                label = 'Record Blood Cholesterol'    
                 
                 Form PrescriptionForm
-                    
                     Field ECG
-                        #text #left
-                        label = "ECG Value:" 
+                        #text #left #mandatory
+                        label = "Blood Cholesterol Level (mm/L):" 
     
         Stage Treatment
             #mandatory
-            owner = 'Setting.CaseOwner'
+            owner = 'Setting.Clinician'
             label = 'Treatment'
 
             Precondition
                 previousStep = 'Evaluation' 
-                
+                condition = 'Evaluation.RequestMedicalTest.CholesterolTest=0'
+            
+            Precondition
+                previousStep = 'MedicalTest'
+                //condition = 'MedicalTest.MeasureBloodCholesterol.ECG>100'
+            
             HumanTask Prescribe
-                #mandatory #atLeastOne #repeatParallel #manualActivate
+                #mandatory #repeatParallel #manualActivate
                 label = 'Prescribe'
-                owner = 'Setting.CaseOwner'
+                owner = 'Setting.Clinician'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 
                 Form PrescriptionForm
@@ -204,7 +205,7 @@ treatmentPlanStr = """
             label = 'Discharge'
             
             precondition
-                previousStep = 'Evaluation'
+                previousStep = 'Identification'
             
             HumanTask DischargePatient
                 #mandatory
