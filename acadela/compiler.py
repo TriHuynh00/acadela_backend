@@ -4,7 +4,7 @@ import logging
 import re
 import textx.scoping.providers as scoping_providers
 #import obesity_treatment as caseTemplateStr
-import obesity_treatment_taskPrecondition as caseTemplateStr
+import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
 import config.general_config as generalConf
 
 from textx import *
@@ -19,7 +19,7 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = generalConf.CONN_SOCIOCORTEX
+runNetworkOp = not generalConf.CONN_SOCIOCORTEX
 
 def extract_attributes(metamodel):
     print(" ??")
@@ -66,7 +66,7 @@ def convert_import_path(i):
 
 
 try:
-    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_CRITICAL)
+    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
 
     input = caseTemplateStr.treatmentPlanStr
 

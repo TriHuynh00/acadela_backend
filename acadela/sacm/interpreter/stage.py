@@ -20,6 +20,7 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     print("\n Stage Info")
     directive = stage.directive
+    ownerPathvalue = None
 
     preconditionList = []
 
@@ -67,8 +68,9 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
         for sentry in preconditionObj:
             preconditionList.append(interpret_precondition(sentry))
 
-    ownerPathvalue = str(stage.ownerpath.value)\
-        .replace(default_state.SETTING_NAME + ".", util.prefixing(default_state.SETTING_NAME + "."))
+    if util.is_attribute_not_null(stage, "ownerPath"):
+        ownerPathvalue = str(stage.ownerpath.value)\
+            .replace(default_state.SETTING_NAME + ".", util.prefixing(default_state.SETTING_NAME + "."))
 
     stageObject = Stage(stage.name, stage.description.value,
                         directive.multiplicity,
@@ -125,7 +127,6 @@ def sacm_compile(stageList):
 
         stageAttr = stageJson['$']
 
-
         stageAttr['id'] = stage.id
         stageAttr['description'] = stage.description
 
@@ -141,12 +142,14 @@ def sacm_compile(stageList):
                 'externalId', 'dynamicDescriptionPath'])
 
         if len(stage.preconditionList) > 0:
+            # TODO: Parse the subject of the expression
+            # & prefix them based on their hierarchy level
              stageJson['SentryDefinition'] = \
-                 util_intprtr.parse_precondition(stage)
+                 util_intprtr.parse_precondition(stage, stageList)
 
         # parse the tasks
         print('len stageTaskList', len(stage.taskList))
-        jsonTasks = taskIntprtr.sacm_compile(stage.taskList)
+        jsonTasks = taskIntprtr.sacm_compile(stage.taskList, stageList)
 
         # if len(jsonTasks['humanTaskList']) > 0:
         #     stageJson['HumanTaskDefinition'] = jsonTasks['humanTaskList']

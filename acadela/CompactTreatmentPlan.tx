@@ -29,7 +29,7 @@ DefWorkspace:
 ;
 
 Workspace:
-    /(workspace)\s/ BasicIdentity
+    WorkspaceTerm BasicIdentity
 ;
 
 BasicIdentity:
@@ -130,11 +130,11 @@ Responsibilities:
 ;
 
 Group:
-    /(group)\s/ GroupIdentity
+    GroupTerm GroupIdentity
 ;
 
 User:
-    /(user)\s/ BasicIdentity
+    UserTerm BasicIdentity
 ;
 
 ValidAttribute:
@@ -381,7 +381,7 @@ SharedTaskAttrs:
 ;
 
 Precondition:
-    /(Precondition)\s/ 
+    PreconditionTerm
     (
         // aka. processDefinitionId in Thesis
         ('previousStep' Eq stepList += STRING)*
@@ -397,10 +397,10 @@ Precondition:
 
 Form:
     (
-        /(Form)\s/ name = ID
+        FormTerm name = ID
             (directive = FormDirective)?
             fieldList += FormField
-    ) | (Ref /(Form)\s/ ref=[Form|FQN])?
+    ) | (Ref FormTerm ref=[Form|FQN])?
 ;
 
 FormDirective:
@@ -447,15 +447,15 @@ FieldDirective:
         // introducing a DualTaskField along with Field
         // will result in longer parsing time
         // The interpreter will check whether a part
-        // is included in the field instead.
+        // is included in the DualTaskField instead.
         (part = Part)?
-        type = FieldType
+        (type = FieldType)?
     )#
 ;
 
 DynamicField:
     (
-        /(DynamicField)\s/  name = ID
+        DynamicFieldTerm name = ID
             directive = DynamicFieldDirective
             (
                 description = Description
@@ -464,7 +464,7 @@ DynamicField:
                 (expression = DynamicFieldExpression)?
                 (externalId = ExternalId)?
             )#
-    ) | (Ref (/(Field)\s/|/(DynamicField)\s/) ref=[DynamicField|FQN])?
+    ) | (Ref (FieldTerm | DynamicFieldTerm) ref=[DynamicField|FQN])?
 ;
 
 DynamicFieldDirective:
@@ -810,6 +810,10 @@ Comment:
 ******* I18N TERMINAL *****
 ***************************/
 
+WorkspaceTerm:
+    'Workspace'
+;
+
 CaseTerm:
     /(Case)\s/
 ;
@@ -846,14 +850,54 @@ FieldTerm:
     /(Field)\s/
 ;
 
+DynamicFieldTerm:
+    'DynamicField'
+;
+
 HookTerm:
     /(Hook)\s/
+;
+
+UserTerm:
+    'User'
+;
+
+GroupTerm:
+    'Group'
+;
+
+PreconditionTerm:
+    'Precondition'
+;
+
+FormTerm:
+    'Form'
+;
+
+
+/********************************************
+**** ERROR DETECTION ASSISTANT RULES ********
+*********************************************/
+
+// These are the foundational object in SACM. When the
+// Syntax Detector scan the lines upward from the error line,
+// if it reaches one of these keywords, it will stop scanning
+
+BuildingBlockObject:
+    WorkspaceTerm
+    | CaseTerm
+    | SettingTerm
+    | StageTerm
+    | HumanTaskTerm | DualTaskTerm | AutoTaskTerm
+    | FormTerm
+    | FieldTerm | DynamicField
+    | GroupTerm | UserTerm
+    | PreconditionTerm | HookTerm
 ;
 
 /*****************
 *** OLD SYNTAX ***
 ******************/
-
 
 Entity:
     "entity" name = ID

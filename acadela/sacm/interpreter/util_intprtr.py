@@ -1,12 +1,11 @@
 import sys
 
 from sacm import default_state, util
+from sacm.interpreter import sentry, stage
 from sacm.interpreter.directive import interpret_directive
 
-
-
 # Parse the sentry of a stage or task
-def parse_precondition(process):
+def parse_precondition(process, stageList = None):
     if len(process.preconditionList) > 0:
         sentryList = []
 
@@ -29,7 +28,8 @@ def parse_precondition(process):
 
                 if util.is_attribute_not_null(precondition, 'expression'):
                     preconditionJson['expression'] = \
-                        precondition.expression
+                        sentry.auto_parse_conditional_expression(
+                            precondition.expression, stageList)
 
                 sentryJson['precondition'].append(
                     {
