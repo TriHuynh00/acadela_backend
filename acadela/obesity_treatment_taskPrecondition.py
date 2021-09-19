@@ -7,12 +7,11 @@ treatmentPlanStr = """
         label = 'ObesityTreatment'
         
         Responsibilities
-            group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
+            group UmcgPhysicians name = 'Umcg Physician'//staticId = 'asdf234'
             group UmcgClinicians name = 'Umcg Clinician'
-            group UmcgProfessionals name = 'Umcg Professional' 
+            group UmcgProfessionals name = 'Umcg Professional'
             group UmcgPatients name = 'Umcg Patient' 
 
-            //user matthijs
             //user williamst
             //user michelf
             //user hopkinsc
@@ -24,13 +23,13 @@ treatmentPlanStr = """
 
         Setting
             // label = 'Case Configuration'
-            CaseOwner UmcgProfessionals #exactlyOne
-                label = 'UMCG Professionals'
 
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
                 label = 'Workplan Due Date'
                 externalId = 'dueDateConnie'
+            CaseOwner UmcgProfessionals #exactlyOne
+                label = 'UMCG Professionals'
 
             CasePatient UmcgPatients #exactlyOne
                 label = 'CasePatient'
@@ -74,8 +73,10 @@ treatmentPlanStr = """
             #mandatory #noRepeat
             owner = 'Setting.CaseOwner'
             label = 'Admit Patient'
+            group UmcgPhysicians name = 'Umcg Physician'//staticId = 'asdf234'
 
             HumanTask SelectPatient
+            
                 #mandatory
                 label = 'Assign Patient'
                 owner = 'Setting.CaseOwner'
@@ -102,8 +103,8 @@ treatmentPlanStr = """
             label = 'Evaluation'
             
             Precondition
-                previousStep = 'AdmitPatient'
-                
+            previousStep = 'AdmitPatient'
+
             HumanTask MeasureBMI
                 #mandatory #manualActivate #repeatParallel 
                 label = 'Measure BMI score'
@@ -143,7 +144,7 @@ treatmentPlanStr = """
                         label = 'BMI Calculation with age counted'
                         expression = 'BmiScore + AgeRange'
                         uiRef = 'colors(5<orange<=18<green<=25<red<100)'
-                        
+           
             HumanTask FinalBMI
                 #mandatory #noRepeat 
                 label = 'Health Check'
@@ -287,11 +288,12 @@ treatmentPlanStr = """
             
             HumanTask DischargePatient
                 #mandatory //#activateWhen('Evaluation.FinalBMI.HealthCode<3')
-                owner = 'Setting.CaseOwner'
                 label = 'Discharge Patient'
                 
                 Precondition
                     previousStep = 'FinalBMI'
+                    owner = 'Setting.CaseOwner'
+
                     
                 Form DischargeForm
                     Field DoctorNote 

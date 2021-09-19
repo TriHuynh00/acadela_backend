@@ -1,7 +1,7 @@
 import sys
 import pprint
 import logging
-
+import re
 import textx.scoping.providers as scoping_providers
 #import obesity_treatment as caseTemplateStr
 import obesity_treatment_taskPrecondition as caseTemplateStr
@@ -21,6 +21,23 @@ model = None
 # True = run User/Group validation check in SACM
 runNetworkOp = generalConf.CONN_SOCIOCORTEX
 
+def extract_attributes(metamodel):
+    print(" ??")
+    namespaces = metamodel.namespaces['CompactTreatmentPlan']
+    dictionary = {}
+    print("attr_dict",dir(namespaces['SettingTerm']))
+    print("attr_dict",dir(namespaces['SettingTerm']._tx_peg_rule))
+    print("attr_dict",namespaces['HttpMethod']._tx_peg_rule.nodes[0])
+
+    for attr in namespaces:
+        attr_dict = namespaces[attr]._tx_peg_rule
+        print(attr,':',attr_dict)
+        dictionary[attr] = attr_dict
+        if type(attr_dict) == str:
+            print(attr, ':')
+            print(attr_dict)
+    #print("my dict",dictionary.items())
+    return dictionary
 def analyze_dsl_language(metamodelPath, model, metamodel):
 
     print("Treatment Plan Grammar")
@@ -73,15 +90,15 @@ try:
     logging.info("rootImportPart" + rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
 
+    # extract_attributes(mm)
     # analyze_dsl_language(metamodelPath, model, mm)
 
-    acaInterpreter = CaseInterpreter(mm, model)
+    #acaInterpreter = CaseInterpreter(mm, model)
 
-    acaInterpreter.interpret(runNetworkOp)
-
+    #acaInterpreter.interpret(runNetworkOp)
     print("")
 except TextXSyntaxError as e:
-    SyntaxErrorHandler.handleSyntaxError(e)
-    # print(vars(e.expected_rules[0]))
+    SyntaxErrorHandler.handleSyntaxError(e, input, metamodelPath, mm)
+    #print(vars(e.expected_rules[0]))
 
 
