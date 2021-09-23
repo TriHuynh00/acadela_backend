@@ -2,6 +2,7 @@ import re
 
 from sacm.case_object.sentry import Precondition
 import sacm.util as util
+import sacm.default_state as default_state
 from sacm.interpreter import util_intprtr
 
 def interpret_precondition(preconditionObj, process=None):
@@ -47,8 +48,13 @@ def auto_parse_conditional_expression(entryCondition, stageList):
 
         subElements = subject.split(".")
 
-        if len(subElements) <= 2:
-            for element in subElements:
+        if len(subElements) <= 1:
+            subject = util_intprtr.prefix_path_value(subject, True)
+
+        elif len(subElements) == 2:
+            if str(subject).startswith(default_state.SETTING_NAME):
+                subject = util_intprtr.prefix_path_value(subject, False)
+            else:
                 subject = util_intprtr.prefix_path_value(subject, True)
         else:
             for stage in stageList:
