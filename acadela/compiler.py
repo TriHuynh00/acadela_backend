@@ -4,7 +4,8 @@ import logging
 
 import textx.scoping.providers as scoping_providers
 #import obesity_treatment as caseTemplateStr
-import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
+# import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
+import sample_case_def.smoke_inhalation as caseTemplateStr
 import config.general_config as generalConf
 
 from textx import *

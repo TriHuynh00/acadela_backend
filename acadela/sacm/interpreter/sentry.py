@@ -30,39 +30,46 @@ def interpret_precondition(preconditionObj, process=None):
 def auto_parse_conditional_expression(entryCondition, stageList):
     subjAndPredicate = re.split('[<>=][=]*', entryCondition)
 
-    subject = re.findall('[\w+\.]+\w+', subjAndPredicate[0])[0]
+    subjects = re.findall('[\w+\.]+\w+', subjAndPredicate[0])
 
     predicate = str.strip(subjAndPredicate[1])
     operator = re.findall('[<>=][=]*', entryCondition)[-1]
 
     print("entryCond=", entryCondition,
-          "subject=", subject,
+          "subjects=", subjects,
           "operator=", operator,
           "predicate=", predicate)
 
-    subElements = subject.split(".")
+    subjectPhrase = subjAndPredicate[0]
 
-    if len(subElements) <= 2:
-        for element in subElements:
-            subject = util_intprtr.prefix_path_value(subject, True)
-    else:
-        for stage in stageList:
-            if stage.id == subElements[-1]:
+    for subject in subjects:
+        subjectPrev = subject
+
+        subElements = subject.split(".")
+
+        if len(subElements) <= 2:
+            for element in subElements:
                 subject = util_intprtr.prefix_path_value(subject, True)
-                break
-            for task in stage.taskList:
-                if task.id == subElements[-1]:
+        else:
+            for stage in stageList:
+                if stage.id == subElements[-1]:
                     subject = util_intprtr.prefix_path_value(subject, True)
                     break
-        # No task or stage matches the path element, so this is a field
-        subject = util_intprtr.prefix_path_value(subject, False)
+                for task in stage.taskList:
+                    if task.id == subElements[-1]:
+                        subject = util_intprtr.prefix_path_value(subject, True)
+                        break
+            # No task or stage matches the path element, so this is a field
+            subject = util_intprtr.prefix_path_value(subject, False)
 
-    if str.isdigit(predicate):
-        subject = 'number(' + subject + ', 0)'
-    elif str.isdecimal(predicate):
-        subject = 'number(' + subject + ', 2)'
+        if str.isdigit(predicate):
+            subject = 'number(' + subject + ', 0)'
+        elif str.isdecimal(predicate):
+            subject = 'number(' + subject + ', 2)'
 
-    entryCondition = subject + operator + predicate
+        subjectPhrase = subjectPhrase.replace(subjectPrev, subject)
+
+    entryCondition = subjectPhrase + operator + predicate
 
     print("Entry Condition after parse to number:", entryCondition)
     return entryCondition
