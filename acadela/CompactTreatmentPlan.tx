@@ -461,6 +461,7 @@ DynamicField:
                 description = Description
                 (additionalDescription = AdditionalDescription)?
                 (uiRef = UiReference)?
+                (path = FieldPath)?
                 (expression = DynamicFieldExpression)?
                 (externalId = ExternalId)?
             )#
@@ -544,11 +545,12 @@ Type:
         | 'singlechoice' // aka. 'enumeration' in Thesis
         | DateType
         | 'json'
+        | 'custom'
     )
 ;
 
 FieldType:
-    Type | (Hash 'custom')
+    Type
 ;
 
 LinkType:
