@@ -3,7 +3,7 @@ workspace Umcg
 
 define case OT1_ObesityTreatment
     prefix = 'OT1'
-    version = 16
+    version = 15
     label = 'ObesityTreatment'
     
     Responsibilities
@@ -12,24 +12,26 @@ define case OT1_ObesityTreatment
         group UmcgPatients name = 'Umcg Patient'
 
     Setting
-        CaseOwner UmcgClinicians #exactlyOne
+        CaseOwner UmcgClinicians 
+            #exactlyOne
             label = 'Case Owner'
 
         Attribute WorkplanDueDate
-            #exactlyOne #date.after(TODAY)
+            #date.after(TODAY)
             label = 'Workplan Due Date'
             externalId = 'dueDateConnie'
 
-        CasePatient UmcgPatients #exactlyOne
+        CasePatient UmcgPatients
+            #exactlyOne
             label = 'CasePatient'
 
         //Attribute Age
-            //#maxOne #number(0-120)
+            //#number(0-120)
             //label = 'Patient Age'
         
-        Attribute Clinicians
-            #exactlyOne #Link.Users(UmcgClinicians) 
-            label = 'Clinician'
+        Attribute Physician
+            #Link.Users(UmcgPhysicians) 
+            label = 'Physician'
 
     SummaryPanel
         Section BMIHeightAndWeight #left
@@ -71,7 +73,7 @@ define case OT1_ObesityTreatment
                     
                 Field SelectDoctor
                     #custom
-                    CustomFieldValue = 'Setting.Clinicians'
+                    CustomFieldValue = 'Setting.CaseOwner'
                     label = 'Assigned Clinician'
 
                 //Field PatientAge
@@ -80,25 +82,24 @@ define case OT1_ObesityTreatment
                     //label = 'Patient Age:'
                     
                 Field PatientAge
-                    #singlechoice
+                    #mandatory #singlechoice
                     Question = 'What is your age range?'
-                        Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
+                        Option 'less than 10' value = '1'
                         Option '10-30' value = '2'
                         Option '30-50' value = '3'
                         Option 'over 50' value = '4'
 
     Stage Evaluation
         #mandatory
-        
         owner = 'Setting.CaseOwner'
         label = 'Evaluation'
         
         Precondition
             previousStep = 'AdmitPatient'
-            condition = 'AdmitPatient.SelectPatient.PatientAge > 2'
+            //condition = 'AdmitPatient.SelectPatient.AgeRange > 2'
             
         HumanTask MeasureBMI
-            #mandatory 
+            #mandatory #repeatParallel #manualActivate #any
             label = 'Measure BMI score'
             owner = 'Setting.CaseOwner'
             dueDateRef = 'Setting.WorkplanDueDate'
@@ -117,35 +118,22 @@ define case OT1_ObesityTreatment
                     #number(0-300)
                     label ='Weight of patient in kg'
             
-                field AgeRange
-                    #singlechoice
-                    Question = 'What is your age range?'
-                        Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
-                        Option '10-30' value = '1.2'
-                        Option '30-50' value = '1.5'
-                        Option 'over 50' value = '1.7'
-            
                 DynamicField BmiScore
                     #mandatory #number
                     label ='BMI Calculation in kilogram and meters'
                     expression = 'Weight / (Height * Height)'
-            
-                DynamicField BmiScorePlus
-                    #mandatory #left #number
-                    label = 'BMI Calculation with age counted'
-                    expression = 'BmiScore + AgeRange'
                     uiRef = 'colors(5<orange<=18<green<=25<red<100)'
                     
         HumanTask FinalBMI
-            #mandatory #noRepeat
+            #mandatory 
             label = 'Health Check'
             owner = 'Setting.CaseOwner'
             dueDateRef = 'Setting.WorkplanDueDate'
             externalId = 'HealthCheck'
             
-            Precondition
-                previousStep = 'MeasureBMI'
-                //condition = 'Evaluation.MeasureBMI.BmiScore <= 23'
+            //Precondition
+                //previousStep = 'MeasureBMI'
+                //condition = 'Evaluation.MeasureBMI.BmiScore<=23'
                 
             Form HealthEvalForm
                 #mandatory
