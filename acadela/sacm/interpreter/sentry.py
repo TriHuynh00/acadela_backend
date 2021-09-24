@@ -68,9 +68,7 @@ def auto_parse_conditional_expression(entryCondition, stageList):
             # No task or stage matches the path element, so this is a field
             subject = util_intprtr.prefix_path_value(subject, False)
 
-        if str.isdigit(predicate):
-            subject = 'number(' + subject + ', 0)'
-        elif str.isdecimal(predicate):
+        if str.isdecimal(predicate):
             subject = 'number(' + subject + ', 2)'
 
         subjectPhrase = subjectPhrase.replace(subjectPrev, subject)
