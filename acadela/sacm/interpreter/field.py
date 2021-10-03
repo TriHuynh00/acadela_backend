@@ -145,14 +145,11 @@ def interpret_dynamic_field(field, fieldPath,
 
     print ("expression is", expression)
 
-    # Construct Attribute Object of TaskParam (field)
-    fieldAsAttribute = DerivedAttribute(field.name,
-        field.description.value,
-        extraDescription,
-        expression,
-        uiRef,
-        externalId,
-        explicitAttrType)
+    # If field type is custom, set the field path to custom path
+    if explicitAttrType == CUSTOM_TYPE:
+        fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
+        explicitAttrType = ''
+        print("custom field path of dynamic field", fieldPath)
 
     if taskType == 'DualTask':
         check_part_for_dual_task(directive.part, field.name)
@@ -167,25 +164,18 @@ def interpret_dynamic_field(field, fieldPath,
                                               directive,
                                               formDirective)
 
-    # if util.is_attribute_not_null(directive.readOnly):
-    #     readOnly = direc_intprtr\
-    #         .interpret_directive(directive.readOnly)
-    # elif util.is_attribute_not_null(formDirective.readOnly):
-    #     readOnly = direc_intprtr \
-    #         .interpret_directive(formDirective.readOnly)
-
-    # mandatory = defaultAttrMap['mandatory']
-    #
-    # if util.is_attribute_not_null(directive.mandatory):
-    #     mandatory = direc_intprtr \
-    #         .interpret_directive(directive.mandatory)
-    # elif util.is_attribute_not_null(formDirective.mandatory):
-    #     mandatory = direc_intprtr \
-    #         .interpret_directive(formDirective.mandatory)
+    # Construct Attribute Object of TaskParam (field)
+    fieldAsAttribute = DerivedAttribute(field.name,
+                                        field.description.value,
+                                        extraDescription,
+                                        expression,
+                                        uiRef,
+                                        externalId,
+                                        explicitAttrType)
 
     dynamicField = DynamicField(field.name,
                                 field.description.value,
-                                directive.explicitType,
+                                explicitAttrType,
                                 extraDescription,
                                 expression,
                                 uiRef,

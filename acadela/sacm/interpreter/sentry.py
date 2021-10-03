@@ -2,6 +2,7 @@ import re
 
 from sacm.case_object.sentry import Precondition
 import sacm.util as util
+import sacm.default_state as default_state
 from sacm.interpreter import util_intprtr
 
 def interpret_precondition(preconditionObj, process=None):
@@ -28,42 +29,72 @@ def interpret_precondition(preconditionObj, process=None):
     return Precondition(sentryStepList, entryCondition)
 
 def auto_parse_conditional_expression(entryCondition, stageList):
-    subjAndPredicate = re.split('[<>=][=]*', entryCondition)
+    prefixedCondition = ''
+    clauses = re.split('(and)|(or)', entryCondition)
 
-    subject = re.findall('[\w+\.]+\w+', subjAndPredicate[0])[0]
+    for clause in clauses:
+        if clause == 'and' or clause == 'or' or clause is None:
+            if clause == 'and' or clause == 'or':
+                prefixedCondition += ' {} '.format(clause)
+            continue
 
-    predicate = str.strip(subjAndPredicate[1])
-    operator = re.findall('[<>=][=]*', entryCondition)[-1]
+        subjAndPredicate = re.split('[<>=][=]*', str(clause).strip())
 
-    print("entryCond=", entryCondition,
-          "subject=", subject,
-          "operator=", operator,
-          "predicate=", predicate)
+        subjects = re.findall('[\w+\.]+\w+', subjAndPredicate[0])
 
-    subElements = subject.split(".")
+        predicate = str.strip(subjAndPredicate[1])
+        operator = re.findall('[<>=][=]*', entryCondition)[-1]
 
-    if len(subElements) <= 2:
-        for element in subElements:
-            subject = util_intprtr.prefix_path_value(subject, True)
-    else:
-        for stage in stageList:
-            if stage.id == subElements[-1]:
+        print("entryCond=", entryCondition,
+              "subjects=", subjects,
+              "operator=", operator,
+              "predicate=", predicate)
+
+        subjectPhrase = subjAndPredicate[0]
+
+        for subject in subjects:
+            fieldType = ''
+
+            subjectPrev = subject
+
+            subElements = subject.split(".")
+
+            if len(subElements) <= 1:
                 subject = util_intprtr.prefix_path_value(subject, True)
-                break
-            for task in stage.taskList:
-                if task.id == subElements[-1]:
+
+            elif len(subElements) == 2:
+                if str(subject).startswith(default_state.SETTING_NAME):
+                    subject = util_intprtr.prefix_path_value(subject, False)
+                else:
                     subject = util_intprtr.prefix_path_value(subject, True)
-                    break
-        # No task or stage matches the path element, so this is a field
-        subject = util_intprtr.prefix_path_value(subject, False)
+            else:
+                for stage in stageList:
+                    if stage.id == util.prefixing(subElements[-1]):
+                        subject = util_intprtr.prefix_path_value(subject, True)
+                        break
+                    for task in stage.taskList:
+                        # If the task is the last element of the path, prefix all elements
+                        if task.id == util.prefixing(subElements[-1]):
+                            subject = util_intprtr.prefix_path_value(subject, True)
+                            break
+                        # if the task is the second last element, check the type of the field in the task
+                        elif task.id == util.prefixing(subElements[-2]) and len(subElements) > 1:
+                            for field in task.fieldList:
+                                if field.id == subElements[-1]:
+                                    if 'number' in str(field.type):
+                                        fieldType = 'number'
+                                        # No task or stage matches the path element, so this is a field\
+                                        break
 
-    if str.isdigit(predicate):
-        subject = 'number(' + subject + ', 0)'
-    elif str.isdecimal(predicate):
-        subject = 'number(' + subject + ', 2)'
+                subject = util_intprtr.prefix_path_value(subject, False)
 
-    entryCondition = subject + operator + predicate
+            if str.isdecimal(predicate) and fieldType != 'number':
+                subject = 'number(' + subject + ', 2)'
 
-    print("Entry Condition after parse to number:", entryCondition)
-    return entryCondition
+            subjectPhrase = subjectPhrase.replace(subjectPrev, subject)
+
+        prefixedCondition += subjectPhrase + operator + predicate
+
+    print("Prefixed Condition after parse to number:", prefixedCondition)
+    return prefixedCondition
 

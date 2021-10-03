@@ -83,11 +83,13 @@ def prefix_path_value(pathValue, isAllValuePrefixed = True):
     print("Prepended Path =", prependedPath)
 
     for i in range(1, prefixScope):
-
-        prependedPath += str('.' + util.prefixing(pathSections[i]))
+        if not str(pathSections[i]).startswith(util.prefix):
+            prependedPath += str('.' + util.prefixing(pathSections[i]))
 
     if isAllValuePrefixed is False:
         prependedPath += str('.' + pathSections[-1])
+
+    print("Prepended Path After =", prependedPath)
 
     return prependedPath
 
