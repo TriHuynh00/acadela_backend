@@ -1,33 +1,33 @@
-from textx import TextXSyntaxError
-from . import typo_handler
-from . import keyword_handler
 import re
+from textx import TextXSyntaxError
+
+from . import keyword_handler
+from . import typo_handler
+
 
 def extract_attributes2(metamodel):
-    print(" ??")
+    # print(" ??")
     namespaces = metamodel.namespaces['CompactTreatmentPlan']
     dictionary = {}
-    print("attr_dict", namespaces['GroupIdentity']._tx_attrs)
+    # print("attr_dict", namespaces['GroupIdentity']._tx_attrs)
     for attr in namespaces:
         attr_dict = namespaces[attr]._tx_attrs
         dictionary[attr] = attr_dict.keys()
-        if len(attr_dict) != 0:
-            print(attr, ':')
-            print(attr_dict.keys())
-    #print("my dict",dictionary.items())
     return dictionary
+
 
 def extract_attributes(metamodel):
     namespaces = metamodel.namespaces['CompactTreatmentPlan']
     dictionary = {}
     for attr in namespaces:
         attr_dict = namespaces[attr]._tx_peg_rule
-        print(attr,':',attr_dict, type(attr_dict))
+        print(attr, ':', attr_dict, type(attr_dict))
         dictionary[attr] = attr_dict
         if type(attr_dict) == 'arpeggio.RegExMatch':
             print(attr, ':')
             print(attr_dict)
     return dictionary
+
 
 def get_attributes_from_model(meta_model_path):
     f = open(meta_model_path, "r")
@@ -39,8 +39,32 @@ def get_attributes_from_model(meta_model_path):
     string_list = [each_string.replace("/(", "") for each_string in string_list]
     string_list = [each_string.replace("'", "") for each_string in string_list]
     # print(quotes)
-    #print(string_list, len(string_list))
+    # print(string_list, len(string_list))
     return string_list
+
+
+def get_hash_attributes(meta_model_path):
+    f = open(meta_model_path, "r")
+    # print(f.read())
+    no_whitespace = f.read()
+    quotes = re.split('Hash', no_whitespace)
+    hash_keywords = []
+    for quote in quotes[1:]:
+        end = re.search('#', quote)
+        if end:
+            break
+        word = re.split('\)\s\;', quote)
+        quoted = re.findall(r'\'[a-zA-Z]+\'', word[0])
+        # print("word", word[0])
+        # print("quoted", quoted)
+        string_list = [each_string.replace("'", "") for each_string in quoted]
+        hash_keywords = hash_keywords + string_list
+    # quotes = re.findall('^Hash', no_whitespace)
+    # quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/', no_whitespace)
+    # print("quotes",quotes)
+    print(hash_keywords)
+    return hash_keywords
+
 
 class SyntaxErrorHandler():
     def handleSyntaxError(exception, case_template_str, meta_model_path, model):
@@ -53,12 +77,12 @@ class SyntaxErrorHandler():
         error_line_str = lines[error_line - 1]
         # check if there is only one option
         print("rulename", exception.expected_rules[0].to_match)
-        #print("original error msg: ",error_message)
+        # print("original error msg: ",error_message)
         rule_name = exception.expected_rules[0].rule_name
         attributes = get_attributes_from_model(meta_model_path)
-        #keys = extract_attributes(model)
+        hash_attributes = get_hash_attributes(meta_model_path)
+        # keys = extract_attributes(model)
         keys = extract_attributes2(model)
-        print("KEYS\n",keys)
         # if rule_name != '':
         #     error_message = keyword_handler.keyword_handler(error_message)
         # else:
@@ -69,7 +93,7 @@ class SyntaxErrorHandler():
         # error_message = keyword_handler.keyword_handler(syntax_error_message)
         # error_message = error_message.replace(")\s", "").replace("'(", "'")
 
-        syntax_error_message = typo_handler.typo_handler(exception, attributes, error_line_str)
+        syntax_error_message = typo_handler.typo_handler(exception, attributes, hash_attributes, error_line_str)
         error_message = keyword_handler.keyword_handler(error_message)
         # error_message = error_message.replace(")\s", "").replace("'(", "'")
         print("------------------------------------------------")

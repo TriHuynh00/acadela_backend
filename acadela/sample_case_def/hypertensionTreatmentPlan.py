@@ -58,7 +58,7 @@ treatmentPlanStr = """
                 InfoPath Discharge.DischargePatient.DoctorNote
 
         Stage Identification
-            #mandatory
+            #mandatory #norepeat
             owner = 'Setting.CaseOwner'
             label = 'Identification'
 

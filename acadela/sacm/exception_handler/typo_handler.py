@@ -17,25 +17,25 @@ def generate_dictionary(attribute_list):
     return spell
 
 
-def typo_handler(error, attribute_list, error_line_str):
+def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     spell = generate_dictionary(attribute_list)
     error_message = error.message
     error_line = error.line
     error_column = error.col
-    print("????", error_line_str, error_line_str[error_column-1:])
-    misspelled = error_line_str[error_column-1:len(error_line_str)]
+    print("????", error_line_str, error_line_str[error_column - 1:])
+    misspelled = error_line_str[error_column - 1:len(error_line_str)]
     misspelled = misspelled.split(' ', 1)[0]
-    print("misspelled",misspelled)
-    #misspelled = [t for t in error_message.split() if t.startswith('*')]
-    #if misspelled == []:
-        # return error_message
-    #else:
-        #misspelled = misspelled[0]
-    #misspelled = misspelled.replace("*", "")
+    print("misspelled", misspelled)
+    # misspelled = [t for t in error_message.split() if t.startswith('*')]
+    # if misspelled == []:
+    # return error_message
+    # else:
+    # misspelled = misspelled[0]
+    # misspelled = misspelled.replace("*", "")
     # DO WE WANT THIS?
     if any(ext in misspelled for ext in attribute_list):
         print("???", misspelled)
-    res = [ele for ele in attribute_list if (ele in misspelled)]
+    res = [ele for ele in attribute_list if (ele.lower() in misspelled.lower())]
     print("res", res)
     # print("missing space between ", res, " and ", misspelled.replace(res, ""))
     # end extra
@@ -47,13 +47,19 @@ def typo_handler(error, attribute_list, error_line_str):
         # print("No keyword ", misspelled)
         if len(res) == 0:
             typo_text = "No keyword " + misspelled + '\n'
-        elif res[0] == misspelled:
-            typo_text = "This is the place to handle it maybe?\n"
+        elif misspelled in res:
+            # check for hash
+            if hash_attributes.index(misspelled):
+                print("typo_hash", error_line_str[error_column - 2])
+                if error_line_str[error_column - 2] != '#':
+                    print("forgotton hash")
+                    typo_text = "The keyword " + misspelled + " is a hash value. Did you forget to put #?\n"
+                else:
+                    typo_text = "No idea what happened?\n"
+                # might need to check other possibilities
         else:
             typo_text = "No keyword " + misspelled + ". Did you meant: " + res[0] + '?\n'
     else:
         typo_text = "No keyword " + misspelled + ". Did you meant: " + candidate_attr + '?\n'
 
-    # error_text = error_message.replace(")\s", "").replace("'(", "'")
-    # error_message = typo_text + '\n' + error_message
     return typo_text
