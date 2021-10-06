@@ -426,6 +426,7 @@ Field:
                 (path = FieldPath)?
                 (uiRef = UiReference)?
                 (externalId = ExternalId)?
+                (additionalDescription = AdditionalDescription)?
             )#
     )
     | (Ref 'Field' ref=[Field|FQN])?
@@ -662,8 +663,9 @@ UiReference:
             ("'" value=Function "'")
             | ('"' value=Function '"')
         )
-        | 'privatelink'
-        | 'hidden'
+        | value='privatelink'
+        | value='hidden'
+        | value=STRING
         | (Ref ref=[ValidAttribute|FQN])
     )
 ;
