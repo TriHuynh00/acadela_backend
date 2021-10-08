@@ -42,7 +42,11 @@ def auto_parse_conditional_expression(entryCondition, stageList):
 
         subjects = re.findall('[\w+\.]+\w+', subjAndPredicate[0])
 
-        predicate = str.strip(subjAndPredicate[1])
+        predicate = ''
+
+        if len(subjAndPredicate) == 2:
+            predicate = str.strip(subjAndPredicate[1])
+
         operator = re.findall('[<>=][=]*', entryCondition)[-1]
 
         print("entryCond=", entryCondition,
