@@ -47,12 +47,15 @@ def auto_parse_conditional_expression(entryCondition, stageList):
         if len(subjAndPredicate) == 2:
             predicate = str.strip(subjAndPredicate[1])
 
-        operator = re.findall('[<>=][=]*', entryCondition)[-1]
+        operator = re.findall('[<>=][=]*', clause)[-1]
 
         print("entryCond=", entryCondition,
+              "clause=", clause,
               "subjects=", subjects,
               "operator=", operator,
               "predicate=", predicate)
+
+
 
         subjectPhrase = subjAndPredicate[0]
 
@@ -92,7 +95,7 @@ def auto_parse_conditional_expression(entryCondition, stageList):
 
                 subject = util_intprtr.prefix_path_value(subject, False)
 
-            if str.isdecimal(predicate) and fieldType != 'number':
+            if str.isdecimal(predicate.replace(')', '')) and fieldType != 'number':
                 subject = 'number(' + subject + ', 2)'
 
             subjectPhrase = subjectPhrase.replace(subjectPrev, subject)

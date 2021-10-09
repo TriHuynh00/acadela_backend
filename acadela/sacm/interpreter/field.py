@@ -72,13 +72,23 @@ def interpret_field(field, fieldPath, taskType, formDirective):
         if field.externalId is None \
         else field.externalId.value
 
+    defaultValue = None \
+        if field.defaultValue is None \
+        else field.defaultValue.value
+
+    defaultValues = None \
+        if field.defaultValues is None \
+        else field.defaultValues.value
+
     # For a field with custom path, do not create new attribute
     if type != CUSTOM_TYPE:
         fieldAsAttribute = Attribute(field.name, description,
                                      multiplicity=multiplicity,
                                      type=type,
                                      uiReference=uiRef,
-                                     externalId=externalId)
+                                     externalId=externalId,
+                                     defaultValue=defaultValue,
+                                     defaultValues=defaultValues)
         print("field as Attribute", vars(fieldAsAttribute))
     else:
         fieldAsAttribute = None
@@ -139,11 +149,13 @@ def interpret_dynamic_field(field, fieldPath,
     #     else None
     uiRef = interpret_uiRef(field)
 
-    expression = str(field.expression.value)
+    expression = str(field.expression.value) \
+                if util.is_attribute_not_null(field, "expression") \
+                else None
 
     expression = ' '.join(expression.split())
 
-    print ("expression is", expression)
+    print ("expression of {} is {}".format(field.name, expression))
 
     # If field type is custom, set the field path to custom path
     if explicitAttrType == CUSTOM_TYPE:
@@ -290,6 +302,8 @@ def sacm_compile(fieldList):
                                  'isReadOnly',
                                  'isMandatory',
                                  'position',
+                                 'defaultValue',
+                                 'defaultValues',
                                  'part'])
 
         taskParamList.append(taskParam)
@@ -305,11 +319,12 @@ def interpret_position(directiveObj):
 def interpret_uiRef(field):
     uiRefObj = util.getRefOfObject(field.uiRef)
 
-    print("UIRef of ", field.name, "is", uiRefObj,
-          'as type', util.cname(uiRefObj))
-
     uiRef = uiRefObj.value \
         if util.is_attribute_not_null(uiRefObj, "value") \
         else None
+
+    print("UIRef of ", field.name, "is", uiRefObj,
+          'as type', util.cname(uiRefObj),
+          'with value', uiRef)
 
     return uiRef

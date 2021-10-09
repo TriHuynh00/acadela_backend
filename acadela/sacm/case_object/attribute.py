@@ -16,6 +16,7 @@ class Attribute():
                  additionalDescription = None,  # below are optional
                  uiReference = None,
                  externalId = None,
+                 defaultValue = None,
                  defaultValues = None):
         self.id = id
 
@@ -50,6 +51,7 @@ class Attribute():
         self.additionalDescription = additionalDescription
         self.uiReference = uiReference
         self.externalId = externalId
+        self.defaultValue = defaultValue
         self.defaultValues = defaultValues
 
 

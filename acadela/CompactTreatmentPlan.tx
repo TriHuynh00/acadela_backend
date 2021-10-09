@@ -427,6 +427,8 @@ Field:
                 (uiRef = UiReference)?
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
+                (defaultValue = DefaultValue)?
+                (defaultValues = DefaultValues)?
             )#
     )
     | (Ref 'Field' ref=[Field|FQN])?
@@ -465,6 +467,8 @@ DynamicField:
                 (path = FieldPath)?
                 (expression = DynamicFieldExpression)?
                 (externalId = ExternalId)?
+                (defaultValue = DefaultValue)?
+                (defaultValues = DefaultValues)?
             )#
     ) | (Ref (FieldTerm | DynamicFieldTerm) ref=[DynamicField|FQN])?
 ;
@@ -638,6 +642,10 @@ AdditionalDescription:
 
 DefaultValues:
     'defaultValues' Eq value=WrapValue
+;
+
+DefaultValue:
+    'defaultValue' Eq value=STRING
 ;
 
 DynamicDescriptionPath:

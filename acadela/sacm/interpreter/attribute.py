@@ -84,7 +84,7 @@ def sacm_compile(attribute):
     #     thisAttr['description'] = attribute.description
 
     util.compile_attributes(thisAttr, attribute,
-        ['defaultValues', 'additionalDescription', 'externalId'
+        ['defaultValues', 'defaultValue', 'additionalDescription', 'externalId'
          'mandatory', 'multiplicity', 'uiReference'])
 
     if util.is_attribute_not_null(attribute, 'type'):
