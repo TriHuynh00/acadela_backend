@@ -149,6 +149,10 @@ def interpret_task(task, stageId):
             )
 
         for attrField in fieldAsAttributeList:
+            # This can be a custom reference field, so skip it
+            if attrField is None:
+                continue
+
             if attrField.id == dynamicField.id:
                 attrField.expression = dynaExpression
                 break
