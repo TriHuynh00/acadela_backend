@@ -30,7 +30,7 @@ def interpret_precondition(preconditionObj, process=None):
 
 def auto_parse_conditional_expression(entryCondition, stageList):
     prefixedCondition = ''
-    clauses = re.split('(and)|(or)', entryCondition)
+    clauses = re.split('( and )|( or )', entryCondition)
 
     for clause in clauses:
         if clause == 'and' or clause == 'or' or clause is None:
