@@ -47,15 +47,16 @@ def auto_parse_conditional_expression(entryCondition, stageList):
         if len(subjAndPredicate) == 2:
             predicate = str.strip(subjAndPredicate[1])
 
-        operator = re.findall('[<>=][=]*', clause)[-1]
+        operator = ''
+        operatorVals = re.findall('[<>=][=]*', clause)
+        if len(operatorVals) > 0:
+            operator = operatorVals[-1]
 
         print("entryCond=", entryCondition,
               "clause=", clause,
               "subjects=", subjects,
               "operator=", operator,
               "predicate=", predicate)
-
-
 
         subjectPhrase = subjAndPredicate[0]
 
