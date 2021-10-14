@@ -108,6 +108,7 @@
     "User": 10,
     "Group": 10,
     "Precondition": 10,
+    "Attribute": 10,
     "attributelist": 10,
     "endAttributeList": 10
 }

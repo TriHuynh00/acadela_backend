@@ -114,7 +114,7 @@ define case ST1_Hypertension
                     expression = 'if (Systolic < 120) then "Normal"
                                   else if (Systolic < 130) then "Elevated" 
                                   else "High"'
-                    
+
                 DynamicField DiastolicAnalysis
                     #left 
                     label = 'Diastolic Assessment:'

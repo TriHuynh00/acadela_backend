@@ -146,7 +146,7 @@ ValidAttribute:
 *****************************/
 
 Attribute:
-    "attribute" name = ID
+    AttributeTerm name = ID
     //(
 
         attrProp = AttributeProp
@@ -560,7 +560,7 @@ LinkType:
 
 DateType:
     'date.after(TODAY)'
-    | 'date'
+    | 'date' // define the longest child path first 
 ;
 
 NumType:
@@ -813,7 +813,7 @@ Comment:
 ***************************/
 
 WorkspaceTerm:
-    'Workspace'
+    /(Workspace)\s/
 ;
 
 CaseTerm:
@@ -821,7 +821,7 @@ CaseTerm:
 ;
 
 SettingTerm:
-    'Setting'
+    /(Setting)\s/
 ;
 
 StageTerm:
@@ -853,7 +853,7 @@ FieldTerm:
 ;
 
 DynamicFieldTerm:
-    'DynamicField'
+    /(DynamicField)\s/
 ;
 
 HookTerm:
@@ -861,21 +861,23 @@ HookTerm:
 ;
 
 UserTerm:
-    'User'
+    /(User)\s/
 ;
 
 GroupTerm:
-    'Group'
+    /(Group)\s/
 ;
 
 PreconditionTerm:
-    'Precondition'
+    /(Precondition)\s/
 ;
 
 FormTerm:
-    'Form'
+    /(Form)\s/
 ;
-
+AttributeTerm:
+    /(Attribute)\s/
+;
 
 /********************************************
 **** ERROR DETECTION ASSISTANT RULES ********

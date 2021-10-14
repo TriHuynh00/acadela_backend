@@ -33,6 +33,7 @@ def get_attributes_from_model(meta_model_path):
     f = open(meta_model_path, "r")
     # print(f.read())
     no_whitespace = f.read()
+    #add double quotes as well
     quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/|\'[a-zA-Z]+\'', no_whitespace)
     # quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/', no_whitespace)
     string_list = [each_string.replace(")\s/", "") for each_string in quotes]
@@ -45,24 +46,32 @@ def get_attributes_from_model(meta_model_path):
 
 def get_hash_attributes(meta_model_path):
     f = open(meta_model_path, "r")
-    # print(f.read())
-    no_whitespace = f.read()
-    quotes = re.split('Hash', no_whitespace)
+    grammar = f.read()
+    quotes = re.split('Hash', grammar)
     hash_keywords = []
     for quote in quotes[1:]:
         end = re.search('#', quote)
         if end:
             break
         word = re.split('\)\s\;', quote)
-        quoted = re.findall(r'\'[a-zA-Z]+\'', word[0])
-        # print("word", word[0])
-        # print("quoted", quoted)
-        string_list = [each_string.replace("'", "") for each_string in quoted]
-        hash_keywords = hash_keywords + string_list
-    # quotes = re.findall('^Hash', no_whitespace)
-    # quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/', no_whitespace)
-    # print("quotes",quotes)
-    print(hash_keywords)
+        word = re.sub(r'\s+', '', word[0])
+        quoted_attrs = re.findall(r'\|\'[a-zA-Z]+\'|\(\'[a-zA-Z]+\'', word)
+        not_quoted_attrs = re.findall(r'\|[a-zA-Z]+|\([a-zA-Z]+', word)
+        quoted_attrs = [each_string.replace("(", "") .replace("|", "").replace("'", "") for each_string in quoted_attrs]
+        not_quoted_attrs = [each_string.replace("(", "") .replace("|", "") for each_string in not_quoted_attrs]
+        extracted_keywords = []
+
+        for attr in not_quoted_attrs:
+            attr_regex = re.escape(attr) + r"\:\s+\'(.+?)\'"
+            extracted = re.findall(attr_regex, grammar)
+            print("extracted keywords:", extracted)
+            extracted_keywords = extracted_keywords + [extracted[0].replace("'", "")]
+            #if len(extracted)>0:
+                #extracted = re.findall(r'\'[a-zA-Z]+\'', extracted[0])
+                #print ("extracted keywords:",extracted)
+                #extracted_keywords = extracted_keywords + [extracted[0].replace("'", "")]
+        hash_keywords = hash_keywords + quoted_attrs + extracted_keywords
+    print("keywords", hash_keywords)
     return hash_keywords
 
 
@@ -79,6 +88,7 @@ class SyntaxErrorHandler():
         print("rulename", exception.expected_rules[0].to_match)
         # print("original error msg: ",error_message)
         rule_name = exception.expected_rules[0].rule_name
+        print("EXCEPTİON",exception.expected_rules[0])
         attributes = get_attributes_from_model(meta_model_path)
         hash_attributes = get_hash_attributes(meta_model_path)
         # keys = extract_attributes(model)

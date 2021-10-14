@@ -22,10 +22,10 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     error_message = error.message
     error_line = error.line
     error_column = error.col
-    print("????", error_line_str, error_line_str[error_column - 1:])
+    print("Line with error:", error_line_str, error_line_str[error_column - 1:])
     misspelled = error_line_str[error_column - 1:len(error_line_str)]
     misspelled = misspelled.split(' ', 1)[0]
-    print("misspelled", misspelled)
+    print("Misspelled word:", misspelled)
     # misspelled = [t for t in error_message.split() if t.startswith('*')]
     # if misspelled == []:
     # return error_message
@@ -33,21 +33,20 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     # misspelled = misspelled[0]
     # misspelled = misspelled.replace("*", "")
     # DO WE WANT THIS?
-    if any(ext in misspelled for ext in attribute_list):
-        print("???", misspelled)
+    # if any(ext in misspelled for ext in attribute_list):
+    #    print("???", misspelled)
     res = [ele for ele in attribute_list if (ele.lower() in misspelled.lower())]
-    print("res", res)
-    # print("missing space between ", res, " and ", misspelled.replace(res, ""))
-    # end extra
+    print("Attributes included in misspelled:", res)
 
     # check for most likely correction
     candidate_attr = spell.correction(misspelled)
-    print("SUGGESTION", candidate_attr)
+    print("SUGGESTION from spell checker:", candidate_attr)
+
     if candidate_attr == misspelled:
         # print("No keyword ", misspelled)
         if len(res) == 0:
             typo_text = "No keyword " + misspelled + '\n'
-        elif misspelled in res:
+        elif misspelled in res or misspelled in hash_attributes:
             # check for hash
             if hash_attributes.index(misspelled):
                 print("typo_hash", error_line_str[error_column - 2])
@@ -58,7 +57,13 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
                     typo_text = "No idea what happened?\n"
                 # might need to check other possibilities
         else:
-            typo_text = "No keyword " + misspelled + ". Did you meant: " + res[0] + '?\n'
+            for hash in hash_attributes:
+                if misspelled.lower().startswith(hash):
+                    typo_text = misspelled + " looks like a hash value. Did you forget to put #?\n"
+                    print("found it")
+                    break
+                else:
+                    typo_text = "No keyword " + misspelled + ". Did you meant: " + res[0] + '?\n'
     else:
         typo_text = "No keyword " + misspelled + ". Did you meant: " + candidate_attr + '?\n'
 
