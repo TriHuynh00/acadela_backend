@@ -21,9 +21,9 @@ def interpret_precondition(preconditionObj, process=None):
         sentryStepList.append(stepStr)
 
     if util.is_attribute_not_null(preconditionObj, 'entryCondition'):
-        # entryCondition = util_intprtr.prefix_path_value(
-        #                     preconditionObj.entryCondition,
-        #                     False)
+        entryCondition = util_intprtr.prefix_path_value(
+                             preconditionObj.entryCondition,
+                             False)
         entryCondition = preconditionObj.entryCondition
 
     return Precondition(sentryStepList, entryCondition)

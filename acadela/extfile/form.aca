@@ -10,7 +10,7 @@ define Form BMIForm
         label ='Weight of patient in kg'
 
     field AgeRange
-        #selector #notmandatory #notReadOnly
+        #singlechoice #notmandatory #notReadOnly
         Question = 'What is your age range?'
             Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
             Option '10-30' value = '1.2'

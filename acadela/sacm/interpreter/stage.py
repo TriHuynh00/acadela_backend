@@ -20,7 +20,9 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
 
     print("\n Stage Info")
     directive = stage.directive
-    ownerPathvalue = None
+    ownerPathvalue = stage.ownerpath.value \
+        if util.is_attribute_not_null(stage.ownerpath, 'value') \
+        else None
 
     preconditionList = []
 

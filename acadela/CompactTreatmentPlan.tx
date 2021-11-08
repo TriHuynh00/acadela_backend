@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | CaseSetting | Stage | Task | Form | Field | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task |  Form | Field | Hook | ValidAttribute)
 ;
 
 /********************
@@ -324,11 +324,13 @@ HumanTask:
     (
         HumanTaskTerm name = ID
             directive = StageElementDirective
+            attrList = SharedTaskAttrs
             (
-                attrList = SharedTaskAttrs
                 (/(Trigger)\s/ hookList *= HttpHook)?
-                form = Form
+                (form +=  Form)
             )#
+
+
     )
     | (RefTask ref=[HumanTask|FQN])?
 ;
@@ -396,11 +398,11 @@ Precondition:
 ***********************/
 
 Form:
-    (
-        FormTerm name = ID
+    (   FormTerm
+         name = ID
             (directive = FormDirective)?
             fieldList += FormField
-    ) | (Ref FormTerm ref=[Form|FQN])?
+    )  | (Ref FormTerm ref=[Form|FQN])?
 ;
 
 FormDirective:

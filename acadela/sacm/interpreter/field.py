@@ -47,7 +47,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
                 .interpret_directive(directive.multiplicity)
 
     type = defaultAttrMap['type'] \
-        if not hasattr(directive, "type") \
+        if not util.is_attribute_not_null(directive, "type") \
         else direc_intprtr\
                     .interpret_directive(directive.type)
 
@@ -124,8 +124,8 @@ def interpret_dynamic_field(field, fieldPath,
         if field.additionalDescription is None \
         else field.additionalDescription.value
 
-    explicitAttrType = None \
-        if not hasattr(directive, "explicitType") \
+    explicitAttrType = defaultAttrMap["type"] \
+        if not util.is_attribute_not_null(directive, "explicitType") \
         else direc_intprtr \
         .interpret_directive(directive.explicitType)
 
@@ -148,7 +148,6 @@ def interpret_dynamic_field(field, fieldPath,
     # If field type is custom, set the field path to custom path
     if explicitAttrType == CUSTOM_TYPE:
         fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
-        explicitAttrType = ''
         print("custom field path of dynamic field", fieldPath)
 
     if taskType == 'DualTask':

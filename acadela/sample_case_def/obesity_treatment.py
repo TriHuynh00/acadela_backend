@@ -1,6 +1,6 @@
 treatmentPlanStr = """
     #aca0.1
-    //import extfile.form as iForm
+    import extfile.form as iForm
     //import extfile.taskCharlsonTest
     //import extfile.redGreenUiRef as rgu
 

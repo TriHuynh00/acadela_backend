@@ -1,5 +1,6 @@
 treatmentPlanStr = """
 #aca0.1
+import extfile.form as iForm
 
 workspace Umcg
 
@@ -14,7 +15,9 @@ define case ST1_Hypertension
         group UmcgProfessionals name = 'Umcg Professional' 
         group UmcgPatients name = 'Umcg Patient' 
         group UmcgNurses name = 'Umcg Nurse' 
-
+            user williamst
+            user michelf
+            user hopkinsc
     // A comment
         /* a multiline
          * Comment
@@ -22,8 +25,8 @@ define case ST1_Hypertension
 
     Setting
         CaseOwner UmcgProfessionals #exactlyOne
-            label = 'UMCG Professionals'
-
+            label = 'UMCG Professionals'   
+            
         Attribute WorkplanDueDate
             #exactlyOne #date.after(TODAY)
             label = 'Workplan Due Date'
@@ -31,11 +34,11 @@ define case ST1_Hypertension
 
         CasePatient UmcgPatients #exactlyOne
             label = 'Patient'
-            
+          
         Attribute Clinician
             #exactlyOne #Link.Users(UmcgClinicians) 
             label = 'Clinician'
-            
+      
         Attribute Nurse
             #exactlyOne #Link.Users(UmcgNurses) 
             label = 'Nurse'
@@ -65,13 +68,13 @@ define case ST1_Hypertension
         HumanTask SelectPatient
             #mandatory
             label = 'Assign Patient'
-            owner = 'Setting.Nurse'
             dueDateRef = 'Setting.WorkplanDueDate'
             externalId = 'SelectPatient'
-            
+            // use Form iForm.BMIForm
+         
             Form PatientAssignForm
                 #mandatory
-                
+                 
                 Field SelectPatient
                     #custom
                     CustomFieldValue = "Setting.CasePatient"
@@ -81,7 +84,10 @@ define case ST1_Hypertension
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
-                  
+        
+           Trigger
+                    On complete invoke 'http://127.0.0.1:3001/connecare' method Post
+
     Stage Evaluation
         #mandatory
         owner = 'Setting.Clinician'
@@ -138,7 +144,10 @@ define case ST1_Hypertension
                 
                 Precondition
                     previousStep = 'MeasureBloodPressure'
-                
+                    previousStep = 'MeasureBloodCholesterol'
+                    condition = 'Setting.BloodPressureCondition = "High"'
+
+
                 Form CgiForm
                     Field CholesterolTest
                     #singlechoice
@@ -172,6 +181,7 @@ define case ST1_Hypertension
 
         // Define two Preconditions to express the OR logic between them
         Precondition
+            previousStep = 'Evaluation' 
             previousStep = 'Evaluation' 
             condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0'
         
@@ -224,4 +234,8 @@ define case ST1_Hypertension
                 Field DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
+                DynamicField DiastdolicAnalysis
+                    #left 
+                    label = 'Diastolic Assessment:'
+                    expression = 'fdflkf.dlfkl'
 """

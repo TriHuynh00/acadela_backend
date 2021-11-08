@@ -34,9 +34,11 @@ def interpret_task(task, stageId):
 
     if util.cname(task) != 'AutomatedTask':
         if util.is_attribute_not_null(attrList, 'dueDatePath'):
-            dueDatePath = util_intprtr.prefix_path_value(
-                attrList.dueDatePath.value, False
-            )
+            #dueDatePath = util_intprtr.prefix_path_value(
+            #    attrList.dueDatePath.value, False
+            #)
+            dueDatePath = attrList.dueDatePath.value
+            print("dueDatePath",dueDatePath,attrList.dueDatePath.value)
 
     ownerPath = None \
         if attrList.ownerPath is None \
@@ -68,7 +70,7 @@ def interpret_task(task, stageId):
         else None
 
     if preconditionObj is not None:
-        print("Task Precondition", [sentry for sentry in preconditionObj])
+        print("Task Precondition", [sentry.__dict__ for sentry in preconditionObj])
         for sentry in preconditionObj:
             preconditionList.append(
                 interpret_precondition(sentry, process = task)
@@ -108,8 +110,10 @@ def interpret_task(task, stageId):
         else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
-    taskForm = util.getRefOfObject(task.form)
-
+    taskFormList = util.getRefOfObject(task.form)
+    if len(taskFormList)>1:
+        raise Exception("Each task has to have 1 form!")
+    taskForm=taskFormList[0]
     for field in taskForm.fieldList:
         field = util.getRefOfObject(field)
         formDirective = taskForm.directive

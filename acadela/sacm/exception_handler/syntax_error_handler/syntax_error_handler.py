@@ -1,6 +1,7 @@
 import re
 from textx import TextXSyntaxError
-
+import os.path
+import config.general_config as generalConf
 from . import keyword_handler
 from . import typo_handler
 
@@ -33,7 +34,7 @@ def get_attributes_from_model(meta_model_path):
     f = open(meta_model_path, "r")
     # print(f.read())
     no_whitespace = f.read()
-    #add double quotes as well
+    # add double quotes as well
     quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/|\'[a-zA-Z]+\'', no_whitespace)
     # quotes = re.findall(r'\/\([a-zA-Z]+\)\\s\/', no_whitespace)
     string_list = [each_string.replace(")\s/", "") for each_string in quotes]
@@ -57,8 +58,8 @@ def get_hash_attributes(meta_model_path):
         word = re.sub(r'\s+', '', word[0])
         quoted_attrs = re.findall(r'\|\'[a-zA-Z]+\'|\(\'[a-zA-Z]+\'', word)
         not_quoted_attrs = re.findall(r'\|[a-zA-Z]+|\([a-zA-Z]+', word)
-        quoted_attrs = [each_string.replace("(", "") .replace("|", "").replace("'", "") for each_string in quoted_attrs]
-        not_quoted_attrs = [each_string.replace("(", "") .replace("|", "") for each_string in not_quoted_attrs]
+        quoted_attrs = [each_string.replace("(", "").replace("|", "").replace("'", "") for each_string in quoted_attrs]
+        not_quoted_attrs = [each_string.replace("(", "").replace("|", "") for each_string in not_quoted_attrs]
         extracted_keywords = []
 
         for attr in not_quoted_attrs:
@@ -66,10 +67,10 @@ def get_hash_attributes(meta_model_path):
             extracted = re.findall(attr_regex, grammar)
             print("extracted keywords:", extracted)
             extracted_keywords = extracted_keywords + [extracted[0].replace("'", "")]
-            #if len(extracted)>0:
-                #extracted = re.findall(r'\'[a-zA-Z]+\'', extracted[0])
-                #print ("extracted keywords:",extracted)
-                #extracted_keywords = extracted_keywords + [extracted[0].replace("'", "")]
+            # if len(extracted)>0:
+            # extracted = re.findall(r'\'[a-zA-Z]+\'', extracted[0])
+            # print ("extracted keywords:",extracted)
+            # extracted_keywords = extracted_keywords + [extracted[0].replace("'", "")]
         hash_keywords = hash_keywords + quoted_attrs + extracted_keywords
     print("keywords", hash_keywords)
     return hash_keywords
@@ -80,15 +81,25 @@ class SyntaxErrorHandler():
         error_message = exception.message
         error_line = exception.line
         error_column = exception.col
+        error_file = error_message.split("at position")[1].split(":")[0].replace(" ", "")
+        is_file_exists = os.path.isfile(error_file)
+        print("error file", error_file)
+        if error_file is not None and generalConf.MODEL_PLACEHOLDER in error_file:
+            lines = case_template_str.splitlines()
+        elif is_file_exists:
+            f = open(error_file, "r")
+            error_file_text = f.read()
+            print("error message", error_file, error_file_text)
+            lines = error_file_text.splitlines()
+
         # get the line by the line number
-        lines = case_template_str.splitlines()
         print(lines[error_line - 1])
         error_line_str = lines[error_line - 1]
         # check if there is only one option
         print("rulename", exception.expected_rules[0].to_match)
         # print("original error msg: ",error_message)
         rule_name = exception.expected_rules[0].rule_name
-        print("EXCEPTİON",exception.expected_rules[0])
+        print("EXCEPTION", exception.expected_rules[0])
         attributes = get_attributes_from_model(meta_model_path)
         hash_attributes = get_hash_attributes(meta_model_path)
         # keys = extract_attributes(model)
