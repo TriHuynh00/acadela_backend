@@ -79,12 +79,14 @@ define case ST1_Hypertension
                     #custom
                     CustomFieldValue = "Setting.CasePatient"
                     label = "Assigned Patient"
+                // FieldEnd
                     
                 Field SelectDoctor
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
-        
+                 // FieldEnd
+       
            Trigger
                     On complete invoke 'http://127.0.0.1:3001/connecare' method Post
 
@@ -107,12 +109,15 @@ define case ST1_Hypertension
                 Field Systolic
                     #number(0-300)
                     label = 'Systolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
+                                        uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
+                // FieldEnd
 
                 Field Diastolic
                     #number(0-300)
                     label = 'Diastolic Blood pressure (mm Hg):'
                     uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
+                // FieldEnd
+
 
                 DynamicField SystolicAnalysis
                     #left
@@ -154,7 +159,8 @@ define case ST1_Hypertension
                         question = 'Perform Blood Cholesterol Test?'
                         Option 'No' value='0'
                         Option 'Yes' value='1'
-                    
+                   // FieldEnd
+                 
     Stage MedicalTest
         #mandatory
         label = 'Medical Test'        
@@ -162,7 +168,7 @@ define case ST1_Hypertension
         
         Precondition
             previousStep = 'Evaluation'
-            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 1'
+            condition = 'Evalution.RequestMedicalTest.CholesterolTest = 1'
             
         HumanTask MeasureBloodCholesterol
             #mandatory
@@ -173,6 +179,7 @@ define case ST1_Hypertension
                 Field CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
+                // FieldEnd
 
     Stage Treatment
         #mandatory
@@ -200,23 +207,28 @@ define case ST1_Hypertension
                 Field AntihypertensiveDrug
                     #text #left
                     label = "Medicine Name:"
-                
+                  // FieldEnd
+              
                 Field DailyDose
                     #number #center 
                     label = "Daily Dose:"
-                    
+                 // FieldEnd
+                   
                 Field Frequency
                     #number #left
                     label = "Frequency"
-                
+                                // FieldEnd
+
                 Field FrequencyUnit
                     #text #center
                     label = "Frequency Unit"
-                    
+                                  // FieldEnd
+  
                 Field Comment
                     #notmandatory #stretched
                     label = "Comment:"
-                    
+                                 // FieldEnd
+   
     Stage Discharge
         #mandatory #manualActivate
         owner = 'Setting.CaseOwner'
@@ -234,6 +246,8 @@ define case ST1_Hypertension
                 Field DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
+                                    // FieldEnd
+
                 DynamicField DiastdolicAnalysis
                     #left 
                     label = 'Diastolic Assessment:'

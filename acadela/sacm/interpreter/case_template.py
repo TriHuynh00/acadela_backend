@@ -25,14 +25,16 @@ import sys
 from sacm.exception_handler.semantic_error_handler import id_uniqueness_checker
 from sacm.exception_handler.semantic_error_handler import path_validity_checker
 
+
 this_folder = dirname(__file__)
 
 
 class CaseInterpreter():
 
-    def __init__(self, metamodel, model):
+    def __init__(self, metamodel, model, treatment_str):
         self.metamodel = metamodel
         self.model = model
+        self.treatment_str = treatment_str
         self.refFinder = WorkspaceReferencer()
         self.groupFinder = GroupReferencer()
         self.groupInterpreter = GroupInterpreter()
@@ -149,17 +151,19 @@ class CaseInterpreter():
 
             if util.cname(case) == 'Case':
                 print('Case', case.name)
+                print(self.model._tx_parser.pos_to_linecol(case._tx_position))
             for group in case.responsibilities.groupList:
                 print("Group", group.name)
-
                 if runNetworkOp:
                     if self.groupInterpreter. \
                             find_static_id(group, workspaceDef.workspace.staticId) is not None:
+                        group.lineNumber = model._tx_parser.pos_to_linecol(group._tx_position)
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
                                         .format(group.name, group.groupName, workspaceDef.workspace.staticId))
                 else:
+                    group.lineNumber = model._tx_parser.pos_to_linecol(group._tx_position)
                     self.groupList \
                         .append(group)
 
@@ -168,12 +172,14 @@ class CaseInterpreter():
                 if runNetworkOp:
                     if self.userInterpreter. \
                             findStaticId(user, self.groupList) is not None:
+                        user.lineNumber = model._tx_parser.pos_to_linecol(user._tx_position)
                         self.userList.append(user)
                     else:
                         raise Exception(("cannot find static ID for user with reference ID {0}. " +
                                          "Please verify if the user reference ID is correct.")
                                         .format(user.name))
                 else:
+                    user.lineNumber = model._tx_parser.pos_to_linecol(user._tx_position)
                     self.userList.append(user)
             print()
 
@@ -196,8 +202,12 @@ class CaseInterpreter():
             ########################################
             stageAsAttributeList = []
             for caseStage in case.stageList:
-
                 print("Stage", caseStage.name, "Task List size before parse", len(caseStage.taskList))
+                print('Stage!!!', caseStage.preconditionList)
+                if len(caseStage.preconditionList)>0:
+                    for condition in caseStage.preconditionList:
+                        print('Condition',condition.__dict__)
+                        print('Condition!!!',self.model._tx_parser.pos_to_linecol(condition._tx_position))
 
                 stage = util.getRefOfObject(caseStage)
 
@@ -209,7 +219,7 @@ class CaseInterpreter():
                     task = util.getRefOfObject(task)
 
                     iTask = taskInterpreter \
-                        .interpret_task(task, stage.name)
+                        .interpret_task(self.model, task, stage.name)
 
                     taskAsAttributeList \
                         .append(iTask['taskAsAttribute'])
@@ -222,13 +232,13 @@ class CaseInterpreter():
                         .append(iTask['taskAsEntity'])
 
                 interpretedStage = \
-                    interpret_stage(stage,
+                    interpret_stage(self.model, stage,
                                     stageTasks,
                                     taskAsAttributeList)
 
                 self.entityList \
                     .append(interpretedStage['stageAsEntity'])
-
+            
                 self.stageList \
                     .append(interpretedStage['stage'])
 
@@ -240,14 +250,14 @@ class CaseInterpreter():
             ############################################
 
             interpretedSetting = caseDefinition \
-                .interpret_setting_entity(case.setting)
+                .interpret_setting_entity(case.setting, self.model)
 
             settingEntity = interpretedSetting['settingAsEntity']
             self.entityList.append(settingEntity)
             self.settingList.append(settingEntity)
 
             interpretedCase = caseDefinition.interpret_case_definition(
-                case, interpretedSetting, stageAsAttributeList, self.stageList)
+                case, interpretedSetting, stageAsAttributeList, self.stageList, self.model)
 
             self.entityList \
                 .append(interpretedCase['caseDataEntity'])
@@ -285,7 +295,7 @@ class CaseInterpreter():
             # 2. Check Field with custom path is pointed to a valid source
             #    Need to prefix the path afterward (using
             #    prefix_path_value() function in interpreter/util_intprtr
-            path_validity_checker.check_path_validity(self.caseObjectTree)
+            path_validity_checker.check_path_validity(self.caseObjectTree, self.treatment_str)
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
                 attributeInterpreter.interpret_attribute_object(attr)

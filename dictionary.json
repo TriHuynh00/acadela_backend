@@ -34,6 +34,7 @@
     "previousStep": 10,
     "condition": 10,
     "Field": 10,
+    "FieldEnd": 10,
     "CustomFieldValue": 10,
     "Question": 10,
     "Option": 10,

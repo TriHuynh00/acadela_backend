@@ -20,9 +20,11 @@ class Stage():
                  manualActivationExpression,
                  dynamicDescriptionPath,
                  preconditionList,
+                 lineNumber,
                  entityDefinitionId = None,
                  entityAttachPath=None,
-                 isPrefixed = True):
+                 isPrefixed = True
+                 ):
 
         if isPrefixed:
             self.id = util.prefixing(id)
@@ -53,5 +55,7 @@ class Stage():
 
         self.taskList = taskList
         self.preconditionList = preconditionList
+        self.lineNumber = lineNumber
+
 
 

@@ -16,7 +16,7 @@ class Attribute():
                  additionalDescription = None,  # below are optional
                  uiReference = None,
                  externalId = None,
-                 defaultValues = None):
+                 defaultValues = None, lineNumber = None):
         self.id = id
 
         self.enumerationOptions = []

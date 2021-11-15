@@ -18,7 +18,8 @@ class DynamicField:
                  isReadOnly,
                  isMandatory,
                  position,
-                 part):
+                 part,
+                 lineNumber):
 
         self.id = id
         self.description = description
@@ -33,4 +34,5 @@ class DynamicField:
         self.isMandatory = isMandatory
         self.position = position
         self.part = part
+        self.lineNumber = lineNumber
 

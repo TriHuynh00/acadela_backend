@@ -74,11 +74,11 @@ try:
     rootImportPath = join(abspath(dirname(__file__)), generalConf.MODEL_PLACEHOLDER)
     logging.info("rootImportPart" + rootImportPath)
     model = mm.model_from_str(input, rootImportPath)
-
     # extract_attributes(mm)
     # analyze_dsl_language(metamodelPath, model, mm)
     
-    acaInterpreter = CaseInterpreter(mm, model)
+    acaInterpreter = CaseInterpreter(mm, model,input)
+    # ------------- HERE CHECK EXPRESSION
     acaInterpreter.interpret(runNetworkOp)
     print("")
 except TextXSyntaxError as e:
@@ -98,7 +98,7 @@ except OSError as e:
                 line_index = index + 1
                 import_found = True
                 print(item.strip(),index)
-                print ("Cannot import {} at line {}. File does not exist.\n\n {}".format(path_file, line_index,e) )
+                print("Cannot import {} at line {}. File does not exist.\n\n {}".format(path_file, line_index,e) )
                 break
         if not import_found:
             print("Cannot import {}. File does not exist.\n\n {}".format(path_file, e))
