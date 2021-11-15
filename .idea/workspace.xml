@@ -3,27 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bc6f8753-c9a1-456c-9757-4449b8023fbd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/CompactTreatmentPlan.tx" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/CompactTreatmentPlan.tx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/compiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/attribute.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/attribute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/case_definition.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/case_definition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/dynamic_field.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/dynamic_field.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/sentry.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/sentry.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/stage.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/stage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/summary.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/case_definition.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/case_definition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/case_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/case_template.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/field.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/field.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/sentry.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/sentry.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/stage.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/stage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/summary.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dictionary.json" beforeDir="false" afterPath="$PROJECT_DIR$/dictionary.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.log" beforeDir="false" afterPath="$PROJECT_DIR$/run.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
