@@ -33,12 +33,14 @@ def auto_parse_conditional_expression(entryCondition, stageList):
     clauses = re.split('( and )|( or )', entryCondition)
 
     for clause in clauses:
-        if clause == 'and' or clause == 'or' or clause is None:
-            if clause == 'and' or clause == 'or':
+        print ("Clause is", clause)
+        clause = str(clause).strip()
+        if clause in ['and', 'or', 'None']:
+            if clause in ['and', 'or']:
                 prefixedCondition += ' {} '.format(clause)
             continue
 
-        subjAndPredicate = re.split('[<>=][=]*', str(clause).strip())
+        subjAndPredicate = re.split('[<>=][=]*', clause)
 
         subjects = re.findall('[\w+\.]+\w+', subjAndPredicate[0])
 
