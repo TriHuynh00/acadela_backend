@@ -8,7 +8,7 @@ treatmentPlanStr = """
 
     define case OT1_ObesityTreatment
         prefix = 'OT1'
-        version = 2
+        version = '2'
         label = 'ObesityTreatment'
         
         Responsibilities

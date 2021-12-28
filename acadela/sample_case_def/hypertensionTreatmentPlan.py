@@ -1,5 +1,6 @@
 treatmentPlanStr = """
 #aca0.1
+import extfile.form as iForm
 
 workspace Umcg
 
@@ -14,7 +15,9 @@ define case ST1_Hypertension
         group UmcgProfessionals name = 'Umcg Professional' 
         group UmcgPatients name = 'Umcg Patient' 
         group UmcgNurses name = 'Umcg Nurse' 
-
+            user williamst
+            user michelf
+            user hopkinsc
     // A comment
         /* a multiline
          * Comment
@@ -22,8 +25,8 @@ define case ST1_Hypertension
 
     Setting
         CaseOwner UmcgProfessionals #exactlyOne
-            label = 'UMCG Professionals'
-
+            label = 'UMCG Professionals'   
+            
         Attribute WorkplanDueDate
             #exactlyOne #date.after(TODAY)
             label = 'Workplan Due Date'
@@ -31,11 +34,11 @@ define case ST1_Hypertension
 
         CasePatient UmcgPatients #exactlyOne
             label = 'Patient'
-            
+          
         Attribute Clinician
             #exactlyOne #Link.Users(UmcgClinicians) 
             label = 'Clinician'
-            
+      
         Attribute Nurse
             #exactlyOne #Link.Users(UmcgNurses) 
             label = 'Nurse'
@@ -65,23 +68,28 @@ define case ST1_Hypertension
         HumanTask SelectPatient
             #mandatory
             label = 'Assign Patient'
-            owner = 'Setting.Nurse'
             dueDateRef = 'Setting.WorkplanDueDate'
             externalId = 'SelectPatient'
-            
+            // use Form iForm.BMIForm
+         
             Form PatientAssignForm
                 #mandatory
-                
+                 
                 Field SelectPatient
                     #custom
                     CustomFieldValue = "Setting.CasePatient"
                     label = "Assigned Patient"
+                // FieldEnd
                     
                 Field SelectDoctor
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
-                  
+                 // FieldEnd
+       
+           Trigger
+                    On complete invoke 'http://127.0.0.1:3001/connecare' method Post
+
     Stage Evaluation
         #mandatory
         owner = 'Setting.Clinician'
@@ -101,12 +109,15 @@ define case ST1_Hypertension
                 Field Systolic
                     #number(0-300)
                     label = 'Systolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
+                                        uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
+                // FieldEnd
 
                 Field Diastolic
                     #number(0-300)
                     label = 'Diastolic Blood pressure (mm Hg):'
                     uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
+                // FieldEnd
+
 
                 DynamicField SystolicAnalysis
                     #left
@@ -114,7 +125,7 @@ define case ST1_Hypertension
                     expression = 'if (Systolic < 120) then "Normal"
                                   else if (Systolic < 130) then "Elevated" 
                                   else "High"'
-                    
+
                 DynamicField DiastolicAnalysis
                     #left 
                     label = 'Diastolic Assessment:'
@@ -139,14 +150,18 @@ define case ST1_Hypertension
                 
                 Precondition
                     previousStep = 'MeasureBloodPressure'
-                
+                    previousStep = 'MeasureBloodCholesterol'
+                    condition = 'Setting.BloodPressureCondition = "High"'
+
+
                 Form CgiForm
                     Field CholesterolTest
                     #singlechoice
                         question = 'Perform Blood Cholesterol Test?'
                         Option 'No' value='0'
                         Option 'Yes' value='1'
-                    
+                   // FieldEnd
+                 
     Stage MedicalTest
         #mandatory
         label = 'Medical Test'        
@@ -154,7 +169,7 @@ define case ST1_Hypertension
         
         Precondition
             previousStep = 'Evaluation'
-            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 1'
+            condition = 'Evalution.RequestMedicalTest.CholesterolTest = 1'
             
         HumanTask MeasureBloodCholesterol
             #mandatory
@@ -165,6 +180,7 @@ define case ST1_Hypertension
                 Field CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
+                // FieldEnd
 
     Stage Treatment
         #mandatory
@@ -193,23 +209,28 @@ define case ST1_Hypertension
                 Field AntihypertensiveDrug
                     #text #left
                     label = "Medicine Name:"
-                
+                  // FieldEnd
+              
                 Field DailyDose
                     #number #center 
                     label = "Daily Dose:"
-                    
+                 // FieldEnd
+                   
                 Field Frequency
                     #number #left
                     label = "Frequency"
-                
+                                // FieldEnd
+
                 Field FrequencyUnit
                     #text #center
                     label = "Frequency Unit"
-                    
+                                  // FieldEnd
+  
                 Field Comment
                     #notmandatory #stretched
                     label = "Comment:"
-                    
+                                 // FieldEnd
+   
     Stage Discharge
         #mandatory #activateWhen('Evaluation.MeasureBloodPressure.Systolic > 100')
         owner = 'Setting.CaseOwner'
@@ -227,4 +248,10 @@ define case ST1_Hypertension
                 Field DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
+                                    // FieldEnd
+
+                DynamicField DiastdolicAnalysis
+                    #left 
+                    label = 'Diastolic Assessment:'
+                    expression = 'fdflkf.dlfkl'
 """

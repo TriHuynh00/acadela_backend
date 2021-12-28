@@ -12,7 +12,7 @@ from os.path import dirname
 this_folder = dirname(__file__)
 
 
-def interpret_summary(summary, isPrefixed = True):
+def interpret_summary(summary, model, isPrefixed = True):
     summaryId = summary.name
 
     if isPrefixed:
@@ -40,10 +40,11 @@ def interpret_summary(summary, isPrefixed = True):
         sacmSummaryParamPath += summaryParamPathLvl[-1]
 
         summaryParamList.append(sacmSummaryParamPath)
-
+    lineNumber = model._tx_parser.pos_to_linecol(summary._tx_position)
     summarySection = SummarySection(summaryId,
                                     summary.description.value,
                                     summaryParamList,
+                                    lineNumber,
                                     position=position)
     print ('Summary Section', vars(summarySection))
 

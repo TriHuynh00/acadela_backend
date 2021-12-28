@@ -11,6 +11,7 @@ workspace Umcg
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
             group UmcgNurses name = 'Umcg Nurse' 
+            
         Setting
             CaseOwner UmcgProfessionals #exactlyOne
                 label = 'UMCG Professionals'

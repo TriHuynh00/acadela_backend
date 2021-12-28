@@ -5,28 +5,27 @@ import sacm.util as util
 import sacm.default_state as default_state
 from sacm.interpreter import util_intprtr
 
-def interpret_precondition(preconditionObj, process=None):
+def interpret_precondition(model, preconditionObj, process=None):
     sentryStepList = []
     entryCondition = None
-
+    line_number = model._tx_parser.pos_to_linecol(preconditionObj._tx_position)
     for step in preconditionObj.stepList:
         # stepStr = str(step)
         # stepObjList =  stepStr.split('.')
         # for stepObj in stepObjList:
         #     stepStr = stepStr.replace(stepObj, \
         #                         util.prefixing(stepObj))
-
         stepStr = util_intprtr.prefix_path_value(str(step), True)
         # stepStr = str(step)
         sentryStepList.append(stepStr)
 
     if util.is_attribute_not_null(preconditionObj, 'entryCondition'):
-        # entryCondition = util_intprtr.prefix_path_value(
-        #                     preconditionObj.entryCondition,
-        #                     False)
+        entryCondition = util_intprtr.prefix_path_value(
+                             preconditionObj.entryCondition,
+                             False)
         entryCondition = preconditionObj.entryCondition
 
-    return Precondition(sentryStepList, entryCondition)
+    return Precondition(sentryStepList, entryCondition, line_number)
 
 def auto_parse_conditional_expression(entryCondition, stageList):
     prefixedCondition = ''

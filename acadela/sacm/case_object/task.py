@@ -24,9 +24,12 @@ class Task():
                  dynamicDescriptionPath,
                  preconditionList,
                  hookList,
+                lineNumber,
                  entityAttachPath = None,
                  entityDefinitionId = None,
-                 isPrefixed = True):
+                 isPrefixed = True,
+
+                 ):
 
         if isPrefixed:
             self.id = util.prefixing(id)
@@ -57,6 +60,7 @@ class Task():
         self.dynamicDescriptionPath = dynamicDescriptionPath
         self.preconditionList = preconditionList
         self.hookList = hookList
+        self.lineNumber = lineNumber
 
     # def print(self):
     #     print("\n\tTask {}"

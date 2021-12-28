@@ -16,11 +16,13 @@ import sys
 this_folder = dirname(__file__)
 
 
-def interpret_stage(stage, taskList, taskAsAttributeList = None,):
+def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
 
     print("\n Stage Info")
     directive = stage.directive
-    ownerPathvalue = None
+    ownerPathvalue = stage.ownerpath.value \
+        if util.is_attribute_not_null(stage.ownerpath, 'value') \
+        else None
 
     preconditionList = []
 
@@ -66,12 +68,13 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
     if preconditionObj is not None:
         print("Stage Precondition", [sentry for sentry in preconditionObj])
         for sentry in preconditionObj:
-            preconditionList.append(interpret_precondition(sentry))
+            preconditionList.append(interpret_precondition(model, sentry))
 
     if util.is_attribute_not_null(stage, "ownerPath"):
         ownerPathvalue = str(stage.ownerpath.value)\
             .replace(default_state.SETTING_NAME + ".", util.prefixing(default_state.SETTING_NAME + "."))
-
+            
+    lineNumber = model._tx_parser.pos_to_linecol(stage._tx_position)
     stageObject = Stage(stage.name, stage.description.value,
                         directive.multiplicity,
                         type,
@@ -84,7 +87,9 @@ def interpret_stage(stage, taskList, taskAsAttributeList = None,):
                         activation,
                         manualActivationExpression,
                         dynamicDescPath,
-                        preconditionList)
+                        preconditionList,
+                        lineNumber
+                        )
 
     stageAsAttribute = Attribute(stageObject.id,
                             stage.description,

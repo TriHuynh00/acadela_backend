@@ -18,7 +18,8 @@ class Field:
                  position,
                  uiRef,
                  externalId,
-                 part):
+                 part,
+                 lineNumber):
 
         self.id = id
         self.description = description
@@ -32,3 +33,4 @@ class Field:
         self.uiRef = uiRef
         self.externalId = externalId
         self.type = type
+        self.lineNumber = lineNumber

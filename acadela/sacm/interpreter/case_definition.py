@@ -43,7 +43,7 @@ hookEventMap = {
 # Generate the Case Data Entity, containing settings, CaseDefinition
 def interpret_case_definition(case, intprtSetting,
                               stageAsAttributeList,
-                              stageList):
+                              stageList, model):
     global caseOwnerAttr
     global casePatientAttr
 
@@ -67,7 +67,7 @@ def interpret_case_definition(case, intprtSetting,
     summarySectionList = []
     for summarySection in case.summary.sectionList:
         summarySectionList.append(
-            summaryInterpreter.interpret_summary(summarySection))
+            summaryInterpreter.interpret_summary(summarySection,model))
 
     caseDefinition = CaseDefinition(case.name, case.description.value,
                         caseOwnerPath,
@@ -98,11 +98,10 @@ def interpret_case_data(settingAsAttribute, stageAsAttributes):
 
     return caseDataEntity
 
-def interpret_setting_entity(settingObj):
+def interpret_setting_entity(settingObj, model):
     global settingName
 
-    print("Setting name is ", settingName)
-
+    print("Setting name is ", settingName,settingObj.__dict__)
     settingDescription = settingName \
         if settingObj.description is None \
         else settingObj.description.value
@@ -114,6 +113,7 @@ def interpret_setting_entity(settingObj):
         print("Attr ID " + attr.name)
         print("#Directives ", attr.attrProp.directive)
         attrObj = attributeInterpreter.interpret_attribute_object(attr)
+        attrObj.lineNumber = model._tx_parser.pos_to_linecol(attr._tx_position)
         settingEntity.attribute.append(attrObj)
 
     print("\tCase Owner "
@@ -128,11 +128,13 @@ def interpret_setting_entity(settingObj):
     if settingObj.caseOwner is not None:
        global caseOwnerAttr
        caseOwnerAttr = attributeInterpreter.interpret_attribute_object(settingObj.caseOwner)
+       caseOwnerAttr.lineNumber = model._tx_parser.pos_to_linecol(settingObj.caseOwner._tx_position)
        settingEntity.attribute.append(caseOwnerAttr)
 
     if settingObj.casePatient is not None:
         global casePatientAttr
         casePatientAttr = attributeInterpreter.interpret_attribute_object(settingObj.casePatient)
+        casePatientAttr.lineNumber = model._tx_parser.pos_to_linecol(settingObj.casePatient._tx_position)
         settingEntity.attribute.append(casePatientAttr)
         # settingAttributeJson = []
         # attrObjJson = attributeInterpreter.create_attribute_json_object(attrObj)

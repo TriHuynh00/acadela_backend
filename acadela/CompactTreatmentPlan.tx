@@ -7,7 +7,7 @@ Start:
 
     (
         (defWorkspace = DefWorkspace)
-        | ('define' objList *= Obj)*
+        | (/(define)\s/ objList *= Obj)*
         // | (objList *= Obj)
     )
 ;
@@ -24,7 +24,7 @@ DefWorkspace:
         (workspaceGlobalObjList *= DefineObj)?
         workspaceProp = DefineCase
     )#*/
-    ('define')? (workspaceObj*=Obj)+
+    (/(define)\s/)? (workspaceObj*=Obj)+
 
 ;
 
@@ -46,15 +46,15 @@ GroupIdentity:
 ;
 
 DefineCase:
-    'define' case=Case
+    /(define)\s/ case=Case
 ;
 
 DefineObj:
-    'define' object=Obj
+    /(define)\s/ object=Obj
 ;
 
 Obj:
-    ( Case | CaseSetting | Stage | Task | Form | Field | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task |  Form | Field | Hook | ValidAttribute)
 ;
 
 /********************
@@ -86,7 +86,7 @@ Case:
             )#
             stageList += Stage
         )#
-    ) | (Ref 'Case' ref=[Case|FQN])?
+    ) | (Ref /(Case)\s/ ref=[Case|FQN])?
 ;
 
 CaseSetting:
@@ -103,12 +103,12 @@ CaseSetting:
 ;
 
 CaseOwner:
-    'CaseOwner' group = TextNoQuote
+    /(CaseOwner)\s/ group = TextNoQuote
         attrProp = AttributeProp
 ;
 
 CasePatient:
-    'CasePatient' group = TextNoQuote
+    /(CasePatient)\s/ group = TextNoQuote
         attrProp = AttributeProp
 ;
 
@@ -122,7 +122,7 @@ CasePatient:
 
 
 Responsibilities:
-    'Responsibilities'
+    /(Responsibilities)\s/
     (
         groupList *= Group
         userList *= User
@@ -146,7 +146,7 @@ ValidAttribute:
 *****************************/
 
 Attribute:
-    "attribute" name = ID
+    AttributeTerm name = ID
     //(
 
         attrProp = AttributeProp
@@ -174,18 +174,18 @@ AttributeDirective:
 ****************************/
 
 SummaryPanel:
-    'SummaryPanel' sectionList += SummarySection
+    /(SummaryPanel)\s/ sectionList += SummarySection
 ;
 
 SummarySection:
-    'Section' name = ID
+    /(Section)\s/ name = ID
         (directive = SummarySectionPosition)?
         description = Description
         paramList += SummaryParam
 ;
 
 SummaryParam:
-    'InfoPath' path = TextNoQuote
+    /(InfoPath)\s/ path = TextNoQuote
 ;
 
 /********************
@@ -198,32 +198,32 @@ Hook:
 
 CaseHook:
     (
-        ('Hook' name = ID)?
-        'On' event = CaseHookEvent
-        'invoke' url = STRING
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = CaseHookEvent
+        /(invoke)\s/ url = STRING
     ) | (RefHook ref=[CaseHook|FQN])?
 ;
 
 HttpHook:
     (
-        ('Hook' name = ID)?
-        'On' event = BaseEvent
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = BaseEvent
         (
-            ('invoke' url = STRING)
-            ('method' method = HttpMethod)
-            ('with failureMessage' failureMessage = STRING)?
+            (/(invoke)\s/ url = STRING)
+            (/(method)\s/ method = HttpMethod)
+            (/(with failureMessage)\s/ failureMessage = STRING)?
         )#
     ) | (RefHook ref=[HttpHook|FQN])?
 ;
 
 DualTaskHttpHook:
     (
-        ('Hook' name = ID)?
-        'On' event = DualTaskEvent
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = DualTaskEvent
         (
-            ('invoke' url = STRING)
-            ('method' method = HttpMethod)
-            ('with failureMessage' failureMessage = STRING)?
+            (/(invoke)\s/ url = STRING)
+            (/(method)\s/ method = HttpMethod)
+            (/(with failureMessage)\s/ failureMessage = STRING)?
         )#
     ) | (RefHook ref=[DualTaskHttpHook|FQN])?
 ;
@@ -324,11 +324,13 @@ HumanTask:
     (
         HumanTaskTerm name = ID
             directive = StageElementDirective
+            attrList = SharedTaskAttrs
             (
-                attrList = SharedTaskAttrs
-                ('Trigger' hookList *= HttpHook)?
-                form = Form
+                (/(Trigger)\s/ hookList *= HttpHook)?
+                (form +=  Form)
             )#
+
+
     )
     | (RefTask ref=[HumanTask|FQN])?
 ;
@@ -339,7 +341,7 @@ AutomatedTask:
             directive = StageElementDirective
             (
                 attrList = AutomatedTaskAttrs
-                ('Trigger' hookList *= HttpHook)?
+                (/(Trigger)\s/ hookList *= HttpHook)?
                 form = Form
             )#
     ) | (RefTask ref=[AutomatedTask|FQN])?
@@ -351,7 +353,7 @@ DualTask:
             directive = StageElementDirective
             (
                 attrList = SharedTaskAttrs
-                ('Trigger' hookList *= DualTaskHttpHook)?
+                (/(Trigger)\s/ hookList *= DualTaskHttpHook)?
                 form = Form
             )#
     ) | (RefTask ref=[DualTask|FQN])?
@@ -396,11 +398,11 @@ Precondition:
 ***********************/
 
 Form:
-    (
-        FormTerm name = ID
+    (   FormTerm
+         name = ID
             (directive = FormDirective)?
             fieldList += FormField
-    ) | (Ref FormTerm ref=[Form|FQN])?
+    )  | (Ref FormTerm ref=[Form|FQN])?
 ;
 
 FormDirective:
@@ -416,7 +418,7 @@ FormField:
 
 Field:
     (
-        'Field' name = ID
+         /(Field)\s/ name = ID
             directive = FieldDirective
             (
                 (
@@ -430,8 +432,9 @@ Field:
                 (defaultValue = DefaultValue)?
                 (defaultValues = DefaultValues)?
             )#
-    )
-    | (Ref 'Field' ref=[Field|FQN])?
+            ) 
+ //   /(FieldEnd)\s/ ) 
+    | (Ref /(Field)\s/ ref=[Field|FQN])?
 ;
 
 FieldPath:
@@ -489,7 +492,7 @@ Question:
 ;
 
 Option:
-    'Option' (
+    /(Option)\s/ (
         (key=STRING)
         ('value' Eq value=STRING)
         (additionalDescription = AdditionalDescription)?
@@ -565,7 +568,9 @@ LinkType:
 
 DateType:
     'date.after(TODAY)'
-    | 'date'
+    | /(date)\s/
+
+     // define the longest child path first 
 ;
 
 NumType:
@@ -823,69 +828,71 @@ Comment:
 ***************************/
 
 WorkspaceTerm:
-    'Workspace'
+    /(Workspace)\s/
 ;
 
 CaseTerm:
-    'Case'
+    /(Case)\s/
 ;
 
 SettingTerm:
-    'Setting'
+    /(Setting)\s/
 ;
 
 StageTerm:
-    'Stage'
+    /(Stage)\s/
 ;
 
 TaskTerm:
-    'Task'
+    /(Task)\s/
 ;
 
 HumanTaskTerm:
-    'HumanTask'
+    /(HumanTask)\s/
 ;
 
 AutoTaskTerm:
-    'AutoTask'
+    /(AutoTask)\s/
 ;
 
 DualTaskTerm:
-    'DualTask'
+    /(DualTask)\s/
 ;
 
 FormTerm:
-    'Form'
+    /(Form)\s/
 ;
 
 FieldTerm:
-    'Field'
+    /(Field)\s/
 ;
 
 DynamicFieldTerm:
-    'DynamicField'
+    /(DynamicField)\s/
 ;
 
 HookTerm:
-    'Hook'
+    /(Hook)\s/
 ;
 
 UserTerm:
-    'User'
+    /(User)\s/
 ;
 
 GroupTerm:
-    'Group'
+    /(Group)\s/
 ;
 
 PreconditionTerm:
-    'Precondition'
+    /(Precondition)\s/
 ;
 
 FormTerm:
-    'Form'
+    /(Form)\s/
 ;
-
+AttributeTerm:
+    /(Attribute)\s/
+;
 
 /********************************************
 **** ERROR DETECTION ASSISTANT RULES ********
@@ -925,3 +932,5 @@ AttrList:
     (attr += Entity | attr += Attribute)*
     'endAttributeList'
 ;
+WhiteSpace:
+    /\s/ | /\n/;

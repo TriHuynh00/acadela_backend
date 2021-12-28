@@ -112,6 +112,6 @@ def sacm_compile(attribute):
     else:
         thisAttr['type'] = defaultAttrMap['type']
 
-    print("Attribute JSON")
-    print(json.dumps(attrObj, indent=4))
+    #print("Attribute JSON")
+    #print(json.dumps(attrObj, indent=4))
     return attrObj

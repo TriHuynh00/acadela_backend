@@ -18,7 +18,8 @@ class CaseDefinition():
                  clientPath = None,
                  notesDefaultValue = None,
                  version = 0,
-                 isPrefixed = True):
+                 isPrefixed = True,
+                 lineNumber = None):
 
         if isPrefixed:
             self.id = util.prefixing(id)
@@ -42,6 +43,7 @@ class CaseDefinition():
         self.notesDefaultValue = notesDefaultValue
         self.caseHookEvents = caseHookEvents
         self.version = version
+        self.lineNumber = lineNumber
         # self.onActivateHookUrl = onActivateHookUrl
         # self.onCompleteHookUrl = onCompleteHookUrl
         # self.onTerminateHookUrl = onTerminateHookUrl

@@ -4,3 +4,5 @@ import logging
 CONN_SOCIOCORTEX = False
 LOG_LEVEL_CRITICAL = logging.CRITICAL
 LOG_LEVEL_NONE = logging.DEBUG
+PATH_CHECKING_EXTERNAL_FIELD = False
+MODEL_PLACEHOLDER = "model_placeholder"

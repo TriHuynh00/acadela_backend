@@ -22,15 +22,19 @@ from http_request import HttpRequest
 import json
 import requests
 import sys
+from sacm.exception_handler.semantic_error_handler import id_uniqueness_checker
+from sacm.exception_handler.semantic_error_handler import path_validity_checker
+
 
 this_folder = dirname(__file__)
 
 
 class CaseInterpreter():
 
-    def __init__(self, metamodel, model):
+    def __init__(self, metamodel, model, treatment_str):
         self.metamodel = metamodel
         self.model = model
+        self.treatment_str = treatment_str
         self.refFinder = WorkspaceReferencer()
         self.groupFinder = GroupReferencer()
         self.groupInterpreter = GroupInterpreter()
@@ -49,6 +53,7 @@ class CaseInterpreter():
         self.attributeList = []
         self.jsonEntityList = []
         self.jsonAttributeList = []
+        self.settingList = []
 
         self.caseObjectTree = None
 
@@ -83,7 +88,7 @@ class CaseInterpreter():
 
         caseDefJsonFinal = {"jsonTemplate": caseDefJson}
 
-        print(json.dumps(caseDefJsonFinal, indent=4))
+        # print(json.dumps(caseDefJsonFinal, indent=4))
         print()
         return caseDefJsonFinal
 
@@ -102,7 +107,7 @@ class CaseInterpreter():
         #             print(obj.name)
         #             for attr in obj.attr:
         #                print('{} = {}'.format(util.cname(attr), attr.value))
-        #else:
+        # else:
         if util.cname(workspaceDef) == 'DefWorkspace':
 
             acaversion = model.versionTag
@@ -118,8 +123,8 @@ class CaseInterpreter():
 
                 self.workspace = workspaceDef
 
+            self.workspace = workspaceDef
             case = None
-
             caseCount = 0
             for wpObj in workspaceDef.workspaceObj:
                 print('wpObj cname = ', util.cname(wpObj))
@@ -138,7 +143,6 @@ class CaseInterpreter():
 
             # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.name)
 
-
             # if "Error" in returnedMsg:
             #     raise Exception("StaticID not found for workspace {}, Reason: {}"
             #                     .format(workspace.name, returnedMsg))
@@ -147,38 +151,44 @@ class CaseInterpreter():
 
             if util.cname(case) == 'Case':
                 print('Case', case.name)
-
+                print(self.model._tx_parser.pos_to_linecol(case._tx_position))
             for group in case.responsibilities.groupList:
                 print("Group", group.name)
-
                 if runNetworkOp:
-                    if self.groupInterpreter.\
+                    if self.groupInterpreter. \
                             find_static_id(group, workspaceDef.workspace.staticId) is not None:
+                        group.lineNumber = model._tx_parser.pos_to_linecol(group._tx_position)
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"
                                         .format(group.name, group.groupName, workspaceDef.workspace.staticId))
+                else:
+                    group.lineNumber = model._tx_parser.pos_to_linecol(group._tx_position)
+                    self.groupList \
+                        .append(group)
 
             for user in case.responsibilities.userList:
                 print("User", user.name)
                 if runNetworkOp:
-                    if self.userInterpreter.\
+                    if self.userInterpreter. \
                             findStaticId(user, self.groupList) is not None:
+                        user.lineNumber = model._tx_parser.pos_to_linecol(user._tx_position)
                         self.userList.append(user)
                     else:
                         raise Exception(("cannot find static ID for user with reference ID {0}. " +
-                                        "Please verify if the user reference ID is correct.")
+                                         "Please verify if the user reference ID is correct.")
                                         .format(user.name))
-
+                else:
+                    user.lineNumber = model._tx_parser.pos_to_linecol(user._tx_position)
+                    self.userList.append(user)
             print()
-
 
             print('Workspace \n\tStaticID = {} \n\tID = {} \n'.format(
                 workspaceDef.workspace.staticId, workspaceDef.workspace.name))
 
-            #for group in self.groupList:
-            #    print("\tgroup: staticId = {}, name = {}".
-            #          format(group.staticId, group.name))
+            for group in self.groupList:
+                print("\tgroup: staticId = {}, name = {}".
+                      format(group.staticId, group.name))
 
             print()
 
@@ -192,8 +202,12 @@ class CaseInterpreter():
             ########################################
             stageAsAttributeList = []
             for caseStage in case.stageList:
-
                 print("Stage", caseStage.name, "Task List size before parse", len(caseStage.taskList))
+                print('Stage!!!', caseStage.preconditionList)
+                if len(caseStage.preconditionList)>0:
+                    for condition in caseStage.preconditionList:
+                        print('Condition',condition.__dict__)
+                        print('Condition!!!',self.model._tx_parser.pos_to_linecol(condition._tx_position))
 
                 stage = util.getRefOfObject(caseStage)
 
@@ -202,54 +216,60 @@ class CaseInterpreter():
                 stageTasks = []
 
                 for task in stage.taskList:
-
                     task = util.getRefOfObject(task)
 
-                    iTask = taskInterpreter\
-                            .interpret_task(task, stage.name)
+                    iTask = taskInterpreter \
+                        .interpret_task(self.model, task, stage.name)
 
-                    taskAsAttributeList\
+                    taskAsAttributeList \
                         .append(iTask['taskAsAttribute'])
 
                     stageTasks.append(iTask['task'])
 
                     self.taskList.append(iTask['task'])
 
-                    self.entityList\
+                    self.entityList \
                         .append(iTask['taskAsEntity'])
 
                 interpretedStage = \
-                    interpret_stage(stage,
-                                   stageTasks,
-                                   taskAsAttributeList)
+                    interpret_stage(self.model, stage,
+                                    stageTasks,
+                                    taskAsAttributeList)
 
-                self.entityList\
+                self.entityList \
                     .append(interpretedStage['stageAsEntity'])
-
-                self.stageList\
+            
+                self.stageList \
                     .append(interpretedStage['stage'])
 
-                stageAsAttributeList\
+                stageAsAttributeList \
                     .append(interpretedStage['stageAsAttribute'])
 
             ############################################
             # END INTERPRET CLINICAL PATHWAYS ELEMENTS #
             ############################################
 
-            interpretedSetting = caseDefinition\
-                .interpret_setting_entity(case.setting)
+            interpretedSetting = caseDefinition \
+                .interpret_setting_entity(case.setting, self.model)
 
             settingEntity = interpretedSetting['settingAsEntity']
             self.entityList.append(settingEntity)
+            self.settingList.append(settingEntity)
 
             interpretedCase = caseDefinition.interpret_case_definition(
-                case, interpretedSetting, stageAsAttributeList, self.stageList)
+                case, interpretedSetting, stageAsAttributeList, self.stageList, self.model)
 
             self.entityList \
                 .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
-
+            
+            # loop through stageasattributelist and add each to attributelist
+            for attr in stageAsAttributeList:
+                self.attributeList.append(attr)
+                
+            for attr in taskAsAttributeList:
+                self.attributeList.append(attr)
             # Swap Entity so that the objects at higher
             # hierarchy are placed first. This avoid
             # creating non-existing parent entity when a
@@ -264,17 +284,18 @@ class CaseInterpreter():
                 "stages": self.stageList,
                 "tasks": self.taskList,
                 'case': self.caseDefinition,
-                "attributes": self.attributeList
+                "attributes": self.attributeList,
+                "settings": self.settingList
             }
-
             # TODO [Validation]: Check valid path value here
             # 1. Check Sentry ID & Condition match with any existing
             #    Stage.Task.Field Object
             #
+            id_uniqueness_checker.check_id_uniqueness(self.caseObjectTree)
             # 2. Check Field with custom path is pointed to a valid source
             #    Need to prefix the path afterward (using
             #    prefix_path_value() function in interpreter/util_intprtr
-
+            path_validity_checker.check_path_validity(self.caseObjectTree, self.treatment_str)
             print("\nAttrList size =", len(case.setting.attrList))
             for attr in case.setting.attrList:
                 attributeInterpreter.interpret_attribute_object(attr)
@@ -286,10 +307,10 @@ class CaseInterpreter():
 
             if runNetworkOp:
                 response = requests.post(
-                HttpRequest.sacmUrl + \
-                "import/acadela/casedefinition?version={}&isExecute=false".format(self.caseDefinition.version),
-                headers=HttpRequest.simulateUserHeader,
-                json=json.loads(json.dumps(caseInJson)))
+                    HttpRequest.sacmUrl + \
+                    "import/acadela/casedefinition?version={}&isExecute=false".format(self.caseDefinition.version),
+                    headers=HttpRequest.simulateUserHeader,
+                    json=json.loads(json.dumps(caseInJson)))
 
                 print("response", json.dumps(str(response._content)[1:-1], indent=2))
 

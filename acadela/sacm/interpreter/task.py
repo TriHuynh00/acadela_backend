@@ -15,7 +15,7 @@ from sacm.case_object.task import Task
 from sacm.case_object.attribute import Attribute
 
 
-def interpret_task(task, stageId):
+def interpret_task(model, task, stageId):
 
     taskId = util.prefixing(task.name)
     stageId = util.prefixing(stageId)
@@ -34,9 +34,11 @@ def interpret_task(task, stageId):
 
     if util.cname(task) != 'AutomatedTask':
         if util.is_attribute_not_null(attrList, 'dueDatePath'):
-            dueDatePath = util_intprtr.prefix_path_value(
-                attrList.dueDatePath.value, False
-            )
+            #dueDatePath = util_intprtr.prefix_path_value(
+            #    attrList.dueDatePath.value, False
+            #)
+            dueDatePath = attrList.dueDatePath.value
+            print("dueDatePath",dueDatePath,attrList.dueDatePath.value)
 
     ownerPath = None \
         if attrList.ownerPath is None \
@@ -68,10 +70,10 @@ def interpret_task(task, stageId):
         else None
 
     if preconditionObj is not None:
-        print("Task Precondition", [sentry for sentry in preconditionObj])
+        print("Task Precondition", [sentry.__dict__ for sentry in preconditionObj])
         for sentry in preconditionObj:
             preconditionList.append(
-                interpret_precondition(sentry, process = task)
+                interpret_precondition(model, sentry, process = task)
             )
 
     print("Task Sentry List", preconditionList)
@@ -108,13 +110,14 @@ def interpret_task(task, stageId):
         else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
-    taskForm = util.getRefOfObject(task.form)
-
+    taskFormList = util.getRefOfObject(task.form)
+    if len(taskFormList)>1:
+        raise Exception("Each task has to have 1 form!")
+    taskForm=taskFormList[0]
     for field in taskForm.fieldList:
         field = util.getRefOfObject(field)
         formDirective = taskForm.directive
         interpretedFieldTuple = None
-
         fieldPath = "{}.{}.{}".format(
             stageId,
             taskId,
@@ -124,7 +127,7 @@ def interpret_task(task, stageId):
 
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath,\
-                                 taskType, formDirective)
+                                 taskType, formDirective, model)
 
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
@@ -132,7 +135,7 @@ def interpret_task(task, stageId):
 
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath,
-                                         taskType, formDirective)
+                                         taskType, formDirective, model)
 
             dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
             # dynamicFieldList.append(dynamicFieldList)
@@ -164,6 +167,7 @@ def interpret_task(task, stageId):
                         fieldAsAttributeList, isPrefixed=False)
 
     entityAttachPath = '{}.{}'.format(stageId, taskId)
+    lineNumber = model._tx_parser.pos_to_linecol(task._tx_position)
 
     taskObject = Task(taskId, attrList.description.value,
                       multiplicity, typeValue,
@@ -181,14 +185,17 @@ def interpret_task(task, stageId):
                       dynamicDescriptionPath,
                       preconditionList,
                       taskHookList,
+                      lineNumber,
                       entityAttachPath,
-                      isPrefixed=False)
+                      isPrefixed=False,
+
+                      )
 
     taskAsAttribute = Attribute(taskId,
                                 attrList.description,
                                 multiplicity, typeValue,
                                 externalId = externalId)
-
+    print("TASK OBJECT:",taskObject.__dict__)
     return {
         'task': taskObject,
         'taskAsEntity': taskAsEntity,

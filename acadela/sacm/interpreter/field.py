@@ -11,7 +11,7 @@ from sacm.case_object.enumeration import Enumeration
 
 import sacm.interpreter.directive as direc_intprtr
 
-def interpret_field(field, fieldPath, taskType, formDirective):
+def interpret_field(field, fieldPath, taskType, formDirective,model):
     directive = field.directive
     part = directive.part
     enumerationOptions = []
@@ -47,7 +47,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
                 .interpret_directive(directive.multiplicity)
 
     type = defaultAttrMap['type'] \
-        if not hasattr(directive, "type") \
+        if not util.is_attribute_not_null(directive, "type") \
         else direc_intprtr\
                     .interpret_directive(directive.type)
 
@@ -100,7 +100,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
 
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
-
+    lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
     fieldAsTaskParam = Field(field.name, description,
                              question,
                              multiplicity,
@@ -111,7 +111,8 @@ def interpret_field(field, fieldPath, taskType, formDirective):
                              position,
                              uiRef,
                              externalId,
-                             part)
+                             part,
+                             lineNumber)
 
     print("field as TaskParam", vars(fieldAsTaskParam))
 
@@ -119,7 +120,7 @@ def interpret_field(field, fieldPath, taskType, formDirective):
             "fieldAsTaskParam": fieldAsTaskParam}
 
 def interpret_dynamic_field(field, fieldPath,
-                            taskType, formDirective):
+                            taskType, formDirective,model):
 
     directive = field.directive
 
@@ -134,8 +135,8 @@ def interpret_dynamic_field(field, fieldPath,
         if field.additionalDescription is None \
         else field.additionalDescription.value
 
-    explicitAttrType = None \
-        if not hasattr(directive, "explicitType") \
+    explicitAttrType = defaultAttrMap["type"] \
+        if not util.is_attribute_not_null(directive, "explicitType") \
         else direc_intprtr \
         .interpret_directive(directive.explicitType)
 
@@ -160,7 +161,6 @@ def interpret_dynamic_field(field, fieldPath,
     # If field type is custom, set the field path to custom path
     if explicitAttrType == CUSTOM_TYPE:
         fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
-        explicitAttrType = ''
         print("custom field path of dynamic field", fieldPath)
 
     if taskType == 'DualTask':
@@ -184,7 +184,7 @@ def interpret_dynamic_field(field, fieldPath,
                                         uiRef,
                                         externalId,
                                         explicitAttrType)
-
+    lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
     dynamicField = DynamicField(field.name,
                                 field.description.value,
                                 explicitAttrType,
@@ -197,7 +197,8 @@ def interpret_dynamic_field(field, fieldPath,
                                 readOnly,
                                 mandatory,
                                 position,
-                                part)
+                                part,
+                                lineNumber)
 
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": dynamicField}
