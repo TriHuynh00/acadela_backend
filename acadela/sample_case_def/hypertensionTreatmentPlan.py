@@ -127,7 +127,7 @@ define case ST1_Hypertension
                     label = 'Systolic Assessment:'
                     uiRef = use rgu.redGreenUiRef
                     expression = 'if (Systolic<120) then "Normal"
-                            elsef "High"'
+                            else "High"'
 
 
                 OutputField DiastolicAnalysis

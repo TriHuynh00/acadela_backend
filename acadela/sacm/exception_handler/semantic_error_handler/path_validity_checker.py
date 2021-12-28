@@ -38,63 +38,70 @@ def parse_field_expression(dynamic_field, fields, line_number):
                                                                                                       line_number))
 
 
-def parse_precondition(precondition, case_object_tree, line_number=(0, 0)):
-    print("PARSING PRECONDITION", precondition)
-    split_precondition_path = precondition.split(".")
-    precondition_start = split_precondition_path[0]
-    # CASE 1: precondition is located in SETTING
-    if 'Setting' in precondition_start:
-        if len(split_precondition_path) < 2:
-            raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
-        field = re.split('\W+', split_precondition_path[1])[0]
-        setting_list = case_object_tree["settings"][0].attribute
-        setting_names = [setting.id for setting in setting_list]
-        if field not in setting_names:
-            raise Exception(
-                "Invalid precondition path at line {}. '{}' not found in Settings!".format(line_number, field))
+def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
+    print("PARSING PRECONDITION", precondition_str)
+    precondition_str = precondition_str.replace("(", "").replace(")", "")
+    preconditions = re.split(r'and|or', precondition_str)
+    for precondition in preconditions:
+        precondition = precondition.replace(" ", "")
+        split_precondition_path = precondition.split(".")
+        print(precondition, split_precondition_path)
+        precondition_start = split_precondition_path[0]
+        # CASE 1: precondition is located in SETTING
+        if 'Setting' in precondition_start:
+            if len(split_precondition_path) < 2:
+                raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
+            field = re.split('\W+', split_precondition_path[1])[0]
+            setting_list = case_object_tree["settings"][0].attribute
+            setting_names = [setting.id for setting in setting_list]
+            if field not in setting_names:
+                raise Exception(
+                    "Invalid precondition path at line {}. '{}' not found in Settings!".format(line_number, field))
 
-    # CASE 2: precondition is located in TASK
-    else:
-        if len(split_precondition_path) < 3:
-            raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
-        precondition_stage = split_precondition_path[0]
-        precondition_task = split_precondition_path[1]
-        precondition_field = re.split('\W+', split_precondition_path[2])[0]
-
-        # check if stage name is valid
-        stages = case_object_tree["stages"]
-        found_stage = None
-        found_task = None
-        found_field = None
-
-        for stage in stages:
-            if stage.id.split("_")[1] == precondition_stage:
-                found_stage = stage
-                break
-
-        if found_stage is None:
-            raise Exception("invalid precondition path at line {}. '{}' not found in stages!".format(line_number,
-                                                                                                     precondition_stage))
+        # CASE 2: precondition is located in TASK
         else:
-            print("Stage is found", precondition_stage)
-            task_list = stage.taskList
-            for task in task_list:
-                if task.id.split("_")[1] == precondition_task:
-                    found_task = task
+            if len(split_precondition_path) < 3:
+                raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
+            precondition_stage = split_precondition_path[0]
+            precondition_task = split_precondition_path[1]
+            precondition_field = re.split('\W+', split_precondition_path[2])[0]
+
+            # check if stage name is valid
+            stages = case_object_tree["stages"]
+            found_stage = None
+            found_task = None
+            found_field = None
+
+            for stage in stages:
+                if stage.id.split("_")[1] == precondition_stage:
+                    found_stage = stage
+                    print("foundSTAGE", found_stage)
                     break
-            if found_task is None:
-                raise Exception("invalid precondition path at line {}. '{}' not found in tasks!".format(line_number,
-                                                                                                        precondition_task))
+
+            if found_stage is None:
+                raise Exception("invalid precondition path at line {}. '{}' not found in stages!".format(line_number,
+                                                                                                         precondition_stage))
             else:
-                print("Task is found", precondition_task)
-                task_field_list = found_task.fieldList + found_task.dynamicFieldList
-                for field in task_field_list:
-                    if field.id == precondition_field:
-                        found_field = field
+                print("Stage is found", precondition_stage)
+                task_list = stage.taskList
+                for task in task_list:
+                    if task.id.split("_")[1] == precondition_task:
+                        found_task = task
                         break
-                if found_field is None:
-                    raise Exception("invalid precondition path at line {}.. {} not found in fields!".format(line_number,
-                                                                                                            precondition_field))
+                if found_task is None:
+                    raise Exception("invalid precondition path at line {}. '{}' not found in tasks!".format(line_number,
+                                                                                                            precondition_task))
+                else:
+                    print("Task is found", precondition_task)
+                    task_field_list = found_task.fieldList + found_task.dynamicFieldList
+                    for field in task_field_list:
+                        if field.id == precondition_field:
+                            found_field = field
+                            break
+                    if found_field is None:
+                        raise Exception(
+                            "invalid precondition path at line {}.. {} not found in fields!".format(line_number,
+                                                                                                    precondition_field))
 
 
 def find_line_number(treatment_str, parent, field):
