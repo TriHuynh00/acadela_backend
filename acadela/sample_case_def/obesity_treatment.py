@@ -1,6 +1,6 @@
 treatmentPlanStr = """
     #aca0.1
-    //import extfile.form as iForm
+    import extfile.form as iForm
     //import extfile.taskCharlsonTest
     //import extfile.redGreenUiRef as rgu
 
@@ -116,38 +116,9 @@ treatmentPlanStr = """
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'MeasureBMI'
                 
-                //use Form iForm.BMIForm
-                
-                Form BMIForm
-                    #mandatory
-                    
-                    field Height
-                        #number(0-3) #exactlyOne
-                        label ='Height of patient in m'
-                
-                    field Weight
-                        #number(0-300) #exactlyOne
-                        label ='Weight of patient in kg'
-                
-                    field AgeRange
-                        #singlechoice #exactlyOne
-                        Question = 'What is your age range?'
-                            Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
-                            Option '10-30' value = '1.2'
-                            Option '30-50' value = '1.5'
-                            Option 'over 50' value = '1.7'
+                use Form iForm.BMIForm
                 
                 
-                    DynamicField BmiScore
-                        #mandatory #number
-                        label ='BMI Calculation in kilogram and meters'
-                        expression = 'Weight / (Height * Height)'
-                
-                    DynamicField BmiScorePlus
-                        #mandatory #left #number
-                        label = 'BMI Calculation with age counted'
-                        expression = 'BmiScore + AgeRange'
-                        uiRef = 'colors(5<orange<=18<green<=25<red<100)'
             
         Stage Treatment
             #mandatory #repeatParallel

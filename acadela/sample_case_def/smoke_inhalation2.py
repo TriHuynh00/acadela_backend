@@ -1,5 +1,6 @@
 treatmentPlanStr = """
-workspace Umcg
+    workspace Umcg
+
     define case ST1_SmokeInhalation
         prefix = 'ST1'
         version = 2
@@ -11,9 +12,11 @@ workspace Umcg
             group UmcgProfessionals name = 'Umcg Professional' 
             group UmcgPatients name = 'Umcg Patient' 
             group UmcgNurses name = 'Umcg Nurse' 
+
         Setting
             CaseOwner UmcgProfessionals #exactlyOne
                 label = 'UMCG Professionals'
+
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
                 label = 'Workplan Due Date'
@@ -29,18 +32,21 @@ workspace Umcg
             Attribute Nurse
                 #exactlyOne #Link.Users(UmcgNurses) 
                 label = 'Nurse'
+
         SummaryPanel
             Section Risks #left
                 label = "Immediate Signs for Class II?"
                 InfoPath EvaluationIntermediate.ImmediateRisks.ImmediateFactor1
                 InfoPath EvaluationIntermediate.ImmediateRisks.ImmediateFactor2
                 InfoPath EvaluationIntermediate.ImmediateRisks.ImmediateFactor3
+
             Section Risks #left
                 label = "Potential Signs for Class II?"
                 InfoPath Evaluation.AssessRisk.Factor1
                 InfoPath Evaluation.AssessRisk.Factor2
                 InfoPath Evaluation.AssessRisk.Factor3
                 InfoPath Evaluation.AssessRisk.Factor4
+
             Section Risks #left
                 label = "Symptoms for Class II?"
                 InfoPath Sy.ASy.S1
@@ -49,20 +55,24 @@ workspace Umcg
                 InfoPath Sy.ASy.S4
                 InfoPath Sy.ASy.S5
                 InfoPath Sy.ASy.S6
+
             Section Risks #left
                 label = "Results of laryngoscopy"
                 InfoPath ClassTwo.AssessClassTwo.ClTwo1
                 InfoPath ClassTwo.AssessClassTwo.ClTwo2
+
             Section Risks #right
                 label = "Actions taken for Class II diagnosed patient"
                 InfoPath ClassTwoDiagnosed.AssessClassTwoDiagnosed.CLDiagnosed1
                 InfoPath ClassTwoDiagnosed.AssessClassTwoDiagnosed.CLDiagnosed2
                 InfoPath ClassTwoDiagnosed.AssessClassTwoDiagnosed.CLDiagnosed3
+
              Section Risks #right
                 label = "Actions taken for Class II not diagnosed patient"
                 InfoPath ClassTwoNotDiagnosed.AssessClassTwoNotDiagnosed.CLNotDiagnosed1
                 InfoPath ClassTwoNotDiagnosed.AssessClassTwoNotDiagnosed.CLNotDiagnosed2
                 
+
         Stage Identification
             #mandatory
             owner = 'Setting.CaseOwner'
@@ -110,16 +120,19 @@ workspace Umcg
                             question = 'Visible burns or edema of the oropharnyx'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                         Field ImmediateFactor2
                         #singlechoice 
                             question = 'Full thickness nasolabial burns'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                         Field ImmediateFactor3
                         #singlechoice 
                             question = 'Circumfeerential neck burns'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
         Stage Evaluation
             #mandatory
             owner = 'Setting.Clinician'
@@ -129,12 +142,14 @@ workspace Umcg
                 previousStep = 'EvaluationIntermediate'
                 condition = 'EvaluationIntermediate.ImmediateRisks.ImmediateFactor1 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor2 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor3 = 0'
                        
+
             HumanTask AssessRisk
                 #mandatory #exactlyOne
                 label = 'Assess potential signs for smoke inhalation injury (Class II)'
                 owner = 'Setting.Clinician'
                 dueDateRef = 'Setting.WorkplanDueDate'
                 externalId = 'AssessRisk'
+
                 
                 Form AssessRiskForm
                         Field Factor1
@@ -142,11 +157,13 @@ workspace Umcg
                             question = 'Burns in a closed space'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                         Field Factor2
                         #singlechoice
                             question = 'Singed nasal hair'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                         Field Factor3
                         #singlechoice
                             question = 'Facial burns'
@@ -158,14 +175,17 @@ workspace Umcg
                             question = 'Soot in the mouth'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
     
         Stage Sy
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Symtopmatic'
+
             Precondition
                 previousStep = 'Evaluation'
                 condition = 'Evaluation.AssessRisk.Factor1 + Evaluation.AssessRisk.Factor2 + Evaluation.AssessRisk.Factor3 + Evaluation.AssessRisk.Factor4 > 0'
+
             
             HumanTask ASy
                 #mandatory #exactlyOne
@@ -180,31 +200,38 @@ workspace Umcg
                             question = 'signss of respiratory'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field S2
                         #singlechoice
                             question = 'throat pain'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field S3
                         #singlechoice
                             question = 'odynophagia'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field S4
                         #singlechoice
                             question = 'drooling'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field S5
                         #singlechoice
                             question = 'stridor'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field S6
                         #singlechoice
                             question = 'hoarseness'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
+
         Stage ClassTwo
             #mandatory
             owner = 'Setting.Clinician'
@@ -227,24 +254,30 @@ workspace Umcg
                             question = 'Erythema at upper airway'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field ClTwo2
                         #singlechoice
                             question = 'Blisters of the palate'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
         Stage ClassTwoDiagnosed
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Class II Diagnosed'
+
             Precondition
                 previousStep = 'EvaluationIntermediate'
                 condition = 'EvaluationIntermediate.ImmediateRisks.ImmediateFactor1 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor2 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor3 > 0'
+
             Precondition
                 previousStep = 'ASy'
                 condition = 'Sy.ASy.S1 + Sy.ASy.S2 + Sy.ASy.S3 + Sy.ASy.S4 + Sy.ASy.S5 + Sy.ASy.S6 > 0'
+
             Precondition
                 previousStep = 'ClassTwo'
                 condition = 'ClassTwo.AssessClassTwo.ClTwo1 + ClassTwo.AssessClassTwo.ClTwo2 > 0'
+
             HumanTask AssessClassTwoDiagnosed
                 #mandatory #exactlyOne
                 label = 'Next steps for patient Diagnosed with Class II'
@@ -258,26 +291,32 @@ workspace Umcg
                             question = 'Early intubation for airway protection'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field CLDiagnosed2
                         #singlechoice 
                             question = 'Admit to ICU for bronchoscopy or consider to transfer to burn center'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field CLDiagnosed3
                         #singlechoice 
                             question = 'Transfer to burn center'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
         Stage ClassTwoNotDiagnosed
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Class II not Diagnosed'
+
             Precondition
                 previousStep = 'Evaluation'
                 condition = 'Evaluation.AssessRisk.Factor1 + Evaluation.AssessRisk.Factor2 + Evaluation.AssessRisk.Factor3 + Evaluation.AssessRisk.Factor4 = 0'
+
             Precondition
                 previousStep = 'ClassTwo'
                 condition = 'ClassTwo.AssessClassTwo.ClTwo1 + ClassTwo.AssessClassTwo.ClTwo2 = 0'
+
             HumanTask AssessClassTwoNotDiagnosed
                 #mandatory #exactlyOne
                 label = 'Next steps for patient not Diagnosed with Class II'
@@ -291,9 +330,11 @@ workspace Umcg
                             question = 'If high-risk, consider 24-hour observation to rule out lower airway injury'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+
                     Field CLNotDiagnosed2
                         #singlechoice
                             question = 'If high-risk, bronchoscopy to rule out lower airway injury'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
+                        
 """

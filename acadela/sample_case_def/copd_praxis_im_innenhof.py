@@ -4,7 +4,7 @@ treatmentPlanStr = """
 workspace Umcg
     define case PII1_COPD
         prefix = 'PII1'
-        version = 7
+        version = 1
         label = 'COPD Treatment'
         
         Responsibilities
@@ -83,7 +83,7 @@ workspace Umcg
                     previousStep = 'Exercise'
                     
                 HumanTask QuestionPreExercise
-                    #mandatory #atLeastOne
+                    #mandatory
                     label = "Pre-exercise Questionnaire"
                     
                     Form PreExerciseForm
@@ -129,7 +129,7 @@ workspace Umcg
                                 option 'Yes' value = '1'
                 
                 HumanTask BreathingExercise
-                    #mandatory #atLeastOne
+                    #mandatory 
                     label = 'Conduct Breathing Exercise'
                     
                     precondition
@@ -164,7 +164,7 @@ workspace Umcg
                             label = 'Comment'
                             
                 HumanTask QuestionPostExercise
-                    #mandatory #atLeastOne
+                    #mandatory 
                     label = 'Post-exercise Questionnaire'
                     
                     precondition
@@ -201,7 +201,7 @@ workspace Umcg
                         
                     
             Stage Discharge
-                #mandatory #manualActivate
+                #mandatory
                 owner = 'Setting.CaseOwner'
                 label = 'Discharge'
                 

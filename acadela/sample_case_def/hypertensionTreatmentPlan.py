@@ -5,7 +5,7 @@ workspace Umcg
 
 define case ST1_Hypertension
     prefix = 'ST1'
-    version = 4
+    version = 1
     label = 'Hypertension Treatment'
     
     Responsibilities
@@ -126,6 +126,7 @@ define case ST1_Hypertension
                     #left #custom
                     CustomFieldValue = "Setting.BloodPressureCondition"
                     label = 'Overall Assessment:'
+                    
                     expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
                                   else if (Diastolic < 80 and Systolic < 130) then "Elevated" 
                                   else "High"'
@@ -173,8 +174,10 @@ define case ST1_Hypertension
         // Define two Preconditions to express the OR logic between them
         Precondition
             previousStep = 'Evaluation' 
-            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0'
-        
+            condition = '((Evaluation.RequestMedicalTest.CholesterolTest = 0 and Evaluation.MeasureBloodPressure.Diastolic > 130) 
+                            or Evaluation.MeasureBloodPressure.Diastolic > 150)'
+            //condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0'
+            
         Precondition
             previousStep = 'MedicalTest'
             condition = 'Setting.BloodPressureCondition = "High"'
@@ -208,7 +211,7 @@ define case ST1_Hypertension
                     label = "Comment:"
                     
     Stage Discharge
-        #mandatory #manualActivate
+        #mandatory #activateWhen('Evaluation.MeasureBloodPressure.Systolic > 100')
         owner = 'Setting.CaseOwner'
         label = 'Discharge'
         
