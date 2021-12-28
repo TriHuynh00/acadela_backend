@@ -4,13 +4,12 @@ import re
 
 
 def generate_dictionary(attribute_list):
-    spell = SpellChecker(language=None)
+    spell = SpellChecker(language=None, case_sensitive=True)
     spell.distance = 2
     attribute_dict = {}
     for attr in attribute_list:
         key = attr.replace("'", "")
         attribute_dict[key] = 10
-    # print(attribute_dict)
     with open('dictionary.json', 'w', encoding='utf-8') as f:
         json.dump(attribute_dict, f, ensure_ascii=False, indent=4)
     spell.word_frequency.load_dictionary('dictionary.json')
@@ -24,7 +23,9 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     error_column = error.col
     print("Line with error:", error_line_str, error_line_str[error_column - 1:])
     misspelled = error_line_str[error_column - 1:len(error_line_str)]
-    misspelled = misspelled.split(' ', 1)[0]
+    print(re.split('[\W|\d]+', misspelled))
+    misspelled = re.split('[\W|\d]+', misspelled)[0]
+    #misspelled = misspelled.split(' ', 1)[0].split('(',1)[0]
     print("Misspelled word:", misspelled)
     # misspelled = [t for t in error_message.split() if t.startswith('*')]
     # if misspelled == []:
@@ -51,7 +52,7 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
             if hash_attributes.index(misspelled):
                 print("typo_hash", error_line_str[error_column - 2])
                 if error_line_str[error_column - 2] != '#':
-                    print("forgotton hash")
+                    print("forgotten hash")
                     typo_text = "The keyword " + misspelled + " is a hash value. Did you forget to put #?\n"
                 else:
                     typo_text = "No idea what happened?\n"
@@ -64,6 +65,8 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
                     break
                 else:
                     typo_text = "No keyword " + misspelled + ". Did you meant: " + res[0] + '?\n'
+    elif misspelled == '':
+        typo_text = ""
     else:
         typo_text = "No keyword " + misspelled + ". Did you meant: " + candidate_attr + '?\n'
 

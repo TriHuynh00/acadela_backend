@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | CaseSetting | Stage | Task |  Form | Field | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task |  Form | InputField | Hook | ValidAttribute)
 ;
 
 /********************
@@ -298,7 +298,6 @@ Stage:
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
                 (preconditionList *= Precondition)
-
             )#
 
             taskList += Task
@@ -413,12 +412,12 @@ FormDirective:
 ;
 
 FormField:
-    Field | DynamicField
+    InputField/[\s\n]*/ | OutputField/[\s\n]*/
 ;
 
-Field:
-    (
-         /(Field)\s/ name = ID
+InputField:
+  (  (
+         InputFieldTerm name = ID
             directive = FieldDirective
             (
                 (
@@ -431,7 +430,8 @@ Field:
             )#
             ) 
  //   /(FieldEnd)\s/ ) 
-    | (Ref /(Field)\s/ ref=[Field|FQN])?
+    | (Ref InputFieldTerm ref=[InputField|FQN])?
+    )
 ;
 
 FieldPath:
@@ -447,7 +447,7 @@ FieldDirective:
         // There is no grammar for DualTask field
         // to avoid overhead in computation, since
         // we expect a large number of fields, and
-        // introducing a DualTaskField along with Field
+        // introducing a DualTaskField along with InputField
         // will result in longer parsing time
         // The interpreter will check whether a part
         // is included in the DualTaskField instead.
@@ -456,22 +456,22 @@ FieldDirective:
     )#
 ;
 
-DynamicField:
+OutputField:
     (
-        DynamicFieldTerm name = ID
-            directive = DynamicFieldDirective
+        OutputFieldTerm name = ID
+            directive = OutputFieldDirective
             (
                 description = Description
                 (additionalDescription = AdditionalDescription)?
                 (uiRef = UiReference)?
                 (path = FieldPath)?
-                (expression = DynamicFieldExpression)?
+                (expression = OutputFieldExpression)?
                 (externalId = ExternalId)?
             )#
-    ) | (Ref (FieldTerm | DynamicFieldTerm) ref=[DynamicField|FQN])?
+    ) | (Ref OutputFieldTerm ref=[OutputField|FQN])?
 ;
 
-DynamicFieldDirective:
+OutputFieldDirective:
     (
         (mandatory = Mandatory)?
         (readOnly = ReadOnly)?
@@ -661,14 +661,13 @@ ClientPath:
 ;
 
 UiReference:
-    'uiRef' Eq
+    'uiRef' Eq //value = STRING
     (
         (
-            ("'" value=Function "'")
-            | ('"' value=Function '"')
+            ( value=STRING )
         )
-        | 'privatelink'
-        | 'hidden'
+        | (Quote 'privatelink' Quote)
+        | (Quote 'hidden' Quote)
         | (Ref ref=[ValidAttribute|FQN])
     )
 ;
@@ -688,7 +687,7 @@ Function:
     ')'
 ;
 
-DynamicFieldExpression:
+OutputFieldExpression:
     // TODO: Create syntax for expression
     'expression' Eq value = STRING
 ;
@@ -790,7 +789,7 @@ RefTask:
 ;
 
 RefField:
-    Ref FieldTerm
+    Ref InputFieldTerm
 ;
 
 RefHook:
@@ -853,12 +852,12 @@ FormTerm:
     /(Form)\s/
 ;
 
-FieldTerm:
-    /(Field)\s/
+InputFieldTerm:
+    /(InputField)\s/
 ;
 
-DynamicFieldTerm:
-    /(DynamicField)\s/
+OutputFieldTerm:
+    /(OutputField)\s/
 ;
 
 HookTerm:
@@ -899,7 +898,7 @@ BuildingBlockObject:
     | StageTerm
     | HumanTaskTerm | DualTaskTerm | AutoTaskTerm
     | FormTerm
-    | FieldTerm | DynamicField
+    | InputFieldTerm | OutputFieldTerm
     | GroupTerm | UserTerm
     | PreconditionTerm | HookTerm
 ;

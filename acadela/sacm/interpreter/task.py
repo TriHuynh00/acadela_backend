@@ -61,7 +61,7 @@ def interpret_task(model, task, stageId):
     if hasattr(task, "hookList"):
         for hook in task.hookList:
             hook = util.getRefOfObject(hook)
-            interpretedHook = hookInterpreter.interpret_http_hook(hook)
+            interpretedHook = hookInterpreter.interpret_http_hook(hook, model)
             print("HttpHook", vars(interpretedHook))
             taskHookList.append(interpretedHook)
 
@@ -111,6 +111,7 @@ def interpret_task(model, task, stageId):
 
     # Interpret task fields (TaskParam)
     taskFormList = util.getRefOfObject(task.form)
+    print(taskFormList)
     if len(taskFormList)>1:
         raise Exception("Each task has to have 1 form!")
     taskForm=taskFormList[0]
@@ -123,7 +124,7 @@ def interpret_task(model, task, stageId):
             taskId,
             field.name)
 
-        if util.cname(field) == "Field":
+        if util.cname(field) == "InputField":
 
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath,\
@@ -131,7 +132,7 @@ def interpret_task(model, task, stageId):
 
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
-        elif util.cname(field) == "DynamicField":
+        elif util.cname(field) == "OutputField":
 
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath,

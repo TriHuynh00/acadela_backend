@@ -140,9 +140,11 @@ def interpret_dynamic_field(field, fieldPath,
     #     else None
     uiRef = interpret_uiRef(field)
 
-    expression = str(field.expression.value)
-
-    expression = ' '.join(expression.split())
+    expression =str(field.expression.value) \
+        if util.is_attribute_not_null(field.expression,"value")  \
+        else None
+    if expression is not None:
+        expression = ' '.join(expression.split())
 
     print ("expression is", expression)
 

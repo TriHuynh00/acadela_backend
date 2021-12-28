@@ -1,0 +1,5 @@
+HOSPITAL_NAME,URLS,OPERATION
+Umcg,http://127.0.0.1:3001/connecare,"POST"
+Umcg,https://server1.com/api2,"POST , GET"
+Umcg,http://integration-producer:8081/v1/activate,""
+Umcg,localhost:3001/connecare,""
