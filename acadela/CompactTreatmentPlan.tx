@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | CaseSetting | Stage | Task |  Form | Field | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task |  Form | InputField | OutputField | Hook | ValidAttribute)
 ;
 
 /********************
@@ -413,13 +413,13 @@ FormDirective:
 ;
 
 FormField:
-    Field | DynamicField
+    InputField | OutputField
 ;
 
-Field:
+InputField:
     (
-         /(Field)\s/ name = ID
-            directive = FieldDirective
+         InputFieldTerm name = ID
+            directive = InputFieldDirective
             (
                 (
                     description = Description
@@ -432,16 +432,15 @@ Field:
                 (defaultValue = DefaultValue)?
                 (defaultValues = DefaultValues)?
             )#
-            ) 
- //   /(FieldEnd)\s/ ) 
-    | (Ref /(Field)\s/ ref=[Field|FQN])?
+            )
+    | (Ref InputFieldTerm ref=[InputField|FQN])?
 ;
 
 FieldPath:
     'CustomFieldValue' Eq value=STRING
 ;
 
-FieldDirective:
+InputFieldDirective:
     (
         (mandatory = Mandatory)?
         (readOnly = ReadOnly)?
@@ -459,30 +458,30 @@ FieldDirective:
     )#
 ;
 
-DynamicField:
+OutputField:
     (
-        DynamicFieldTerm name = ID
-            directive = DynamicFieldDirective
+        OutputFieldTerm name = ID
+            directive = OutputFieldDirective
             (
                 description = Description
                 (additionalDescription = AdditionalDescription)?
                 (uiRef = UiReference)?
                 (path = FieldPath)?
-                (expression = DynamicFieldExpression)?
+                (expression = OutputFieldExpression)?
                 (externalId = ExternalId)?
                 (defaultValue = DefaultValue)?
                 (defaultValues = DefaultValues)?
             )#
-    ) | (Ref (FieldTerm | DynamicFieldTerm) ref=[DynamicField|FQN])?
+    ) | (Ref OutputFieldTerm ref=[OutputField|FQN])?
 ;
 
-DynamicFieldDirective:
+OutputFieldDirective:
     (
         (mandatory = Mandatory)?
         (readOnly = ReadOnly)?
         (position = Position)?
-        //(explicitType = PrimitiveDataType)?
-        (explicitType = Type)?
+        (explicitType = PrimitiveDataType)?
+        //(explicitType = Type)?
     )#
 ;
 
@@ -532,15 +531,16 @@ Multiplicity:
     )
 ;
 
-/*PrimitiveDataType:
+PrimitiveDataType:
     Hash (
         'text' // string
         | 'longtext'
         | 'boolean'
+        | 'json'
         | NumType
         | DateType
     )
-;*/
+;
 
 Type:
     Hash (
@@ -698,7 +698,7 @@ Function:
     ')'
 ;
 
-DynamicFieldExpression:
+OutputFieldExpression:
     // TODO: Create syntax for expression
     'expression' Eq value = STRING
 ;
@@ -799,8 +799,8 @@ RefTask:
     Ref TaskTerm
 ;
 
-RefField:
-    Ref FieldTerm
+RefInputField:
+    Ref InputFieldTerm
 ;
 
 RefHook:
@@ -863,12 +863,12 @@ FormTerm:
     /(Form)\s/
 ;
 
-FieldTerm:
-    /(Field)\s/
+InputFieldTerm:
+    /(InputField)\s/
 ;
 
-DynamicFieldTerm:
-    /(DynamicField)\s/
+OutputFieldTerm:
+    /(OutputField)\s/
 ;
 
 HookTerm:
@@ -909,7 +909,7 @@ BuildingBlockObject:
     | StageTerm
     | HumanTaskTerm | DualTaskTerm | AutoTaskTerm
     | FormTerm
-    | FieldTerm | DynamicField
+    | InputFieldTerm | OutputFieldTerm
     | GroupTerm | UserTerm
     | PreconditionTerm | HookTerm
 ;

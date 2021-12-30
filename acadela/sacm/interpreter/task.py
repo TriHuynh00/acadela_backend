@@ -9,6 +9,7 @@ import sacm.interpreter.field as fieldInterpreter
 from sacm import default_state
 
 import sacm.constant.task_type as TASKTYPE
+import sacm.constant.element_term as ELEMENTKEYWORD
 
 from sacm.case_object.entity import Entity
 from sacm.case_object.task import Task
@@ -123,7 +124,7 @@ def interpret_task(model, task, stageId):
             taskId,
             field.name)
 
-        if util.cname(field) == "Field":
+        if util.cname(field) == ELEMENTKEYWORD.INPUTFIELD:
 
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath,\
@@ -131,7 +132,7 @@ def interpret_task(model, task, stageId):
 
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
-        elif util.cname(field) == "DynamicField":
+        elif util.cname(field) == ELEMENTKEYWORD.OUTPUTFIELD:
 
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath,
