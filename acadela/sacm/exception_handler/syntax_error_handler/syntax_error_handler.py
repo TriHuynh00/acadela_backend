@@ -7,10 +7,8 @@ from . import typo_handler
 
 
 def extract_attributes2(metamodel):
-    # print(" ??")
     namespaces = metamodel.namespaces['CompactTreatmentPlan']
     dictionary = {}
-    # print("attr_dict", namespaces['GroupIdentity']._tx_attrs)
     for attr in namespaces:
         attr_dict = namespaces[attr]._tx_attrs
         dictionary[attr] = attr_dict.keys()
@@ -96,14 +94,21 @@ class SyntaxErrorHandler():
         print(lines[error_line - 1])
         error_line_str = lines[error_line - 1]
         # check if there is only one option
-        print("rulename", exception.expected_rules[0].to_match)
+        print("rulename", exception.__dict__)
         # print("original error msg: ",error_message)
         rule_name = exception.expected_rules[0].rule_name
-        print("EXCEPTION", exception.expected_rules[0])
+        print("EXCEPTION", exception.expected_rules[0].__dict__)
+        # handle number (0-0)
+        # handle missing dot '.'
+
+        if rule_name == 'Eq' or rule_name == 'STRING'or rule_name == 'INT':
+            error_message = keyword_handler.keyword_handler(error_message)
+            print(error_message)
+            return
         attributes = get_attributes_from_model(meta_model_path)
         hash_attributes = get_hash_attributes(meta_model_path)
         # keys = extract_attributes(model)
-        keys = extract_attributes2(model)
+        #keys = extract_attributes2(model)
         # if rule_name != '':
         #     error_message = keyword_handler.keyword_handler(error_message)
         # else:

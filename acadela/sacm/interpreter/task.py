@@ -38,8 +38,8 @@ def interpret_task(model, task, stageId):
             #dueDatePath = util_intprtr.prefix_path_value(
             #    attrList.dueDatePath.value, False
             #)
-            dueDatePath = attrList.dueDatePath.value
-            print("dueDatePath",dueDatePath,attrList.dueDatePath.value)
+            dueDatePath = util.prefixingSetting(attrList.dueDatePath.value)
+            print("dueDatePath", dueDatePath,attrList.dueDatePath.value)
 
     ownerPath = None \
         if attrList.ownerPath is None \
@@ -62,7 +62,7 @@ def interpret_task(model, task, stageId):
     if hasattr(task, "hookList"):
         for hook in task.hookList:
             hook = util.getRefOfObject(hook)
-            interpretedHook = hookInterpreter.interpret_http_hook(hook)
+            interpretedHook = hookInterpreter.interpret_http_hook(hook, model)
             print("HttpHook", vars(interpretedHook))
             taskHookList.append(interpretedHook)
 
@@ -112,6 +112,7 @@ def interpret_task(model, task, stageId):
 
     # Interpret task fields (TaskParam)
     taskFormList = util.getRefOfObject(task.form)
+    print(taskFormList)
     if len(taskFormList)>1:
         raise Exception("Each task has to have 1 form!")
     taskForm=taskFormList[0]
@@ -133,7 +134,6 @@ def interpret_task(model, task, stageId):
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
         elif util.cname(field) == ELEMENTKEYWORD.OUTPUTFIELD:
-
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath,
                                          taskType, formDirective, model)

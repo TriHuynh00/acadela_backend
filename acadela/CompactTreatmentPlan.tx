@@ -55,6 +55,7 @@ DefineObj:
 
 Obj:
     ( Case | CaseSetting | Stage | Task |  Form | InputField | OutputField | Hook | ValidAttribute)
+
 ;
 
 /********************
@@ -298,7 +299,6 @@ Stage:
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
                 (preconditionList *= Precondition)
-
             )#
 
             taskList += Task
@@ -413,26 +413,26 @@ FormDirective:
 ;
 
 FormField:
-    InputField | OutputField
+    InputField/[\s\n]*/ | OutputField/[\s\n]*/
 ;
 
 InputField:
     (
-         InputFieldTerm name = ID
-            directive = InputFieldDirective
+    InputFieldTerm name = ID
+        directive = InputFieldDirective
+        (
             (
-                (
-                    description = Description
-                    | question = Question
-                )
-                (path = FieldPath)?
-                (uiRef = UiReference)?
-                (externalId = ExternalId)?
-                (additionalDescription = AdditionalDescription)?
-                (defaultValue = DefaultValue)?
-                (defaultValues = DefaultValues)?
-            )#
+                description = Description
+                | question = Question
             )
+            (path = FieldPath)?
+            (uiRef = UiReference)?
+            (externalId = ExternalId)?
+            (additionalDescription = AdditionalDescription)?
+            (defaultValue = DefaultValue)?
+            (defaultValues = DefaultValues)?
+        )#
+    )
     | (Ref InputFieldTerm ref=[InputField|FQN])?
 ;
 
@@ -449,7 +449,7 @@ InputFieldDirective:
         // There is no grammar for DualTask field
         // to avoid overhead in computation, since
         // we expect a large number of fields, and
-        // introducing a DualTaskField along with Field
+        // introducing a DualTaskField along with InputField
         // will result in longer parsing time
         // The interpreter will check whether a part
         // is included in the DualTaskField instead.
@@ -539,6 +539,7 @@ PrimitiveDataType:
         | 'json'
         | NumType
         | DateType
+        | 'custom'
     )
 ;
 
@@ -670,15 +671,14 @@ ClientPath:
 ;
 
 UiReference:
-    'uiRef' Eq
+    'uiRef' Eq //value = STRING
     (
         (
-            ("'" value=Function "'")
-            | ('"' value=Function '"')
+            ( value=STRING )
         )
-        | value='privatelink'
-        | value='hidden'
-        | value=STRING
+        //| value=STRING
+        | (Quote 'privatelink' Quote)
+        | (Quote 'hidden' Quote)
         | (Ref ref=[ValidAttribute|FQN])
     )
 ;
@@ -801,6 +801,10 @@ RefTask:
 
 RefInputField:
     Ref InputFieldTerm
+;
+
+RefOutputField:
+    Ref OutputFieldTerm
 ;
 
 RefHook:

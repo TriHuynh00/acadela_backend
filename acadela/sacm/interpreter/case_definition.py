@@ -60,7 +60,7 @@ def interpret_case_definition(case, intprtSetting,
     caseDataEntity = interpret_case_data(intprtSetting['settingAsAttribute'],
                                          stageAsAttributeList)
 
-    caseHookEvents = interpret_case_hook(case.hookList)
+    caseHookEvents = interpret_case_hook(case.hookList, model)
 
     print("Case Hook Events", caseHookEvents)
 
@@ -193,11 +193,14 @@ def create_entity_json_object(entity):
 
     return entityJson
 
-def interpret_case_hook(hookList):
+def interpret_case_hook(hookList, model):
     hookEvents = []
     for hook in hookList:
+        print("hoook:",hook.__dict__)
+        line_number = model._tx_parser.pos_to_linecol(hook._tx_position)
+        print("LINENMUBER",line_number)
         hookEvents.append(HttpTrigger(hook.event, hook.url,
-                                      None, None))
+                                      None,line_number))
 
     return hookEvents
 

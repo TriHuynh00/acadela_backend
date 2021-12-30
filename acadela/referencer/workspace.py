@@ -32,7 +32,7 @@ class WorkspaceReferencer:
         if workspace != None:
             # print(json.dumps(workspace, indent=4))
             # print(json.dumps(workspace['permissions'], indent=4))
-            if workspace['permissions'] is not None:
+            if 'permissions' in workspace and workspace['permissions'] is not None:
                 for permission in workspace['permissions']:
                     permissionObj = workspace['permissions'][permission]
                     # print("Permission: ", permission)

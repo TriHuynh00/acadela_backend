@@ -1,4 +1,4 @@
-inputStrSimple = """
+treatmentPlanStr = """
     #aca0.1
     import extfile.form as iForm
     import extfile.taskCharlsonTest
@@ -118,7 +118,7 @@ inputStrSimple = """
                         label = 'Admitted Times Plus 1'
 
                         expression = 'AdmittedTimes + 1'
-                        uiRef = use rgu.redGreenUiRef
+                        uiRef = 'privatelink'
                         externalId = 'BmiPlus'   
 
 

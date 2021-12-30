@@ -9,7 +9,7 @@ import textx.scoping.providers as scoping_providers
 # import sample_case_def.MRI_SchizophreniaTreatment as caseTemplateStr
 # import sample_case_def.smoke_inhalation2 as caseTemplateStr
 # import sample_case_def.copd_praxis_im_innenhof as caseTemplateStr
-import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
+import sample_case_def.hypertensionTreatmentPlan_base as caseTemplateStr
 
 import config.general_config as generalConf
 import os

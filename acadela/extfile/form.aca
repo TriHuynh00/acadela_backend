@@ -1,15 +1,15 @@
 import field
 define Form BMIForm
     #notreadonly #mandatory
-    field Height
+    InputField Height
         #number(0-3) #exactlyOne
         label ='Height of patient in m'
 
-    field Weight
+    InputField Weight
         #number(0-300) #exactlyOne
         label ='Weight of patient in kg'
 
-    field AgeRange
+    InputField AgeRange
         #singlechoice #notmandatory #notReadOnly
         Question = 'What is your age range?'
             Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
@@ -19,12 +19,12 @@ define Form BMIForm
 
     //use field ImportedField
 
-    DynamicField BmiScore
+    OutputField BmiScore
         #mandatory #number
         label ='BMI Calculation in kilogram and meters'
         expression = 'round(Weight / (Height * Height))'
 
-    DynamicField BmiScorePlus
+    OutputField BmiScorePlus
         #mandatory #left #number
         label = 'BMI Calculation with age counted'
         additionalDescription = 'full Derived field'

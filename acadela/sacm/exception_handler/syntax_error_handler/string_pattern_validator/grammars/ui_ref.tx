@@ -1,0 +1,48 @@
+//grammar for uiRef
+
+UiRef:
+    Function
+    | 'privatelink'
+    | 'hidden'
+;
+
+Function:
+    ValidFunctionName
+    '('
+        (CompareExpression | ParamPattern)
+    ')'
+;
+
+CompareExpression:
+    NUMBER (Comparator ColorName Comparator NUMBER)+
+;
+
+ParamPattern:
+    Text (',' Text)*
+;
+
+ColorName:
+    'red'
+    | 'blue'
+    | 'green'
+    | 'orange'
+    | 'yellow'
+;
+
+ValidFunctionName:
+    'number' | 'colors'
+;
+
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    |'>='
+    | '<'
+    | '>'
+;
+
+Text:
+    STRING
+;

@@ -1,4 +1,5 @@
 from sacm.default_state import defaultAttrMap, CUSTOM_TYPE
+import sacm.default_state as default_state
 from sacm import util
 from sacm.interpreter import util_intprtr
 
@@ -53,7 +54,10 @@ def interpret_field(field, fieldPath, taskType, formDirective,model):
 
     # If field type is custom, set the field path to custom path
     if type == CUSTOM_TYPE:
-        fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
+        if str(fieldPath).lower().startswith(default_state.SETTING_NAME):
+            fieldPath = util.prefixingSetting(field.path.value);
+        else:
+            fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
         print("custom field path", fieldPath)
 
     readOnly = assign_form_directive_to_field('readOnly',
@@ -150,11 +154,19 @@ def interpret_dynamic_field(field, fieldPath,
     #     else None
     uiRef = interpret_uiRef(field)
 
-    expression = str(field.expression.value) \
-                if util.is_attribute_not_null(field, "expression") \
-                else None
 
-    expression = ' '.join(expression.split())
+    # expression = str(field.expression.value) \
+    #             if util.is_attribute_not_null(field, "expression") \
+    #             else None
+    #
+    # expression = ' '.join(expression.split())
+
+    expression =str(field.expression.value) \
+        if util.is_attribute_not_null(field.expression,"value")  \
+        else None
+    if expression is not None:
+        expression = ' '.join(expression.split())
+
 
     print ("expression of {} is {}".format(field.name, expression))
 

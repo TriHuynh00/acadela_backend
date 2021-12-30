@@ -1,6 +1,7 @@
 treatmentPlanStr = """
 #aca0.1
-import extfile.form as iForm
+import extfile.redGreenUiRef as rgu
+import extfile.prescriptionTask as prescription
 
 workspace Umcg
 
@@ -15,13 +16,11 @@ define case ST1_Hypertension
         group UmcgProfessionals name = 'Umcg Professional' 
         group UmcgPatients name = 'Umcg Patient' 
         group UmcgNurses name = 'Umcg Nurse' 
-            user williamst
-            user michelf
-            user hopkinsc
-    // A comment
-        /* a multiline
-         * Comment
-         */
+        
+        // A comment
+            /* a multiline
+             * Comment
+             */
 
     Setting
         CaseOwner UmcgProfessionals #exactlyOne
@@ -46,7 +45,11 @@ define case ST1_Hypertension
         Attribute BloodPressureCondition
             #exactlyOne #text
             label = 'Blood Pressure Condition'
-
+            
+    Trigger
+        On activate invoke 'http://integration-producer:8081/v1/activate'
+        On complete invoke 'localhost:3001/connecare'
+        
     SummaryPanel
         Section BloodPressureMeasurement #left
             label = "Systolic Pressure:"
@@ -70,7 +73,6 @@ define case ST1_Hypertension
             label = 'Assign Patient'
             dueDateRef = 'Setting.WorkplanDueDate'
             externalId = 'SelectPatient'
-            // use Form iForm.BMIForm
          
             Form PatientAssignForm
                 #mandatory
@@ -79,17 +81,12 @@ define case ST1_Hypertension
                     #custom
                     CustomFieldValue = "Setting.CasePatient"
                     label = "Assigned Patient"
-                // FieldEnd
                     
                 InputField SelectDoctor
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
-                 // FieldEnd
        
-            Trigger
-                On complete invoke 'http://127.0.0.1:3001/connecare' method Post
-
     Stage Evaluation
         #mandatory
         owner = 'Setting.Clinician'
@@ -101,7 +98,7 @@ define case ST1_Hypertension
         HumanTask MeasureBloodPressure
             #mandatory #exactlyOne
             label = 'Measure Blood Pressure'
-            owner = 'Setting.Clinician'
+            owner= 'Setting.Clinician'
             dueDateRef = 'Setting.WorkplanDueDate'
             
             Form BloodPressureForm
@@ -109,21 +106,21 @@ define case ST1_Hypertension
                 InputField Systolic
                     #number(0-300)
                     label = 'Systolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
-                // FieldEnd
+                    uiRef = 'colors(0<green<120<=yellow<=139<red<300)'
+                
 
                 InputField Diastolic
                     #number(0-300)
                     label = 'Diastolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
-                // FieldEnd
+                    uiRef = 'colors(0<green<80<yellow<=89<red<300)'
 
                 OutputField SystolicAnalysis
                     #left
                     label = 'Systolic Assessment:'
-                    expression = 'if (Systolic < 120) then "Normal"
-                                  else if (Systolic < 130) then "Elevated" 
-                                  else "High"'
+                    //uiRef = use rgu.redGreenUiRef
+                    expression = 'if (Systolic<120) then "Normal"
+                            else if (Systolic < 140) then "Elevated"
+                            else "High"'
 
                 OutputField DiastolicAnalysis
                     #left 
@@ -133,13 +130,13 @@ define case ST1_Hypertension
                                   else "High"'
                                   
                 OutputField OverallAssessment
-                    #left #custom
+                    #left 
+                    #custom
                     CustomFieldValue = "Setting.BloodPressureCondition"
                     label = 'Overall Assessment:'
-                    
-                    expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
-                                  else if (Diastolic < 80 and Systolic < 130) then "Elevated" 
-                                  else "High"'
+                    //expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
+                    //              else if (Diastolic < 90 and Systolic < 130) then "Elevated" 
+                    //              else "High"'
             
             HumanTask RequestMedicalTest
                 #notmandatory
@@ -156,9 +153,9 @@ define case ST1_Hypertension
                     InputField CholesterolTest
                     #singlechoice
                         question = 'Perform Blood Cholesterol Test?'
-                        Option 'No' value='0'
-                        Option 'Yes' value='1'
-                   // FieldEnd
+                            Option 'No' value='0'
+                            Option 'Yes' value='1'
+                   
                  
     Stage MedicalTest
         #mandatory
@@ -178,7 +175,6 @@ define case ST1_Hypertension
                 InputField CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
-                // FieldEnd
 
     Stage Treatment
         #mandatory
@@ -188,49 +184,17 @@ define case ST1_Hypertension
         // Define two Preconditions to express the OR logic between them
         Precondition
             previousStep = 'Evaluation' 
-            condition = '((Evaluation.RequestMedicalTest.CholesterolTest = 0 and Evaluation.MeasureBloodPressure.Diastolic > 130) 
-                            or Evaluation.MeasureBloodPressure.Diastolic > 150)'
-            //condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0'
+            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0 
+                         and Evaluation.MeasureBloodPressure.Diastolic >= 120'
             
         Precondition
             previousStep = 'MedicalTest'
             condition = 'Setting.BloodPressureCondition = "High"'
         
-        HumanTask Prescribe
-            #mandatory #repeatParallel #manualActivate
-            label = 'Prescribe'
-            owner = 'Setting.Clinician'
-            dueDateRef = 'Setting.WorkplanDueDate'
-            
-            Form PrescriptionForm
-                #mandatory
-                InputField AntihypertensiveDrug
-                    #text #left
-                    label = "Medicine Name:"
-                  // FieldEnd
-              
-                InputField DailyDose
-                    #number #center 
-                    label = "Daily Dose:"
-                 // FieldEnd
-                   
-                InputField Frequency
-                    #number #left
-                    label = "Frequency"
-                                // FieldEnd
-
-                InputField FrequencyUnit
-                    #text #center
-                    label = "Frequency Unit"
-                                  // FieldEnd
-  
-                InputField Comment
-                    #notmandatory #stretched
-                    label = "Comment:"
-                                 // FieldEnd
-   
+        use Task prescription.Prescribe
+        
     Stage Discharge
-        #mandatory #activateWhen('Evaluation.MeasureBloodPressure.Systolic > 100')
+        #mandatory 
         owner = 'Setting.CaseOwner'
         label = 'Discharge'
         
@@ -242,14 +206,17 @@ define case ST1_Hypertension
             owner = 'Setting.CaseOwner'
             label = "Discharge Patient"
             
+            Trigger
+                On complete invoke 'http://127.0.0.1:3001/connecare' method post
+                On complete invoke 'https://server1.com/api2' method Post with failureMessage 'Cannot complete the completion of data creation!'
+            
             Form DischargeForm
+            
                 InputField DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
-                                    // FieldEnd
 
-                OutputField DiastolicAnalysis
+                InputField DiastolicAssessment
                     #left 
                     label = 'Diastolic Assessment:'
-                    expression = 'fdflkf.dlfkl'
 """

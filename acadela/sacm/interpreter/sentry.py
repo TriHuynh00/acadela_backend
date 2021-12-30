@@ -32,7 +32,8 @@ def auto_parse_conditional_expression(entryCondition, stageList):
     clauses = re.split('( and )|( or )', entryCondition)
 
     for clause in clauses:
-        if clause == 'and' or clause == 'or' or clause is None:
+        clause = str(clause).strip()
+        if clause in ['and', 'or', 'None'] :
             if clause == 'and' or clause == 'or':
                 prefixedCondition += ' {} '.format(clause)
             continue
@@ -100,7 +101,7 @@ def auto_parse_conditional_expression(entryCondition, stageList):
 
             subjectPhrase = subjectPhrase.replace(subjectPrev, subject)
 
-        prefixedCondition += subjectPhrase + operator + predicate
+        prefixedCondition += subjectPhrase.strip() + operator + predicate.strip()
 
     print("Prefixed Condition after parse to number:", prefixedCondition)
     return prefixedCondition

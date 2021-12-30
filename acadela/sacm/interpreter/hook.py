@@ -7,11 +7,15 @@ def interpret_case_hook(hookObj):
         "url": hookObj.url
     }
 
-def interpret_http_hook(httpHookObj):
+def interpret_http_hook(httpHookObj, model):
+    print("hoook:",httpHookObj.__dict__)
+    line_number = model._tx_parser.pos_to_linecol(httpHookObj._tx_position)
     return HttpTrigger(str.upper(httpHookObj.event),
                        httpHookObj.url,
                        str.upper(httpHookObj.method),
-                       httpHookObj.failureMessage)
+                       line_number,
+                       httpHookObj.failureMessage,
+                       )
 
 def sacm_compile(hookList):
 

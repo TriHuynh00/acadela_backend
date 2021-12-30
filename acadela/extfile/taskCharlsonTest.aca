@@ -4,13 +4,13 @@ define HumanTask TestCharlson
     label = 'Charlson Comorbidity Form'
     Form CharlsonForm
         field Charlson1
-            #selector #mandatory
+            #mandatory
             Question = 'Do you have diabetes?'
                 Option 'No' value = '0'
                 Option 'Yes' value = '1'
 
         field Charlson2
-            #selector #mandatory
+             #mandatory
             Question = 'Do you have heart attacks?'
                 Option 'No' value = '0'
                 Option 'Yes' value = '1'

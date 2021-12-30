@@ -1,4 +1,4 @@
-HumanTask Prescribe
+define HumanTask Prescribe
     #mandatory #repeatParallel #manualActivate
     label = 'Prescribe'
     owner = 'Setting.Clinician'
