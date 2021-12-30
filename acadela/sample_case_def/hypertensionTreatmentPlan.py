@@ -75,20 +75,20 @@ define case ST1_Hypertension
             Form PatientAssignForm
                 #mandatory
                  
-                Field SelectPatient
+                InputField SelectPatient
                     #custom
                     CustomFieldValue = "Setting.CasePatient"
                     label = "Assigned Patient"
                 // FieldEnd
                     
-                Field SelectDoctor
+                InputField SelectDoctor
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
                  // FieldEnd
        
-           Trigger
-                    On complete invoke 'http://127.0.0.1:3001/connecare' method Post
+            Trigger
+                On complete invoke 'http://127.0.0.1:3001/connecare' method Post
 
     Stage Evaluation
         #mandatory
@@ -106,34 +106,33 @@ define case ST1_Hypertension
             
             Form BloodPressureForm
                 #mandatory
-                Field Systolic
+                InputField Systolic
                     #number(0-300)
                     label = 'Systolic Blood pressure (mm Hg):'
-                                        uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
+                    uiRef = 'colors(0<green<=120<yellow<=139<red<300)'
                 // FieldEnd
 
-                Field Diastolic
+                InputField Diastolic
                     #number(0-300)
                     label = 'Diastolic Blood pressure (mm Hg):'
                     uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
                 // FieldEnd
 
-
-                DynamicField SystolicAnalysis
+                OutputField SystolicAnalysis
                     #left
                     label = 'Systolic Assessment:'
                     expression = 'if (Systolic < 120) then "Normal"
                                   else if (Systolic < 130) then "Elevated" 
                                   else "High"'
 
-                DynamicField DiastolicAnalysis
+                OutputField DiastolicAnalysis
                     #left 
                     label = 'Diastolic Assessment:'
                     expression = 'if (Diastolic < 80) then "Normal"
                                   else if (Diastolic <= 89) then "Elevated" 
                                   else "High"'
                                   
-                DynamicField OverallAssessment
+                OutputField OverallAssessment
                     #left #custom
                     CustomFieldValue = "Setting.BloodPressureCondition"
                     label = 'Overall Assessment:'
@@ -153,9 +152,8 @@ define case ST1_Hypertension
                     previousStep = 'MeasureBloodCholesterol'
                     condition = 'Setting.BloodPressureCondition = "High"'
 
-
                 Form CgiForm
-                    Field CholesterolTest
+                    InputField CholesterolTest
                     #singlechoice
                         question = 'Perform Blood Cholesterol Test?'
                         Option 'No' value='0'
@@ -169,7 +167,7 @@ define case ST1_Hypertension
         
         Precondition
             previousStep = 'Evaluation'
-            condition = 'Evalution.RequestMedicalTest.CholesterolTest = 1'
+            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 1'
             
         HumanTask MeasureBloodCholesterol
             #mandatory
@@ -177,7 +175,7 @@ define case ST1_Hypertension
             label = 'Record Blood Cholesterol'    
             
             Form PrescriptionForm
-                Field CholesterolLvl
+                InputField CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
                 // FieldEnd
@@ -206,27 +204,27 @@ define case ST1_Hypertension
             
             Form PrescriptionForm
                 #mandatory
-                Field AntihypertensiveDrug
+                InputField AntihypertensiveDrug
                     #text #left
                     label = "Medicine Name:"
                   // FieldEnd
               
-                Field DailyDose
+                InputField DailyDose
                     #number #center 
                     label = "Daily Dose:"
                  // FieldEnd
                    
-                Field Frequency
+                InputField Frequency
                     #number #left
                     label = "Frequency"
                                 // FieldEnd
 
-                Field FrequencyUnit
+                InputField FrequencyUnit
                     #text #center
                     label = "Frequency Unit"
                                   // FieldEnd
   
-                Field Comment
+                InputField Comment
                     #notmandatory #stretched
                     label = "Comment:"
                                  // FieldEnd
@@ -245,12 +243,12 @@ define case ST1_Hypertension
             label = "Discharge Patient"
             
             Form DischargeForm
-                Field DoctorNote 
+                InputField DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
                                     // FieldEnd
 
-                DynamicField DiastdolicAnalysis
+                OutputField DiastolicAnalysis
                     #left 
                     label = 'Diastolic Assessment:'
                     expression = 'fdflkf.dlfkl'
