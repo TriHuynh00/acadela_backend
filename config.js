@@ -1,5 +1,5 @@
 
 module.exports = {
-    pythonPath: "E:\\Software\\Python\\3.6\\python.exe",
-    acadelaBackEndPath: "E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela"
+    pythonPath: "/Users/macbookpro/textx-demo/demo/bin/python3",
+    acadelaBackEndPath: "/Users/macbookpro/dsl-connecare/acadela"
 };

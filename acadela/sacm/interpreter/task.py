@@ -37,7 +37,7 @@ def interpret_task(model, task, stageId):
             #dueDatePath = util_intprtr.prefix_path_value(
             #    attrList.dueDatePath.value, False
             #)
-            dueDatePath = attrList.dueDatePath.value
+            dueDatePath = util.prefixingSetting(attrList.dueDatePath.value)
             print("dueDatePath",dueDatePath,attrList.dueDatePath.value)
 
     ownerPath = None \

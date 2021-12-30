@@ -123,7 +123,7 @@ class SyntaxErrorHandler():
         error_message = keyword_handler.keyword_handler(error_message)
         # error_message = error_message.replace(")\s", "").replace("'(", "'")
         print("------------------------------------------------")
-        print('Syntax Error!!!!, unrecognized command at line', error_line
+        raise Exception('Syntax Error!!!!, unrecognized command at line', error_line
               , 'col', error_column,
               '\n',
               syntax_error_message + error_message)

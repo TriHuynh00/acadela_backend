@@ -99,7 +99,6 @@ class CaseInterpreter():
     def interpret(self, runNetworkOp):
         model = self.model
         workspaceDef = model.defWorkspace
-
         print("WP type", util.cname(workspaceDef))
         print('importedObj', len(model.objList))
         # # Pure Object Import
@@ -160,7 +159,6 @@ class CaseInterpreter():
                 if runNetworkOp:
                     if self.groupInterpreter. \
                             find_static_id(group, workspaceDef.workspace.staticId) is not None:
-                        group.lineNumber = model._tx_parser.pos_to_linecol(group._tx_position)
                         self.groupList.append(group)
                     else:
                         raise Exception("cannot find static ID for group {} with name {} in workspace {}"

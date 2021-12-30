@@ -2,29 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc6f8753-c9a1-456c-9757-4449b8023fbd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/acadela/extfile/prescriptionTask.aca" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/syntax_error_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/CompactTreatmentPlan.tx" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/CompactTreatmentPlan.tx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/compiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/extfile/redGreenUiRef.aca" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/extfile/redGreenUiRef.aca" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/extfile/taskCharlsonTest.aca" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/extfile/taskCharlsonTest.aca" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/referencer/workspace.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/referencer/workspace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/case_object/http_hook.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/case_object/http_hook.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/semantic_error_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/semantic_error_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/keyword_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/keyword_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acadela/config/general_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/config/general_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/syntax_error_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/syntax_error_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/typo_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/typo_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/case_definition.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/case_definition.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/case_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/case_template.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/field.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/field.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/hook.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/hook.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/interpreter/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/interpreter/task.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sample_case_def/test_case_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sample_case_def/test_case_template.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dictionary.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/compiler/compiler.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/compiler/compiler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.log" beforeDir="false" afterPath="$PROJECT_DIR$/run.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

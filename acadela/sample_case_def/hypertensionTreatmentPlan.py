@@ -7,7 +7,7 @@ workspace Umcg
 
 define case ST1_Hypertension
     prefix = 'ST1'
-    version = 6
+    version = 8
     label = 'Hypertension Treatment'
     
     Responsibilities
@@ -27,7 +27,6 @@ define case ST1_Hypertension
     Setting
         CaseOwner UmcgProfessionals #exactlyOne
             label = 'UMCG Professionals'   
-            
         Attribute WorkplanDueDate
             #exactlyOne #date.after(TODAY)
             label = 'Workplan Due Date'
@@ -216,8 +215,7 @@ define case ST1_Hypertension
             label = "Discharge Patient"
             
             Form DischargeForm
-                OutputField DoctorNote 
+                InputField DoctorNote 
                     #text
                     label = "Post-Treatment Recommendation:"
-                    expression = 'round(DoctorNote + 10)'
 """
