@@ -3205,3 +3205,913 @@ DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
 DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
 DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
 DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=16&isExecute=false HTTP/1.1" 200 None
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 346
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 345
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=9&isExecute=false HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=9&isExecute=false HTTP/1.1" 500 346
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=9&isExecute=false HTTP/1.1" 500 346
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=15&isExecute=false HTTP/1.1" 200 None
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 3963-31-223-64-60.ngrok.ioapi:443
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): a068-31-223-64-60.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://a068-31-223-64-60.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=17&isExecute=false HTTP/1.1" 200 None
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 345
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 200 None
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=17&isExecute=false HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8084
+DEBUG:urllib3.connectionpool:http://localhost:8084 "POST /api/v1/import/acadela/casedefinition?version=17&isExecute=false HTTP/1.1" 500 347
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 686
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1987
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 686
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1987
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 686
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 686
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 346
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 346
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 346
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 200 None
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8083
+DEBUG:urllib3.connectionpool:http://localhost:8083 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 345
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.ioapi:443
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "GET /api/v1/workspaces HTTP/1.1" 500 154
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 200 559
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 346
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/administrators HTTP/1.1" 200 1061
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/a412ac01923a11e7bd0c0242ac120002 HTTP/1.1" 200 1900
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 1031
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
+DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 345

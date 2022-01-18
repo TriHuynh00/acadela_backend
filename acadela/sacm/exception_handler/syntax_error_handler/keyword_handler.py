@@ -14,11 +14,28 @@ def keyword_handler(error_text):
                            '(else if)\s':"else if",
                            '(else)\s':"else", 
                            '(and)\s':"and", 
-                           '(or)\s':"or"
+                           '(or)\s':"or",
+                           "WorkspaceTerm":"Workspace",
+                           'CaseTerm':"Case",
+                           'SettingTerm':"Setting", 
+                           'StageTerm':"Stage", 
+                           'TaskTerm':"Task",
+                            "HumanTaskTerm":"HumanTask",
+                            "AutoTaskTerm":"AutoTask",
+                            "DualTaskTerm":"DualTask",
+                            "FormTerm":"Form",
+                            "InputFieldTerm":"InputField",
+                            "OutputFieldTerm":"OutputField",
+                            "HookTerm":"Hook",
+                            "UserTerm":"User",
+                            "GroupTerm":"Group",
+                            "PreconditionTerm":"Precondition",
+                            "FormTerm":"Form",
+                            "AttributeTerm":"Attribute"
                            }
     for word, initial in keywords_dictionary.items():
         error_text = error_text.replace(word, initial)
-    error_text = error_text.replace(")\s", "")
+    error_text = error_text.replace(")\s'", "").replace("'(","")
     suggestions_init = error_text.split('Expected ')[1]
     suggestions = suggestions_init.split(' or ')
     print(error_text)

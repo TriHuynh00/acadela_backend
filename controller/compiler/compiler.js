@@ -16,19 +16,18 @@ const compile = async (req, res) => {
 
     // const pythonProcess = await spawn('python', ["compiler.py"]);
     options.args = [req.body.code]
-    console.log('req body %j', req.body.code);
+    // console.log('req body %j', req.body.code);
     const result1 = await PythonShell.run('compiler.py', options, function (err, results) {
         if (err) {
             console.log("Error");
             console.log(err);
-            return res.status(500).json(err);
+            return res.status(213).json(err);
         }
         // results is an array consisting of messages collected during execution
         console.log(`results: ${results.join("\n")}`);
         return res.status(201).json(`results: ${results.join("\n")}`);
     });
      return result1;
-
 }
 
 module.exports = {

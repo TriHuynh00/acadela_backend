@@ -1,9 +1,10 @@
 import requests
 import json
+import config.general_config as config
 class HttpRequest():
     apiVersion = "api/v1/"
-    sacmUrl = "http://localhost:8084/" + apiVersion
-    sociocortexUrl = "http://localhost:8083/" + apiVersion
+    sacmUrl = config.SACM_URL + apiVersion
+    sociocortexUrl = config.SOCIOCORTEX_URL + apiVersion
     defaultHeader = {
         "Content-Type": "application/json",
         "Authorization": "Basic bXVzdGVybWFubkB0ZXN0LnNjOm90dHRv"

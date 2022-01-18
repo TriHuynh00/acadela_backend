@@ -123,9 +123,4 @@ class SyntaxErrorHandler():
         error_message = keyword_handler.keyword_handler(error_message)
         # error_message = error_message.replace(")\s", "").replace("'(", "'")
         print("------------------------------------------------")
-        raise Exception('Syntax Error!!!!, unrecognized command at line', error_line
-              , 'col', error_column,
-              '\n',
-              syntax_error_message + error_message)
-
-        # VALIDATING STRING PATTERNS
+        raise Exception(  "Syntax Error!! Unrecognized command at line {} and column {}!\n{} ".format(error_line, error_column, syntax_error_message + error_message ))
