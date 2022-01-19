@@ -23,9 +23,12 @@ const compile = async (req, res) => {
             console.log(err);
             return res.status(213).json(err);
         }
-        // results is an array consisting of messages collected during execution
-        console.log(`results: ${results.join("\n")}`);
-        return res.status(201).json(`results: ${results.join("\n")}`);
+        // Only return the result after the python script finishes executing
+        else if (results) {
+            // results is an array consisting of messages collected during execution
+            console.log(`results: ${results.join("\n")}`);
+            return res.status(201).json(`results: ${results.join("\n")}`);
+        }
     });
      return result1;
 }

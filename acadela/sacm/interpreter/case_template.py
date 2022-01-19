@@ -317,6 +317,9 @@ class CaseInterpreter():
                     headers=HttpRequest.simulateUserHeader,
                     json=json.loads(json.dumps(caseInJson)))
 
+                if response.status_code == 500:
+                    raise Exception("Internal Server Error in SACM")
+
                 print("response", json.dumps(str(response._content)[1:-1], indent=2))
 
                 # TODO [Validation]: Delete Created Case Version in
