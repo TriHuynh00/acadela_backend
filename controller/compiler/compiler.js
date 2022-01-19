@@ -15,7 +15,7 @@ let options = {
 const compile = async (req, res) => {
 
     // const pythonProcess = await spawn('python', ["compiler.py"]);
-    options.args = [req.body.code]
+    options.args = [req.body.code,req.body.connect]
     // console.log('req body %j', req.body.code);
     const result1 = await PythonShell.run('compiler.py', options, function (err, results) {
         if (err) {

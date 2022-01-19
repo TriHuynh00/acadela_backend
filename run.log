@@ -4115,3 +4115,17 @@ DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a
 DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/groups/2c9480885d1737ef015d74deed260006 HTTP/1.1" 200 3726
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443
 DEBUG:urllib3.connectionpool:https://2357-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:443 "POST /api/v1/import/acadela/casedefinition?version=8&isExecute=false HTTP/1.1" 500 345
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces HTTP/1.1" 200 133
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80
+DEBUG:urllib3.connectionpool:http://d01f-2a02-2455-5a2-6a00-f5bf-7c69-5f5b-a7af.ngrok.io:80 "GET /api/v1/workspaces/workspaceIdNotFound HTTP/1.1" 404 137
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder
+INFO:root:rootImportPart/Users/macbookpro/dsl-connecare/acadela/model_placeholder

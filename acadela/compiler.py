@@ -51,12 +51,17 @@ def convert_import_path(i):
 
 
 try:
-    logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
+    #logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
 
     input = caseTemplateStr.treatmentPlanStr
 
     if len(sys.argv) > 1:
         input = sys.argv[1]
+    if len(sys.argv) > 2:
+        if sys.argv[2] == "validate":
+            runNetworkOp = False
+        else:
+           runNetworkOp = True 
 
     metamodelPath = join(this_folder, 'CompactTreatmentPlan.tx')
 

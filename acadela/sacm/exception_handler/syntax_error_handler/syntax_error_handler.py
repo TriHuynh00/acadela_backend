@@ -104,6 +104,7 @@ class SyntaxErrorHandler():
         if rule_name == 'Eq' or rule_name == 'STRING'or rule_name == 'INT':
             error_message = keyword_handler.keyword_handler(error_message)
             print(error_message)
+            raise Exception(  "Syntax Error!! Unrecognized command at line {} and column {}!\n{} ".format(error_line, error_column,  error_message ))
             return
         attributes = get_attributes_from_model(meta_model_path)
         hash_attributes = get_hash_attributes(meta_model_path)
