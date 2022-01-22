@@ -2,32 +2,21 @@ def find_duplicate(objects, list, field, identifier):
     seen = set()
     for x in list:
         if x in seen:
-            found = next((item for item in objects if getattr(item, identifier) == x), None).lineNumber
-            raise Exception(("{} IDs should be unique. {} is a duplicate at line and column {} " +
-                             "Please verify if the IDs are unique.")
-                            .format(field, x, found))
-            return True, x
+            found_line = next((item for item in objects if getattr(item, identifier) == x), None).lineNumber
+            line_number_text = f"at line {str(found_line[0])} and column {str(found_line[1])}"
+            raise Exception(f"{field} IDs should be unique! {x} {line_number_text} is a duplicate. "
+                            f"Please verify that the IDs are unique for each field.")
         seen.add(x)
     return False, None
 
 
-def raise_not_unique_exception(field, item):
-    raise Exception(("{} IDs should be unique.{} is a duplicate. " +
-                     "Please verify if the IDs are unique.")
-                    .format(field, item))
-
-
 def check_id_uniqueness(case_object_tree):
-    # TODO [Validation]: Check valid path value here
-    # 1. Check Sentry ID & Condition match with any existing
-    #    Stage.Task.Field Object
-    #
+
     case_groups = case_object_tree["groups"]
     case_users = case_object_tree["users"]
     case_stages = case_object_tree["stages"]
     case_settings = case_object_tree["settings"][0].attribute
     case_task_list = case_object_tree["tasks"]
-
 
     print("###1.CHECK ID UNIQUENESS###\n")
     # 1.GROUP ID/NAME UNIQUENESS
@@ -68,17 +57,18 @@ def check_id_uniqueness(case_object_tree):
 
     # 5.TASK ID/NAME UNIQUENESS
     task_names = [task.id for task in case_task_list]
-    dup, item = find_duplicate(case_task_list, task_names, "Task","id")
+    dup, item = find_duplicate(case_task_list, task_names, "Task", "id")
     print("TASK Names:", task_names)
     print("TASK ID NOT UNIQUE", dup, item)
     field_names = []
     field_object = []
+
     # 6.FIELD ID/NAME UNIQUENESS
     for task in case_task_list:
         static_field_names = [field.id for field in task.fieldList]
         dynamic_field_names = [field.id for field in task.dynamicFieldList]
         field_names = field_names + static_field_names + dynamic_field_names
         field_object = field_object + task.fieldList + task.dynamicFieldList
-    dup, item = find_duplicate(field_object, field_names, "Field","id")
+    dup, item = find_duplicate(field_object, field_names, "Field", "id")
     print("FIELD Names:", field_names)
     print("FIELD ID NOT UNIQUE", dup, item, "\n######\n")

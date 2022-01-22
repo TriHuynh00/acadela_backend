@@ -85,7 +85,7 @@ try:
     acaInterpreter = CaseInterpreter(mm, model,input)
     # ------------- HERE CHECK EXPRESSION
     acaInterpreter.interpret(runNetworkOp)
-    print("")
+    
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e, input, metamodelPath, mm)
 
@@ -97,15 +97,16 @@ except OSError as e:
         print(path_file)
         # find the line with the import in case template
         file_name = split_path_imported[len(split_path_imported)-1]
+        
         for index, item in enumerate(input.split("\n")):
             if path_file in item:
                 line_str = item.strip()
                 line_index = index + 1
                 import_found = True
                 print(item.strip(),index)
-                print("Cannot import {} at line {}. File does not exist.\n\n {}".format(path_file, line_index,e) )
-                break
+                raise Exception(f"Cannot import {path_file} at line {line_index}. File does not exist.\n\n {e}")
+                
         if not import_found:
-            print("Cannot import {}. File does not exist.\n\n {}".format(path_file, e))
+            raise Exception(f"Cannot import {path_file}. File does not exist.\n\n {e}")
     elif not import_found:
         print(e)

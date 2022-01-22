@@ -111,14 +111,6 @@ define case ST1_Hypertension
                     #number(0-300)
                     label = 'Systolic Blood pressure (mm Hg):'
                     uiRef = 'colors(0<green<=20<yellow<=139<red<=300)'
-                // FieldEnd
-
-                InputField Diastolic
-                    #number(0-300)
-                    label = 'Diastolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
-
-                // FieldEnd
 
 
                 OutputField SystolicAnalysis
@@ -127,6 +119,12 @@ define case ST1_Hypertension
                     uiRef = use rgu.redGreenUiRef
                     expression = 'if (Systolic<120) then "Normal"
                             else "High"'
+                            
+                            
+                InputField Diastolic
+                    #number(0-300)
+                    label = 'Diastolic Blood pressure (mm Hg):'
+                    uiRef = 'colos(0<green<=80<yellow<=89<red<300)'
 
 
                 OutputField DiastolicAnalysis
@@ -146,6 +144,7 @@ define case ST1_Hypertension
             Trigger
                     On complete invoke 'http://127.0.0.1:3001/connecare' method post
                     On complete invoke 'https://server1.com/api2' method Post with failureMessage 'Cannot complete the completion of data creation!'
+                    
             HumanTask RequestMedicalTest
                 #notmandatory
                 owner = 'Setting.Clinician'
@@ -168,7 +167,7 @@ define case ST1_Hypertension
                  
     Stage MedicalTest
         #mandatory
-        label = 'Medical Test'        
+        label = 'Medical Test' 
         owner = 'Setting.Nurse'
         
         Precondition

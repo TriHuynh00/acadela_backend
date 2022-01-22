@@ -8,8 +8,8 @@ def keyword_handler(error_text):
                            "FLOAT": "Number including fraction",
                            "HASH": "Hash sign (#)",
                            "Hash": "Hash sign (#)",
-                           "NUMBER": 'Number?',
-                           "condition": 'condition(condition is the blabla)?',
+                           "NUMBER": 'Number',
+                           "condition": 'condition',
                            '(if)\s':"if",
                            '(else if)\s':"else if",
                            '(else)\s':"else", 
@@ -35,17 +35,16 @@ def keyword_handler(error_text):
                            }
     for word, initial in keywords_dictionary.items():
         error_text = error_text.replace(word, initial)
-    error_text = error_text.replace(")\s'", "").replace("'(","")
+    if "Expected '('" not in error_text:
+        error_text = error_text.replace(")\s'", "").replace("'(","")
     suggestions_init = error_text.split('Expected ')[1]
     suggestions = suggestions_init.split(' or ')
-    print(error_text)
     attr_str = 'Expected one of: \n'
     if len(suggestions) == 1:
-        error_text = "Expected " + suggestions[0] + '\n'
+        error_text = f"Expected {suggestions[0]} \n"
         return error_text
     else:
         for index, word in enumerate(suggestions):
             attr_str = attr_str + str(index + 1) + '. ' + word + '\n'
         error_text = attr_str
-        # EXPLAIN OTHER
         return error_text

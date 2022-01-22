@@ -18,56 +18,45 @@ def generate_dictionary(attribute_list):
 
 def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     spell = generate_dictionary(attribute_list)
-    error_message = error.message
-    error_line = error.line
     error_column = error.col
     print("Line with error:", error_line_str, error_line_str[error_column - 1:])
     misspelled = error_line_str[error_column - 1:len(error_line_str)]
-    print(re.split('[\W|\d]+', misspelled))
     misspelled = re.split('[\W|\d]+', misspelled)[0]
-    #misspelled = misspelled.split(' ', 1)[0].split('(',1)[0]
     print("Misspelled word:", misspelled)
-    # misspelled = [t for t in error_message.split() if t.startswith('*')]
-    # if misspelled == []:
-    # return error_message
-    # else:
-    # misspelled = misspelled[0]
-    # misspelled = misspelled.replace("*", "")
-    # DO WE WANT THIS?
-    # if any(ext in misspelled for ext in attribute_list):
-    #    print("???", misspelled)
+    
     res = [ele for ele in attribute_list if (ele.lower() in misspelled.lower())]
+    res_lower = [x.lower() for x in res]
+    hash_lower = [x.lower() for x in hash_attributes]
     print("Attributes included in misspelled:", res)
 
     # check for most likely correction
     candidate_attr = spell.correction(misspelled)
     print("SUGGESTION from spell checker:", candidate_attr)
-
-    if candidate_attr == misspelled:
-        # print("No keyword ", misspelled)
+    if candidate_attr.lower() == misspelled.lower():
         if len(res) == 0:
-            typo_text = "No keyword " + misspelled + '\n'
-        elif misspelled in res or misspelled in hash_attributes:
+            typo_text = f"No keyword {misspelled}\n"
+        elif misspelled.lower() in hash_attributes:
             # check for hash
-            if hash_attributes.index(misspelled):
+            if hash_lower.index(misspelled.lower()):
                 print("typo_hash", error_line_str[error_column - 2])
                 if error_line_str[error_column - 2] != '#':
                     print("forgotten hash")
-                    typo_text = "The keyword " + misspelled + " is a hash value. Did you forget to put #?\n"
+                    typo_text = f"The keyword {misspelled} is a hash value. Did you forget to use #?\n"
                 else:
-                    typo_text = "No idea what happened?\n"
+                    typo_text = ""
                 # might need to check other possibilities
+        elif misspelled.lower() in res_lower:
+            typo_text = f"Unexpected keyword {misspelled} \n"
+            
         else:
             for hash in hash_attributes:
                 if misspelled.lower().startswith(hash):
-                    typo_text = misspelled + " looks like a hash value. Did you forget to put #?\n"
-                    print("found it")
+                    typo_text = f"{misspelled} looks like a hash value. Did you forget to use #?\n"
                     break
                 else:
-                    typo_text = "No keyword " + misspelled + ". Did you meant: " + res[0] + '?\n'
+                    typo_text = f"No keyword {misspelled}. Did you meant: {res[0]}?\n"
     elif misspelled == '':
         typo_text = ""
     else:
-        typo_text = "No keyword " + misspelled + ". Did you meant: " + candidate_attr + '?\n'
-
+        typo_text = f"No keyword {misspelled}. Did you meant: {candidate_attr}?\n"
     return typo_text

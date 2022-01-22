@@ -33,13 +33,11 @@ def parse_field_expression(dynamic_field, fields, line_number):
         for field in fields_to_search:
             if field not in pattern_keys and field not in field_ids:
                 raise Exception(
-                    "Invalid field {} found in the expression of dynamic field {} at line {}!".format(field,
-                                                                                                      dynamic_field.id,
-                                                                                                      line_number))
+                    f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of dynamic "
+                    f"field {dynamic_field.id}. Field does not exist.")
 
 
 def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
-    print("PARSING PRECONDITION", precondition_str)
     precondition_str = precondition_str.replace("(", "").replace(")", "")
     preconditions = re.split(r'and|or', precondition_str)
     for precondition in preconditions:
@@ -50,18 +48,24 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
         # CASE 1: precondition is located in SETTING
         if 'Setting' in precondition_start:
             if len(split_precondition_path) < 2:
-                raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
+                raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
+                                f"The path does not point to an existing element. "
+                                f"Make sure your path follows one of these rules:"
+                                f"\n\n 1. Stage.Task.Field\n 2. Setting.Attribute\n")
             field = re.split('\W+', split_precondition_path[1])[0]
             setting_list = case_object_tree["settings"][0].attribute
             setting_names = [setting.id for setting in setting_list]
             if field not in setting_names:
                 raise Exception(
-                    "Invalid precondition path at line {}. '{}' not found in Settings!".format(line_number, field))
+                    f"Semantic Error at line {line_number}! '{field}' not found in Settings. Invalid precondition path.")
 
         # CASE 2: precondition is located in TASK
         else:
             if len(split_precondition_path) < 3:
-                raise Exception("Invalid precondition path '{}' at line {}!".format(precondition, line_number))
+                raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
+                                f"The path does not point to an existing element. "
+                                f"Make sure your path follows one of these rules:"
+                                f"\n\n 1. Stage.Task.Field\n 2. Setting.Attribute\n")
             precondition_stage = split_precondition_path[0]
             precondition_task = split_precondition_path[1]
             precondition_field = re.split('\W+', split_precondition_path[2])[0]
@@ -79,18 +83,19 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                     break
 
             if found_stage is None:
-                raise Exception("invalid precondition path at line {}. '{}' not found in stages!".format(line_number,
-                                                                                                         precondition_stage))
+                raise Exception(
+                    f"Semantic Error at line {line_number}! '{precondition_stage}' not found in Stages. "
+                    f"Invalid precondition path.")
             else:
-                print("Stage is found", precondition_stage)
                 task_list = stage.taskList
                 for task in task_list:
                     if task.id.split("_")[1] == precondition_task:
                         found_task = task
                         break
                 if found_task is None:
-                    raise Exception("invalid precondition path at line {}. '{}' not found in tasks!".format(line_number,
-                                                                                                            precondition_task))
+                    raise Exception(
+                        f"Semantic Error at line {line_number}.! '{precondition_task}' not found in Tasks."
+                        f" Invalid precondition path.")
                 else:
                     print("Task is found", precondition_task)
                     task_field_list = found_task.fieldList + found_task.dynamicFieldList
@@ -100,8 +105,8 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                             break
                     if found_field is None:
                         raise Exception(
-                            "invalid precondition path at line {}.. {} not found in fields!".format(line_number,
-                                                                                                    precondition_field))
+                            f"Semantic Error at line {line_number}! {precondition_field} not found in Fields."
+                            f" Invalid precondition path.")
 
 
 def find_line_number(treatment_str, parent, field):
@@ -114,7 +119,6 @@ def find_line_number(treatment_str, parent, field):
     for index, item in enumerate(treatment_str_lines[init_line - 1:]):
         if field in item:
             line_index = index
-            print("??????", item.strip(), index)
             break
     if line_index is not None:
         line_index = line_index + init_line
@@ -159,7 +163,8 @@ def check_path_validity(case_object_tree, treatment_str):
                         print("group name:", group_name)
                         if group_name not in group_names:
                             raise Exception(
-                                "CaseOwner '{}' at line {} not found in groups!".format(group_name, attr.lineNumber))
+                                f"Semantic Error at line {attr.lineNumber}! CaseOwner '{group_name}' "
+                                f"not found in groups.")
 
                     elif split_owner_path[1] == 'CasePatient':
                         print("CHECKING IF CASE PATIENT IN GROUP:")
@@ -167,19 +172,20 @@ def check_path_validity(case_object_tree, treatment_str):
                         print("group name:", group_name)
                         if group_name not in group_names:
                             raise Exception(
-                                "CasePatient '{}' at line {} not found in groups!".format(group_name, attr.lineNumber))
+                                f"Semantic Error at line {attr.lineNumber}! CasePatient '{group_name}' "
+                                f"not found in groups.")
                     else:
                         group_name = attr.type.replace("Link.Users(", "").replace(")", "")
                         print("group name:", group_name)
                         if group_name not in group_names:
                             raise Exception(
-                                "User '{}' at line {} not found in groups!".format(group_name, attr.lineNumber))
+                                f"Semantic Error at line {attr.lineNumber}! User '{group_name}' not found in groups.")
                     break
             # ADD LINE NUMBER
             if not owner_found:
                 line_number = find_line_number(treatment_str, task, split_owner_path[1])
-                raise Exception("Owner '{}' at line {} not found in settings!"
-                                .format(split_owner_path[1], line_number))
+                raise Exception(
+                    f"Semantic Error at line {line_number}! Owner '{split_owner_path[1]}' not found in settings.")
 
         print("1.2 DUE DATE PATH CHECK:")
         due_date_path = task.dueDatePath
@@ -193,13 +199,14 @@ def check_path_validity(case_object_tree, treatment_str):
                         print("Due date attr value starts with 'date.' continue")
                     else:
                         # Syntax checker already detects this as a syntax error
-                        raise Exception("Due date value {} at line {} is not in date format!"
-                                        .format(attr.type, attr.lineNumber))
+                        raise Exception(
+                            f"Semantic Error at line {attr.lineNumber}! Due date value {attr.type}"
+                            f" is not in date format.")
                     break
             if not due_date_found:
                 line_number = find_line_number(treatment_str, task, split_due_date_path[1])
-                raise Exception("Due date {} at line {} not found in settings!"
-                                .format(split_due_date_path[1], line_number))
+                raise Exception(
+                    f"Semantic Error at line {line_number}! Due date {split_due_date_path[1]} not found in Settings.")
 
         # 1.3. CHECK TASK PRECONDITION
         print("1.3. CHECK TASK PRECONDITION:")
@@ -212,7 +219,8 @@ def check_path_validity(case_object_tree, treatment_str):
                     if step not in task_names:
                         remove_field_prefix = remove_attribute_prefix(step)
                         line_number = find_line_number(treatment_str, precondition, remove_field_prefix)
-                        raise Exception("Task '{}' in precondition at line {} not found!".format(step, line_number))
+                        raise Exception(
+                            f"Semantic Error at line {line_number}! Task '{step}' in precondition not found.")
             if precondition.expression is not None:
                 # if precondition has expression check path validity--DONE
                 line_number = find_line_number(treatment_str, precondition, precondition.expression)
@@ -245,7 +253,6 @@ def check_path_validity(case_object_tree, treatment_str):
         if len(task_dynamic_field_list) > 0:
             for field in task_dynamic_field_list:
                 if field.expression:
-                    print("the expression:", field.expression)
                     line_number = find_line_number(treatment_str, field, "expression")
                     parse_field_expression(field, task_fields, line_number)
 
@@ -255,16 +262,14 @@ def check_path_validity(case_object_tree, treatment_str):
     # IF IT'S TRUE THEN CHECK O.W. THROW EXCEPTION
     # ALSO CHECK THE STAGE -- DONE
     for summary in summary_list:
-        print("summary line", summary.lineNumber, summary.__dict__)
         info_path = summary.summaryParamList[0].split(".")
         # ADD LINES !!!
         if len(info_path) < 3:
             raise Exception(
-                "Invalid info path {} for Section at line {}!".format(summary.summaryParamList[0], summary.lineNumber))
+                f"Semantic Error at line {summary.lineNumber}! Invalid Section info path {summary.summaryParamList[0]}.")
         info_path_stage = info_path[0]
         info_path_task = info_path[1]
         info_path_field = info_path[2]
-        print("INFO_PATH:", info_path_field, info_path_task)
         found_stage = None
         found_task = None
         found_field = None
@@ -280,7 +285,7 @@ def check_path_validity(case_object_tree, treatment_str):
             removed_prefix = remove_attribute_prefix(info_path_stage)
             line_number = find_line_number(treatment_str, summary, removed_prefix)
             raise Exception(
-                "Invalid info path at line {}. '{}' not found in stages!".format(line_number, info_path_stage))
+                f"Semantic Error at line {line_number}! '{info_path_stage}' not found in Stages. Invalid info path.")
         else:
             task_list = found_stage.taskList
             print("Stage is found", info_path_stage, task_list)
@@ -292,10 +297,9 @@ def check_path_validity(case_object_tree, treatment_str):
             if found_task is None:
                 removed_prefix = remove_attribute_prefix(info_path_task)
                 line_number = find_line_number(treatment_str, summary, removed_prefix)
-                raise Exception("Invalid info path at line {}. '{}' not found in tasks of stage {}!".format(line_number,
-                                                                                                            removed_prefix,
-                                                                                                            remove_attribute_prefix(
-                                                                                                                info_path_stage)))
+                raise Exception(
+                    f"Semantic Error at line {line_number}! '{removed_prefix}' "
+                    f"not found in tasks of Stage {remove_attribute_prefix(info_path_stage)}. Invalid info path.")
             else:
                 print("Task is found", info_path_task)
                 task_field_list = found_task.fieldList + found_task.dynamicFieldList
@@ -307,10 +311,9 @@ def check_path_validity(case_object_tree, treatment_str):
                 if found_field is None:
                     removed_prefix = remove_attribute_prefix(info_path_field)
                     line_number = find_line_number(treatment_str, summary, removed_prefix)
-                    raise Exception("Invalid info path at line {}. Field '{}' not found in task {}!".format(line_number,
-                                                                                                            removed_prefix,
-                                                                                                            remove_attribute_prefix(
-                                                                                                                info_path_task)))
+                    raise Exception(
+                        f"Semantic Error at line {line_number}! Field '{removed_prefix}' not found in Task "
+                        f"{remove_attribute_prefix(info_path_task)}. Invalid info path.")
 
     # 3. CHECK STAGE OWNER & PRECONDITION
     stage_names = [stage.id for stage in case_stages]
@@ -330,11 +333,11 @@ def check_path_validity(case_object_tree, treatment_str):
                     print("group name:", group_name)
                     if group_name not in group_names:
                         raise Exception(
-                            "Stage owner {} at line not found in groups!".format(group_name, attr.lineNumber))
+                            f"Semantic Error at line {attr.lineNumber}! Stage Owner {group_name} not found in Groups!")
             if not owner_found:
                 line_number = find_line_number(treatment_str, stage, split_owner_path[1])
-                raise Exception("Stage Owner '{}' at line {} not found in settings!"
-                                .format(split_owner_path[1], line_number))
+                raise Exception(
+                    f"Semantic Error at line {line_number}! Stage Owner '{split_owner_path[1]}' not found in Settings!")
         # 3.2. CHECK STAGE PRECONDITION
         print("3.2. CHECK STAGE PRECONDITION")
         if len(stage.preconditionList) > 0:
@@ -344,9 +347,8 @@ def check_path_validity(case_object_tree, treatment_str):
                         remove_prefix = remove_attribute_prefix(step)
                         line_number = find_line_number(treatment_str, stage, remove_prefix)
                         raise Exception(
-                            "Stage '{}' in precondition not found at line {}!".format(remove_prefix, line_number))
+                            f"Semantic Error at line {line_number}! Stage '{remove_prefix}' does not exist!")
                 # HERE ONLY CHECK IF THE PATH EXISTS AGAIN--DONE
-                # ADD LINES !!!
                 if precondition.expression is not None:
                     line_number = find_line_number(treatment_str, precondition, precondition.expression)
                     parse_precondition(precondition.expression, case_object_tree, line_number)

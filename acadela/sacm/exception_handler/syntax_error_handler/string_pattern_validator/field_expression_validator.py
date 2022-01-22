@@ -2,7 +2,7 @@ import re
 from os.path import join, dirname, abspath
 from . import util
 from textx import *
-from . import syntax_error_handler
+from . import string_pattern_syntax_error_handler
 
 
 def validate_expression(expression, line_number):
@@ -11,15 +11,14 @@ def validate_expression(expression, line_number):
     # there has to be () and CompareExpression or ParamPattern in between
     # compare expression --> NUMBER (Comparator ColorName Comparator NUMBER)+
     if expression.startswith("if"):
-        #expression = expression.replace(" ", "")
         try:
             meta_model_path = join(this_folder, 'grammars','if_else_expression.tx')
             mm = metamodel_from_file(meta_model_path,
                                         ignore_case=True)
             if_else_meta = mm.model_from_str(expression, meta_model_path)
         except TextXSyntaxError as e:
-            syntax_error_handler.handleSyntaxError(e, expression, line_number)
-        print(expression)
+            string_pattern_syntax_error_handler.handle_string_pattern_syntax_errors(e, expression, line_number)
+
         expression = expression.replace(" ", "")
         regex_compare_expression = re.compile(r'if\([a-zA-Z]+(=|<>|<=|>=|<|>)[0-9]+((and|or)[a-zA-Z]+('
                                               r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"[a-zA-Z]+\"(elseif\([a-zA-Z]+('
@@ -27,23 +26,19 @@ def validate_expression(expression, line_number):
                                               r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"['
                                               r'a-zA-Z]+\")*else\"[a-zA-Z]+\"', re.I)
         match_if_else = regex_compare_expression.match(expression)
-        print("does it match?", bool(match_if_else))
         return bool(match_if_else)
+    
     elif expression.startswith("round"):
-        print("handle round")
         round_count = expression.count("round")
-        print("round count:",round_count)
         try:
             meta_model_path = join(this_folder, 'grammars', 'round_expression.tx')
             mm = metamodel_from_file(meta_model_path,
                                      ignore_case=True)
-            print("before split",expression)
             if round_count == 2:
                 expression = expression.split("round(", 1)[1][:-1]
-            print("expression:", expression)
             expression_meta = mm.model_from_str(expression, meta_model_path)
         except TextXSyntaxError as e:
-            syntax_error_handler.handleSyntaxError(e, expression, line_number)
+            string_pattern_syntax_error_handler.handle_string_pattern_syntax_errors(e, expression, line_number)
         return True
     return True
 
