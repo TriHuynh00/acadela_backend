@@ -34,24 +34,24 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
     print("SUGGESTION from spell checker:", candidate_attr)
     if candidate_attr.lower() == misspelled.lower():
         if len(res) == 0:
-            typo_text = f"No keyword {misspelled}\n"
+            typo_text = f"Unrecognized keyword: {misspelled}\n"
         elif misspelled.lower() in hash_attributes:
             # check for hash
             if hash_lower.index(misspelled.lower()):
                 print("typo_hash", error_line_str[error_column - 2])
                 if error_line_str[error_column - 2] != '#':
                     print("forgotten hash")
-                    typo_text = f"The keyword {misspelled} is a hash value. Did you forget to use #?\n"
+                    typo_text = f"The keyword {misspelled} is a directive value. Did you meant #{misspelled}?\n"
                 else:
                     typo_text = ""
                 # might need to check other possibilities
         elif misspelled.lower() in res_lower:
-            typo_text = f"Unexpected keyword {misspelled} \n"
+            typo_text = f"Unexpected keyword: {misspelled} \n"
             
         else:
             for hash in hash_attributes:
                 if misspelled.lower().startswith(hash):
-                    typo_text = f"{misspelled} looks like a hash value. Did you forget to use #?\n"
+                    typo_text = f"{misspelled} looks like a directive value. Did you meant #{misspelled}?\n"
                     break
                 else:
                     typo_text = f"No keyword {misspelled}. Did you meant: {res[0]}?\n"

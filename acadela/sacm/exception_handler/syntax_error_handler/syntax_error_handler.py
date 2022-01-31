@@ -40,7 +40,6 @@ def get_hash_attributes(meta_model_path):
         end = re.search('#', quote)
         if end:
             break
-        
         word = re.split('\)\s\;', quote)
         word = re.sub(r'\s+', '', word[0])
         quoted_attrs = re.findall(r'\|\'[a-zA-Z]+\'|\(\'[a-zA-Z]+\'', word)
@@ -65,6 +64,7 @@ class SyntaxErrorHandler():
         error_column = exception.col
         error_file = error_message.split("at position")[1].split(":")[0].replace(" ", "")
         is_file_exists = os.path.isfile(error_file)
+        print(exception)
 
         if error_file is not None and generalConf.MODEL_PLACEHOLDER in error_file:
             lines = case_template_str.splitlines()
@@ -100,3 +100,4 @@ class SyntaxErrorHandler():
         raise Exception(
             f"Syntax Error! Unrecognized command at line {error_line} "
             f"and column {error_column}!\n{syntax_error_message + error_message} ")
+

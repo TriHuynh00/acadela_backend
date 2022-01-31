@@ -108,13 +108,13 @@ define case ST1_Hypertension
             Form BloodPressureForm
                 #mandatory
                 InputField Systolic
-                    #number(0-300)
+                    #number(0-300) 
                     label = 'Systolic Blood pressure (mm Hg):'
                     uiRef = 'colors(0<green<=20<yellow<=139<red<=300)'
 
 
                 OutputField SystolicAnalysis
-                    #left
+                    #left #exactlyOne
                     label = 'Systolic Assessment:'
                     uiRef = use rgu.redGreenUiRef
                     expression = 'if (Systolic<120) then "Normal"
@@ -124,7 +124,7 @@ define case ST1_Hypertension
                 InputField Diastolic
                     #number(0-300)
                     label = 'Diastolic Blood pressure (mm Hg):'
-                    uiRef = 'colos(0<green<=80<yellow<=89<red<300)'
+                    uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
 
 
                 OutputField DiastolicAnalysis
