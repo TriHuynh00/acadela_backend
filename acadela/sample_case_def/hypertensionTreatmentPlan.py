@@ -16,7 +16,7 @@ define case ST1_Hypertension
         group UmcgProfessionals name = 'Umcg Professional' 
         group UmcgPatients name = 'Umcg Patient' 
         group UmcgNurses name = 'Umcg Nurse' 
-            //user williamst
+            // user williamst
             //user michelf
             //user hopkinsc
     // A comment
@@ -114,7 +114,7 @@ define case ST1_Hypertension
 
 
                 OutputField SystolicAnalysis
-                    #left #exactlyOne
+                    #left
                     label = 'Systolic Assessment:'
                     uiRef = use rgu.redGreenUiRef
                     expression = 'if (Systolic<120) then "Normal"

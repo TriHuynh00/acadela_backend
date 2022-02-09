@@ -1,16 +1,7 @@
 import re
 from sacm.interpreter.sentry import auto_parse_conditional_expression
 from sacm.interpreter.sentry import interpret_precondition
-
-
-def remove_attribute_prefix(str):
-    remove_prefix = str.split('_')
-    if len(remove_prefix) > 1:
-        remove_prefix = remove_prefix[1]
-    else:
-        remove_prefix = remove_prefix[0]
-    return remove_prefix
-
+from sacm.exception_handler.semantic_error_handler.utils import remove_attribute_prefix, find_line_number
 
 def parse_field_expression(dynamic_field, fields, line_number):
     field_expression = dynamic_field.expression
@@ -51,7 +42,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
                                 f"Make sure your path follows one of these rules:"
-                                f"\n\n 1. Stage.Task.Field\n 2. Setting.Attribute\n")
+                                f"\n\n 1.Setting.<AttributeName>\n")
             field = re.split('\W+', split_precondition_path[1])[0]
             setting_list = case_object_tree["settings"][0].attribute
             setting_names = [setting.id for setting in setting_list]
@@ -65,7 +56,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
                                 f"Make sure your path follows one of these rules:"
-                                f"\n\n 1. Stage.Task.Field\n 2. Setting.Attribute\n")
+                                f"\n\n 1.<StageName>.<TaskName>.<FieldName>\n 2. Setting.<AttributeName>\n")
             precondition_stage = split_precondition_path[0]
             precondition_task = split_precondition_path[1]
             precondition_field = re.split('\W+', split_precondition_path[2])[0]
@@ -94,7 +85,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                         break
                 if found_task is None:
                     raise Exception(
-                        f"Semantic Error at line {line_number}.! '{precondition_task}' not found in Tasks."
+                        f"Semantic Error at line {line_number}! '{precondition_task}' not found in Tasks."
                         f" Invalid precondition path.")
                 else:
                     print("Task is found", precondition_task)
@@ -108,22 +99,6 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                             f"Semantic Error at line {line_number}! {precondition_field} not found in Fields."
                             f" Invalid precondition path.")
 
-
-def find_line_number(treatment_str, parent, field):
-    init_line = parent.lineNumber[0]
-    print("to find:", parent, field, init_line)
-    treatment_str_lines = treatment_str.splitlines()
-    init_line_str = treatment_str_lines[init_line - 1]
-    print(init_line_str)
-    line_index = None
-    for index, item in enumerate(treatment_str_lines[init_line - 1:]):
-        if field in item:
-            line_index = index
-            break
-    if line_index is not None:
-        line_index = line_index + init_line
-        print(line_index)
-    return line_index
 
 
 def check_path_validity(case_object_tree, treatment_str):

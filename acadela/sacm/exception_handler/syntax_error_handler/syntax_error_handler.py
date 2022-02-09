@@ -94,9 +94,18 @@ class SyntaxErrorHandler():
         attributes = get_attributes_from_model(meta_model_path)
         hash_attributes = get_hash_attributes(meta_model_path)
 
+        # generate the part of the error message that includes typos and suggestions
         syntax_error_message = typo_handler.typo_handler(exception, attributes, hash_attributes, error_line_str)
+        
+        # replace the keywords with more readable versions 
         error_message = keyword_handler.keyword_handler(error_message)
-
+        
+        # remove the file path as it is not needed and not accurate for the IDE
+        error_message = re.sub(r'((((?<!\w)[A-Z,a-z]:)|(\.{1,2}\\))([^\b%\/\|:\n\"]*))|("\2([^%\/\|:\n\"]*)")|(('
+                               r'?<!\w)(\.{1,2})?(?<!\/)(\/((\\\b)|[^ \b%\|:\n\"\\\/])+)+\/?)\:', "", error_message)
+        # remove the extra whitespace before the error location
+        error_message = re.sub(r'\'\s+\*',"'*",error_message)
+        
         raise Exception(
             f"Syntax Error! Unrecognized command at line {error_line} "
             f"and column {error_column}!\n{syntax_error_message + error_message} ")

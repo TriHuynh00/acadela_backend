@@ -7,7 +7,7 @@ ifStatement:
     /(if)\s/'(' (conditionStatement) ')' thenStatement
 ;
 elseIfStatement:
-    /(else if)\s/ '('(conditionStatement) ')' thenStatement
+    /(else\sif)\s/ '('(conditionStatement) ')' thenStatement
 ;
 elseStatement:
     /(else)\s/ STRING

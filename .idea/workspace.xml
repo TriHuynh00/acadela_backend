@@ -3,19 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="bc6f8753-c9a1-456c-9757-4449b8023fbd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/compiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/config/general_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/config/general_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/id_uniqueness_checker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/path_validity_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/url_validation/url_validator.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/semantic_error_handler/url_validation/url_validator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/keyword_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/keyword_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/field_expression_validator.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/field_expression_validator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/syntax_error_handler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/ui_ref_validator.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/ui_ref_validator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/grammars/if_else_expression.tx" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/string_pattern_validator/grammars/if_else_expression.tx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/syntax_error_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/syntax_error_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/typo_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sacm/exception_handler/syntax_error_handler/typo_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" beforeDir="false" afterPath="$PROJECT_DIR$/acadela/sample_case_def/hypertensionTreatmentPlan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
