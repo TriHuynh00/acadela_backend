@@ -1,6 +1,6 @@
 
 def remove_attribute_prefix(str):
-    remove_prefix = str.split('_')
+    remove_prefix = str.split('_', 1)
     if len(remove_prefix) > 1:
         remove_prefix = remove_prefix[1]
     else:
