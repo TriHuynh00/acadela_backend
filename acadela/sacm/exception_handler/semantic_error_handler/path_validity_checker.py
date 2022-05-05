@@ -24,8 +24,8 @@ def parse_field_expression(dynamic_field, fields, line_number):
         for field in fields_to_search:
             if field not in pattern_keys and field not in field_ids:
                 raise Exception(
-                    f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of dynamic "
-                    f"field {dynamic_field.id}. Field does not exist.")
+                    f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of OutputField "
+                    f"{dynamic_field.id}. The field does not exist.")
 
 
 def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
@@ -42,7 +42,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
                                 f"Make sure your path follows one of these rules:"
-                                f"\n\n 1.Setting.<AttributeName>\n")
+                                f"\n\n 1.Setting.&lt;AttributeName&gt;\n")
             field = re.split('\W+', split_precondition_path[1])[0]
             setting_list = case_object_tree["settings"][0].attribute
             setting_names = [setting.id for setting in setting_list]
@@ -56,7 +56,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
                                 f"Make sure your path follows one of these rules:"
-                                f"\n\n 1.<StageName>.<TaskName>.<FieldName>\n 2. Setting.<AttributeName>\n")
+                                f"\n\n 1. &lt;StageName&gt;.&lt;TaskName&gt;.&lt;FieldName&gt;\n 2. Setting.&ltAttributeName&gt\n")
             precondition_stage = split_precondition_path[0]
             precondition_task = split_precondition_path[1]
             precondition_field = re.split('\W+', split_precondition_path[2])[0]
@@ -241,7 +241,10 @@ def check_path_validity(case_object_tree, treatment_str):
         # ADD LINES !!!
         if len(info_path) < 3:
             raise Exception(
-                f"Semantic Error at line {summary.lineNumber}! Invalid Section info path {summary.summaryParamList[0]}.")
+                f"Semantic Error at line {summary.lineNumber}! Invalid info path {summary.summaryParamList[0]}."
+                 f"The path does not point to an existing element. "
+                                f"Make sure your path follows the following rule:"
+                                f"\n 1. &lt;StageName&gt;.&lt;TaskName&gt;.&lt;FieldName&gt;\n ")
         info_path_stage = info_path[0]
         info_path_task = info_path[1]
         info_path_field = info_path[2]
@@ -260,7 +263,7 @@ def check_path_validity(case_object_tree, treatment_str):
             removed_prefix = remove_attribute_prefix(info_path_stage)
             line_number = find_line_number(treatment_str, summary, removed_prefix)
             raise Exception(
-                f"Semantic Error at line {line_number}! '{info_path_stage}' not found in Stages. Invalid info path.")
+                f"Semantic Error at line {line_number}! {remove_attribute_prefix(info_path_stage)} not found in Stages. Invalid info path.")
         else:
             task_list = found_stage.taskList
             print("Stage is found", info_path_stage, task_list)

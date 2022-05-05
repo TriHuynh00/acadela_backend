@@ -27,11 +27,7 @@ define case ST1_Hypertension
     Setting
         CaseOwner UmcgProfessionals #exactlyOne
             label = 'UMCG Professionals'   
-        Attribute WorkplanDueDate
-            #exactlyOne #date.after(TODAY)
-            label = 'Workplan Due Date'
-            externalId = 'dueDateConnie'
-
+            
         CasePatient UmcgPatients #exactlyOne
             label = 'Patient'
           
@@ -42,7 +38,11 @@ define case ST1_Hypertension
         Attribute Nurse
             #exactlyOne #Link.Users(UmcgNurses) 
             label = 'Nurse'
-            
+         Attribute WorkplanDueDate
+            #exactlyOne #date.after(TODAY)
+            label = 'Workplan Due Date'
+            externalId = 'dueDateConnie'
+    
         Attribute BloodPressureCondition
             #exactlyOne #text
             label = 'Blood Pressure Condition'
@@ -57,7 +57,7 @@ define case ST1_Hypertension
 
         Section Diastolic #left
             label = "Diastolic"
-            InfoPath Evaluation.MeasureBloodPressure.Diastolic 
+            InfoPath Evaluation.MeasureBloodPressure.Systolic
             
         Section DoctorNote #left
             label = "Recommendations"
@@ -168,11 +168,11 @@ define case ST1_Hypertension
     Stage MedicalTest
         #mandatory
         label = 'Medical Test' 
-        owner = 'Setting.Nurse'
+        group = 'Setting.Nurse'
         
         Precondition
             previousStep = 'Evaluation'
-            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 1'
+            // condition = 'Evaluation.RequestMedicalTest = 1'
             
         HumanTask MeasureBloodCholesterol
             #mandatory

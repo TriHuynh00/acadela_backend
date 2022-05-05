@@ -41,7 +41,7 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
                 print("typo_hash", error_line_str[error_column - 2])
                 if error_line_str[error_column - 2] != '#':
                     print("forgotten hash")
-                    typo_text = f"The keyword {misspelled} is a directive value. Did you meant #{misspelled}?\n"
+                    typo_text = f"The keyword {misspelled} is a directive value. Did you mean #{misspelled}?\n"
                 else:
                     typo_text = ""
                 # might need to check other possibilities
@@ -51,12 +51,12 @@ def typo_handler(error, attribute_list, hash_attributes, error_line_str):
         else:
             for hash in hash_attributes:
                 if misspelled.lower().startswith(hash):
-                    typo_text = f"{misspelled} looks like a directive value. Did you meant #{misspelled}?\n"
+                    typo_text = f"{misspelled} looks like a directive value. Did you mean #{misspelled}?\n"
                     break
                 else:
-                    typo_text = f"No keyword {misspelled}. Did you meant: {res[0]}?\n"
+                    typo_text = f"No keyword {misspelled}. Did you mean: {res[0]}?\n"
     elif misspelled == '':
         typo_text = ""
     else:
-        typo_text = f"No keyword {misspelled}. Did you meant: {candidate_attr}?\n"
+        typo_text = f"No keyword {misspelled}. Did you mean: {candidate_attr}?\n"
     return typo_text
