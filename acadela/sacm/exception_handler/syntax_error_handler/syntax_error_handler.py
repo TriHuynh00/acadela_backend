@@ -78,8 +78,6 @@ class SyntaxErrorHandler():
         # get the line by the line number
         error_line_str = lines[error_line - 1]
         # check if there is only one option
-        print("rulename", exception.__dict__)
-        # print("original error msg: ",error_message)
         rule_name = exception.expected_rules[0].rule_name
         print("EXCEPTION", exception.expected_rules[0].__dict__)
         
