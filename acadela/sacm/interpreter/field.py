@@ -4,14 +4,14 @@ from sacm.interpreter import util_intprtr
 
 from sacm.case_object.attribute import Attribute
 from sacm.case_object.derived_attribute import DerivedAttribute
-from sacm.case_object.field import Field
-from sacm.case_object.dynamic_field import DynamicField
+from sacm.case_object.input_field import InputField
+from sacm.case_object.output_field import OutputField
 from sacm.case_object.enumeration_option import EnumerationOption
 from sacm.case_object.enumeration import Enumeration
 
 import sacm.interpreter.directive as direc_intprtr
 
-def interpret_field(field, fieldPath, taskType, formDirective,model):
+def interpret_field(field, fieldPath, taskType, formDirective, model):
     directive = field.directive
     part = directive.part
     enumerationOptions = []
@@ -91,7 +91,7 @@ def interpret_field(field, fieldPath, taskType, formDirective,model):
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
     lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
-    fieldAsTaskParam = Field(field.name, description,
+    fieldAsTaskParam = InputField(field.name, description,
                              question,
                              multiplicity,
                              type,
@@ -175,7 +175,7 @@ def interpret_dynamic_field(field, fieldPath,
                                         externalId,
                                         explicitAttrType)
     lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
-    dynamicField = DynamicField(field.name,
+    dynamicField = OutputField(field.name,
                                 field.description.value,
                                 explicitAttrType,
                                 extraDescription,

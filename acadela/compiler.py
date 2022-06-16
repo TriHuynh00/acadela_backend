@@ -7,8 +7,10 @@ import textx.scoping.providers as scoping_providers
 # import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
 import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
 import config.general_config as generalConf
+import json
 import os
 from textx import *
+from textx.export import *
 from os.path import join, dirname, abspath
 
 from sacm.interpreter.case_template import CaseInterpreter
@@ -22,19 +24,22 @@ model = None
 # True = run User/Group validation check in SACM
 runNetworkOp = generalConf.CONN_SOCIOCORTEX
 
-
 def analyze_dsl_language(metamodelPath, model, metamodel):
-    print("Treatment Plan Grammar")
+    # print("Treatment Plan Grammar")
+    #
+    # pprint.pprint(metamodel.namespaces['CompactTreatmentPlan'])
+    #
+    # print("Attribute Element")
+    # pprint.pprint(vars(metamodel
+    #                    .namespaces['CompactTreatmentPlan']
+    #                    ['Attribute']))
 
-    pprint.pprint(metamodel.namespaces['CompactTreatmentPlan'])
-
-    print("Attribute Element")
-    pprint.pprint(vars(metamodel
-                       .namespaces['CompactTreatmentPlan']
-                       ['Attribute']))
     # mm = get_metamodel(model)
     # print (vars(mm['Case']._tx_attrs['hookList']))
     # print (mm.namespaces['CompactTreatmentPlan']['Case']._tx_attrs)
+
+    # Analyze model structure
+    pprint.pprint(model._tx_parser.parse_tree[0])
 
 
 # Create meta-model from the grammar. Provide `pointmodel` class to be used for
@@ -48,7 +53,6 @@ def convert_import_path(i):
         # language from the importURI string
         # e.g. here: import "file.ext" --> module name "file".
         return import_obj.importURI.split('.')[0]
-
 
 try:
     #logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
@@ -78,10 +82,13 @@ try:
 
     rootImportPath = join(abspath(dirname(__file__)), generalConf.MODEL_PLACEHOLDER)
     logging.info("rootImportPart" + rootImportPath)
+
+    # metamodel_export(mm, 'entity.pu', renderer=PlantUmlRenderer())
     model = mm.model_from_str(input, rootImportPath)
+
     # extract_attributes(mm)
     # analyze_dsl_language(metamodelPath, model, mm)
-    
+
     acaInterpreter = CaseInterpreter(mm, model,input)
     # ------------- HERE CHECK EXPRESSION
     acaInterpreter.interpret(runNetworkOp)

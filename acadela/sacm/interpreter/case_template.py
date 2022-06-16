@@ -310,6 +310,8 @@ class CaseInterpreter():
             caseInJson = self.compile_for_connecare(
                 workspaceDef.workspace, self.caseObjectTree)
 
+            print ("Case in JSON \n", json.dumps(caseInJson, indent=4))
+
             if runNetworkOp:
                 response = requests.post(
                     HttpRequest.sacmUrl + \

@@ -48,7 +48,7 @@ def validate_ui_ref(case_object_tree, treatment_str):
         fields = task.fieldList
         if len(fields) > 0:
             for field in fields:
-                if field.uiRef:
+                if field.uiReference:
                     line_number = util.find_line_number(treatment_str, field, 'uiRef')
-                    validate_ref_text(field.uiRef, line_number)
+                    validate_ref_text(field.uiReference, line_number)
 

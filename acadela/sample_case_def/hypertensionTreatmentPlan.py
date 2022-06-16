@@ -114,7 +114,7 @@ define case ST1_Hypertension
 
 
                 OutputField SystolicAnalysis
-                    #left #exactlyOne
+                    #left
                     label = 'Systolic Assessment:'
                     uiRef = use rgu.redGreenUiRef
                     expression = 'if (Systolic<120) then "Normal"
@@ -153,9 +153,7 @@ define case ST1_Hypertension
                 
                 Precondition
                     previousStep = 'MeasureBloodPressure'
-                    previousStep = 'MeasureBloodCholesterol'
                     condition = 'Setting.BloodPressureCondition = "High"'
-
 
                 Form CgiForm
                     InputField CholesterolTest

@@ -75,6 +75,9 @@ class SyntaxErrorHandler():
             print("error message", error_file, error_file_text)
             lines = error_file_text.splitlines()
 
+        else:
+            lines = case_template_str.splitlines()
+
         # get the line by the line number
         error_line_str = lines[error_line - 1]
         # check if there is only one option

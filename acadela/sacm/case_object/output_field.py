@@ -1,4 +1,6 @@
 from os.path import dirname
+
+from sacm.case_object.field import Field
 from sacm.default_state import defaultAttrMap
 import sacm.util as util
 import sys
@@ -7,12 +9,12 @@ this_folder = dirname(__file__)
 
 
 # TaskParamDefinition
-class DynamicField:
+class OutputField:
     def __init__(self, id, description,
                  explicityType,
                  additionalDescription,
                  expression,
-                 uiReference,
+                 uiRef,
                  externalId,
                  path,
                  isReadOnly,
@@ -21,18 +23,16 @@ class DynamicField:
                  part,
                  lineNumber):
 
-        self.id = id
-        self.description = description
         self.explicitType = explicityType
         self.additionalDescription = additionalDescription
         self.expression = expression
-        self.uiReference = uiReference
-        self.externalId = externalId
-        # Task Param
-        self.path = path
-        self.isReadOnly = isReadOnly
-        self.isMandatory = isMandatory
-        self.position = position
-        self.part = part
-        self.lineNumber = lineNumber
+        Field.__init__(self, id, description,
+                       uiRef,
+                       externalId,
+                       path,
+                       position,
+                       part,
+                       isReadOnly,
+                       isMandatory,
+                       lineNumber)
 

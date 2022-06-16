@@ -79,12 +79,12 @@ workspace Umcg
                 Form PatientAssignForm
                     #mandatory
                     
-                    Field SelectPatient
+                    InputField SelectPatient
                         #custom
                         CustomFieldValue = "Setting.CasePatient"
                         label = "Assigned Patient"
                         
-                    Field SelectDoctor
+                    InputField SelectDoctor
                         #custom
                         CustomFieldValue = "Setting.Clinician"
                         label = "Assigned Clinician"
@@ -106,17 +106,17 @@ workspace Umcg
                 
                 Form ImmediateRisksForm 
                         
-                        Field ImmediateFactor1
+                    InputField ImmediateFactor1
                         #singlechoice 
                             question = 'Visible burns or edema of the oropharnyx'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                        Field ImmediateFactor2
+                    InputField ImmediateFactor2
                         #singlechoice 
                             question = 'Full thickness nasolabial burns'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                        Field ImmediateFactor3
+                    InputField ImmediateFactor3
                         #singlechoice 
                             question = 'Circumfeerential neck burns'
                             Option 'No' value='0'
@@ -138,23 +138,23 @@ workspace Umcg
                 externalId = 'AssessRisk'
                 
                 Form AssessRiskForm
-                        Field Factor1
+                    InputField Factor1
                         #singlechoice
                             question = 'Burns in a closed space'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                        Field Factor2
+                    InputField Factor2
                         #singlechoice
                             question = 'Singed nasal hair'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                        Field Factor3
+                    InputField Factor3
                         #singlechoice
                             question = 'Facial burns'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
                 
-                        Field Factor4
+                    InputField Factor4
                         #singlechoice
                             question = 'Soot in the mouth'
                             Option 'No' value='0'
@@ -166,7 +166,8 @@ workspace Umcg
             label = 'Symtopmatic'
             Precondition
                 previousStep = 'Evaluation'
-                condition = 'Evaluation.AssessRisk.Factor1 + Evaluation.AssessRisk.Factor2 + Evaluation.AssessRisk.Factor3 + Evaluation.AssessRisk.Factor4>0'
+                condition = 'Evaluation.AssessRisk.Factor1 + Evaluation.AssessRisk.Factor2 
+                            + Evaluation.AssessRisk.Factor3 + Evaluation.AssessRisk.Factor4>0'
             
             HumanTask AssessSymptomatic
                 #mandatory #exactlyOne
@@ -176,32 +177,32 @@ workspace Umcg
                 externalId = 'Symptomatic'
                 
                 Form SymptomaticForm
-                    Field Symptoms1
+                    InputField Symptoms1
                         #singlechoice
                             question = 'signss of respiratory'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field Symptoms2
+                    InputField Symptoms2
                         #singlechoice
                             question = 'throat pain'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field Symptoms3
+                    InputField Symptoms3
                         #singlechoice
                             question = 'odynophagia'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field Symptoms4
+                    InputField Symptoms4
                         #singlechoice
                             question = 'drooling'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field Symptoms5
+                    InputField Symptoms5
                         #singlechoice
                             question = 'stridor'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field Symptoms6
+                    InputField Symptoms6
                         #singlechoice
                             question = 'hoarseness'
                             Option 'No' value='0'
@@ -210,6 +211,7 @@ workspace Umcg
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Laryngoscopy'
+            
             Precondition
                 previousStep = 'Symptomatic'
                 condition = 'Symptomatic.AssessSymptomatic.Symptoms1 + Symptomatic.AssessSymptomatic.Symptoms2 + Symptomatic.AssessSymptomatic.Symptoms3 + Symptomatic.AssessSymptomatic.Symptoms4 + Symptomatic.AssessSymptomatic.Symptoms5 + Symptomatic.AssessSymptomatic.Symptoms6=0'
@@ -222,12 +224,12 @@ workspace Umcg
                 externalId = 'AssessClassTwo'
                 
                 Form ClassTwoForm
-                    Field ClTwo1
+                    InputField ClTwo1
                         #singlechoice
                             question = 'Erythema at upper airway'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field ClTwo2
+                    InputField ClTwo2
                         #singlechoice
                             question = 'Blisters of the palate'
                             Option 'No' value='0'
@@ -237,6 +239,7 @@ workspace Umcg
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Class II Diagnosed'
+            
             Precondition
                 previousStep = 'EvaluationIntermediate'
                 condition = 'EvaluationIntermediate.ImmediateRisks.ImmediateFactor1 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor2 + EvaluationIntermediate.ImmediateRisks.ImmediateFactor3 > 0'
@@ -246,6 +249,7 @@ workspace Umcg
             Precondition
                 previousStep = 'ClassTwo'
                 condition = 'ClassTwo.AssessClassTwo.ClTwo1 + ClassTwo.AssessClassTwo.ClTwo2>0'
+            
             HumanTask AssessClassTwoDiagnosed
                 #mandatory #exactlyOne
                 label = 'Next steps for patient Diagnosed with Class II'
@@ -254,31 +258,34 @@ workspace Umcg
                 externalId = 'AssessClassTwoDiagnosed'
                 
                 Form ClassTwoDiagnosedForm
-                    Field CLDiagnosed1
+                    InputField CLDiagnosed1
                         #singlechoice 
                             question = 'Early intubation for airway protection'
                             Option 'Yes' value='0'
                             Option 'Yes' value='1'
-                    Field CLDiagnosed2
+                    InputField CLDiagnosed2
                         #singlechoice 
                             question = 'Admit to ICU for bronchoscopy or consider to transfer to burn center'
                             Option 'Yes' value='0'
                             Option 'Yes' value='1'
-                    Field CLDiagnosed3
+                    InputField CLDiagnosed3
                         #singlechoice 
                             question = 'Transfer to burn center'
                             Option 'Yes' value='0'
                             Option 'Yes' value='1'
+                            
         Stage ClassTwoNotDiagnosed
             #mandatory
             owner = 'Setting.Clinician'
             label = 'Class II not Diagnosed'
+            
             Precondition
                 previousStep = 'Evaluation'
                 condition = 'Evaluation.AssessRisk.Factor1 + Evaluation.AssessRisk.Factor2 + Evaluation.AssessRisk.Factor3 + Evaluation.AssessRisk.Factor4 = 0'
             Precondition
                 previousStep = 'ClassTwo'
                 condition = 'ClassTwo.AssessClassTwo.ClTwo1 + ClassTwo.AssessClassTwo.ClTwo2 =0'
+            
             HumanTask AssessClassTwoNotDiagnosed
                 #mandatory #exactlyOne
                 label = 'Next steps for patient not Diagnosed with Class II'
@@ -287,12 +294,12 @@ workspace Umcg
                 externalId = 'AssessClassTwoNotDiagnosed'
                 
                 Form ClassTwoNotDiagnosedForm
-                    Field CLNotDiagnosed1
+                    InputField CLNotDiagnosed1
                         #singlechoice
                             question = 'If high-risk, consider 24-hour observation to rule out lower airway injury'
                             Option 'No' value='0'
                             Option 'Yes' value='1'
-                    Field CLNotDiagnosed2
+                    InputField CLNotDiagnosed2
                         #singlechoice
                             question = 'If high-risk, bronchoscopy to rule out lower airway injury'
                             Option 'No' value='0'

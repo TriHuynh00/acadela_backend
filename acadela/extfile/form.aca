@@ -1,33 +1,33 @@
-import field
 define Form BMIForm
-    #notreadonly #mandatory
-    field Height
-        #number(0-3) #exactlyOne
-        label ='Height of patient in m'
+  #notreadonly #mandatory
 
-    field Weight
-        #number(0-300) #exactlyOne
-        label ='Weight of patient in kg'
+  InputField Height
+      #number(0-3) #exactlyOne
+      label ='Height of patient in m'
 
-    field AgeRange
-        #singlechoice #notmandatory #notReadOnly
-        Question = 'What is your age range?'
-            Option 'less than 10' value = '1' additionalDescription = 'child' externalId = 'childBMI'
-            Option '10-30' value = '1.2'
-            Option '30-50' value = '1.5'
-            Option 'over 50' value = '1.7'
+  InputField Weight
+      #number(0-300) #exactlyOne
+      label ='Weight of patient in kg'
 
-    //use field ImportedField
+  InputField AgeRange
+      #singlechoice #notmandatory #notReadOnly
+      question = 'What is your age range?'
+          Option 'less than 10' value = '1'
+						additionalDescription = 'child'
+						externalId = 'childBMI'
+          Option '10-30' value = '1.2'
+          Option '30-50' value = '1.5'
+          Option 'over 50' value = '1.7'
 
-    DynamicField BmiScore
-        #mandatory #number
-        label ='BMI Calculation in kilogram and meters'
-        expression = 'round(Weight / (Height * Height))'
+	OutputField BmiScore
+	    #mandatory #number
+	    label ='BMI Calculation in kilogram and meters'
+	    expression = 'round(Weight / (Height * Height))'
 
-    DynamicField BmiScorePlus
-        #mandatory #left #number
-        label = 'BMI Calculation with age counted'
-        additionalDescription = 'full Derived field'
-        expression = 'round(BmiScore + number(AgeRange, 2))'
-        uiRef = 'colors(5<red<10<green<25)'
-        externalId = 'BmiPlus'
+	OutputField BmiScorePlus
+	    #mandatory #left #number
+	    label = 'BMI Calculation with age counted'
+	    additionalDescription = 'full Derived field'
+	    expression = 'round(BmiScore + number(AgeRange, 2))'
+	    uiRef = 'colors(0 < red < 17 < yellow < 18.5 < green < 25 < orange < 30 < red < 100)'
+      externalId = 'BmiPlus'
