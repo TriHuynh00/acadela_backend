@@ -30,4 +30,4 @@ define Form BMIForm
 	    additionalDescription = 'full Derived field'
 	    expression = 'round(BmiScore + number(AgeRange, 2))'
 	    uiRef = 'colors(0 < red < 17 < yellow < 18.5 < green < 25 < orange < 30 < red < 100)'
-      externalId = 'BmiPlus'
+        externalId = 'BmiPlus'

@@ -11,7 +11,7 @@ def keyword_handler(error_text):
                            "NUMBER": 'Number',
                            "condition": 'condition',
                            '(if)\s':"if",
-                           '(else if)\s':"else if",
+                           '(else\sif)\s':"else if",
                            '(else)\s':"else", 
                            '(and)\s':"and", 
                            '(or)\s':"or",
@@ -31,7 +31,8 @@ def keyword_handler(error_text):
                             "GroupTerm":"Group",
                             "PreconditionTerm":"Precondition",
                             "FormTerm":"Form",
-                            "AttributeTerm":"Attribute"
+                            "AttributeTerm":"Attribute",
+                            
                            }
     for word, initial in keywords_dictionary.items():
         error_text = error_text.replace(word, initial)

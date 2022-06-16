@@ -57,5 +57,5 @@ def validate_field_expressions(case_object_tree, treatment_str):
                     is_valid = validate_expression(field.expression, line_number)
                     if not is_valid:
                         raise Exception(
-                            "Invalid dynamic field expression: {} \n found at line {}!".format(field.expression,
+                            "Invalid OutputField expression: {} \n found at line {}!".format(field.expression,
                                                                                                line_number))

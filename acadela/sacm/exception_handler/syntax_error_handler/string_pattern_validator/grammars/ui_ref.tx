@@ -30,7 +30,7 @@ ColorName:
 ;
 
 ValidFunctionName:
-    'number' | 'colors'
+     'number' | 'colors'
 ;
 
 

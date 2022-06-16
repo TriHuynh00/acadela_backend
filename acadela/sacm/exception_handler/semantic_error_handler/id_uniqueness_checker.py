@@ -1,9 +1,12 @@
+from sacm.exception_handler.semantic_error_handler.utils import remove_attribute_prefix
+
 def find_duplicate(objects, list, field, identifier):
     seen = set()
     for x in list:
         if x in seen:
             found_line = next((item for item in objects if getattr(item, identifier) == x), None).lineNumber
             line_number_text = f"at line {str(found_line[0])} and column {str(found_line[1])}"
+            x = remove_attribute_prefix(x)
             raise Exception(f"{field} IDs should be unique! {x} {line_number_text} is a duplicate. "
                             f"Please verify that the IDs are unique for each field.")
         seen.add(x)
