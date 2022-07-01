@@ -166,7 +166,7 @@ define case ST1_Hypertension
     Stage MedicalTest
         #mandatory
         label = 'Medical Test' 
-        group = 'Setting.Nurse'
+        owner = 'Setting.Nurse'
         
         Precondition
             previousStep = 'Evaluation'

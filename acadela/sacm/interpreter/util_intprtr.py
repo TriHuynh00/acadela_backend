@@ -31,6 +31,9 @@ def parse_precondition(process, stageList = None):
                         sentry.auto_parse_conditional_expression(
                             precondition.expression, stageList)
 
+                    preconditionJson['simplifiedExpression'] = \
+                        precondition.expression
+
                 sentryJson['precondition'].append(
                     {
                         '$': preconditionJson
