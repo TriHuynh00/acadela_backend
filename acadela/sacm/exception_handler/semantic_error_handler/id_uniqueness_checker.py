@@ -63,15 +63,16 @@ def check_id_uniqueness(case_object_tree):
     dup, item = find_duplicate(case_task_list, task_names, "Task", "id")
     print("TASK Names:", task_names)
     print("TASK ID NOT UNIQUE", dup, item)
-    field_names = []
-    field_object = []
+
 
     # 6.FIELD ID/NAME UNIQUENESS
     for task in case_task_list:
+        field_names = []
+        field_object = []
         static_field_names = [field.id for field in task.fieldList]
         dynamic_field_names = [field.id for field in task.dynamicFieldList]
         field_names = field_names + static_field_names + dynamic_field_names
         field_object = field_object + task.fieldList + task.dynamicFieldList
-    dup, item = find_duplicate(field_object, field_names, "Field", "id")
+        dup, item = find_duplicate(field_object, field_names, "Field", "id")
     print("FIELD Names:", field_names)
     print("FIELD ID NOT UNIQUE", dup, item, "\n######\n")

@@ -2,6 +2,7 @@ import re
 from sacm.interpreter.sentry import auto_parse_conditional_expression
 from sacm.interpreter.sentry import interpret_precondition
 from sacm.exception_handler.semantic_error_handler.utils import remove_attribute_prefix, find_line_number
+import sacm.util as sacmUtil
 
 def parse_field_expression(dynamic_field, fields, line_number):
     field_expression = dynamic_field.expression
@@ -29,9 +30,18 @@ def parse_field_expression(dynamic_field, fields, line_number):
 
 
 def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
-    precondition_str = precondition_str.replace("(", "").replace(")", "")
-    preconditions = re.split(r'and|or', precondition_str)
+    precondition_str = precondition_str.replace("(", "")\
+                                        .replace(")", "")\
+                                        .replace("\n", "")
+    preconditions = re.split(r'( and )|( or )|(\+)' \
+                             + '|[<>=]|[=]', precondition_str)
+
+    for invalidElem in [None, "and", "or"]:
+        preconditions = list(filter(lambda a: a != invalidElem, preconditions))
+
     for precondition in preconditions:
+        if '.' not in precondition:
+            continue
         precondition = precondition.replace(" ", "")
         split_precondition_path = precondition.split(".")
         print(precondition, split_precondition_path)
@@ -59,7 +69,8 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                                 f"\n\n 1. &lt;StageName&gt;.&lt;TaskName&gt;.&lt;FieldName&gt;\n 2. Setting.&ltAttributeName&gt\n")
             precondition_stage = split_precondition_path[0]
             precondition_task = split_precondition_path[1]
-            precondition_field = re.split('\W+', split_precondition_path[2])[0]
+            # precondition_field = re.split('\W+', split_precondition_path[2])[0]
+            precondition_field = split_precondition_path[2]
 
             # check if stage name is valid
             stages = case_object_tree["stages"]
@@ -68,7 +79,9 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
             found_field = None
 
             for stage in stages:
-                if stage.id.split("_")[1] == precondition_stage:
+                print(str.format("precond stage: {}| COT stage: {}",
+                                 precondition_stage, stage.id.split("_")[1]))
+                if stage.id.split("_")[1] == sacmUtil.unprefix(precondition_stage):
                     found_stage = stage
                     print("foundSTAGE", found_stage)
                     break
@@ -80,7 +93,8 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
             else:
                 task_list = stage.taskList
                 for task in task_list:
-                    if task.id.split("_")[1] == precondition_task:
+                    print(f'taskID: {task.id.split("_")[1]} | precondTask: {sacmUtil.unprefix(precondition_task)}')
+                    if task.id.split("_")[1] == sacmUtil.unprefix(precondition_task):
                         found_task = task
                         break
                 if found_task is None:
@@ -91,6 +105,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                     print("Task is found", precondition_task)
                     task_field_list = found_task.fieldList + found_task.dynamicFieldList
                     for field in task_field_list:
+                        print(f"Field: {field.id} | PRecondField: {precondition_field}")
                         if field.id == precondition_field:
                             found_field = field
                             break
@@ -299,10 +314,12 @@ def check_path_validity(case_object_tree, treatment_str):
         # 3.1. CHECK STAGE OWNER
         print("3.1. CHECK STAGE OWNER ")
         owner_path = stage.ownerPath
-        split_owner_path = owner_path.split(".")
+
+
         owner_found = False
 
         if (owner_path != 'None') and (owner_path is not None):
+            split_owner_path = owner_path.split(".")
             for attr in setting_list:
                 if attr.id == split_owner_path[1]:
                     owner_found = True

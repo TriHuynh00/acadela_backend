@@ -12,6 +12,10 @@ def set_case_prefix(casePrefix):
 def prefixing(name):
     return str(prefix + name)
 
+def unprefix(name):
+    global prefix
+    return str(name).replace(prefix, "", 1)
+
 def prefixingSetting(name):
     return str(name).replace(SETTING_NAME + '.', \
                              prefixing(SETTING_NAME) + '.')
