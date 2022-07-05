@@ -40,6 +40,8 @@ class InputField(Field):
                  uiRef,
                  externalId,
                  part,
+                 defaultValue,
+                 defaultValues,
                  lineNumber):
 
         self.question = question
@@ -53,4 +55,6 @@ class InputField(Field):
                        part,
                        isReadOnly,
                        isMandatory,
+                       defaultValue,
+                       defaultValues,
                        lineNumber)

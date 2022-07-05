@@ -7,6 +7,8 @@ class Field:
                  part,
                  isReadOnly,
                  isMandatory,
+                 defaultValue,
+                 defaultValues,
                  lineNumber):
 
         self.id = id
@@ -19,3 +21,5 @@ class Field:
         self.position = position
         self.part = part
         self.lineNumber = lineNumber
+        self.defaultValue = defaultValue
+        self.defaultValues = defaultValues

@@ -1,4 +1,4 @@
-from sacm.default_state import defaultAttrMap, CUSTOM_TYPE
+from sacm.default_state import defaultAttrMap, CUSTOM_TYPE, DOCUMENT_LINK_TYPE
 from sacm import util
 from sacm.interpreter import util_intprtr
 
@@ -46,16 +46,6 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
         else direc_intprtr\
                 .interpret_directive(directive.multiplicity)
 
-    type = defaultAttrMap['type'] \
-        if not util.is_attribute_not_null(directive, "type") \
-        else direc_intprtr\
-                    .interpret_directive(directive.type)
-
-    # If field type is custom, set the field path to custom path
-    if type == CUSTOM_TYPE:
-        fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
-        print("custom field path", fieldPath)
-
     readOnly = assign_form_directive_to_field('readOnly',
                                               directive,
                                               formDirective)
@@ -72,13 +62,47 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
         if field.externalId is None \
         else field.externalId.value
 
+    defaultValue = None \
+        if field.defaultValue is None \
+        else field.defaultValue.value
+
+    defaultValues = None \
+        if field.defaultValues is None \
+        else field.defaultValues.value
+
+    type = defaultAttrMap['type'] \
+        if not util.is_attribute_not_null(directive, "type") \
+        else direc_intprtr \
+            .interpret_directive(directive.type)
+
+    # If field type is custom, set the field path to custom path
+    if type == CUSTOM_TYPE:
+        fieldPath = util_intprtr.prefix_path_value(field.path.value, False)
+        print("custom field path", fieldPath)
+    else:
+        # Parse document link
+        if str(type).lower().startswith(DOCUMENT_LINK_TYPE):
+            # Get the link URL but remove the )
+            url = type.split('(')[1][:-1]
+
+            # A link document is readOnly, notMandatory, of type string
+            # uiRef = 'privatelink' and defaultValue = url
+            readOnly = 'false'
+            mandatory = 'false'
+            type = 'string'
+            uiRef = 'privatelink'
+            defaultValue = str(url)
+
+
     # For a field with custom path, do not create new attribute
     if type != CUSTOM_TYPE:
         fieldAsAttribute = Attribute(field.name, description,
                                      multiplicity=multiplicity,
                                      type=type,
                                      uiReference=uiRef,
-                                     externalId=externalId)
+                                     externalId=externalId,
+                                     defaultValues=defaultValues,
+                                     defaultValue=defaultValue)
         print("field as Attribute", vars(fieldAsAttribute))
     else:
         fieldAsAttribute = None
@@ -91,6 +115,7 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
         if partValidCode == 1:
             part = direc_intprtr.interpret_directive(part)
     lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
+
     fieldAsTaskParam = InputField(field.name, description,
                              question,
                              multiplicity,
@@ -102,6 +127,8 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
                              uiRef,
                              externalId,
                              part,
+                             defaultValue,
+                             defaultValues,
                              lineNumber)
 
     print("field as TaskParam", vars(fieldAsTaskParam))
@@ -166,6 +193,14 @@ def interpret_dynamic_field(field, fieldPath,
                                               directive,
                                               formDirective)
 
+    defaultValue = None \
+        if field.defaultValue is None \
+        else field.defaultValue.value
+
+    defaultValues = None \
+        if field.defaultValues is None \
+        else field.defaultValues.value
+
     # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = DerivedAttribute(field.name,
                                         field.description.value,
@@ -174,7 +209,9 @@ def interpret_dynamic_field(field, fieldPath,
                                         uiRef,
                                         externalId,
                                         explicitAttrType)
+
     lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
+
     dynamicField = OutputField(field.name,
                                 field.description.value,
                                 explicitAttrType,
@@ -188,6 +225,8 @@ def interpret_dynamic_field(field, fieldPath,
                                 mandatory,
                                 position,
                                 part,
+                                defaultValue,
+                                defaultValues,
                                 lineNumber)
 
     return {"fieldAsAttribute": fieldAsAttribute,
@@ -293,7 +332,8 @@ def sacm_compile(fieldList):
                                  'isReadOnly',
                                  'isMandatory',
                                  'position',
-                                 'part'])
+                                 'part',
+                                 'lineNumber'])
 
         taskParamList.append(taskParam)
 

@@ -16,7 +16,9 @@ class Attribute():
                  additionalDescription = None,  # below are optional
                  uiReference = None,
                  externalId = None,
-                 defaultValues = None, lineNumber = None):
+                 defaultValues = None,
+                 defaultValue = None,
+                 lineNumber = None):
         self.id = id
 
         self.enumerationOptions = []
@@ -51,6 +53,7 @@ class Attribute():
         self.uiReference = uiReference
         self.externalId = externalId
         self.defaultValues = defaultValues
+        self.defaultValue = defaultValue
 
 
 

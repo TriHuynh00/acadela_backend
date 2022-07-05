@@ -85,7 +85,21 @@ def sacm_compile(attribute):
 
     util.compile_attributes(thisAttr, attribute,
         ['defaultValues', 'additionalDescription', 'externalId'
-         'mandatory', 'multiplicity', 'uiReference'])
+         'mandatory', 'multiplicity', 'uiReference',
+         'defaultValue'])
+
+    if util.is_attribute_not_null(attribute, "defaultValues"):
+        defValuesElements = attribute.defaultValues\
+                                .replace("]", "") \
+                                .replace("[", "") \
+                                .split(',')
+        postProcessedDefaultValues = []
+
+        for val in defValuesElements:
+            postProcessedDefaultValues.append(val)
+
+        thisAttr['defaultValues'] = str(postProcessedDefaultValues)
+
 
     if util.is_attribute_not_null(attribute, 'type'):
         thisAttr['type'] = attribute.type

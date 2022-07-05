@@ -11,8 +11,10 @@ defaultAttrMap = {
 
 CUSTOM_TYPE = 'custom'
 
+DOCUMENT_LINK_TYPE = 'documentlink'
 ENTITY_LINK_TYPE = 'Link.EntityDefinition'
 USER_OR_GROUP_LINK_TYPE = 'Link.Users'
+
 
 SETTING_NAME = 'Setting'
 HUMAN_TASK_DEF = 'HumanTaskDefinition'

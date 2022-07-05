@@ -9,13 +9,12 @@ def interpret_case_hook(hookObj):
 
 def interpret_http_hook(httpHookObj, model):
     print("hoook:",httpHookObj.__dict__)
-    line_number = model._tx_parser.pos_to_linecol(httpHookObj._tx_position)
+    lineNumber = model._tx_parser.pos_to_linecol(httpHookObj._tx_position)
     return HttpTrigger(str.upper(httpHookObj.event),
                        httpHookObj.url,
                        str.upper(httpHookObj.method),
-                       line_number,
-                       httpHookObj.failureMessage,
-                       )
+                       lineNumber,
+                       httpHookObj.failureMessage)
 
 def sacm_compile(hookList):
 
@@ -28,7 +27,7 @@ def sacm_compile(hookList):
 
         print('hook in task is {}', vars(hook))
         util.compile_attributes(hookJsonAttr, hook,
-            ['on', 'url', 'method', 'failureMessage'])
+            ['on', 'url', 'method', 'failureMessage', 'lineNumber'])
 
         hooklistJson.append(hookJson)
 

@@ -50,7 +50,8 @@ def interpret_directive(directiveObj):
 
     # Static directives do not have parentheses
     # while dynamic ones have
-    print("directiveObj is {} with Type {}".format(directiveObj, util.cname(directiveObj)))
+    print("directiveObj is {} with Type {}".format(directiveObj,
+                                           util.cname(directiveObj)))
     directiveObjType = util.cname(directiveObj)
 
     if directiveObjType == "LinkType":
@@ -59,12 +60,18 @@ def interpret_directive(directiveObj):
 
     elif directiveObjType == "str" :
         if str(directiveObj).find("(") > -1:
-            return interpret_dynamic_directive(directiveObj, util.cname(directiveObj))
+            return interpret_dynamic_directive(directiveObj,
+                                               util.cname(directiveObj))
         else:
             return interpret_static_directive(directiveObj)
 
     elif directiveObjType == "NumType":
-        return interpret_dynamic_directive(directiveObj, util.cname(directiveObj))
+        return interpret_dynamic_directive(directiveObj,
+                                           util.cname(directiveObj))
+
+    elif directiveObjType == "DocumentLinkType":
+        return default_state.DOCUMENT_LINK_TYPE \
+                + str.format("({})", directiveObj.url)
 
 
 # translate directive in Acadela to SACM value

@@ -288,7 +288,7 @@ Stage:
 
     (
         StageTerm name = ID
-            directive = StageElementDirective
+            directive = WorkflowElementDirective
 
             (
                 (description = Description)
@@ -322,7 +322,7 @@ Task:
 HumanTask:
     (
         HumanTaskTerm name = ID
-            directive = StageElementDirective
+            directive = WorkflowElementDirective
             attrList = SharedTaskAttrs
             (
                 (/(Trigger)\s/ hookList *= HttpHook)?
@@ -337,7 +337,7 @@ HumanTask:
 AutomatedTask:
     (
         AutoTaskTerm name = ID
-            directive = StageElementDirective
+            directive = WorkflowElementDirective
             (
                 attrList = AutomatedTaskAttrs
                 (/(Trigger)\s/ hookList *= HttpHook)?
@@ -349,7 +349,7 @@ AutomatedTask:
 DualTask:
     (
         DualTaskTerm name = ID
-            directive = StageElementDirective
+            directive = WorkflowElementDirective
             (
                 attrList = SharedTaskAttrs
                 (/(Trigger)\s/ hookList *= DualTaskHttpHook)?
@@ -416,21 +416,24 @@ FormField:
 ;
 
 InputField:
-  (  (
-         InputFieldTerm name = ID
-            directive = FieldDirective
+  (
+    (
+      InputFieldTerm name = ID
+        directive = FieldDirective
+        (
             (
-                (
-                    description = Description
-                    | question = Question
-                )
-                (path = FieldPath)?
-                (uiRef = UiReference)?
-                (externalId = ExternalId)?
-                (additionalDescription = AdditionalDescription)?
-            )#
-            ) 
- //   /(FieldEnd)\s/ ) 
+                description = Description
+                | question = Question
+            )
+            (path = FieldPath)?
+            (uiRef = UiReference)?
+            (externalId = ExternalId)?
+            (additionalDescription = AdditionalDescription)?
+            (defaultValue = DefaultValue)?
+            (defaultValues = DefaultValues)?
+        )#
+    )
+ //   /(FieldEnd)\s/ )
     | (Ref InputFieldTerm ref=[InputField|FQN])?
     )
 ;
@@ -468,6 +471,8 @@ OutputField:
                 (path = FieldPath)?
                 (expression = OutputFieldExpression)?
                 (externalId = ExternalId)?
+                (defaultValue = DefaultValue)?
+                (defaultValues = DefaultValues)?
             )#
     ) | (Ref OutputFieldTerm ref=[OutputField|FQN])?
 ;
@@ -500,7 +505,7 @@ Option:
 ****** COMMON DIRECTIVES ******
 *******************************/
 
-StageElementDirective:
+WorkflowElementDirective:
     (
         (mandatory = Mandatory)?
         (repeatable = Repeatable)?
@@ -541,9 +546,11 @@ Multiplicity:
 Type:
     Hash (
         LinkType
+        | DocumentLinkType
         | 'notype'
         | 'text' // string
         | 'longtext'
+        | 'string'
         | 'boolean'
         | NumType
         | 'singlechoice' // aka. 'enumeration' in Thesis
@@ -560,6 +567,10 @@ FieldType:
 LinkType:
     'link' '.' (linkType='Users' | linkType='Entity')
         '(' linkObj += TextNoQuote (',' linkObj += TextNoQuote)? ')'
+;
+
+DocumentLinkType:
+    'documentlink' '(' url=STRING ')'
 ;
 
 DateType:
@@ -643,6 +654,10 @@ AdditionalDescription:
 
 DefaultValues:
     'defaultValues' Eq value=WrapValue
+;
+
+DefaultValue:
+    'defaultValue' Eq value=STRING
 ;
 
 DynamicDescriptionPath:
@@ -770,7 +785,7 @@ Hash:
 ;
 
 WrapValue:
-    '[' (Text | TextNoQuote) ']'
+    '[' (STRING | TextNoQuote) (',' (STRING | TextNoQuote))* ']'
 ;
 
 Ref:

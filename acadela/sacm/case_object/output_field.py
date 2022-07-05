@@ -21,6 +21,8 @@ class OutputField:
                  isMandatory,
                  position,
                  part,
+                 defaultValue,
+                 defaultValues,
                  lineNumber):
 
         self.explicitType = explicityType
@@ -34,5 +36,7 @@ class OutputField:
                        part,
                        isReadOnly,
                        isMandatory,
+                       defaultValue,
+                       defaultValues,
                        lineNumber)
 

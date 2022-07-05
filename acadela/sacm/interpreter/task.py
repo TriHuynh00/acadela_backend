@@ -184,9 +184,7 @@ def interpret_task(model, task, stageId):
                       taskHookList,
                       lineNumber,
                       entityAttachPath,
-                      isPrefixed=False,
-
-                      )
+                      isPrefixed=False)
 
     taskAsAttribute = Attribute(taskId,
                                 attrList.description,
@@ -221,7 +219,8 @@ def sacm_compile(taskList, stageList):
              'isMandatory', 'activation',
              'manualActivationExpression',
              'entityDefinitionId', 'entityAttachPath',
-             'externalId', 'dynamicDescriptionPath'])
+             'externalId', 'dynamicDescriptionPath',
+             'lineNumber'])
 
         if task.taskType == TASKTYPE.HUMAN:
             taskJson['#name'] = default_state.HUMAN_TASK_DEF

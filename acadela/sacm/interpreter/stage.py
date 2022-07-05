@@ -88,8 +88,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
                         manualActivationExpression,
                         dynamicDescPath,
                         preconditionList,
-                        lineNumber
-                        )
+                        lineNumber)
 
     stageAsAttribute = Attribute(stageObject.id,
                             stage.description,
@@ -144,7 +143,8 @@ def sacm_compile(stageList):
                  'mandatory', 'activation',
                  'manualActivationDescription',
                 'entityDefinitionId', 'entityAttachPath',
-                'externalId', 'dynamicDescriptionPath'])
+                'externalId', 'dynamicDescriptionPath',
+                 'lineNumber'])
 
         if len(stage.preconditionList) > 0:
             # TODO: Parse the subject of the expression
