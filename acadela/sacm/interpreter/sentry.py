@@ -33,9 +33,10 @@ def auto_parse_conditional_expression(entryCondition, stageList):
     print("entryCond", entryCondition)
 
     for clause in clauses:
+        if clause is not None: clause = clause.strip()
         if clause == 'and' or clause == 'or' or clause is None:
-            if clause == 'and' or clause == 'or':
-                prefixedCondition += ' {} '.format(clause)
+            # if clause == 'and' or clause == 'or':
+            #     prefixedCondition += ' {} '.format(clause)
             continue
 
         subjAndPredicate = re.split('[<>=][=]*', str(clause).strip())
