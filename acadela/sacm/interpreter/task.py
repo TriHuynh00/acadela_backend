@@ -1,7 +1,7 @@
 from sacm.interpreter import util_intprtr
 
 from sacm import util
-from sacm.interpreter.sentry import interpret_precondition
+import sacm.interpreter.sentry as precondInterpreter
 import sacm.interpreter.hook as hookInterpreter
 import sacm.interpreter.directive as direc_intprtr
 import sacm.interpreter.field as fieldInterpreter
@@ -73,7 +73,8 @@ def interpret_task(model, task, stageId):
         print("Task Precondition", [sentry.__dict__ for sentry in preconditionObj])
         for sentry in preconditionObj:
             preconditionList.append(
-                interpret_precondition(model, sentry, process = task)
+                precondInterpreter
+                    .interpret_precondition(model, sentry, process=task)
             )
 
     print("Task Sentry List", preconditionList)
@@ -234,7 +235,7 @@ def sacm_compile(taskList, stageList):
         if util.is_attribute_not_null(task, 'preconditionList'):
             if len(task.preconditionList) > 0 != None:
                 taskJson['SentryDefinition'] = \
-                    util_intprtr.parse_precondition(task, stageList)
+                    precondInterpreter.parse_precondition(task, stageList)
 
         if util.is_attribute_not_null(task, 'hookList'):
             if len(task.hookList) > 0:

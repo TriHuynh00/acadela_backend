@@ -35,8 +35,8 @@ def auto_parse_conditional_expression(entryCondition, stageList):
     for clause in clauses:
         if clause is not None: clause = clause.strip()
         if clause == 'and' or clause == 'or' or clause is None:
-            # if clause == 'and' or clause == 'or':
-            #     prefixedCondition += ' {} '.format(clause)
+            if clause == 'and' or clause == 'or':
+                prefixedCondition += ' {} '.format(clause)
             continue
 
         subjAndPredicate = re.split('[<>=][=]*', str(clause).strip())
@@ -99,3 +99,46 @@ def auto_parse_conditional_expression(entryCondition, stageList):
     print("Prefixed Condition after parse to number:", prefixedCondition)
     return prefixedCondition
 
+# Parse the sentry of a stage or task
+def parse_precondition(process, stageList = None):
+    if len(process.preconditionList) > 0:
+        sentryList = []
+
+        for precondition in process.preconditionList:
+
+            sentryJson = {}
+
+            # if util.is_attribute_not_null(precondition, 'expression'):
+            #     sentryJson['$'] = {
+            #         'expression': precondition.expression
+            #     }
+
+            sentryJson['precondition'] = []
+
+            for processId in precondition.stepList:
+                preconditionJson = \
+                    {
+                        'processDefinitionId': processId,
+                    }
+
+                if util.is_attribute_not_null(precondition, 'expression'):
+                    preconditionJson['expression'] = \
+                        auto_parse_conditional_expression(
+                            precondition.expression, stageList)
+
+                    preconditionJson['simplifiedExpression'] = \
+                        precondition.expression
+
+                    preconditionJson['lineNumber'] = \
+                        precondition.lineNumber
+
+                sentryJson['precondition'].append(
+                    {
+                        '$': preconditionJson
+                    }
+                )
+
+            sentryList.append(sentryJson)
+
+
+        return sentryList

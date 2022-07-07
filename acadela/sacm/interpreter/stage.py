@@ -7,7 +7,7 @@ from sacm.case_object.entity import Entity
 from sacm.case_object.attribute import Attribute
 
 from sacm.interpreter.directive import interpret_directive
-from sacm.interpreter.sentry import interpret_precondition
+from sacm.interpreter.sentry import interpret_precondition, parse_precondition
 import sacm.interpreter.task as taskIntprtr
 
 from os.path import dirname
@@ -150,7 +150,7 @@ def sacm_compile(stageList):
             # TODO: Parse the subject of the expression
             # & prefix them based on their hierarchy level
              stageJson['SentryDefinition'] = \
-                 util_intprtr.parse_precondition(stage, stageList)
+                 parse_precondition(stage, stageList)
 
         # parse the tasks
         print('len stageTaskList', len(stage.taskList))

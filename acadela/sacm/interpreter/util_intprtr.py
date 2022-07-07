@@ -4,47 +4,6 @@ from sacm import default_state, util
 from sacm.interpreter import sentry, stage
 from sacm.interpreter.directive import interpret_directive
 
-# Parse the sentry of a stage or task
-def parse_precondition(process, stageList = None):
-    if len(process.preconditionList) > 0:
-        sentryList = []
-
-        for precondition in process.preconditionList:
-
-            sentryJson = {}
-
-            # if util.is_attribute_not_null(precondition, 'expression'):
-            #     sentryJson['$'] = {
-            #         'expression': precondition.expression
-            #     }
-
-            sentryJson['precondition'] = []
-
-            for processId in precondition.stepList:
-                preconditionJson = \
-                    {
-                        'processDefinitionId': processId,
-                    }
-
-                if util.is_attribute_not_null(precondition, 'expression'):
-                    preconditionJson['expression'] = \
-                        sentry.auto_parse_conditional_expression(
-                            precondition.expression, stageList)
-
-                    preconditionJson['simplifiedExpression'] = \
-                        precondition.expression
-
-                sentryJson['precondition'].append(
-                    {
-                        '$': preconditionJson
-                    }
-                )
-
-            sentryList.append(sentryJson)
-
-
-        return sentryList
-    
 def parse_activation(directive):
     manualActivationExpression = None
 

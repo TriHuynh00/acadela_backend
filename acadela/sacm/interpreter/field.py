@@ -324,6 +324,7 @@ def auto_convert_expression(dynamicField, fieldList):
 def sacm_compile(fieldList):
     taskParamList = []
     for field in fieldList:
+
         taskParam = {'$': {}}
         taskParamAttr = taskParam['$']
 
@@ -334,6 +335,12 @@ def sacm_compile(fieldList):
                                  'position',
                                  'part',
                                  'lineNumber'])
+
+        fieldType = util.cname(field)
+        if fieldType == "InputField":
+            taskParamAttr['fieldType'] = "inputfield"
+        elif fieldType == "OutputField":
+                taskParamAttr['fieldType'] = "outputfield"
 
         taskParamList.append(taskParam)
 
