@@ -54,7 +54,7 @@ DefineObj:
 ;
 
 Obj:
-    ( Case | CaseSetting | Stage | Task |  Form | InputField | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task | Form | InputField | OutputField | Hook | ValidAttribute)
 ;
 
 /********************
@@ -397,11 +397,11 @@ Precondition:
 ***********************/
 
 Form:
-    (   FormTerm
-         name = ID
+    (
+        FormTerm name = ID
             (directive = FormDirective)?
             fieldList += FormField
-    )  | (Ref FormTerm ref=[Form|FQN])?
+    )  | (RefForm ref=[Form|FQN])?
 ;
 
 FormDirective:
@@ -806,6 +806,10 @@ RefTask:
 
 RefField:
     Ref InputFieldTerm
+;
+
+RefForm:
+    Ref FormTerm
 ;
 
 RefHook:

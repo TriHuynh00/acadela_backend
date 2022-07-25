@@ -204,9 +204,9 @@ class CaseInterpreter():
             stageAsAttributeList = []
             for caseStage in case.stageList:
                 print("Stage", caseStage.name, "Task List size before parse", len(caseStage.taskList))
-                if len(caseStage.preconditionList)>0:
-                    for condition in caseStage.preconditionList:
-                        print('Condition',condition.__dict__)
+                # if len(caseStage.preconditionList)>0:
+                #     for condition in caseStage.preconditionList:
+                #         print('Condition', condition.__dict__)
 
                 stage = util.getRefOfObject(caseStage)
 

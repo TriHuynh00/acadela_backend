@@ -85,7 +85,7 @@ def interpret_task(model, task, stageId):
     manualActivationExpression = \
         activationParse['manualActivationExpression']
 
-    repeatable = default_state.defaultAttrMap['repeat'] \
+    repeatable = default_state.defaultAttrMap['repeatable'] \
         if not hasattr(directive, 'repeatable') \
         else direc_intprtr. \
                 interpret_directive(directive.repeatable)
@@ -96,7 +96,7 @@ def interpret_task(model, task, stageId):
                 interpret_directive(directive.mandatory)
 
     multiplicity = default_state.defaultAttrMap['multiplicity']\
-        if directive.multiplicity is None\
+        if not hasattr(directive, 'multiplicity')\
         else direc_intprtr.\
                 interpret_directive(directive.multiplicity)
     
@@ -111,11 +111,14 @@ def interpret_task(model, task, stageId):
         else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
-    taskFormList = util.getRefOfObject(task.form)
-    print(taskFormList)
-    if len(taskFormList)>1:
-        raise Exception("Each task has to have 1 form!")
-    taskForm=taskFormList[0]
+    taskFormList = util.getRefOfObject(task.form[0])
+    print ("task form: ", (task.form[0]))
+
+    # print("TaskFormList of", task.name, "is", taskFormList, "with size", taskFormList)
+    # if len(taskFormList)>1:
+    #     raise Exception("Each task has to have 1 form!")
+    taskForm=taskFormList
+
     for field in taskForm.fieldList:
         field = util.getRefOfObject(field)
         formDirective = taskForm.directive

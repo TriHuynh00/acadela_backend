@@ -16,13 +16,9 @@ def interpret_precondition(model, preconditionObj, process=None):
         #     stepStr = stepStr.replace(stepObj, \
         #                         util.prefixing(stepObj))
         stepStr = util_intprtr.prefix_path_value(str(step), True)
-        # stepStr = str(step)
         sentryStepList.append(stepStr)
 
     if util.is_attribute_not_null(preconditionObj, 'entryCondition'):
-        entryCondition = util_intprtr.prefix_path_value(
-                             preconditionObj.entryCondition,
-                             False)
         entryCondition = preconditionObj.entryCondition
 
     return Precondition(sentryStepList, entryCondition, line_number)

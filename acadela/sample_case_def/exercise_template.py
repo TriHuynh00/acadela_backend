@@ -1,6 +1,7 @@
 treatmentPlanStr = """
 #aca0.1
 import extfile.redGreenUiRef as rgu
+import extfile.form
 
 workspace Umcg
 
@@ -42,9 +43,10 @@ define case ST1_Hypertension
         Attribute BloodPressureCondition
             #exactlyOne #text
             label = 'Blood Pressure Condition'
+
     Trigger
         On activate invoke 'http://integration-producer:8081/v1/activate'
-        On complete invoke 'localhost:3002/connecare'
+        On complete invoke 'localhost:3001/connecare'
         
     SummaryPanel
         Section BloodPressureMeasurement #left
@@ -74,14 +76,10 @@ define case ST1_Hypertension
                     #custom
                     CustomFieldValue = "Setting.Clinician"
                     label = "Assigned Clinician"
-
-                InputField Document
-                    #documentlink('https://examplelink.com')
-                    label = 'External Doc'
-
+       
            Trigger
-                    On complete invoke 'http://127.0.0.1:3001/connecare' method post
-                    On complete invoke 'https://server1.com/api2' method Post with failureMessage 'Cannot complete the completion of data creation!'
+               On complete invoke 'http://127.0.0.1:3001/connecare' method post
+               On complete invoke 'https://server1.com/api2' method Post with failureMessage 'Cannot complete the completion of data creation!'
 
 
     Stage Evaluation
@@ -111,25 +109,25 @@ define case ST1_Hypertension
                         Option 'Yes' value='1'
 
             HumanTask MeasureBloodPressure
-            #mandatory #exactlyOne
-            label = 'Measure Blood Pressure'
-            owner= 'Setting.Clinician'
-            dueDateRef = 'Setting.WorkplanDueDate'
+               #mandatory #exactlyOne
+               label = 'Measure Blood Pressure'
+               owner= 'Setting.Clinician'
+               dueDateRef = 'Setting.WorkplanDueDate'
             
-            Form BloodPressureForm
+               Form BloodPressureForm
 
-                InputField Diastolic
-                    #number(0-300)
-                    label = 'Diastolic Blood pressure (mm Hg):'
-                    uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
+                   InputField Diastolic
+                       #number(0-300)
+                       label = 'Diastolic Blood pressure (mm Hg):'
+                       uiRef = 'colors(0<green<=80<yellow<=89<red<300)'
 
 
-                OutputField DiastolicAnalysis
-                    #left 
-                    label = 'Diastolic Assessment:'
-                    expression = ' if (Diastolic < 80) then "Normal"
-                                  else if (Diastolic <= 89) then "Elevated" 
-                                  else "High"'
+                   OutputField DiastolicAnalysis
+                       #left 
+                       label = 'Diastolic Assessment:'
+                       expression = ' if (Diastolic < 80) then "Normal"
+                                      else if (Diastolic <= 89) then "Elevated" 
+                                      else "High"'
                                   
 
     Stage MedicalTest
@@ -146,8 +144,65 @@ define case ST1_Hypertension
             owner = 'Setting.Nurse'
             label = 'Record Blood Cholesterol'    
             
+            Trigger
+                On complete
+                invoke 'localhost:3001/connecare' 
+                method POST
+            
             Form PrescriptionForm
                 InputField CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
+
+    Stage Treatment
+        #mandatory
+        owner = 'Setting.Clinician'
+        label = 'Treatment'
+
+        Precondition
+            previousStep = 'Evaluation' 
+            condition = 'Evaluation.RequestMedicalTest.CholesterolTest = 0' 
+
+        HumanTask RecordPatientStatus
+            #mandatory
+            owner = 'Setting.Nurse'
+            label = 'Record Pre-treatment Condition:'    
+            
+            Form PrescriptionForm
+                InputField PreTreatmentNote
+                    #text #left #mandatory
+                    label = "Pre-treatment Note:" 
+
+        HumanTask MeasureBMI
+            #mandatory
+            owner = 'Setting.Nurse'
+            label = 'Measure BMI'
+            
+            use Form BMIForm
+            
+    Stage BloodCholesterolTest
+        #mandatory
+        label = "Blood Cholesterol Test"
+        owner = "Setting.Nurse"
+        
+        Precondition
+            previousStep = "Evaluation"
+            condition = "Evaluation.MeasureBloodPressure.Diastolic > 80"
+            
+        HumanTask TestBloodCholesterol
+            label = "Test Blood Cholesterol"
+            dueDateRef = "Setting.WorkplanDueDate"
+            
+            Form CholesterolTestForm
+                InputField BloodCholesterolLvl
+                    #number(1-10) #left
+                    label = "Blood Cholesterol Lvl"
+                    
+                OutputField BloodCholesterolState
+                    label = "Blood Cholesterol Condition"
+                    expression = 'if (BloodCholesterolLvl < 2) then "Normal"
+                                  else if (BloodCholesterolLvl < 6) then "High"
+                                  else "Critical"'
+                                  
+            
 """

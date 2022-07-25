@@ -336,6 +336,7 @@ def sacm_compile(fieldList):
                                  'part',
                                  'lineNumber'])
 
+        taskParamAttr['acadelaId'] = field.id
         fieldType = util.cname(field)
         if fieldType == "InputField":
             taskParamAttr['fieldType'] = "inputfield"
