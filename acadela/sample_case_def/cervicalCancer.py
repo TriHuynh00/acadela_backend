@@ -18,7 +18,7 @@ workspace Umcg
             Attribute WorkplanDueDate
                 #exactlyOne #date.after(TODAY)
                 label = 'Workplan Due Date'
-                externalId = 'dueDateConnie'
+                externalId = 'dueDateConnie' w 
             
             CasePatient UmcgPatients #exactlyOne
                 label = 'Patient'

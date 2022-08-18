@@ -603,8 +603,8 @@ Repeatable:
 
 Mandatory:
     Hash (
-        'mandatory'
-        | 'notmandatory' // Default
+        'mandatory' // Default
+        | 'notmandatory'
     )
 ;
 
@@ -657,7 +657,13 @@ DefaultValues:
 ;
 
 DefaultValue:
-    'defaultValue' Eq value=STRING
+    (
+        'defaultValue' Eq
+        (
+            (value=STRING)
+            | (Ref ref=[ValidAttribute|FQN])
+        )
+    )
 ;
 
 DynamicDescriptionPath:
@@ -682,8 +688,9 @@ UiReference:
         (
             ( value=STRING )
         )
-        | (Quote 'privatelink' Quote)
-        | (Quote 'hidden' Quote)
+        // | (Quote 'privatelink' Quote)
+        // | (Quote 'hidden' Quote)
+        // | (Quote 'svg' Quote)
         | (Ref ref=[ValidAttribute|FQN])
     )
 ;

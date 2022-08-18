@@ -5,7 +5,7 @@ import re
 import textx.scoping.providers as scoping_providers
 # import obesity_treatment as caseTemplateStr
 # import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
-import sample_case_def.exercise_template as caseTemplateStr
+import sample_case_def.chronic_headache as caseTemplateStr
 import config.general_config as generalConf
 import json
 import os

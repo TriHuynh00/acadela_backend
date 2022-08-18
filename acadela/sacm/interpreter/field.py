@@ -58,17 +58,25 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
 
     uiRef = interpret_uiRef(field)
 
+
     externalId = None \
         if field.externalId is None \
         else field.externalId.value
 
-    defaultValue = None \
-        if field.defaultValue is None \
-        else field.defaultValue.value
+    defaultValue = interpret_field_attr_value(field.defaultValue)
 
-    defaultValues = None \
-        if field.defaultValues is None \
-        else field.defaultValues.value
+    print("Ref Object of default value", field.name, "is", defaultValue,
+          'of type', util.cname(defaultValue))
+
+    defaultValues = interpret_field_attr_value(field.defaultValues)
+
+    # defaultValue = None \
+    #     if field.defaultValue is None \
+    #     else field.defaultValue.value
+    #
+    # defaultValues = None \
+    #     if field.defaultValues is None \
+    #     else field.defaultValues.value
 
     type = defaultAttrMap['type'] \
         if not util.is_attribute_not_null(directive, "type") \
@@ -193,13 +201,20 @@ def interpret_dynamic_field(field, fieldPath,
                                               directive,
                                               formDirective)
 
-    defaultValue = None \
-        if field.defaultValue is None \
-        else field.defaultValue.value
+    # defaultValue = None \
+    #     if field.defaultValue is None \
+    #     else field.defaultValue.value
 
-    defaultValues = None \
-        if field.defaultValues is None \
-        else field.defaultValues.value
+    defaultValue = interpret_field_attr_value(field.defaultValue)
+
+    print("Ref Object of default value", field.name, "is", defaultValue,
+          'of type', util.cname(defaultValue))
+
+    defaultValues = interpret_field_attr_value(field.defaultValues)
+
+    # defaultValues = None \
+    #     if field.defaultValues is None \
+    #     else field.defaultValues.value
 
     # Construct Attribute Object of TaskParam (field)
     fieldAsAttribute = DerivedAttribute(field.name,
@@ -325,6 +340,11 @@ def sacm_compile(fieldList):
     taskParamList = []
     for field in fieldList:
 
+        # Do not render hidden uiRef
+        print("uiRef of field", field.id, 'is', field.uiReference)
+        if field.uiReference == 'hidden':
+            continue
+
         taskParam = {'$': {}}
         taskParamAttr = taskParam['$']
 
@@ -364,3 +384,12 @@ def interpret_uiRef(field):
         else None
 
     return uiRef
+
+def interpret_field_attr_value(fieldAttr):
+    refObj = util.getRefOfObject(fieldAttr)
+
+    refValue = refObj.value \
+        if util.is_attribute_not_null(refObj, "value") \
+        else None
+
+    return refValue

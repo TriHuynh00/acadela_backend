@@ -42,7 +42,7 @@ def url_validator(case_object_tree):
                         missing_hook = hook
                         break
                 if missing_hook:
-                    line_number_text = f"at line {str(missing_hook.line_number[0])} and column {str(missing_hook.line_number[1])}"
+                    line_number_text = f"at line {str(missing_hook.lineNumber[0])} and column {str(missing_hook.lineNumber[1])}"
                     if method_missing:
                         raise Exception(
                             f"The URL {missing_hook.url} {line_number_text} does not "
@@ -78,7 +78,7 @@ def url_validator(case_object_tree):
                     missing_hook = hook
                     break
             if missing_hook:
-                line_number_text = f"at line {str(missing_hook.line_number[0])} and column {str(missing_hook.line_number[1])}"
+                line_number_text = f"at line {str(missing_hook.lineNumber[0])} and column {str(missing_hook.lineNumber[1])}"
                 if method_missing:
                     raise Exception(f"The URL {missing_hook.url} {line_number_text} does not accept the HTTP method "
                                     f"{missing_hook.method}.  Allowed methods: {allowed_methods}."

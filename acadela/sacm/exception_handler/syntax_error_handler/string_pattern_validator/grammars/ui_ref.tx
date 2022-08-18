@@ -4,6 +4,7 @@ UiRef:
     Function
     | 'privatelink'
     | 'hidden'
+    | 'svg'
 ;
 
 Function:

@@ -6,27 +6,31 @@ import sacm.util as sacmUtil
 
 def parse_field_expression(dynamic_field, fields, line_number):
     field_expression = dynamic_field.expression
-    field_expression = field_expression
+    field_expression = str.strip(field_expression)
     pattern_keys = ["or", "and", "round", "number", "if", "else"]
     field_contains_pattern = any(pattern in field_expression for pattern in pattern_keys)
+    print("Field expression in semancheck:", field_expression)
     # print("field_contains_pattern", field_contains_pattern)
-    if field_contains_pattern:
-        parentheses = re.findall(r'\((.*?)\)', field_expression)
-        fields_to_search = []
-        for key in parentheses:
-            field = re.findall(r'[a-zA-Z]+', key)
-            print("founded field", field)
-            fields_to_search = fields_to_search + field
-        # parentheses = re.split('(and)|(or)', field_expression)
-        fields_to_search = list(dict.fromkeys(fields_to_search))
-        # print("fields_to_search", fields_to_search)
-        field_ids = [field.id for field in fields]
-        # print("field_ids", field_ids)
-        for field in fields_to_search:
-            if field not in pattern_keys and field not in field_ids:
-                raise Exception(
-                    f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of OutputField "
-                    f"{dynamic_field.id}. The field does not exist.")
+    # If the dynamic field expression starts with the "if" keyword, then check for
+    # the element paths inside it
+    if field_expression.startswith("if"):
+        if field_contains_pattern:
+            parentheses = re.findall(r'\((.*?)\)', field_expression)
+            fields_to_search = []
+            for key in parentheses:
+                field = re.findall(r'[a-zA-Z]+', key)
+                print("founded field", field)
+                fields_to_search = fields_to_search + field
+            # parentheses = re.split('(and)|(or)', field_expression)
+            fields_to_search = list(dict.fromkeys(fields_to_search))
+            # print("fields_to_search", fields_to_search)
+            field_ids = [field.id for field in fields]
+            # print("field_ids", field_ids)
+            for field in fields_to_search:
+                if field not in pattern_keys and field not in field_ids:
+                    raise Exception(
+                        f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of OutputField "
+                        f"{dynamic_field.id}. The field does not exist.")
 
 
 def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
