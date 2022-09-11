@@ -20,6 +20,7 @@ class Stage():
                  manualActivationExpression,
                  dynamicDescriptionPath,
                  preconditionList,
+                 stageHookList,
                  lineNumber,
                  entityDefinitionId = None,
                  entityAttachPath=None,
@@ -55,6 +56,7 @@ class Stage():
 
         self.taskList = taskList
         self.preconditionList = preconditionList
+        self.hookList = stageHookList
         self.lineNumber = lineNumber
 
 

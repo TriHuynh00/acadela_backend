@@ -300,7 +300,8 @@ def auto_convert_expression(dynamicField, fieldList):
 
     # If there is no math operators in the uiReference,
     # it is something else and no need to convert them to number
-    if not any(operand in expression\
+    if dynamicField.explicitType in ["text", "string", "longtext", "json"] \
+        or not any(operand in expression\
                for operand in mathOperators):
         return expression
 

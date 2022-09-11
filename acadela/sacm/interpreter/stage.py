@@ -9,6 +9,7 @@ from sacm.case_object.attribute import Attribute
 from sacm.interpreter.directive import interpret_directive
 from sacm.interpreter.sentry import interpret_precondition, parse_precondition
 import sacm.interpreter.task as taskIntprtr
+import sacm.interpreter.hook as hookInterpreter
 
 from os.path import dirname
 import sys
@@ -25,6 +26,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
         else None
 
     preconditionList = []
+    stageHookList = []
 
     type = default_state.ENTITY_LINK_TYPE + '.' \
            + util.prefixing(stage.name)
@@ -65,6 +67,13 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
         if util.is_attribute_not_null(stage, 'preconditionList') \
         else None
 
+    if hasattr(stage, "hookList"):
+        for hook in stage.hookList:
+            hook = util.getRefOfObject(hook)
+            interpretedHook = hookInterpreter.interpret_http_hook(hook, model)
+            print("HttpHook", vars(interpretedHook))
+            stageHookList.append(interpretedHook)
+
     if preconditionObj is not None:
         print("Stage Precondition", [sentry for sentry in preconditionObj])
         for sentry in preconditionObj:
@@ -88,6 +97,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
                         manualActivationExpression,
                         dynamicDescPath,
                         preconditionList,
+                        stageHookList,
                         lineNumber)
 
     stageAsAttribute = Attribute(stageObject.id,
@@ -151,6 +161,11 @@ def sacm_compile(stageList):
             # & prefix them based on their hierarchy level
              stageJson['SentryDefinition'] = \
                  parse_precondition(stage, stageList)
+
+        if util.is_attribute_not_null(stage, 'hookList'):
+            if len(stage.hookList) > 0:
+                stageJson['HttpHookDefinition'] = \
+                    hookInterpreter.sacm_compile(stage.hookList)
 
         # parse the tasks
         print('len stageTaskList', len(stage.taskList))

@@ -298,9 +298,11 @@ Stage:
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
                 (preconditionList *= Precondition)
+                (/(Trigger)\s/ hookList *= HttpHook)?
+                taskList += Task
             )#
 
-            taskList += Task
+
 
     )
     |
