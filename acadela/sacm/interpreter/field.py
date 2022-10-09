@@ -58,7 +58,6 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
 
     uiRef = interpret_uiRef(field)
 
-
     externalId = None \
         if field.externalId is None \
         else field.externalId.value
@@ -93,13 +92,17 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
             # Get the link URL but remove the )
             url = type.split('(')[1][:-1]
 
-            # A link document is readOnly, notMandatory, of type string
+            # A link document is notReadOnly, notMandatory, of type string
             # uiRef = 'privatelink' and defaultValue = url
             readOnly = 'false'
             mandatory = 'false'
             type = 'string'
             uiRef = 'privatelink'
             defaultValue = str(url)
+
+        elif str(type) == 'multiplechoice':
+            type = 'enumeration'
+            multiplicity = 'atLeastOne'
 
 
     # For a field with custom path, do not create new attribute
@@ -193,13 +196,13 @@ def interpret_dynamic_field(field, fieldPath,
 
     position = interpret_position(directive)
 
-    readOnly = assign_form_directive_to_field('readOnly',
-                                              directive,
-                                              formDirective)
-
-    mandatory = assign_form_directive_to_field('mandatory',
-                                              directive,
-                                              formDirective)
+    # readOnly = assign_form_directive_to_field('readOnly',
+    #                                           directive,
+    #                                           formDirective)
+    #
+    # mandatory = assign_form_directive_to_field('mandatory',
+    #                                           directive,
+    #                                           formDirective)
 
     # defaultValue = None \
     #     if field.defaultValue is None \
@@ -236,8 +239,6 @@ def interpret_dynamic_field(field, fieldPath,
                                 externalId,
                                 # Dynamic field properties
                                 fieldPath,
-                                readOnly,
-                                mandatory,
                                 position,
                                 part,
                                 defaultValue,

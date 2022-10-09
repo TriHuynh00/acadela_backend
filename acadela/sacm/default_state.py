@@ -1,6 +1,6 @@
 
 defaultAttrMap = {
-    'multiplicity': 'maximalOne',
+    'multiplicity': 'exactlyOne', #maximalOne
     'type': 'notype',
     'mandatory': 'false',
     'readOnly': 'false',

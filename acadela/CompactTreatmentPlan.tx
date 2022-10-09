@@ -83,8 +83,9 @@ Case:
                 //(entityDefinitionId = STRING)?
                 //(entityAttachPath = STRING)?
                 (notes = STRING)?
+                stageList += Stage
             )#
-            stageList += Stage
+
         )#
     ) | (Ref /(Case)\s/ ref=[Case|FQN])?
 ;
@@ -481,8 +482,8 @@ OutputField:
 
 OutputFieldDirective:
     (
-        (mandatory = Mandatory)?
-        (readOnly = ReadOnly)?
+        //(mandatory = Mandatory)?
+        //(readOnly = ReadOnly)?
         (position = Position)?
         //(explicitType = PrimitiveDataType)?
         (explicitType = Type)?
@@ -556,6 +557,7 @@ Type:
         | 'boolean'
         | NumType
         | 'singlechoice' // aka. 'enumeration' in Thesis
+        | 'multiplechoice'
         | DateType
         | 'json'
         | 'custom'

@@ -7,7 +7,7 @@ workspace Umcg
 
 define case MI1_Headache
     prefix = 'MI1'
-    version = 14
+    version = 4
     label = 'Chronic Headache Treatment'
     
     Responsibilities
@@ -187,7 +187,15 @@ define case MI1_Headache
                         uiRef = "hidden"
                         expression = 'let massageSites = PainArea in
                             let styleTemple = if massageSites.contains("TEMPLE")
-                                then ".temple{fill:red} .shoulder{fill:red} .nape{fill:red}" else "" in styleTemple
+                                then ".temple{fill:blue} 
+                                      .shoulder{fill:blue} 
+                                      .nape{fill:blue}" 
+                                else "" in 
+                            let styleForehead = styleTemple + if massageSites.contains("FOREHEAD")
+                                then ".forehead{fill:blue} 
+                                      .headCrown{fill:blue} 
+                                      .centerUpperBack{fill:blue}"
+                                else "" in styleForehead
                             '
 
                     InputField bodytemplate
@@ -302,7 +310,7 @@ define case MI1_Headache
             Form AcuPosForm
                 #mandatory
                 InputField AcupuncturePos
-                #singleChoice #atLeastOne
+                #multiplechoice
                 Question = 'Apply Acupuncture to Positions:'
                     Option "Below Left Ear" value = '1'
                     Option "Below Right Ear" value = '2'

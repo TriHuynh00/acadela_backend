@@ -10,12 +10,14 @@ this_folder = dirname(__file__)
 
 # Acadela-SACM Dictionary: Faster Lookup than if-else statement
 staticDirectivesDict = {
+    # NOTE: SOME ATTR ARE NOT HERE BECAUSE BY REMOVING # RETURNS
+    # A CORRECT VALUE. E.g., #any => any for multiplicity
     # Multiplicity
     '#maxOne': 'maximalOne',
-    '#exactlyOne': 'exactlyOne',
     # Type
     '#text': 'string',
     '#singlechoice': 'enumeration',
+    '#multiplechoice': 'multiplechoice',
     # Mandatory
     '#mandatory': 'true',
     '#notmandatory': 'false',
@@ -41,7 +43,6 @@ staticDirectivesDict = {
     '#stretched': 'STRETCHED',
     '#leftcenter': 'LEFTCENTER',
     '#centerright': 'CENTERRIGHT',
-
 }
 
 def interpret_directive(directiveObj):

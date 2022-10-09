@@ -49,6 +49,10 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
         if util.is_attribute_not_null(directive, 'mandatory')\
         else default_state.defaultAttrMap['mandatory']
 
+    multiplicity = interpret_directive(directive.multiplicity) \
+        if util.is_attribute_not_null(directive, 'multiplicity') \
+        else default_state.defaultAttrMap['multiplicity']
+
     activationParse = util_intprtr.parse_activation(directive)
 
     activation = activationParse['activation']
@@ -85,7 +89,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
             
     lineNumber = model._tx_parser.pos_to_linecol(stage._tx_position)
     stageObject = Stage(stage.name, stage.description.value,
-                        directive.multiplicity,
+                        multiplicity,
                         type,
                         ownerPathvalue,
                         taskList,
@@ -102,7 +106,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
 
     stageAsAttribute = Attribute(stageObject.id,
                             stage.description,
-                            directive.multiplicity,
+                            multiplicity,
                             type,
                             #uiReference = stage.uiReference.value,
                             additionalDescription = stage.additionalDescription,

@@ -57,6 +57,14 @@ def interpret_case_definition(case, intprtSetting,
         else '{}.{}'.format(settingEntity.id,\
                             casePatientAttr.id)
 
+    entityDefinitionId = case.entityDefinitionId \
+        if util.is_attribute_not_null(case, "entityDefinitionId") \
+        else settingEntity.id
+
+    entityAttachPath = case.entityAttachPath \
+        if util.is_attribute_not_null(case, "entityAttachPath") \
+        else settingEntity.id
+
     caseDataEntity = interpret_case_data(intprtSetting['settingAsAttribute'],
                                          stageAsAttributeList)
 
@@ -74,8 +82,8 @@ def interpret_case_definition(case, intprtSetting,
                         caseDataEntity.id,
                         summarySectionList,
                         caseHookEvents,
-                        settingEntity.id,
-                        settingEntity.id,
+                        entityDefinitionId,
+                        entityAttachPath,
                         stageList,
                         clientPath = caseClientPath,
                         version = case.version,
