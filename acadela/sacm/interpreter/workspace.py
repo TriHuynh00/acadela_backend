@@ -66,6 +66,9 @@ class WorkspaceInterpreter:
                     if entityAttrProp.type is not None:
                         thisAttr['type'] = entityAttrProp.type.value
 
+                    if entityAttrProp.externalId is not None:
+                        thisAttr['externalId'] = entityAttrProp.externalId.value
+
                     if entityAttrProp.multiplicity is not None:
                         print(entityAttrProp.multiplicity)
                         thisAttr['multiplicity'] = entityAttrProp.multiplicity

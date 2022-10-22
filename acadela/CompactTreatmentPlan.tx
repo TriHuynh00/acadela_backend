@@ -482,8 +482,8 @@ OutputField:
 
 OutputFieldDirective:
     (
-        //(mandatory = Mandatory)?
-        //(readOnly = ReadOnly)?
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
         (position = Position)?
         //(explicitType = PrimitiveDataType)?
         (explicitType = Type)?

@@ -49,17 +49,20 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
             attrObj.multiplicity = directive.interpret_directive(attribute.attrProp.directive.multiplicity)
 
     # interpret optional elements
-    if hasattr(attribute, 'additionalDescription'):
+    if util.is_attribute_not_null(attribute, 'additionalDescription'):
         attrObj.additionalDescription = \
             attribute.additionalDescription.value
 
-    if hasattr(attribute, 'uiReference'):
+    if util.is_attribute_not_null(attribute, 'uiReference'):
         attrObj.uiReference = \
             attribute.uiReference.value
 
-    if hasattr(attribute, 'externalId'):
+    if util.is_attribute_not_null(attribute, 'externalId'):
         attrObj.externalId = \
             attribute.externalId.value
+
+    if util.is_attribute_not_null(attribute, 'defaultValue'):
+        attrObj.defaultValues = attribute.defaultValue.value
 
     if util.is_attribute_not_null(attribute, 'defaultValues'):
         attrObj.defaultValues = attribute.defaultValues.value
@@ -84,7 +87,7 @@ def sacm_compile(attribute):
     #     thisAttr['description'] = attribute.description
 
     util.compile_attributes(thisAttr, attribute,
-        ['defaultValues', 'additionalDescription', 'externalId'
+        ['defaultValues', 'additionalDescription', 'externalId',
          'mandatory', 'multiplicity', 'uiReference',
          'defaultValue'])
 

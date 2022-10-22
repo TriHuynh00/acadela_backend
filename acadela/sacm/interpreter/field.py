@@ -58,9 +58,13 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
 
     uiRef = interpret_uiRef(field)
 
-    externalId = None \
-        if field.externalId is None \
-        else field.externalId.value
+    externalId = field.externalId.value \
+        if util.is_attribute_not_null(field, "externalId") \
+        else None
+
+    additionalDescription = field.additionalDescription.value \
+        if util.is_attribute_not_null(field, "additionalDescription") \
+        else None
 
     defaultValue = interpret_field_attr_value(field.defaultValue)
 
@@ -112,6 +116,7 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
                                      type=type,
                                      uiReference=uiRef,
                                      externalId=externalId,
+                                     additionalDescription=additionalDescription,
                                      defaultValues=defaultValues,
                                      defaultValue=defaultValue)
         print("field as Attribute", vars(fieldAsAttribute))
@@ -155,13 +160,13 @@ def interpret_dynamic_field(field, fieldPath,
     part = None if not hasattr(directive, "part")\
                 else directive.part
 
-    externalId = None \
-        if field.externalId is None \
-        else field.externalId.value
+    externalId = field.externalId.value \
+        if util.is_attribute_not_null(field, "externalId") \
+        else None
 
-    extraDescription = None \
-        if field.additionalDescription is None \
-        else field.additionalDescription.value
+    extraDescription = field.additionalDescription.value \
+        if util.is_attribute_not_null(field, "additionalDescription") \
+        else None
 
     explicitAttrType = defaultAttrMap["type"] \
         if not util.is_attribute_not_null(directive, "explicitType") \
@@ -196,13 +201,13 @@ def interpret_dynamic_field(field, fieldPath,
 
     position = interpret_position(directive)
 
-    # readOnly = assign_form_directive_to_field('readOnly',
-    #                                           directive,
-    #                                           formDirective)
-    #
-    # mandatory = assign_form_directive_to_field('mandatory',
-    #                                           directive,
-    #                                           formDirective)
+    readOnly = assign_form_directive_to_field('readOnly',
+                                              directive,
+                                              formDirective)
+
+    mandatory = assign_form_directive_to_field('mandatory',
+                                              directive,
+                                              formDirective)
 
     # defaultValue = None \
     #     if field.defaultValue is None \
@@ -241,6 +246,8 @@ def interpret_dynamic_field(field, fieldPath,
                                 fieldPath,
                                 position,
                                 part,
+                                readOnly,
+                                mandatory,
                                 defaultValue,
                                 defaultValues,
                                 lineNumber)

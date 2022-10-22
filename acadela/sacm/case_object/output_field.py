@@ -19,6 +19,8 @@ class OutputField:
                  path,
                  position,
                  part,
+                 readOnly,
+                 mandatory,
                  defaultValue,
                  defaultValues,
                  lineNumber):
@@ -32,8 +34,8 @@ class OutputField:
                        path,
                        position,
                        part,
-                       None,
-                       None,
+                       readOnly,
+                       mandatory,
                        defaultValue,
                        defaultValues,
                        lineNumber)

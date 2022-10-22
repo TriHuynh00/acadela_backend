@@ -2,12 +2,11 @@ treatmentPlanStr = """
 #aca0.1
 import extfile.redGreenUiRef as rgu
 import extfile.template.body3ViewsTemplate as bTemplate
-
 workspace Umcg
 
 define case MI1_Headache
     prefix = 'MI1'
-    version = 4
+    version = 5
     label = 'Chronic Headache Treatment'
     
     Responsibilities
@@ -53,9 +52,18 @@ define case MI1_Headache
          
             Form BreathCheckForm
                 #mandatory
-                 
+                
                 InputField BreathPattern
                     #singleChoice
+                    question = "What is the breathing pattern of the patient?"
+                    option 'Light' value = '0'
+                    option 'Short' value = '1'
+                    option 'Chest breathing' value = '2'
+                    option 'Diaphragmatic breathing' value = '3'
+                    option 'Deep' value = '4'
+
+                InputField BreathPatternNote 
+                    #text
                     question = "What is the breathing pattern of the patient?"
                     option 'Light' value = '0'
                     option 'Short' value = '1'
@@ -127,7 +135,7 @@ define case MI1_Headache
                         label = "When did it start?"
 
                     InputField HeadacheFrequency
-                        #text #center
+                        #text #left
                         label = "How often is the headache?"
                 
                     InputField PainQuality
@@ -167,11 +175,11 @@ define case MI1_Headache
                         #singleChoice 
                         question = "How is your sleep condition?"
                         option "I got nightmare frequently" value = '1'
-                        option "I cannot sleep well" value = '1'
-                        option "Rarely sleep well" value = '1'
-                        option "Often sleep well" value = '2'
-                        option "Good" value = '3'
-                        option "Very good" value = '4'
+                        option "I cannot sleep well" value = '2'
+                        option "Rarely sleep well" value = '3'
+                        option "Often sleep well" value = '4'
+                        option "Good" value = '5'
+                        option "Very good" value = '6'
                         
                     InputField WhatMakesBetter
                         #text 
@@ -186,16 +194,33 @@ define case MI1_Headache
                         label = "Massage Style"
                         uiRef = "hidden"
                         expression = 'let massageSites = PainArea in
-                            let styleTemple = if massageSites.contains("TEMPLE")
-                                then ".temple{fill:blue} 
-                                      .shoulder{fill:blue} 
-                                      .nape{fill:blue}" 
+                            let styleShoulder = if massageSites.contains("SHOULDER")
+                                then ".shoulder{fill:orange} " 
                                 else "" in 
+                                
+                            let styleTopHead = styleShoulder + if massageSites.contains("TOPHEAD")
+                                then ".topHead{fill:orange} " 
+                                else "" in
+                                
+                            let styleInHead = styleTopHead + if massageSites.contains("INHEAD")
+                                then ".inHead{fill:orange} " 
+                                else "" in  
+                            
+                            let styleTemple = styleInHead + if massageSites.contains("TEMPLE")
+                                then ".temple{fill:orange}" 
+                                else "" in 
+                                
                             let styleForehead = styleTemple + if massageSites.contains("FOREHEAD")
-                                then ".forehead{fill:blue} 
-                                      .headCrown{fill:blue} 
-                                      .centerUpperBack{fill:blue}"
-                                else "" in styleForehead
+                                then ".forehead{fill:orange}"
+                                else "" in
+                                
+                            let styleHeadCrown = styleForehead + if massageSites.contains("HEADCROWN")
+                                then ".headCrown{fill:orange}"
+                                else "" in
+                            
+                            let styleNape = styleHeadCrown + if massageSites.contains("NAPE")
+                                then ".nape{fill:orange}"
+                                else "" in styleNape
                             '
 
                     InputField bodytemplate
@@ -235,11 +260,25 @@ define case MI1_Headache
                     #text #notmandatory
                     label = "What is the patient's concern with the treatment process?"
                 
+                InputField MassageConsent
+                    #singleChoice
+                    question = "Does the patient agree to massage?"
+                    option "No" value = '0'
+                    option "Yes" value = '1'
+                
+                InputField MassageTime
+                    #text
+                    label = "How much time you would like to massage?"
+                
                 InputField AcupunctureConsent
                     #singleChoice
                     question = "Does the patient agree with using Acupuncture?"
                     option "No" value = '0'
                     option "Yes" value = '1'
+
+                InputField AcupunctureTime
+                    #text
+                    label = "How much time you would like to acupuncture?"
 
                 InputField GuashaConsent
                     #singleChoice
@@ -247,11 +286,7 @@ define case MI1_Headache
                     option "No" value = '0'
                     option "Yes" value = '1'
                     
-                InputField MassageConsent
-                    #singleChoice
-                    question = "Does the patient agree with the use of Massage?"
-                    option "No" value = '0'
-                    option "Yes" value = '1'
+                
 
     Stage Massaging
         #mandatory
@@ -271,23 +306,90 @@ define case MI1_Headache
                 InputField HeadMassagePosition
                     #singleChoice #atLeastOne
                     question = "Massage the following positions:"
-                    option "Left Shoulder" value = '1'
-                    option "Right Shoulder" value = '2'
-                    option "Center Upper Back" value = '3'
-                    option "Left Nape" value = '4'
-                    option "Right Nape" value = '5'
-                    option "Neck" value = '6'
-                    option "Jaw" value = '7'
-                    option "Upper Eyes" value = '8'
-                    option "Occipital Bone" value = '9'
-                    option "Head Crown" value = "10"
-                    option "Close to Kidney" value = "11"
-                    option "Temple" value = "12"
-                    option "Others" value = "13"
+                    option "Shoulder" value = 'SHOULDER'
+                    option "Center Upper Back" value = 'CENTERUPPERBACK'
+                    option "On top of the head" value = 'TOPHEAD'
+                    option "Nape" value = 'NAPE'
+                    option "Neck" value = 'NECK'
+                    option "Jaw" value = 'JAW'
+                    option "Upper Eyes" value = 'UPPEREYES'
+                    option "Occipital Bone" value = 'OCCIBONE'
+                    option "Head Crown" value = "HEADCROWN"
+                    option "Close to Kidney" value = "KIDNEY"
+                    option "Temple" value = "TEMPLE"
+                    option "Forehead" value = "FOREHEAD"
+                    option "Others" value = "OTHER"
+
+                OutputField massageLocationStyle
+                        #string
+                        label = "Massage Style"
+                        uiRef = "hidden"
+                        expression = 'let massageSites = HeadMassagePosition in
+                            let styleShoulder = if massageSites.contains("SHOULDER")
+                                then ".shoulder{fill:orange} " 
+                                else "" in 
+
+                            let styleCenterUpperBack = styleShoulder + if massageSites.contains("CENTERUPPERBACK")
+                                then ".centerUpperBack{fill:orange} " 
+                                else "" in 
+                                
+                            let styleTopHead = styleCenterUpperBack + if massageSites.contains("TOPHEAD")
+                                then ".topHead{fill:orange} " 
+                                else "" in
+                                
+                            let styleNeck = styleTopHead + if massageSites.contains("NECK")
+                                then ".neck{fill:orange} " 
+                                else "" in
+
+                            let styleJaw = styleNeck + if massageSites.contains("JAW")
+                                then ".jaw{fill:orange} " 
+                                else "" in  
+                            
+                            let styleUpperEyes = styleJaw + if massageSites.contains("UPPEREYES")
+                                then ".upperEyes{fill:orange} " 
+                                else "" in
+
+                            let styleOcciBone = styleUpperEyes + if massageSites.contains("OCCIBONE")
+                                then ".occipitalBone{fill:orange} " 
+                                else "" in
+
+                            let styleHeadCrown = styleOcciBone + if massageSites.contains("HEADCROWN")
+                                then ".headCrown{fill:orange}"
+                                else "" in
+
+                            let styleKidney = styleHeadCrown + if massageSites.contains("KIDNEY")
+                                then ".kidney{fill:orange}"
+                                else "" in
+                            
+                            let styleTemple = styleKidney + if massageSites.contains("TEMPLE")
+                                then ".temple{fill:orange}" 
+                                else "" in 
+                                
+                            let styleForehead = styleTemple + if massageSites.contains("FOREHEAD")
+                                then ".forehead{fill:orange}"
+                                else "" in
+                                
+                            let styleNape = styleForehead + if massageSites.contains("NAPE")
+                                then ".nape{fill:orange}"
+                                else "" in styleNape
+                            '
+
+                    InputField massageLocationTemplate
+                        #string #exactlyOne
+                        label = "Meridian Template"
+                        uiRef = 'hidden'
+                        defaultValue = use bTemplate.body3ViewsTemplate
+
+                    OutputField massageLocationVisual
+                        #string
+                        label = "Potential Massage Points"
+                        uiRef = 'svg'
+                        externalId = 'massageLoc'
+                        expression = 'replace(massageLocationTemplate, "#dynamicstylevars{}", massageLocationStyle)'
 
                 InputField OtherMassagePosition
                     #text #notMandatory
-                    label = 'Apply massage to the following positions:'
+                    label = 'Apply massage to the other following positions:'
 
                 InputField ApplyHeat
                     #singleChoice
@@ -351,5 +453,6 @@ define case MI1_Headache
                 InputField DoctorNote
                 #text
                 label = 'Doctor Note:'
+
 """
 
