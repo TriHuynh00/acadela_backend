@@ -1,0 +1,30 @@
+define meridianGraph = '<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="1000" height="713" viewBox="0 0 1000 713"
+ preserveAspectRatio="xMidYMid meet">
+
+<style>
+    #dynamicstylevars{}
+</style>
+
+
+  <img src="http://localhost:8083/file/1q4xmklwuyhla/Umcg/meridianSystem.jpg" alt="Red dot" />
+<circle class="temple" cx="144" cy="57" r="2" fill="none"/>
+<circle class="temple" cx="114" cy="57" r="2" fill="none"/>
+<circle class="temple" cx="277" cy="57" r="2" fill="none"/>
+
+<circle class="topHead" cx="284" cy="37" r="4" fill="none"/>
+<ellipse class="inHead" cx="284" cy="49" rx="12" ry="6" fill="none"/>
+
+<circle class="nape" cx="431" cy="93" r="2" fill="none"/>
+<circle class="nape" cx="445" cy="93" r="2" fill="none"/>
+
+<circle class="shoulder" cx="98" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="160" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="409" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="466" cy="109" r="3" fill="none"/>
+
+<circle class="forehead" cx="128" cy="57" r="3" fill="none"/>
+<circle class="headCrown" cx="438" cy="51" r="14" fill="none"/>
+<circle class="centerUpperBack" cx="432" cy="134" r="3" fill="none"/>
+<circle class="centerUpperBack" cx="444" cy="134" r="3" fill="none"/>
+</svg>'

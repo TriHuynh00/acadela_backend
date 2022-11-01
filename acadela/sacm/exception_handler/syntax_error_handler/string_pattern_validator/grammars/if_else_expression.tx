@@ -2,19 +2,43 @@
 IfElseStatement:
     ifStatement elseIfStatement* elseStatement
 ;
+//ifStatement:
+//    /(if)\s/ '(' (conditionStatement) ')' thenStatement
+//;
 
 ifStatement:
-    /(if)\s/'(' (conditionStatement) ')' thenStatement
+    /(if)\s/ conditionalExpr thenStatement
 ;
+
 elseIfStatement:
-    /(else\sif)\s/ '('(conditionStatement) ')' thenStatement
+    /(else\sif)\s/ conditionalExpr thenStatement
 ;
 elseStatement:
     /(else)\s/ STRING
 ;
-conditionStatement:
-    TextNoQuote Comparator NUMBER (andOr TextNoQuote Comparator NUMBER)*
+
+//conditionStatement:
+//    '('
+//        TextNoQuote Comparator NUMBER
+//            (andOr ('(')? TextNoQuote Comparator NUMBER (')')? )*
+//;
+
+conditionalExpr:
+      (complexStatement|compoundConditionStatement)
 ;
+
+compoundConditionStatement:
+    '(' complexStatement (andOr complexStatement)* ')'
+;
+
+complexStatement:
+    '(' Condition (andOr Condition)* ')'
+;
+
+Condition:
+    TextNoQuote Comparator NUMBER
+;
+
 Comparator:
     '='
     | '<>'
@@ -26,6 +50,7 @@ Comparator:
 TextNoQuote:
     /([a-zA-Z])*/  
 ;
+
 
 andOr:
     /(and)\s/| 

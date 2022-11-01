@@ -18,15 +18,18 @@ def validate_expression(expression, line_number):
             if_else_meta = mm.model_from_str(expression, meta_model_path)
         except TextXSyntaxError as e:
             string_pattern_syntax_error_handler.handle_string_pattern_syntax_errors(e, expression, line_number)
+            return False
 
-        expression = expression.replace(" ", "")
-        regex_compare_expression = re.compile(r'if\([a-zA-Z]+(=|<>|<=|>=|<|>)[0-9]+((and|or)[a-zA-Z]+('
-                                              r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"[a-zA-Z]+\"(elseif\([a-zA-Z]+('
-                                              r'=|<>|<=|>=|<|>)[0-9]+((and|or)[a-zA-Z]+( '
-                                              r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"['
-                                              r'a-zA-Z]+\")*else\"[a-zA-Z]+\"', re.I)
-        match_if_else = regex_compare_expression.match(expression)
-        return bool(match_if_else)
+        # expression = expression.replace(" ", "")
+        # regex_compare_expression = re.compile(r'if\([a-zA-Z]+(=|<>|<=|>=|<|>)[0-9]+((and|or)[a-zA-Z]+('
+        #                                       r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"[a-zA-Z]+\"(elseif\([a-zA-Z]+('
+        #                                       r'=|<>|<=|>=|<|>)[0-9]+((and|or)[a-zA-Z]+( '
+        #                                       r'=|<>|<=|>=|<|>)[0-9]+)*\)then\"['
+        #                                       r'a-zA-Z]+\")*else\"[a-zA-Z]+\"', re.I)
+        # match_if_else = regex_compare_expression.match(expression)
+        # return bool(match_if_else)
+
+        return True
     
     elif expression.startswith("round"):
         round_count = expression.count("round")
