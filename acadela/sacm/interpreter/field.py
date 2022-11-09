@@ -96,9 +96,9 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
             # Get the link URL but remove the )
             url = type.split('(')[1][:-1]
 
-            # A link document is notReadOnly, notMandatory, of type string
+            # A link document is readOnly, notMandatory, of type string
             # uiRef = 'privatelink' and defaultValue = url
-            readOnly = 'false'
+            readOnly = 'true'
             mandatory = 'false'
             type = 'string'
             uiRef = 'privatelink'
@@ -267,7 +267,7 @@ def assign_form_directive_to_field(directiveName,
 
     fieldDirectiveVal = getattr(fieldDirective, directiveName) \
         if util.is_attribute_not_null(fieldDirective, directiveName) \
-        else None
+        else defaultAttrMap[directiveName]
 
     if fieldDirectiveVal is not None:
         directiveVal = direc_intprtr \

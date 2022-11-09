@@ -91,7 +91,7 @@ define case MI1_Headache
                     option 'Upstraight & head up' value = '6'
 
                 InputField ShakeHandPattern
-                    #singleChoice #atLeastOne #notMandatory 
+                    #multipleChoice #notMandatory 
                     question = "How does the patient shake hand?"
                     option 'Weak' value = '0'
                     option 'Normal' value = '1'
@@ -139,7 +139,7 @@ define case MI1_Headache
                         label = "How often is the headache?"
                 
                     InputField PainQuality
-                        #singleChoice #atLeastOne #left
+                        #multipleChoice #left
                         question = "What is the pain quality?"
                         option "Wavy" value = '1'
                         option "Tingling" value = '2'
@@ -149,7 +149,7 @@ define case MI1_Headache
                         option "Pain on the eyes" value = '6'
 
                     InputField PainArea
-                        #singleChoice #atLeastOne #left
+                        #multipleChoice #left
                         question = "Where is/are the location of the pain(s)?"
                         option "Shoulder" value = 'SHOULDER'
                         option "In the head" value = 'INHEAD'
@@ -160,7 +160,7 @@ define case MI1_Headache
                         option "Nape" value = 'NAPE'
                         
                     InputField WorseningSituation
-                        #singleChoice #atLeastOne 
+                        #multipleChoice 
                         question = "What emotion(s) makes your pain worse?"
                         option "Angry" value = '1'
                         option "Fear" value = '2'
@@ -304,7 +304,7 @@ define case MI1_Headache
                 #mandatory
 
                 InputField HeadMassagePosition
-                    #singleChoice #atLeastOne
+                    #multipleChoice
                     question = "Massage the following positions:"
                     option "Shoulder" value = 'SHOULDER'
                     option "Center Upper Back" value = 'CENTERUPPERBACK'

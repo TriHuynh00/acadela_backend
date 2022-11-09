@@ -2,7 +2,7 @@
 defaultAttrMap = {
     'multiplicity': 'exactlyOne', #maximalOne
     'type': 'notype',
-    'mandatory': 'false',
+    'mandatory': 'true',
     'readOnly': 'false',
     'repeatable': 'ONCE',
     'activation': 'AUTOMATIC',

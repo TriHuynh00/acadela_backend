@@ -7,7 +7,11 @@ workspace Umcg
         label = 'COPD Treatment'
         
         Responsibilities
-            group UmcgPhysicians name = 'Umcg Physician' 
+            group UmcgPhysicians name = 'Umcg Physician' //staticId = 'asdf234' 
+            group UmcgClinicians name = 'Umcg Clinician'
+            group UmcgProfessionals name = 'Umcg Professional' 
+            group UmcgPatients name = 'Umcg Patient' 
+            group UmcgNurses name = 'Umcg Nurse' 
             
             Setting
                 CaseOwner UmcgProfessionals 

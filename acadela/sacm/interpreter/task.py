@@ -82,6 +82,7 @@ def interpret_task(model, task, stageId):
     activationParse = util_intprtr.parse_activation(directive)
 
     activation = activationParse['activation']
+
     manualActivationExpression = \
         activationParse['manualActivationExpression']
 

@@ -206,15 +206,16 @@ def check_path_validity(case_object_tree, treatment_str):
         print("1.3. CHECK TASK PRECONDITION:")
         task_precondition_list = task.preconditionList
         task_names = [task.id for task in task_list]
+        stage_names = [stage.id for stage in case_stages]
         if len(task_precondition_list) > 0:
             for precondition in task_precondition_list:
                 # NOW LIST IS BEING CHECKED
                 for step in precondition.stepList:
-                    if step not in task_names:
+                    if step not in task_names and step not in stage_names:
                         remove_field_prefix = remove_attribute_prefix(step)
                         line_number = find_line_number(treatment_str, precondition, remove_field_prefix)
                         raise Exception(
-                            f"Semantic Error at line {line_number}! Task '{step}' in precondition not found.")
+                            f"Semantic Error at line {line_number}! Task or Stage '{step}' in precondition not found.")
             if precondition.expression is not None:
                 # if precondition has expression check path validity--DONE
                 line_number = find_line_number(treatment_str, precondition, precondition.expression)

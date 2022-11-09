@@ -249,13 +249,14 @@ BaseEvent:
 ;
 
 DualTaskEvent:
-    BaseEvent
-    | 'activatehumanpart'
+
+    'activatehumanpart'
     | 'activateautopart'
     | 'completehumanpart'
     | 'completeautopart'
     | 'correcthumanpart'
     | 'correctautopart'
+    | BaseEvent
 ;
 
 CaseDef:
@@ -341,10 +342,10 @@ AutomatedTask:
     (
         AutoTaskTerm name = ID
             directive = WorkflowElementDirective
+            attrList = AutomatedTaskAttrs
             (
-                attrList = AutomatedTaskAttrs
                 (/(Trigger)\s/ hookList *= HttpHook)?
-                form = Form
+                form += Form
             )#
     ) | (RefTask ref=[AutomatedTask|FQN])?
 ;
@@ -353,10 +354,10 @@ DualTask:
     (
         DualTaskTerm name = ID
             directive = WorkflowElementDirective
+            attrList = SharedTaskAttrs
             (
-                attrList = SharedTaskAttrs
                 (/(Trigger)\s/ hookList *= DualTaskHttpHook)?
-                form = Form
+                form += Form
             )#
     ) | (RefTask ref=[DualTask|FQN])?
 ;
@@ -600,7 +601,7 @@ Part:
 Repeatable:
     Hash (
         'repeatSerial'
-        | 'repeatParallel'
+        | 'repeatParallel' ( '(' INT ')' )?
         | 'noRepeat' // default
     )
 ;

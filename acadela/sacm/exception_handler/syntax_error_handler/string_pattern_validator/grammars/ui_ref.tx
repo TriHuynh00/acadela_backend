@@ -5,6 +5,7 @@ UiRef:
     | 'privatelink'
     | 'hidden'
     | 'svg'
+    | 'linediagram'
 ;
 
 Function:

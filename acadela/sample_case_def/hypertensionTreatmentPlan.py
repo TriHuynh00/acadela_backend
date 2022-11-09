@@ -134,13 +134,23 @@ define case ST1_Hypertension
                                   else if (Diastolic <= 89) then "Elevated" 
                                   else "High"'
                                   
-                OutputField OverallAssessment
-                    #left #custom
-                    CustomFieldValue = "Setting.BloodPressureCondition"
-                    label = 'Overall Assessment:'
-                    expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
-                                  else if (Diastolic < 80 and Systolic < 130) then "Elevated" 
-                                  else "High"'
+                // OutputField OverallAssessment
+                //    #left #custom
+                //    CustomFieldValue = "Setting.BloodPressureCondition"
+                //   label = 'Overall Assessment:'
+                //    expression = 'if (Diastolic < 80 and Systolic < 120) then "Normal"
+                //                  else if (Diastolic < 80 and Systolic < 130) then "Elevated" 
+                //                  else "High"'
+                                  
+                OutputField BloodPressureCondition
+                       #left #custom
+                       CustomFieldValue = "Setting.BloodPressureCondition"
+                       label = 'Blood Pressure Assessment:'
+                       expression = ' if (Systolic >= 140 or Diastolic >= 90) then "High"
+                                      else if (Systolic > 120 or Diastolic > 80) then "Elevated" 
+                                      else if (Systolic > 90 or Diastolic > 60) then "Normal"
+                                      else "Low"'
+                
             Trigger
                     On complete invoke 'http://127.0.0.1:3001/connecare' method post
                     On complete invoke 'https://server1.com/api2' method Post with failureMessage 'Cannot complete the completion of data creation!'
