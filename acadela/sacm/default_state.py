@@ -1,6 +1,6 @@
 
 defaultAttrMap = {
-    'multiplicity': 'exactlyOne', #maximalOne
+    'multiplicity': 'exactlyOne', # DONT SET TO 'any', it will break Precondition
     'type': 'notype',
     'mandatory': 'true',
     'readOnly': 'false',

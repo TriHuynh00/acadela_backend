@@ -90,7 +90,7 @@ def auto_parse_conditional_expression(entryCondition, stageList):
 
             subjectPhrase = subjectPhrase.replace(subjectPrev, subject)
 
-        prefixedCondition += subjectPhrase + operator + predicate
+        prefixedCondition += subjectPhrase + operator + " " + predicate
 
     print("Prefixed Condition after parse to number:", prefixedCondition)
     return prefixedCondition
