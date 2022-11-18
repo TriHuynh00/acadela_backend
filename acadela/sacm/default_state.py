@@ -15,8 +15,8 @@ DOCUMENT_LINK_TYPE = 'documentlink'
 ENTITY_LINK_TYPE = 'Link.EntityDefinition'
 USER_OR_GROUP_LINK_TYPE = 'Link.Users'
 
-
 SETTING_NAME = 'Setting'
+CASEOWNER_NAME = 'CaseOwner'
 HUMAN_TASK_DEF = 'HumanTaskDefinition'
 DUAL_TASK_DEF = 'DualTaskDefinition'
 AUTO_TASK_DEF = 'AutomatedTaskDefinition'

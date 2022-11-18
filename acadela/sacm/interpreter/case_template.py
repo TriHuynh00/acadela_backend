@@ -13,6 +13,7 @@ from sacm.interpreter.workspace import WorkspaceInterpreter
 import sacm.interpreter.task as taskInterpreter
 import sacm.interpreter.attribute as attributeInterpreter
 import sacm.interpreter.case_definition as caseDefinition
+import sacm.default_state as default_state
 from sacm.interpreter.stage import interpret_stage
 
 from sacm.case_object.entity import Entity
@@ -142,6 +143,7 @@ class CaseInterpreter():
 
             print('casePrefix = ' + case.casePrefix.value)
             util.set_case_prefix(case.casePrefix.value)
+            case.name = util.prefixing(case.name)
 
             # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.name)
 
@@ -154,6 +156,7 @@ class CaseInterpreter():
             if util.cname(case) == 'Case':
                 print('Case', case.name)
                 print(self.model._tx_parser.pos_to_linecol(case._tx_position))
+
             for group in case.responsibilities.groupList:
                 print("Group", group.name)
                 if runNetworkOp:
@@ -216,9 +219,13 @@ class CaseInterpreter():
 
                 for task in stage.taskList:
                     task = util.getRefOfObject(task)
+                    stageOwner = caseStage.ownerPath.value \
+                        if util.is_attribute_not_null(caseStage, "ownerPath") \
+                        else default_state.SETTING_NAME + "." \
+                             + default_state.CASEOWNER_NAME
 
                     iTask = taskInterpreter \
-                        .interpret_task(self.model, task, stage.name)
+                        .interpret_task(self.model, task, stage.name, stageOwner)
 
                     taskAsAttributeList \
                         .append(iTask['taskAsAttribute'])
@@ -231,7 +238,8 @@ class CaseInterpreter():
                         .append(iTask['taskAsEntity'])
 
                 interpretedStage = \
-                    interpret_stage(self.model, stage,
+                    interpret_stage(self.model,
+                                    stage,
                                     stageTasks,
                                     taskAsAttributeList)
 

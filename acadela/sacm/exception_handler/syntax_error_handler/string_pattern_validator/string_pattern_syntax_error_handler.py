@@ -15,6 +15,10 @@ def handle_string_pattern_syntax_errors(exception, expression, line_number):
     error_message = keyword_handler.keyword_handler(error_message)
     print(error_message)
     error_message_first = error_message.split("/")[0]
+
+    if "=>" in error_message_first:
+        error_message_first = error_message_first.split("=>")[0]
+
     error_message_last = error_message.split("=>")[1]
     raise Exception(
         #f"Syntax Error! Invalid expression at line {line_number}:\n{expression}! \n "

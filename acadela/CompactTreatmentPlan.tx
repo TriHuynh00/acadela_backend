@@ -161,6 +161,7 @@ AttributeProp:
         (externalId = ExternalId)?
         (additionalDescription = AdditionalDescription)?
         (uiRef = UiReference)?
+        (defaultValue = DefaultValue)?
         (defaultValues = DefaultValues)?
     )#
 ;
@@ -294,7 +295,7 @@ Stage:
 
             (
                 (description = Description)
-                (ownerpath = OwnerPath)?
+                (ownerPath = OwnerPath)?
                 (clientPath = ClientPath)?
                 (dynamicDescriptionPath = DynamicDescriptionPath)?
                 (externalId = ExternalId)?
@@ -332,8 +333,6 @@ HumanTask:
                 (/(Trigger)\s/ hookList *= HttpHook)?
                 (form +=  Form)
             )#
-
-
     )
     | (RefTask ref=[HumanTask|FQN])?
 ;
@@ -443,7 +442,7 @@ InputField:
 ;
 
 FieldPath:
-    'CustomFieldValue' Eq value=STRING
+    'ElementPath' Eq value=STRING
 ;
 
 FieldDirective:

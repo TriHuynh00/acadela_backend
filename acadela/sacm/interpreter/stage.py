@@ -21,9 +21,10 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
 
     print("\n Stage Info")
     directive = stage.directive
-    ownerPathvalue = stage.ownerpath.value \
-        if util.is_attribute_not_null(stage.ownerpath, 'value') \
-        else None
+    ownerPathvalue = util.prefixing(stage.ownerPath.value) \
+        if util.is_attribute_not_null(stage.ownerPath, 'value') \
+        else util.prefixing(default_state.SETTING_NAME + "." \
+             + default_state.CASEOWNER_NAME)
 
     preconditionList = []
     stageHookList = []
@@ -84,7 +85,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
             preconditionList.append(interpret_precondition(model, sentry))
 
     if util.is_attribute_not_null(stage, "ownerPath"):
-        ownerPathvalue = str(stage.ownerpath.value)\
+        ownerPathvalue = str(stage.ownerPath.value)\
             .replace(default_state.SETTING_NAME + ".", util.prefixing(default_state.SETTING_NAME + "."))
             
     lineNumber = model._tx_parser.pos_to_linecol(stage._tx_position)

@@ -318,8 +318,9 @@ def check_path_validity(case_object_tree, treatment_str):
     for stage in case_stages:
         # 3.1. CHECK STAGE OWNER
         print("3.1. CHECK STAGE OWNER ")
-        owner_path = stage.ownerPath
-
+        owner_path = stage.ownerPath \
+            if sacmUtil.is_attribute_not_null(stage, "ownerPath") \
+            else None
 
         owner_found = False
 
@@ -340,14 +341,15 @@ def check_path_validity(case_object_tree, treatment_str):
                     f"Semantic Error at line {line_number}! Stage Owner '{split_owner_path[1]}' not found in Settings!")
         # 3.2. CHECK STAGE PRECONDITION
         print("3.2. CHECK STAGE PRECONDITION")
-        if len(stage.preconditionList) > 0:
+        if sacmUtil.is_attribute_not_null(stage, "preconditionList") and \
+                len(stage.preconditionList) > 0:
             for precondition in stage.preconditionList:
                 for step in precondition.stepList:
-                    if step not in stage_names:
+                    if step not in stage_names and step not in task_names:
                         remove_prefix = remove_attribute_prefix(step)
                         line_number = find_line_number(treatment_str, stage, remove_prefix)
                         raise Exception(
-                            f"Semantic Error at line {line_number}! Stage '{remove_prefix}' does not exist!")
+                            f"Semantic Error at line {line_number}! Stage or Task '{remove_prefix}' does not exist!")
                 # HERE ONLY CHECK IF THE PATH EXISTS AGAIN--DONE
                 if precondition.expression is not None:
                     line_number = find_line_number(treatment_str, precondition, precondition.expression)

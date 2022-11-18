@@ -1,13 +1,12 @@
 treatmentPlanStr = """
 #aca0.1
 import extfile.redGreenUiRef as rgu
-import extfile.form
 
 workspace Umcg
 
 define case ST1_Hypertension
     prefix = 'ST1'
-    version = 1
+    version = 7
     label = 'Hypertension Treatment'
     
     Responsibilities
@@ -69,12 +68,12 @@ define case ST1_Hypertension
                  
                 InputField SelectPatient
                     #custom
-                    CustomFieldValue = "Setting.CasePatient"
+                    ElementPath = "Setting.CasePatient"
                     label = "Assigned Patient"
                     
                 InputField SelectDoctor
                     #custom
-                    CustomFieldValue = "Setting.Clinician"
+                    ElementPath = "Setting.Clinician"
                     label = "Assigned Clinician"
        
            Trigger
@@ -144,15 +143,21 @@ define case ST1_Hypertension
             owner = 'Setting.Nurse'
             label = 'Record Blood Cholesterol'    
             
-            Trigger
-                On complete
-                invoke 'localhost:3001/connecare' 
-                method POST
-            
             Form PrescriptionForm
                 InputField CholesterolLvl
                     #text #left #mandatory
                     label = "Blood Cholesterol Level (mm/L):" 
+
+        HumanTask CholesterolLvl
+            #mandatory
+            owner = 'Setting.Nurse'
+            label = 'MedicalTest'    
+            
+            Form MedicalTestForm
+                InputField MedicalTestField
+                    #text #left #mandatory
+                    label = "Blood Cholesterol Level (mm/L):" 
+
 
     Stage Treatment
         #mandatory
@@ -172,37 +177,5 @@ define case ST1_Hypertension
                 InputField PreTreatmentNote
                     #text #left #mandatory
                     label = "Pre-treatment Note:" 
-
-        HumanTask MeasureBMI
-            #mandatory
-            owner = 'Setting.Nurse'
-            label = 'Measure BMI'
-            
-            use Form BMIForm
-            
-    Stage BloodCholesterolTest
-        #mandatory
-        label = "Blood Cholesterol Test"
-        owner = "Setting.Nurse"
-        
-        Precondition
-            previousStep = "Evaluation"
-            condition = "Evaluation.MeasureBloodPressure.Diastolic > 80"
-            
-        HumanTask TestBloodCholesterol
-            label = "Test Blood Cholesterol"
-            dueDateRef = "Setting.WorkplanDueDate"
-            
-            Form CholesterolTestForm
-                InputField BloodCholesterolLvl
-                    #number(1-10) #left
-                    label = "Blood Cholesterol Lvl"
-                    
-                OutputField BloodCholesterolState
-                    label = "Blood Cholesterol Condition"
-                    expression = 'if (BloodCholesterolLvl < 2) then "Normal"
-                                  else if (BloodCholesterolLvl < 6) then "High"
-                                  else "Critical"'
-                                  
-            
+    
 """

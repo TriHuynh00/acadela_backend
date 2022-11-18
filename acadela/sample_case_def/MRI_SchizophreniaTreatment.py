@@ -80,12 +80,12 @@ define case MRI_Schizophrenia
                 
                 InputField SelectPatient
                     #custom
-                    CustomFieldValue = "Setting.CasePatient"
+                    ElementPath = "Setting.CasePatient"
                     label = "Assigned Patient"
                     
                 InputField SelectDoctor
                     #custom
-                    CustomFieldValue = "Setting.Clinician"
+                    ElementPath = "Setting.Clinician"
                     label = "Assigned Clinician"
 
         HumanTask MedicalInfo
@@ -270,7 +270,7 @@ define case MRI_Schizophrenia
                     
     Stage Discharge
         #mandatory #manualActivate
-        owner = 'Setting.CaseOwner'
+        owner = 'Setting.Nurse'
         label = 'Discharge'
         
         precondition
@@ -278,7 +278,6 @@ define case MRI_Schizophrenia
         
         HumanTask DischargePatient
             #mandatory
-            owner = 'Setting.CaseOwner'
             label = "Discharge Patient"
             
             Form DischargeForm

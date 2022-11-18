@@ -7,9 +7,32 @@ def find_duplicate(objects, list, field, identifier):
             found_line = next((item for item in objects if getattr(item, identifier) == x), None).lineNumber
             line_number_text = f"at line {str(found_line[0])} and column {str(found_line[1])}"
             x = remove_attribute_prefix(x)
-            raise Exception(f"{field} IDs should be unique! {x} {line_number_text} is a duplicate. "
-                            f"Please verify that the IDs are unique for each field.")
+            err_message = f"{field} IDs should be unique! {x} {line_number_text} is a duplicate. " \
+                            f"Please verify that the IDs are unique for each {field}"
+
+            if field == "Field":
+                err_message += f" in the same Form."
+            elif field == "Task":
+                err_message += f" in the Case."
+            else:
+                err_message += f"."
+
+            raise Exception(err_message)
         seen.add(x)
+    return False, None
+
+def find_duplicate_task_id(stage_and_field_list, task_name_list, field, identifier):
+    stage_and_field_ids = [element.id for element in stage_and_field_list]
+    for taskName in task_name_list:
+        if taskName in stage_and_field_ids  \
+            or remove_attribute_prefix(taskName) in stage_and_field_ids:
+            found_line = next((item for item in stage_and_field_list
+                               if remove_attribute_prefix(getattr(item, identifier)) == remove_attribute_prefix(taskName))
+                                    , None).lineNumber
+            line_number_text = f"at line {str(found_line[0])} and column {str(found_line[1])}"
+            taskName = remove_attribute_prefix(taskName)
+            raise Exception(f"{field} IDs should be unique! {taskName} {line_number_text} is a duplicate. "
+                        f"Please verify that the Task IDs does not match with a Stage ID.")
     return False, None
 
 
@@ -61,9 +84,14 @@ def check_id_uniqueness(case_object_tree):
     # 5.TASK ID/NAME UNIQUENESS
     task_names = [task.id for task in case_task_list]
     dup, item = find_duplicate(case_task_list, task_names, "Task", "id")
+
     print("TASK Names:", task_names)
     print("TASK ID NOT UNIQUE", dup, item)
 
+
+    dup, item = find_duplicate_task_id(case_stages, task_names, "Task", "id")
+    print("TASK Names:", task_names)
+    print("TASK ID NOT UNIQUE with Stage", dup, item)
 
     # 6.FIELD ID/NAME UNIQUENESS
     for task in case_task_list:
@@ -74,5 +102,8 @@ def check_id_uniqueness(case_object_tree):
         field_names = field_names + static_field_names + dynamic_field_names
         field_object = field_object + task.fieldList + task.dynamicFieldList
         dup, item = find_duplicate(field_object, field_names, "Field", "id")
+
     print("FIELD Names:", field_names)
     print("FIELD ID NOT UNIQUE", dup, item, "\n######\n")
+
+

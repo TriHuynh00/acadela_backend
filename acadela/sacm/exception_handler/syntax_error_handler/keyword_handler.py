@@ -1,7 +1,7 @@
 def keyword_handler(error_text):
     # EXPLAIN TECHNICAL TERMS
     keywords_dictionary = {"ID": "identifier(ID)",
-                           "STRING": 'Text with quotation marks ("")',
+                           "STRING": 'Text with quotation marks ("", \'\')',
                            "Eq": "Equal sign (=) ",
                            "INT": "Integer (Number)",
                            "STRICTFLOAT":"Number including fraction",

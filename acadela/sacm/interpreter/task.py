@@ -15,7 +15,7 @@ from sacm.case_object.task import Task
 from sacm.case_object.attribute import Attribute
 
 
-def interpret_task(model, task, stageId):
+def interpret_task(model, task, stageId, stageOwner):
 
     taskId = util.prefixing(task.name)
     stageId = util.prefixing(stageId)
@@ -40,9 +40,9 @@ def interpret_task(model, task, stageId):
             dueDatePath = util.prefixingSetting(attrList.dueDatePath.value)
             print("dueDatePath",dueDatePath,attrList.dueDatePath.value)
 
-    ownerPath = None \
-        if attrList.ownerPath is None \
-        else attrList.ownerPath.value
+    ownerPath = attrList.ownerPath.value \
+        if util.is_attribute_not_null(attrList.ownerPath, "value") \
+        else stageOwner
 
     ownerPath = util.prefixingSetting(ownerPath)
 
