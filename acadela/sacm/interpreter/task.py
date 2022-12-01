@@ -112,13 +112,14 @@ def interpret_task(model, task, stageId, stageOwner):
         else attrList.additionalDescription.value
 
     # Interpret task fields (TaskParam)
-    taskFormList = util.getRefOfObject(task.form[0])
-    print ("task form: ", (task.form[0]))
+    # taskFormList = util.getRefOfObject(task.form[0])
+    # print("task form: ", (task.form[0]))
+    taskForm = util.getRefOfObject(task.form)
+    print("task form: ", (task.form))
 
     # print("TaskFormList of", task.name, "is", taskFormList, "with size", taskFormList)
     # if len(taskFormList)>1:
     #     raise Exception("Each task has to have 1 form!")
-    taskForm=taskFormList
 
     for field in taskForm.fieldList:
         field = util.getRefOfObject(field)

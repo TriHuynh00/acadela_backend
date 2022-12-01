@@ -292,7 +292,6 @@ Stage:
     (
         StageTerm name = ID
             directive = WorkflowElementDirective
-
             (
                 (description = Description)
                 (ownerPath = OwnerPath)?
@@ -301,12 +300,9 @@ Stage:
                 (externalId = ExternalId)?
                 (additionalDescription = AdditionalDescription)?
                 (preconditionList *= Precondition)
-                (/(Trigger)\s/ hookList *= HttpHook)?
+                (TriggerTerm hookList *= HttpHook)?
                 taskList += Task
             )#
-
-
-
     )
     |
     (RefStage ref=[Stage|FQN])?
@@ -330,8 +326,8 @@ HumanTask:
             directive = WorkflowElementDirective
             attrList = SharedTaskAttrs
             (
-                (/(Trigger)\s/ hookList *= HttpHook)?
-                (form +=  Form)
+                (TriggerTerm hookList *= HttpHook)?
+                form = Form
             )#
     )
     | (RefTask ref=[HumanTask|FQN])?
@@ -343,8 +339,8 @@ AutomatedTask:
             directive = WorkflowElementDirective
             attrList = AutomatedTaskAttrs
             (
-                (/(Trigger)\s/ hookList *= HttpHook)?
-                form += Form
+                (TriggerTerm hookList *= HttpHook)?
+                form = Form
             )#
     ) | (RefTask ref=[AutomatedTask|FQN])?
 ;
@@ -355,8 +351,8 @@ DualTask:
             directive = WorkflowElementDirective
             attrList = SharedTaskAttrs
             (
-                (/(Trigger)\s/ hookList *= DualTaskHttpHook)?
-                form += Form
+                (TriggerTerm hookList *= DualTaskHttpHook)?
+                form = Form
             )#
     ) | (RefTask ref=[DualTask|FQN])?
 ;
@@ -800,7 +796,7 @@ WrapValue:
 ;
 
 Ref:
-    'use'
+    /(use)\s/
 ;
 
 RefSetting:
@@ -889,6 +885,10 @@ InputFieldTerm:
 
 OutputFieldTerm:
     /(OutputField)\s/
+;
+
+TriggerTerm:
+    /(Trigger)\s/
 ;
 
 HookTerm:

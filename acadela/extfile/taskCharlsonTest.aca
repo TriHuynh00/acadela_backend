@@ -3,14 +3,14 @@ define HumanTask TestCharlson
     owner = 'Setting.CaseOwner'
     label = 'Charlson Comorbidity Form'
     Form CharlsonForm
-        field Charlson1
-            #mandatory
+        InputField Charlson1
+            #mandatory #singlechoice
             Question = 'Do you have diabetes?'
                 Option 'No' value = '0'
                 Option 'Yes' value = '1'
 
-        field Charlson2
-             #mandatory
+        InputField Charlson2
+             #singlechoice
             Question = 'Do you have heart attacks?'
                 Option 'No' value = '0'
                 Option 'Yes' value = '1'

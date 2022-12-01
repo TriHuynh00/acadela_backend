@@ -4,7 +4,7 @@ from sacm.interpreter.sentry import interpret_precondition
 from sacm.exception_handler.semantic_error_handler.utils import remove_attribute_prefix, find_line_number
 import sacm.util as sacmUtil
 
-def parse_field_expression(dynamic_field, fields, line_number):
+def parse_field_expression(dynamic_field, task_fields, line_number):
     field_expression = dynamic_field.expression
     field_expression = str.strip(field_expression)
     pattern_keys = ["or", "and", "round", "number", "if", "else"]
@@ -24,13 +24,14 @@ def parse_field_expression(dynamic_field, fields, line_number):
             # parentheses = re.split('(and)|(or)', field_expression)
             fields_to_search = list(dict.fromkeys(fields_to_search))
             # print("fields_to_search", fields_to_search)
-            field_ids = [field.id for field in fields]
+            field_ids = [field.id for field in task_fields]
             # print("field_ids", field_ids)
             for field in fields_to_search:
                 if field not in pattern_keys and field not in field_ids:
                     raise Exception(
                         f"Semantic Error at line {line_number}! Invalid field {field} found in the expression of OutputField "
-                        f"{dynamic_field.id}. The field does not exist.")
+                        f"{dynamic_field.id}. Expected the ID of an InputField or OutputField declared in the same Form "
+                        f"as OutputField {dynamic_field.id}.")
 
 
 def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
@@ -103,8 +104,8 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
                         break
                 if found_task is None:
                     raise Exception(
-                        f"Semantic Error at line {line_number}! '{precondition_task}' not found in Tasks."
-                        f" Invalid precondition path.")
+                        f"Semantic Error: Invalid reference path at line {line_number}! '{precondition_task}' Task does not exist."
+                        f" Expect the ID of a defined Task in the Case.")
                 else:
                     print("Task is found", precondition_task)
                     task_field_list = found_task.fieldList + found_task.dynamicFieldList
@@ -349,7 +350,8 @@ def check_path_validity(case_object_tree, treatment_str):
                         remove_prefix = remove_attribute_prefix(step)
                         line_number = find_line_number(treatment_str, stage, remove_prefix)
                         raise Exception(
-                            f"Semantic Error at line {line_number}! Stage or Task '{remove_prefix}' does not exist!")
+                            f"Semantic Error at line {line_number}! Stage or Task '{remove_prefix}' does not exist. "
+                            f"Expect the ID of an existing Stage or Task.")
                 # HERE ONLY CHECK IF THE PATH EXISTS AGAIN--DONE
                 if precondition.expression is not None:
                     line_number = find_line_number(treatment_str, precondition, precondition.expression)

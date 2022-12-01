@@ -42,12 +42,11 @@ def url_validator(case_object_tree):
                         missing_hook = hook
                         break
                 if missing_hook:
-                    line_number_text = f"at line {str(missing_hook.lineNumber[0])} and column {str(missing_hook.lineNumber[1])}"
+                    line_number_text = f"at line {str(missing_hook.lineNumber[0])}"
                     if method_missing:
                         raise Exception(
                             f"The URL {missing_hook.url} {line_number_text} does not "
-                            f"accept the HTTP method {missing_hook.method}. Allowed methods: {allowed_methods}. "
-                            f"Please further check the trusted sources list for the permitted methods\n ")
+                            f"accept the HTTP method {missing_hook.method}. Allowed methods for this URL: {allowed_methods}. ")
                     else:
                         raise Exception(
                             f"The URL {missing_hook.url} {line_number_text} is not in the list "
