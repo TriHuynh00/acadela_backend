@@ -33,6 +33,9 @@ def validate_ref_text(ui_ref, line_number):
         # match_param = regex.regex_param_pattern(ui_ref)
         # print("??", bool(match_param))
 
+def validate_field_ui_ref(field, treatment_str):
+    line_number = util.find_line_number(treatment_str, field, 'uiRef')
+    validate_ref_text(field.uiReference, line_number)
 
 def validate_ui_ref(case_object_tree, treatment_str):
     print("------------------------------------------------")

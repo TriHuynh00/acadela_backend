@@ -15,7 +15,7 @@ from sacm.case_object.task import Task
 from sacm.case_object.attribute import Attribute
 
 
-def interpret_task(model, task, stageId, stageOwner):
+def interpret_task(model, task, stageId, stageOwner, treatment_str):
 
     taskId = util.prefixing(task.name)
     stageId = util.prefixing(stageId)
@@ -134,7 +134,7 @@ def interpret_task(model, task, stageId, stageOwner):
 
             interpretedFieldTuple = fieldInterpreter\
                 .interpret_field(field, fieldPath,\
-                                 taskType, formDirective, model)
+                                 taskType, formDirective, model, treatment_str)
 
             fieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
 
@@ -142,7 +142,7 @@ def interpret_task(model, task, stageId, stageOwner):
 
             interpretedFieldTuple = fieldInterpreter \
                 .interpret_dynamic_field(field, fieldPath,
-                                         taskType, formDirective, model)
+                                         taskType, formDirective, model, treatment_str)
 
             dynamicFieldList.append(interpretedFieldTuple['fieldAsTaskParam'])
             # dynamicFieldList.append(dynamicFieldList)
@@ -195,7 +195,8 @@ def interpret_task(model, task, stageId, stageOwner):
     taskAsAttribute = Attribute(taskId,
                                 attrList.description,
                                 multiplicity, typeValue,
-                                externalId = externalId)
+                                externalId = externalId,
+                                additionalDescription=extraDescription)
     print("TASK OBJECT:",taskObject.__dict__)
     return {
         'task': taskObject,

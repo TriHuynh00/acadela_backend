@@ -1,10 +1,11 @@
 treatmentPlanStr = """
 #aca0.1
 import extfile.redGreenUiRef as rgu
+import extfile.hook
 
 workspace Umcg
 
-define case ST1_Hypertension
+define case Hypertension
     prefix = 'ST1'
     version = 7
     label = 'Hypertension Treatment'
@@ -57,6 +58,7 @@ define case ST1_Hypertension
         owner = 'Setting.CaseOwner'
         label = 'Identification'
 
+
         HumanTask SelectPatient
             #mandatory
             label = 'Assign Patient'
@@ -82,12 +84,15 @@ define case ST1_Hypertension
 
 
     Stage Evaluation
-        #mandatory
         owner = 'Setting.Clinician'
         label = 'Evaluation'
+        externalId = 'BpEvaluation'
         
         Precondition
             previousStep = 'Identification'
+            
+        Trigger
+            use Hook hook1
             
             HumanTask RequestMedicalTest
                 #notmandatory

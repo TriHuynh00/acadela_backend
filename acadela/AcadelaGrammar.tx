@@ -8,7 +8,6 @@ Start:
     (
         (defWorkspace = DefWorkspace)
         | (/(define)\s/ objList *= Obj)*
-        // | (objList *= Obj)
     )
 ;
 
@@ -20,12 +19,8 @@ AcaVersion:
 // Workspace Definition Level
 DefWorkspace:
     workspace = Workspace
-    /*(
-        (workspaceGlobalObjList *= DefineObj)?
-        workspaceProp = DefineCase
-    )#*/
-    (/(define)\s/)? (workspaceObj*=Obj)+
-
+    //(/(define)\s/) (workspaceObj*=Case)+
+    (/(define)\s/) case = Case
 ;
 
 Workspace:
@@ -45,16 +40,8 @@ GroupIdentity:
     )#
 ;
 
-DefineCase:
-    /(define)\s/ case=Case
-;
-
-DefineObj:
-    /(define)\s/ object=Obj
-;
-
 Obj:
-    ( Case | CaseSetting | Stage | Task | Form | InputField | OutputField | Hook | ValidAttribute)
+    ( Case | CaseSetting | Stage | Task | Form | InputField | OutputField | Hook | AttributeValue)
 ;
 
 /********************
@@ -78,10 +65,10 @@ Case:
                 description = Description
                 responsibilities = Responsibilities
                 setting = CaseSetting
-                ('Trigger' hookList += CaseHook)?
                 summary = SummaryPanel
-                //(entityDefinitionId = STRING)?
-                //(entityAttachPath = STRING)?
+                ('Trigger' hookList += CaseHook)?
+                (entityDefinitionId = STRING)?
+                (entityAttachPath = STRING)?
                 (notes = STRING)?
                 stageList += Stage
             )#
@@ -138,7 +125,7 @@ User:
     UserTerm BasicIdentity
 ;
 
-ValidAttribute:
+AttributeValue:
     name=ID Eq value=STRING|("'" Function "'")|INT|FLOAT
 ;
 
@@ -230,22 +217,21 @@ DualTaskHttpHook:
     ) | (RefHook ref=[DualTaskHttpHook|FQN])?
 ;
 
-
-CaseHookEvent:
+SharedEvent:
     'available'
     | 'enable'
     | 'activate'
     | 'complete'
     | 'terminate'
+;
+
+CaseHookEvent:
+    SharedEvent
     | 'delete'
 ;
 
 BaseEvent:
-    'available'
-    | 'enable'
-    | 'activate'
-    | 'complete'
-    | 'terminate'
+    SharedEvent
     | 'correct'
 ;
 
@@ -260,18 +246,8 @@ DualTaskEvent:
     | BaseEvent
 ;
 
-CaseDef:
-    'casedefinition' caseDefName = ID
-;
-
 CasePrefix:
     'prefix' Eq value = STRING
-;
-
-MultiAttrModel:
-    (attr+=Multiplicity
-    attr+=CasePrefix
-    attr+=UiReference)#
 ;
 
 Description:
@@ -288,24 +264,23 @@ Stage:
     // 1. entityAttachPath: the Path to the Stage entity
     // 2. entityDefinitionId: The name of the Stage entity
     // activation attribute is "EXPRESSION" if #activateWhen is used
-
-    (
-        StageTerm name = ID
-            directive = WorkflowElementDirective
-            (
-                (description = Description)
-                (ownerPath = OwnerPath)?
-                (clientPath = ClientPath)?
-                (dynamicDescriptionPath = DynamicDescriptionPath)?
-                (externalId = ExternalId)?
-                (additionalDescription = AdditionalDescription)?
-                (preconditionList *= Precondition)
-                (TriggerTerm hookList *= HttpHook)?
-                taskList += Task
-            )#
-    )
-    |
-    (RefStage ref=[Stage|FQN])?
+(
+	StageTerm name = ID
+		directive = WorkflowElementDirective
+		(
+			(description = Description)
+			(ownerPath = OwnerPath)?
+			(clientPath = ClientPath)?
+			(dynamicDescriptionPath = DynamicDescriptionPath)?
+			(externalId = ExternalId)?
+			(additionalDescription = AdditionalDescription)?
+		)#
+		(
+			(preconditionList *= Precondition)
+			(TriggerTerm hookList *= HttpHook)?
+			taskList += Task
+		)#
+) | (RefStage ref=[Stage|FQN])?
 ;
 
 /***********************
@@ -415,33 +390,29 @@ FormField:
 ;
 
 InputField:
-  (
+(
+  InputFieldTerm name = ID
+    directive = InputFieldDirective
     (
-      InputFieldTerm name = ID
-        directive = FieldDirective
         (
-            (
-                description = Description
-                | question = Question
-            )
-            (path = FieldPath)?
-            (uiRef = UiReference)?
-            (externalId = ExternalId)?
-            (additionalDescription = AdditionalDescription)?
-            (defaultValue = DefaultValue)?
-            (defaultValues = DefaultValues)?
-        )#
-    )
- //   /(FieldEnd)\s/ )
-    | (Ref InputFieldTerm ref=[InputField|FQN])?
-    )
+            description = Description
+            | question = Question
+        )
+        (path = CustomElementRefPath)?
+        (uiRef = UiReference)?
+        (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
+        (defaultValue = DefaultValue)?
+        (defaultValues = DefaultValues)?
+    )#
+) | (Ref InputFieldTerm ref=[InputField|FQN])?
 ;
 
-FieldPath:
+CustomElementRefPath:
     'ElementPath' Eq value=STRING
 ;
 
-FieldDirective:
+InputFieldDirective:
     (
         (mandatory = Mandatory)?
         (readOnly = ReadOnly)?
@@ -467,7 +438,7 @@ OutputField:
                 description = Description
                 (additionalDescription = AdditionalDescription)?
                 (uiRef = UiReference)?
-                (path = FieldPath)?
+                (path = CustomElementRefPath)?
                 (expression = OutputFieldExpression)?
                 (externalId = ExternalId)?
                 (defaultValue = DefaultValue)?
@@ -513,16 +484,6 @@ WorkflowElementDirective:
     )#
 ;
 
-
-/*TaskDirective:
-    (
-       (mandatory = Mandatory)?
-       (repeatable = Repeatable)?
-       (activation = Activation)?
-       (multiplicity = Multiplicity)?
-    )#
-;*/
-
 Multiplicity:
     Hash (
         'maxOne'
@@ -531,16 +492,6 @@ Multiplicity:
         | 'any'
     )
 ;
-
-/*PrimitiveDataType:
-    Hash (
-        'text' // string
-        | 'longtext'
-        | 'boolean'
-        | NumType
-        | DateType
-    )
-;*/
 
 Type:
     Hash (
@@ -623,23 +574,22 @@ ReadOnly:
     )
 ;
 
+SharedPosition:
+    'stretched' // Default
+    | 'left'
+    | 'center'
+    | 'right'
+;
+
 SummarySectionPosition:
-    Hash (
-        'stretched' // Default
-        | 'left'
-        | 'center'
-        | 'right'
-    )
+    Hash SharedPosition
 ;
 
 Position:
     Hash (
-        'stretched' // Default
-        | 'left'
-        | 'center'
-        | 'right'
-        | 'leftcenter'
+        'leftcenter'
         | 'centerright'
+        | SharedPosition
     )
 ;
 
@@ -661,7 +611,7 @@ DefaultValue:
         'defaultValue' Eq
         (
             (value=STRING)
-            | (Ref ref=[ValidAttribute|FQN])
+            | (Ref ref=[AttributeValue|FQN])
         )
     )
 ;
@@ -683,15 +633,10 @@ ClientPath:
 ;
 
 UiReference:
-    'uiRef' Eq //value = STRING
+    'uiRef' Eq
     (
-        (
-            ( value=STRING )
-        )
-        // | (Quote 'privatelink' Quote)
-        // | (Quote 'hidden' Quote)
-        // | (Quote 'svg' Quote)
-        | (Ref ref=[ValidAttribute|FQN])
+        ( value=STRING )
+        | (Ref ref=[AttributeValue|FQN])
     )
 ;
 

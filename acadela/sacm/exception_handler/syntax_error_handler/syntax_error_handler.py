@@ -88,7 +88,7 @@ class SyntaxErrorHandler():
         
         # handle number (0-0)
         # handle missing dot '.'
-        if rule_name == 'Eq' or rule_name == 'STRING'or rule_name == 'INT':
+        if rule_name == 'Eq' or rule_name == 'STRING' or rule_name == 'INT':
             error_message = keyword_handler.keyword_handler(error_message)
             raise Exception(
                 f"Syntax Error! Unrecognized command at line {error_line} "

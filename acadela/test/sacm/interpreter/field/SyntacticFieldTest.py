@@ -15,7 +15,7 @@ class SyntacticFieldTest(unittest.TestCase):
         self.baseCode = baseCodeWithoutField
         self.mm = metamodel_from_file(\
             join('E:\\TUM\\Thesis\\ACaDeLaEditor\\acadela_backend\\acadela',
-                 'CompactTreatmentPlan.tx'), classes=None, ignore_case=True)
+                 'AcadelaGrammar.tx'), classes=None, ignore_case=True)
 
     def test_field_mandatory_attr(self):
         self.baseCode += '''

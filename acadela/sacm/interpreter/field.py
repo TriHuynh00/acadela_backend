@@ -8,10 +8,13 @@ from sacm.case_object.input_field import InputField
 from sacm.case_object.output_field import OutputField
 from sacm.case_object.enumeration_option import EnumerationOption
 from sacm.case_object.enumeration import Enumeration
+from sacm.exception_handler.syntax_error_handler.string_pattern_validator import ui_ref_validator
+from sacm.exception_handler.syntax_error_handler.string_pattern_validator import field_expression_validator
+
 
 import sacm.interpreter.directive as direc_intprtr
 
-def interpret_field(field, fieldPath, taskType, formDirective, model):
+def interpret_field(field, fieldPath, taskType, formDirective, model, treatment_str):
     directive = field.directive
     part = directive.part
     enumerationOptions = []
@@ -132,7 +135,7 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
             part = direc_intprtr.interpret_directive(part)
     lineNumber = model._tx_parser.pos_to_linecol(field._tx_position)
 
-    fieldAsTaskParam = InputField(field.name, description,
+    inputField = InputField(field.name, description,
                              question,
                              multiplicity,
                              type,
@@ -147,13 +150,16 @@ def interpret_field(field, fieldPath, taskType, formDirective, model):
                              defaultValues,
                              lineNumber)
 
-    print("field as TaskParam", vars(fieldAsTaskParam))
+    if util.is_attribute_not_null(inputField, "uiReference"):
+        ui_ref_validator.validate_field_ui_ref(inputField, treatment_str)
+
+    print("field as TaskParam", vars(inputField))
 
     return {"fieldAsAttribute": fieldAsAttribute,
-            "fieldAsTaskParam": fieldAsTaskParam}
+            "fieldAsTaskParam": inputField}
 
 def interpret_dynamic_field(field, fieldPath,
-                            taskType, formDirective,model):
+                            taskType, formDirective, model, treatment_str):
 
     directive = field.directive
 
@@ -252,6 +258,14 @@ def interpret_dynamic_field(field, fieldPath,
                                 defaultValues,
                                 lineNumber)
 
+    if util.is_attribute_not_null(dynamicField, "uiReference"):
+        ui_ref_validator.validate_field_ui_ref(dynamicField, treatment_str)
+
+        # STRING PATTERN VALIDATIONS
+        # 1. Validate the Dynamic Field expressions
+    if util.is_attribute_not_null(dynamicField, "expression"):
+        field_expression_validator.validate_field_expression(dynamicField, treatment_str)
+
     return {"fieldAsAttribute": fieldAsAttribute,
             "fieldAsTaskParam": dynamicField}
 
@@ -340,8 +354,8 @@ def auto_convert_expression(dynamicField, fieldList):
 
                 expressionElements[i] = 'number({}, 2)'.format(element)
 
-    dynamicField.expression = \
-        'round({})'.format(' '.join(expressionElements))
+    # dynamicField.expression = \
+    #     'round({})'.format(' '.join(expressionElements))
 
     return dynamicField.expression
 

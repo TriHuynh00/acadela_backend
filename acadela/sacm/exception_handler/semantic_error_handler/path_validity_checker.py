@@ -18,7 +18,7 @@ def parse_field_expression(dynamic_field, task_fields, line_number):
             parentheses = re.findall(r'\((.*?)\)', field_expression)
             fields_to_search = []
             for key in parentheses:
-                field = re.findall(r'[a-zA-Z]+', key)
+                field = re.findall(r'^(\'\")[a-zA-Z]+^(\'\")', key)
                 print("founded field", field)
                 fields_to_search = fields_to_search + field
             # parentheses = re.split('(and)|(or)', field_expression)

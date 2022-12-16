@@ -1,26 +1,22 @@
 //grammar for uiRef
 
 UiRef:
-    Function
+    ColorCodeDef
     | 'privatelink'
     | 'hidden'
     | 'svg'
     | 'linediagram'
 ;
 
-Function:
-    ValidFunctionName
+ColorCodeDef:
+    'colors'
     '('
-        (CompareExpression | ParamPattern)
+        (CompareExpression)
     ')'
 ;
 
 CompareExpression:
     NUMBER (Comparator ColorName Comparator NUMBER)+
-;
-
-ParamPattern:
-    Text (',' Text)*
 ;
 
 ColorName:
@@ -31,11 +27,6 @@ ColorName:
     | 'yellow'
 ;
 
-ValidFunctionName:
-     'number' | 'colors'
-;
-
-
 Comparator:
     '='
     | '<>'
@@ -43,8 +34,4 @@ Comparator:
     |'>='
     | '<'
     | '>'
-;
-
-Text:
-    STRING
 ;

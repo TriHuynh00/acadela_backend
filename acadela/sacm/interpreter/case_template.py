@@ -128,30 +128,26 @@ class CaseInterpreter():
 
             self.workspace = workspaceDef
             case = None
-            caseCount = 0
-            for wpObj in workspaceDef.workspaceObj:
-                print('wpObj cname = ', util.cname(wpObj))
+            # caseCount = 0
+            # for wpObj in workspaceDef.workspaceObj:
+            #     print('wpObj cname = ', util.cname(wpObj))
+            #
+            #     if util.cname(wpObj) == 'Case':
+            #         case = util.getRefOfObject(wpObj)
+            #         caseCount += 1
 
-                if util.cname(wpObj) == 'Case':
-                    case = util.getRefOfObject(wpObj)
-                    caseCount += 1
+            if util.cname(workspaceDef.case) == 'Case':
+                case = util.getRefOfObject(workspaceDef.case)
+                # caseCount += 1
 
-            if caseCount > 1:
-                raise Exception('Error: Multiple Case Definitions' \
-                                'There are {} cases in the case definition.' \
-                                'Only one case is allowed.'.format(caseCount))
+            # if caseCount > 1:
+            #     raise Exception('Error: Multiple Case Definitions' \
+            #                     'There are {} cases in the case definition.' \
+            #                     'Only one case is allowed.'.format(caseCount))
 
             print('casePrefix = ' + case.casePrefix.value)
             util.set_case_prefix(case.casePrefix.value)
             case.name = util.prefixing(case.name)
-
-            # returnedMsg = self.workspaceInterpreter.findStaticId(workspace.name)
-
-            # if "Error" in returnedMsg:
-            #     raise Exception("StaticID not found for workspace {}, Reason: {}"
-            #                     .format(workspace.name, returnedMsg))
-            # else:
-            #     workspace.staticId = returnedMsg
 
             if util.cname(case) == 'Case':
                 print('Case', case.name)
@@ -225,7 +221,7 @@ class CaseInterpreter():
                              + default_state.CASEOWNER_NAME
 
                     iTask = taskInterpreter \
-                        .interpret_task(self.model, task, stage.name, stageOwner)
+                        .interpret_task(self.model, task, stage.name, stageOwner, self.treatment_str)
 
                     taskAsAttributeList \
                         .append(iTask['taskAsAttribute'])
@@ -294,6 +290,10 @@ class CaseInterpreter():
                 "attributes": self.attributeList,
                 "settings": self.settingList
             }
+            # CUSTOM SYNTAX ERROR CHECK
+            # 2. Validate the UI References
+            # ui_ref_validator.validate_ui_ref(self.caseObjectTree, self.treatment_str)
+
             #DO THE SEMANTIC ERROR CHECKS
             SemanticErrorHandler.handle_semantic_errors(self.caseObjectTree, self.treatment_str)
             #field_expression_validator.validate_field_expressions(self.caseObjectTree, self.treatment_str)

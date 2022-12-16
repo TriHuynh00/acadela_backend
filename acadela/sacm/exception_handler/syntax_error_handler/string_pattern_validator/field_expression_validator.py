@@ -47,6 +47,14 @@ def validate_expression(expression, line_number):
 
     # implement round validation
 
+def validate_field_expression(field, treatment_str):
+    print("------------------------------------------------")
+    line_number = util.find_line_number(treatment_str, field, 'expression')
+    is_valid = validate_expression(field.expression, line_number)
+    if not is_valid:
+        raise Exception(
+            "Invalid OutputField expression: {} \n found at line {}!".format(field.expression,
+                                                                                               line_number))
 
 def validate_field_expressions(case_object_tree, treatment_str):
     print("------------------------------------------------")

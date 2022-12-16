@@ -39,6 +39,10 @@ def analyze_dsl_language(metamodelPath, model, metamodel):
     # print (mm.namespaces['CompactTreatmentPlan']['Case']._tx_attrs)
 
     # Analyze model structure
+    print("model is")
+    pprint.pprint(model.defWorkspace.case.stageList[1].taskList[0].directive.__dict__)
+
+    print("model parse tree is \n")
     pprint.pprint(model._tx_parser.parse_tree[0])
 
 
@@ -55,7 +59,8 @@ def convert_import_path(i):
         return import_obj.importURI.split('.')[0]
 
 try:
-    #logging.basicConfig(filename='run.log', level=generalConf.LOG_LEVEL_NONE)
+    logging.basicConfig(#filename='run.log',
+                        level=generalConf.LOG_LEVEL_NONE)
 
     input = caseTemplateStr.treatmentPlanStr
 
@@ -67,7 +72,7 @@ try:
         else:
            runNetworkOp = True 
 
-    metamodelPath = join(this_folder, 'CompactTreatmentPlan.tx')
+    metamodelPath = join(this_folder, 'AcadelaGrammar.tx')
 
     mm = metamodel_from_file(metamodelPath,
                              ignore_case=True)
@@ -86,8 +91,10 @@ try:
     # metamodel_export(mm, 'entity.pu', renderer=PlantUmlRenderer())
     model = mm.model_from_str(input, rootImportPath)
 
+
+
     # extract_attributes(mm)
-    # analyze_dsl_language(metamodelPath, model, mm)
+    analyze_dsl_language(metamodelPath, model, mm)
 
     acaInterpreter = CaseInterpreter(mm, model,input)
     # ------------- HERE CHECK EXPRESSION

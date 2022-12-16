@@ -31,8 +31,7 @@ def keyword_handler(error_text):
                             "GroupTerm":"Group",
                             "PreconditionTerm":"Precondition",
                             "FormTerm":"Form",
-                            "AttributeTerm":"Attribute",
-                            
+                            "AttributeTerm":"Attribute"
                            }
     for word, initial in keywords_dictionary.items():
         error_text = error_text.replace(word, initial)

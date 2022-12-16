@@ -1,2 +1,4 @@
 define Hook hook1
-    On activate method Post invoke 'http://integration-producer:8081/v1/activate'
+    On activate
+    method Post
+    invoke 'http://partnersystem.com/api/v1/activate'
