@@ -320,7 +320,6 @@ class CaseInterpreter():
 
             print ("Case in JSON\n", json.dumps(caseInJson, indent=4))
 
-
             if runNetworkOp:
                 response = requests.post(
                     HttpRequest.sacmUrl + \

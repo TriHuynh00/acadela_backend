@@ -22,6 +22,7 @@ define Form BMIForm
 	OutputField BmiScore
 	    #mandatory #number
 	    label ='BMI Calculation in kilogram and meters'
+	    uiRef = 'colors(0 < yellow < 18 < green < 25 < orange < 30 < red < 100)'
 	    expression = 'round(Weight / (Height * Height))'
 
 	OutputField BmiScorePlus

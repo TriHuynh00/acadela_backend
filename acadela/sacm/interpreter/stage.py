@@ -34,8 +34,13 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
 
     manualActivationExpression = None
 
-    extraDescription = util.set_default_value_if_null(
-        stage.additionalDescription, None)
+    #extraDescription = util.set_default_value_if_null(
+     #   stage.additionalDescription, None)
+
+    extraDescription =  None \
+        if stage.additionalDescription is None \
+        else stage.additionalDescription.value
+
     # TODO add custom attach path
     # attachPath = util.prefixing(stage.name)
 
@@ -110,7 +115,7 @@ def interpret_stage(model, stage, taskList, taskAsAttributeList = None):
                             multiplicity,
                             type,
                             #uiReference = stage.uiReference.value,
-                            additionalDescription = stage.additionalDescription,
+                            additionalDescription = extraDescription,
                             externalId = externalId)
 
     print('stageEntity', vars(stageAsEntity))
@@ -157,8 +162,8 @@ def sacm_compile(stageList):
                 ['ownerPath', 'repeatable',
                  'mandatory', 'activation',
                  'manualActivationDescription',
-                'entityDefinitionId', 'entityAttachPath',
-                'externalId', 'dynamicDescriptionPath',
+                 'entityDefinitionId', 'entityAttachPath',
+                 'externalId', 'dynamicDescriptionPath',
                  'lineNumber'])
 
         if len(stage.preconditionList) > 0:

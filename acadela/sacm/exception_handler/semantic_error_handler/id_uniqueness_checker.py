@@ -16,23 +16,22 @@ def find_duplicate(objects, list, field, identifier):
                 err_message += f" in the Case."
             else:
                 err_message += f"."
-
             raise Exception(err_message)
         seen.add(x)
     return False, None
 
-def find_duplicate_task_id(stage_and_field_list, task_name_list, field, identifier):
-    stage_and_field_ids = [element.id for element in stage_and_field_list]
+def find_duplicate_task_id(stage_list, task_name_list, field, identifier):
+    stage_ids = [element.id for element in stage_list]
     for taskName in task_name_list:
-        if taskName in stage_and_field_ids  \
-            or remove_attribute_prefix(taskName) in stage_and_field_ids:
-            found_line = next((item for item in stage_and_field_list
+        if taskName in stage_ids  \
+            or remove_attribute_prefix(taskName) in stage_ids:
+            found_line = next((item for item in stage_list
                                if remove_attribute_prefix(getattr(item, identifier)) == remove_attribute_prefix(taskName))
                                     , None).lineNumber
             line_number_text = f"at line {str(found_line[0])} and column {str(found_line[1])}"
             taskName = remove_attribute_prefix(taskName)
-            raise Exception(f"{field} IDs should be unique! {taskName} {line_number_text} is a duplicate. "
-                        f"Please verify that the Task IDs does not match with a Stage ID.")
+            raise Exception(f"{field} IDs should be unique! {taskName} {line_number_text} is duplicated. "
+                        f"Please verify that the Task ID does not match with a Stage ID.")
     return False, None
 
 

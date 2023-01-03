@@ -1,5 +1,5 @@
 from sacm.exception_handler.syntax_error_handler import keyword_handler
-
+import re
 
 def handle_string_pattern_syntax_errors(exception, expression, line_number):
     error_message = exception.message
@@ -18,6 +18,18 @@ def handle_string_pattern_syntax_errors(exception, expression, line_number):
 
     if "=>" in error_message_first:
         error_message_first = error_message_first.split("=>")[0]
+
+    # Make sure that the error line is correct in the error message, find the line number
+    # in the error message as :(lineNumber
+    line_in_msg_str = re.search(r":\(\d*(?=, \d*\))", error_message_first)
+    line_in_msg = ""
+    # If a matched string found, eliminate the :( part from the number
+    if line_in_msg_str is not None:
+        line_in_msg = line_in_msg_str.group(0)[2:]
+        if line_in_msg != line_number:
+            error_message_first = error_message_first.replace(
+                str.format(":({}", line_in_msg),
+                str.format(":({}", line_number))
 
     error_message_last = error_message.split("=>")[1]
     raise Exception(

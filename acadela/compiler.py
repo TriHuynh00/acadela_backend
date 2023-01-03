@@ -4,7 +4,7 @@ import logging
 import re
 import textx.scoping.providers as scoping_providers
 # import obesity_treatment as caseTemplateStr
-# import sample_case_def.hypertensionTreatmentPlan as caseTemplateStr
+# import sample_case_def.MRI_SchizophreniaTreatment as caseTemplateStr
 import sample_case_def.exercise_template as caseTemplateStr
 import config.general_config as generalConf
 import json
@@ -60,7 +60,7 @@ def convert_import_path(i):
 
 try:
     logging.basicConfig(#filename='run.log',
-                        level=generalConf.LOG_LEVEL_NONE)
+                        level=generalConf.LOG_LEVEL_CRITICAL) # MUST BE CRITICAL FOR FRONTEND TO WORK
 
     input = caseTemplateStr.treatmentPlanStr
 
@@ -91,10 +91,8 @@ try:
     # metamodel_export(mm, 'entity.pu', renderer=PlantUmlRenderer())
     model = mm.model_from_str(input, rootImportPath)
 
-
-
     # extract_attributes(mm)
-    analyze_dsl_language(metamodelPath, model, mm)
+    # analyze_dsl_language(metamodelPath, model, mm)
 
     acaInterpreter = CaseInterpreter(mm, model,input)
     # ------------- HERE CHECK EXPRESSION

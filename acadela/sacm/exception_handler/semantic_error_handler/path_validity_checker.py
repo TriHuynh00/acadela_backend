@@ -56,8 +56,8 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
             if len(split_precondition_path) < 2:
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
-                                f"Make sure your path follows one of these rules:"
-                                f"\n\n 1.Setting.&lt;AttributeName&gt;\n")
+                                f"Make sure your path follows the below rule:"
+                                f"\n\n Setting.&lt;AttributeName&gt;\n")
             field = re.split('\W+', split_precondition_path[1])[0]
             setting_list = case_object_tree["settings"][0].attribute
             setting_names = [setting.id for setting in setting_list]
@@ -67,7 +67,7 @@ def parse_precondition(precondition_str, case_object_tree, line_number=(0, 0)):
 
         # CASE 2: precondition is located in TASK
         else:
-            if len(split_precondition_path) < 3:
+            if len(split_precondition_path) != 3:
                 raise Exception(f"Semantic Error at line {line_number}!\nInvalid precondition path '{precondition}'. "
                                 f"The path does not point to an existing element. "
                                 f"Make sure your path follows one of these rules:"
@@ -174,13 +174,14 @@ def check_path_validity(case_object_tree, treatment_str):
                         print("group name:", group_name)
                         if group_name not in group_names:
                             raise Exception(
-                                f"Semantic Error at line {attr.lineNumber}! User '{group_name}' not found in groups.")
+                                f"Semantic Error at line {attr.lineNumber}! User '{group_name}' not found "
+                                f"in users list under the Responsibilities section.")
                     break
             # ADD LINE NUMBER
             if not owner_found:
                 line_number = find_line_number(treatment_str, task, split_owner_path[1])
                 raise Exception(
-                    f"Semantic Error at line {line_number}! Owner '{split_owner_path[1]}' not found in settings.")
+                    f"Semantic Error at line {line_number}! Owner '{split_owner_path[1]}' not found in Settings.")
 
         print("1.2 DUE DATE PATH CHECK:")
         due_date_path = task.dueDatePath
