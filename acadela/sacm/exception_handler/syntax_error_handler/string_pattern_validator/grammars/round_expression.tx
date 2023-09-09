@@ -4,12 +4,15 @@ FunctionName '('
         (ArithmeticExpression)
     ')'
 ;
+
 FunctionName:
-'round'
+    'round'
 ;
+
 ArithmeticExpression:
-( op = ArithmeticOperation  )
+    ( op = ArithmeticOperation  )
 ;
+
 ArithmeticOperator:
     '+'
     | '-'
@@ -21,19 +24,20 @@ ArithmeticOperation:
 ;
 
 ArithmeticTerm:
-numberFunction
-| TextNoQuote
-| "(" ArithmeticOperation")"
-| INT
+    numberFunction
+    | TextNoQuote
+    | "(" ArithmeticOperation")"
+    | INT
 ;
 
 numberFunction:
-numberFunctionName '('TextNoQuote ',' num=INT ')'
+    numberFunctionName '('TextNoQuote ',' num=INT ')'
 ;
 
 numberFunctionName:
-'number'
+    'number'
 ;
+
 TextNoQuote:
     /([a-zA-Z0-9-_.]*)/    
 ;
