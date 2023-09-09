@@ -1,6 +1,3 @@
-// TODO: Create specific grammar for detecting function
-// uiReference, and expressions
-
 Start:
     (versionTag = AcaVersion)?
     (importList *= Import)?
@@ -15,11 +12,16 @@ AcaVersion:
     /(#aca)\d\.\d/
 ;
 
+FQN: ID+['.'];
+FQNI: ID+['.']('.*')?;
+
+Import:
+    'import' importURI=FQNI ('as' name=ID)?
+;
 
 // Workspace Definition Level
 DefWorkspace:
     workspace = Workspace
-    //(/(define)\s/) (workspaceObj*=Case)+
     (/(define)\s/) case = Case
 ;
 
@@ -125,8 +127,12 @@ User:
     UserTerm BasicIdentity
 ;
 
+//AttributeValue:
+//    name=ID Eq value=STRING|("'" Function "'")|INT|FLOAT
+//;
+
 AttributeValue:
-    name=ID Eq value=STRING|("'" Function "'")|INT|FLOAT
+    name=ID Eq value=STRING|INT|FLOAT
 ;
 
 /*****************************
@@ -528,7 +534,7 @@ DateType:
     'date.after(TODAY)'
     | /(date)\s/
 
-     // define the longest child path first 
+     // define the longest child path first
 ;
 
 NumType:
@@ -644,47 +650,9 @@ DueDatePath:
     'dueDateRef' Eq value=STRING
 ;
 
-ValidFunctionName:
-    'number' | 'colors'
-;
-
-Function:
-    ValidFunctionName
-    '('
-        (CompareExpression | ParamPattern)
-    ')'
-;
-
 OutputFieldExpression:
     // TODO: Create syntax for expression
     'expression' Eq value = STRING
-;
-
-FormulaExpression:
-    Predicate BasicArithmeticOperators Predicate
-;
-
-Predicate:
-    ( '(' FormulaExpression ')' )
-    | TextNoQuote
-    | INT
-    | FLOAT
-;
-
-ParamPattern:
-    Text (',' Text)*
-;
-
-CompareExpression:
-    NUMBER (Comparator ColorName Comparator NUMBER)+
-;
-
-ColorName:
-    'red'
-    | 'blue'
-    | 'green'
-    | 'orange'
-    | 'yellow'
 ;
 
 /*********************
@@ -702,17 +670,12 @@ Comparator:
     '='
     | '<>'
     | '<='
-    |'>='
+    | '>='
     | '<'
     | '>'
 ;
 
-BasicArithmeticOperators:
-    '+'
-    | '-'
-    | '*'
-    |'/'
-;
+//BasicArithmeticOperators: '+'    | '-'    | '*'    |'/' ;
 
 Quote:
     '"' | "'"
@@ -766,15 +729,6 @@ RefForm:
 
 RefHook:
     Ref HookTerm
-;
-
-FQN: ID+['.'];
-FQNI: ID+['.']('.*')?;
-
-// Import Definition Level
-Import:
-    'import' importURI=FQNI ('as' name=ID)?
-    //'import' importVar=ID 'from' path=STRING
 ;
 
 Comment:
@@ -883,19 +837,3 @@ BuildingBlockObject:
 *** OLD SYNTAX ***
 ******************/
 
-Entity:
-    "entity" name = ID
-    (
-        description = Description
-        (attrProp = AttributeProp)?
-    )#
-    (attrList += AttrList)?
-;
-
-AttrList:
-    'attributelist'
-    (attr += Entity | attr += Attribute)*
-    'endAttributeList'
-;
-WhiteSpace:
-    /\s/ | /\n/;

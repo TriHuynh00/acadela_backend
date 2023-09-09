@@ -26,7 +26,6 @@ class OutputField:
                  lineNumber):
 
         self.explicitType = explicityType
-        self.additionalDescription = additionalDescription
         self.expression = expression
         Field.__init__(self, id, description,
                        uiRef,
@@ -38,5 +37,6 @@ class OutputField:
                        mandatory,
                        defaultValue,
                        defaultValues,
-                       lineNumber)
+                       lineNumber,
+                       additionalDescription)
 

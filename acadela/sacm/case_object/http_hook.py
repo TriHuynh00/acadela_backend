@@ -5,7 +5,7 @@ this_folder = dirname(__file__)
 
 
 # Hook (Http Hook)
-class HttpTrigger:
+class HttpHook:
     def __init__(self, on, url, method,
                  lineNumber,
                  failureMessage = None):

@@ -19,7 +19,9 @@ class CaseDefinition():
                  notesDefaultValue = None,
                  version = 0,
                  isPrefixed = True,
-                 lineNumber = None):
+                 lineNumber = None,
+                 groupList = None,
+                 userList = None):
 
         if isPrefixed:
             self.id = util.prefixing(id)

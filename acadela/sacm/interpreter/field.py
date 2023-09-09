@@ -76,14 +76,6 @@ def interpret_field(field, fieldPath, taskType, formDirective, model, treatment_
 
     defaultValues = interpret_field_attr_value(field.defaultValues)
 
-    # defaultValue = None \
-    #     if field.defaultValue is None \
-    #     else field.defaultValue.value
-    #
-    # defaultValues = None \
-    #     if field.defaultValues is None \
-    #     else field.defaultValues.value
-
     type = defaultAttrMap['type'] \
         if not util.is_attribute_not_null(directive, "type") \
         else direc_intprtr \
@@ -110,6 +102,10 @@ def interpret_field(field, fieldPath, taskType, formDirective, model, treatment_
         elif str(type) == 'multiplechoice':
             type = 'enumeration'
             multiplicity = 'atLeastOne'
+
+        elif str(type) == 'singlechoice':
+            type = 'enumeration'
+            multiplicity = 'exactlyOne'
 
 
     # For a field with custom path, do not create new attribute
@@ -148,7 +144,8 @@ def interpret_field(field, fieldPath, taskType, formDirective, model, treatment_
                              part,
                              defaultValue,
                              defaultValues,
-                             lineNumber)
+                             lineNumber,
+                             additionalDescription)
 
     if util.is_attribute_not_null(inputField, "uiReference"):
         ui_ref_validator.validate_field_ui_ref(inputField, treatment_str)

@@ -15,7 +15,7 @@ import sys
 
 from os.path import dirname
 
-from sacm.case_object.http_hook import HttpTrigger
+from sacm.case_object.http_hook import HttpHook
 
 this_folder = dirname(__file__)
 
@@ -207,8 +207,8 @@ def interpret_case_hook(hookList, model):
         print("hoook:",hook.__dict__)
         line_number = model._tx_parser.pos_to_linecol(hook._tx_position)
         print("LINENMUBER",line_number)
-        hookEvents.append(HttpTrigger(hook.event, hook.url,
-                                      None,line_number))
+        hookEvents.append(HttpHook(hook.event, hook.url,
+                                   None, line_number))
 
     return hookEvents
 

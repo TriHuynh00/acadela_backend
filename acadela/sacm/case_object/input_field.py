@@ -14,7 +14,8 @@ class InputField(Field):
                  part,
                  defaultValue,
                  defaultValues,
-                 lineNumber):
+                 lineNumber,
+                 additionalDescription):
 
         self.question = question
         self.multiplicity = multiplicity
@@ -29,4 +30,5 @@ class InputField(Field):
                        isMandatory,
                        defaultValue,
                        defaultValues,
-                       lineNumber)
+                       lineNumber,
+                       additionalDescription)

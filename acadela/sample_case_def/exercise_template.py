@@ -174,7 +174,7 @@ define case Hypertension
                         #mandatory #number
                         label ='BMI Calculation in kilogram and meters'
                         expression = 'round(Weight / (Height * Height))'
-                        uiRef = "colors(0 < yellow < 18 < green < 25 < orange < 30 < red < 100)"
+                        uiRef = use rgu.redGreenUiRef
 
                 InputField CholesterolTest
                 #singlechoice 

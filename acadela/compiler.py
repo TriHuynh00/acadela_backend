@@ -22,11 +22,12 @@ this_folder = dirname(__file__)
 model = None
 
 # True = run User/Group validation check in SACM
-runNetworkOp = generalConf.CONN_SOCIOCORTEX
+isRunningNetworkOpOnSacm = generalConf.CONN_SOCIOCORTEX
 
 def analyze_dsl_language(metamodelPath, model, metamodel):
+
     # print("Treatment Plan Grammar")
-    #
+    # Debugging elements in the metamodel generated from the grammar
     # pprint.pprint(metamodel.namespaces['CompactTreatmentPlan'])
     #
     # print("Attribute Element")
@@ -68,11 +69,11 @@ try:
         input = sys.argv[1]
     if len(sys.argv) > 2:
         if sys.argv[2] == "validate":
-            runNetworkOp = False
+            isRunningNetworkOpOnSacm = False
         else:
-           runNetworkOp = True 
+           isRunningNetworkOpOnSacm = True
 
-    metamodelPath = join(this_folder, 'AcadelaGrammar.tx')
+    metamodelPath = join(this_folder, 'grammar', 'AcadelaGrammar.tx')
 
     mm = metamodel_from_file(metamodelPath,
                              ignore_case=True)
@@ -91,12 +92,14 @@ try:
     # metamodel_export(mm, 'entity.pu', renderer=PlantUmlRenderer())
     model = mm.model_from_str(input, rootImportPath)
 
+    # Uncomment this to analyze the metamodel (generated from the grammar)
+    #   or model (the input clinical pathway by the user)
     # extract_attributes(mm)
     # analyze_dsl_language(metamodelPath, model, mm)
 
-    acaInterpreter = CaseInterpreter(mm, model,input)
-    # ------------- HERE CHECK EXPRESSION
-    acaInterpreter.interpret(runNetworkOp)
+    acaInterpreter = CaseInterpreter(mm, model, input)
+
+    acaInterpreter.interpret(isRunningNetworkOpOnSacm)
     
 except TextXSyntaxError as e:
     SyntaxErrorHandler.handleSyntaxError(e, input, metamodelPath, mm)
@@ -104,7 +107,7 @@ except TextXSyntaxError as e:
 except OSError as e:
     import_found = False
     split_path_imported=str(e).split("acadela/")
-    if len(split_path_imported)>1:
+    if len(split_path_imported) > 1:
         path_file = split_path_imported[1].split(".")[0].replace("/",".")
         print(path_file)
         # find the line with the import in case template

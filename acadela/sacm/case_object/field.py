@@ -9,7 +9,8 @@ class Field:
                  isMandatory,
                  defaultValue,
                  defaultValues,
-                 lineNumber):
+                 lineNumber,
+                 additionalDescription):
 
         self.id = id
         self.description = description
@@ -23,3 +24,4 @@ class Field:
         self.lineNumber = lineNumber
         self.defaultValue = defaultValue
         self.defaultValues = defaultValues
+        self.additionalDescription = additionalDescription

@@ -62,7 +62,7 @@ def interpret_attribute_object(attribute, isIdPrefixed = False):
             attribute.externalId.value
 
     if util.is_attribute_not_null(attribute, 'defaultValue'):
-        attrObj.defaultValues = attribute.defaultValue.value
+        attrObj.defaultValue = attribute.defaultValue.value
 
     if util.is_attribute_not_null(attribute, 'defaultValues'):
         attrObj.defaultValues = attribute.defaultValues.value

@@ -266,7 +266,11 @@ class CaseInterpreter():
                 .append(interpretedCase['caseDataEntity'])
 
             self.caseDefinition = interpretedCase['caseDefinition']
-            
+
+            self.caseDefinition.userList = self.userList
+            self.caseDefinition.groupList = self.groupList
+            self.caseDefinition.settingList = self.settingList
+
             # loop through stageasattributelist and add each to attributelist
             for attr in stageAsAttributeList:
                 self.attributeList.append(attr)

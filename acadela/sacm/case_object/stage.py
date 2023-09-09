@@ -1,12 +1,13 @@
 from sacm import util, default_state
 
 from os.path import dirname
-import sys
+
+from sacm.case_object.workflow_item import WorkflowItem
 
 this_folder = dirname(__file__)
 
 
-class Stage():
+class Stage(WorkflowItem):
     def __init__(self, id, description,
                  multiplicity,
                  type,
@@ -28,36 +29,33 @@ class Stage():
                  ):
 
         if isPrefixed:
-            self.id = util.prefixing(id)
-        else:
-            self.id = id
+            id = util.prefixing(id)
 
         if entityDefinitionId is None:
-            self.entityDefinitionId = self.id
-        else:
-            self.entityDefinitionId = entityDefinitionId
+            entityDefinitionId = id
 
         if entityAttachPath is None:
-            self.entityAttachPath = self.id
-        else:
-            self.entityAttachPath = entityAttachPath
-
-        self.type = type
-        self.description = description
-        self.additionalDescription = additionalDescription
-        self.ownerPath = ownerPath
-        self.repeatable = repeatable
-        self.mandatory = mandatory
-        self.activation = activation
-        self.multiplicity = multiplicity
-        self.manualActivationDescription = manualActivationExpression
-        self.externalId = externalId
-        self.dynamicDescriptionPath = dynamicDescriptionPath
+            entityAttachPath = id
 
         self.taskList = taskList
-        self.preconditionList = preconditionList
-        self.hookList = stageHookList
-        self.lineNumber = lineNumber
+
+        WorkflowItem.__init__(self, id,
+                              description,
+                              multiplicity,
+                              type,
+                              ownerPath,
+                              additionalDescription,
+                              externalId,
+                              repeatable,
+                              mandatory,
+                              activation,
+                              manualActivationExpression,
+                              dynamicDescriptionPath,
+                              preconditionList,
+                              stageHookList,
+                              lineNumber,
+                              entityDefinitionId,
+                              entityAttachPath)
 
 
 

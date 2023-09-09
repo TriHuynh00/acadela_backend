@@ -3,6 +3,8 @@ from sacm import util, default_state
 from os.path import dirname
 import sys
 
+from sacm.case_object.workflow_item import WorkflowItem
+
 this_folder = dirname(__file__)
 
 
@@ -20,47 +22,44 @@ class Task():
                  activation,
                  manualActivationExpression,
                  externalId,
-                 addtionalDescription,
+                 additionalDescription,
                  dynamicDescriptionPath,
                  preconditionList,
                  hookList,
-                lineNumber,
+                 lineNumber,
                  entityAttachPath = None,
                  entityDefinitionId = None,
                  isPrefixed = True,
-
                  ):
 
         if isPrefixed:
-            self.id = util.prefixing(id)
-        else:
-            self.id = id
+            id = util.prefixing(id)
 
         if entityDefinitionId is None:
-            self.entityDefinitionId = self.id
-        else:
-            self.entityDefinitionId = entityDefinitionId
+            entityDefinitionId = id
 
-        self.multiplicity = multiplicity
-        self.valueType = valueType
-
-        self.taskType = taskType
-        self.description = description
+        self.attrType = valueType
         self.fieldList = fieldList
         self.dynamicFieldList = dynamicFieldList
-        self.ownerPath = ownerPath
         self.dueDatePath = dueDatePath
-        self.repeatable = repeatable
-        self.isMandatory = mandatory
-        self.activation = activation
-        self.manualActivationExpression = manualActivationExpression
-        self.entityAttachPath = entityAttachPath
-        self.externalId = externalId
-        self.addtionalDescription = addtionalDescription
-        self.dynamicDescriptionPath = dynamicDescriptionPath
-        self.preconditionList = preconditionList
-        self.hookList = hookList
-        self.lineNumber = lineNumber
+
+        WorkflowItem.__init__(self, id,
+                          description,
+                          multiplicity,
+                          taskType,
+                          ownerPath,
+                          additionalDescription,
+                          externalId,
+                          repeatable,
+                          mandatory,
+                          activation,
+                          manualActivationExpression,
+                          dynamicDescriptionPath,
+                          preconditionList,
+                          hookList,
+                          lineNumber,
+                          entityDefinitionId,
+                          entityAttachPath)
 
     # def print(self):
     #     print("\n\tTask {}"

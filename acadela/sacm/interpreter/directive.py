@@ -16,7 +16,7 @@ staticDirectivesDict = {
     '#maxOne': 'maximalOne',
     # Type
     '#text': 'string',
-    '#singlechoice': 'enumeration',
+    '#singlechoice': 'singlechoice',
     '#multiplechoice': 'multiplechoice',
     # Mandatory
     '#mandatory': 'true',

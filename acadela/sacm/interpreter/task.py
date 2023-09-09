@@ -196,7 +196,7 @@ def interpret_task(model, task, stageId, stageOwner, treatment_str):
                                 attrList.description,
                                 multiplicity, typeValue,
                                 externalId = externalId,
-                                additionalDescription=extraDescription)
+                                additionalDescription = extraDescription)
     print("TASK OBJECT:",taskObject.__dict__)
     return {
         'task': taskObject,
@@ -215,7 +215,7 @@ def sacm_compile(taskList, stageList):
             '$': {}
         }
 
-        print("Task Type SACM is {}".format(task.taskType))
+        print("Task Type SACM is {}".format(task.type))
         taskAttr = taskJson['$']
 
         taskAttr['id'] = task.id
@@ -229,13 +229,13 @@ def sacm_compile(taskList, stageList):
              'externalId', 'dynamicDescriptionPath',
              'lineNumber'])
 
-        if task.taskType == TASKTYPE.HUMAN:
+        if task.type == TASKTYPE.HUMAN:
             taskJson['#name'] = default_state.HUMAN_TASK_DEF
 
-        elif task.taskType == TASKTYPE.AUTO:
+        elif task.type == TASKTYPE.AUTO:
             taskJson['#name'] = default_state.AUTO_TASK_DEF
 
-        elif task.taskType == TASKTYPE.DUAL:
+        elif task.type == TASKTYPE.DUAL:
             taskJson['#name'] = default_state.DUAL_TASK_DEF
 
         if util.is_attribute_not_null(task, 'preconditionList'):
