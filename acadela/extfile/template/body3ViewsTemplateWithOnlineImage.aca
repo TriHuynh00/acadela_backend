@@ -1,0 +1,46 @@
+define body3ViewsTemplate = '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600.000000pt" height="427.000000pt" viewBox="0 0 600.000000 427.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<style>
+    #dynamicstylevars{}
+</style>
+
+<image xlink:href="https://danaiwellness.com/wp-content/uploads/2020/09/depositphotos_99818114-stock-illustration-meridian-system-description-chart-male.jpg" />
+
+<circle class="temple" cx="86" cy="60" r="3" fill="none"/>
+<circle class="temple" cx="122" cy="60" r="3" fill="none"/>
+<circle class="temple" cx="277" cy="57" r="2" fill="none"/>
+
+<circle class="topHead" cx="284" cy="37" r="4" fill="none"/>
+<ellipse class="inHead" cx="284" cy="49" rx="12" ry="6" fill="none"/>
+
+<circle class="neck" cx="122" cy="98" r="3" fill="none"/>
+<circle class="neck" cx="135" cy="98" r="3" fill="none"/>
+<circle class="neck" cx="283" cy="98" r="3" fill="none"/>
+
+<circle class="jaw" cx="117" cy="90" r="3" fill="none"/>
+<circle class="jaw" cx="140" cy="90" r="3" fill="none"/>
+<ellipse class="jaw" cx="278" cy="88" rx="9" ry="3" fill="none"/>
+
+<circle class="upperEyes" cx="117" cy="59" r="3" fill="none"/>
+<circle class="upperEyes" cx="139" cy="59" r="3" fill="none"/>
+<circle class="upperEyes" cx="269" cy="59" r="3" fill="none"/>
+
+<circle class="nape" cx="431" cy="93" r="4" fill="none"/>
+<circle class="nape" cx="445" cy="93" r="4" fill="none"/>
+
+<circle class="kidney" cx="430" cy="204" r="4" fill="none"/>
+<circle class="kidney" cx="445" cy="204" r="4" fill="none"/>
+
+<circle class="shoulder" cx="98" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="160" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="409" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="466" cy="109" r="3" fill="none"/>
+
+<circle class="forehead" cx="128" cy="57" r="3" fill="none"/>
+<circle class="headCrown" cx="438" cy="51" r="14" fill="none"/>
+<circle class="centerUpperBack" cx="432" cy="134" r="3" fill="none"/>
+<circle class="centerUpperBack" cx="444" cy="134" r="3" fill="none"/>
+
+<circle class="occipitalBone" cx="303" cy="74" r="3" fill="none"/>
+</svg>'

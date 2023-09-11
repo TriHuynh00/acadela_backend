@@ -1,4 +1,0 @@
-INDEX VERSION 1.131+E:\TUM\DSL-Connecare\Java-DSL\.metadata\.plugins\org.eclipse.jdt.core
-354209704.index
-1671692264.index
-2146106413.index

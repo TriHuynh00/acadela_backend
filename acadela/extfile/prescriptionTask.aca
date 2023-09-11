@@ -1,0 +1,27 @@
+define HumanTask Prescribe
+    #mandatory #repeatParallel #manualActivate
+    label = 'Prescribe'
+    owner = 'Setting.Clinician'
+    dueDateRef = 'Setting.WorkplanDueDate'
+
+    Form PrescriptionForm
+        #mandatory
+        InputField AntihypertensiveDrug
+            #text #left
+            label = "Medicine Name:"
+
+        InputField DailyDose
+            #number #center
+            label = "Daily Dose:"
+
+        InputField Frequency
+            #number #left
+            label = "Frequency"
+
+        InputField FrequencyUnit
+            #text #center
+            label = "Frequency Unit"
+
+        InputField Comment
+            #notmandatory #stretched
+            label = "Comment:"

@@ -1,0 +1,43 @@
+//round function grammar
+RoundFunction:
+FunctionName '('
+        (ArithmeticExpression)
+    ')'
+;
+
+FunctionName:
+    'round'
+;
+
+ArithmeticExpression:
+    ( op = ArithmeticOperation  )
+;
+
+ArithmeticOperator:
+    '+'
+    | '-'
+    | '*'
+    |'/'
+;
+ArithmeticOperation:
+    ArithmeticTerm ArithmeticOperator ArithmeticTerm
+;
+
+ArithmeticTerm:
+    numberFunction
+    | TextNoQuote
+    | "(" ArithmeticOperation")"
+    | INT
+;
+
+numberFunction:
+    numberFunctionName '('TextNoQuote ',' num=INT ')'
+;
+
+numberFunctionName:
+    'number'
+;
+
+TextNoQuote:
+    /([a-zA-Z0-9-_.]*)/    
+;

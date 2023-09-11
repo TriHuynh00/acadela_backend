@@ -1,0 +1,839 @@
+Start:
+    (versionTag = AcaVersion)?
+    (importList *= Import)?
+
+    (
+        (defWorkspace = DefWorkspace)
+        | (/(define)\s/ objList *= Obj)*
+    )
+;
+
+AcaVersion:
+    /(#aca)\d\.\d/
+;
+
+FQN: ID+['.'];
+FQNI: ID+['.']('.*')?;
+
+Import:
+    'import' importURI=FQNI ('as' name=ID)?
+;
+
+// Workspace Definition Level
+DefWorkspace:
+    workspace = Workspace
+    (/(define)\s/) case = Case
+;
+
+Workspace:
+    WorkspaceTerm BasicIdentity
+;
+
+BasicIdentity:
+    name = ID
+    ('staticId' Eq staticId=STRING)?
+;
+
+GroupIdentity:
+    name = ID
+    (
+        ('staticId' Eq staticId=STRING)?
+        ('name' Eq groupName=STRING)
+    )#
+;
+
+Obj:
+    ( Case | CaseSetting | Stage | Task | Form | InputField | OutputField | Hook | AttributeValue)
+;
+
+/********************
+******* CASE ********
+********************/
+
+Case:
+    (
+        CaseTerm name=ID
+        (
+            casePrefix = CasePrefix
+            ('version' Eq version = INT)
+            // clientPath and ownerPath is defined in CaseSetting
+            // Interpreter automatically finds the following attributes:
+            // 1. entityDefinitionId (rootEntityDefinitionId):
+            //   Case Schema: all entities of settings and stages
+            // 2. newEntityAttachPath (entityAttachPath): take path to Settings entity by default
+            // 3. newEntityDefinitionId (entityDefinitionId): take Settings entity by default
+            //
+            (
+                description = Description
+                responsibilities = Responsibilities
+                setting = CaseSetting
+                summary = SummaryPanel
+                ('Trigger' hookList += CaseHook)?
+                (entityDefinitionId = STRING)?
+                (entityAttachPath = STRING)?
+                (notes = STRING)?
+                stageList += Stage
+            )#
+
+        )#
+    ) | (Ref /(Case)\s/ ref=[Case|FQN])?
+;
+
+CaseSetting:
+    (
+        SettingTerm
+        (description = Description)?
+        (
+            caseOwner = CaseOwner
+            (attrList *= Attribute)
+            (casePatient = CasePatient)?
+            (attrList *= Attribute)
+        )#
+    ) | (RefSetting ref=[CaseSetting|FQN])?
+;
+
+CaseOwner:
+    /(CaseOwner)\s/ group = TextNoQuote
+        attrProp = AttributeProp
+;
+
+CasePatient:
+    /(CasePatient)\s/ group = TextNoQuote
+        attrProp = AttributeProp
+;
+
+/*LinkUserGroupAttr:
+    directive = AttributeDirective
+    (
+        //description = Description
+        (attrProp = AttributeProp)?
+    )#
+;*/
+
+
+Responsibilities:
+    /(Responsibilities)\s/
+    (
+        groupList *= Group
+        userList *= User
+    )#
+;
+
+Group:
+    GroupTerm GroupIdentity
+;
+
+User:
+    UserTerm BasicIdentity
+;
+
+//AttributeValue:
+//    name=ID Eq value=STRING|("'" Function "'")|INT|FLOAT
+//;
+
+AttributeValue:
+    name=ID Eq value=STRING|INT|FLOAT
+;
+
+/*****************************
+***** ATTRIBUTE SECTION ******
+*****************************/
+
+Attribute:
+    AttributeTerm name = ID
+    //(
+
+        attrProp = AttributeProp
+    //)#
+;
+
+AttributeProp:
+    directive = AttributeDirective
+    (
+        description = Description
+        (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
+        (uiRef = UiReference)?
+        (defaultValue = DefaultValue)?
+        (defaultValues = DefaultValues)?
+    )#
+;
+
+AttributeDirective:
+    (multiplicity = Multiplicity)?
+    (type = Type)?
+;
+
+/***************************
+***** SUMMARY SECTION ******
+****************************/
+
+SummaryPanel:
+    /(SummaryPanel)\s/ sectionList += SummarySection
+;
+
+SummarySection:
+    /(Section)\s/ name = ID
+        (directive = SummarySectionPosition)?
+        description = Description
+        paramList += SummaryParam
+;
+
+SummaryParam:
+    /(InfoPath)\s/ path = TextNoQuote
+;
+
+/********************
+***** HTTPHOOK ******
+********************/
+
+Hook:
+    CaseHook | HttpHook | DualTaskHttpHook
+;
+
+CaseHook:
+    (
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = CaseHookEvent
+        /(invoke)\s/ url = STRING
+    ) | (RefHook ref=[CaseHook|FQN])?
+;
+
+HttpHook:
+    (
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = BaseEvent
+        (
+            (/(invoke)\s/ url = STRING)
+            (/(method)\s/ method = HttpMethod)
+            (/(with failureMessage)\s/ failureMessage = STRING)?
+        )#
+    ) | (RefHook ref=[HttpHook|FQN])?
+;
+
+DualTaskHttpHook:
+    (
+        (/(Hook)\s/ name = ID)?
+        /(On)\s/ event = DualTaskEvent
+        (
+            (/(invoke)\s/ url = STRING)
+            (/(method)\s/ method = HttpMethod)
+            (/(with failureMessage)\s/ failureMessage = STRING)?
+        )#
+    ) | (RefHook ref=[DualTaskHttpHook|FQN])?
+;
+
+SharedEvent:
+    'available'
+    | 'enable'
+    | 'activate'
+    | 'complete'
+    | 'terminate'
+;
+
+CaseHookEvent:
+    SharedEvent
+    | 'delete'
+;
+
+BaseEvent:
+    SharedEvent
+    | 'correct'
+;
+
+DualTaskEvent:
+
+    'activatehumanpart'
+    | 'activateautopart'
+    | 'completehumanpart'
+    | 'completeautopart'
+    | 'correcthumanpart'
+    | 'correctautopart'
+    | BaseEvent
+;
+
+CasePrefix:
+    'prefix' Eq value = STRING
+;
+
+Description:
+    ('label' Eq value = STRING)
+;
+
+
+/***********************
+******** STAGE *********
+***********************/
+
+Stage:
+    // Interpreter creates a Stage entity & 2 attributes:
+    // 1. entityAttachPath: the Path to the Stage entity
+    // 2. entityDefinitionId: The name of the Stage entity
+    // activation attribute is "EXPRESSION" if #activateWhen is used
+(
+	StageTerm name = ID
+		directive = WorkflowElementDirective
+		(
+			(description = Description)
+			(ownerPath = OwnerPath)?
+			(clientPath = ClientPath)?
+			(dynamicDescriptionPath = DynamicDescriptionPath)?
+			(externalId = ExternalId)?
+			(additionalDescription = AdditionalDescription)?
+		)#
+		(
+			(preconditionList *= Precondition)
+			(TriggerTerm hookList *= HttpHook)?
+			taskList += Task
+		)#
+) | (RefStage ref=[Stage|FQN])?
+;
+
+/***********************
+******** TASK *********
+***********************/
+
+// In a task, activation attribute is "EXPRESSION"
+// if #activateWhen is used
+Task:
+    HumanTask
+    | AutomatedTask
+    | DualTask
+;
+
+HumanTask:
+    (
+        HumanTaskTerm name = ID
+            directive = WorkflowElementDirective
+            attrList = SharedTaskAttrs
+            (
+                (TriggerTerm hookList *= HttpHook)?
+                form = Form
+            )#
+    )
+    | (RefTask ref=[HumanTask|FQN])?
+;
+
+AutomatedTask:
+    (
+        AutoTaskTerm name = ID
+            directive = WorkflowElementDirective
+            attrList = AutomatedTaskAttrs
+            (
+                (TriggerTerm hookList *= HttpHook)?
+                form = Form
+            )#
+    ) | (RefTask ref=[AutomatedTask|FQN])?
+;
+
+DualTask:
+    (
+        DualTaskTerm name = ID
+            directive = WorkflowElementDirective
+            attrList = SharedTaskAttrs
+            (
+                (TriggerTerm hookList *= DualTaskHttpHook)?
+                form = Form
+            )#
+    ) | (RefTask ref=[DualTask|FQN])?
+;
+
+AutomatedTaskAttrs:
+    (
+        description = Description
+        (ownerPath = OwnerPath)?
+        (externalId = ExternalId)?
+        (dynamicDescriptionPath = DynamicDescriptionPath)?
+        (additionalDescription = AdditionalDescription)?
+        (preconditionList *= Precondition)
+    )#
+;
+
+SharedTaskAttrs:
+    (
+        description = Description
+        (ownerPath = OwnerPath)?
+        (dueDatePath = DueDatePath)?
+        (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
+        (dynamicDescriptionPath = DynamicDescriptionPath)?
+        (preconditionList *= Precondition)
+    )#
+;
+
+Precondition:
+    PreconditionTerm
+    (
+        // aka. processDefinitionId in Thesis
+        ('previousStep' Eq stepList += STRING)*
+
+        // aka. expression in Thesis
+        ('condition' Eq entryCondition = STRING)?
+    )#
+;
+
+/***********************
+********* FORM *********
+***********************/
+
+Form:
+    (
+        FormTerm name = ID
+            (directive = FormDirective)?
+            fieldList += FormField
+    )  | (RefForm ref=[Form|FQN])?
+;
+
+FormDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+    )#
+;
+
+FormField:
+    InputField/[\s\n]*/ | OutputField/[\s\n]*/
+;
+
+InputField:
+(
+  InputFieldTerm name = ID
+    directive = InputFieldDirective
+    (
+        (
+            description = Description
+            | question = Question
+        )
+        (path = CustomElementRefPath)?
+        (uiRef = UiReference)?
+        (externalId = ExternalId)?
+        (additionalDescription = AdditionalDescription)?
+        (defaultValue = DefaultValue)?
+        (defaultValues = DefaultValues)?
+    )#
+) | (Ref InputFieldTerm ref=[InputField|FQN])?
+;
+
+CustomElementRefPath:
+    'ElementPath' Eq value=STRING
+;
+
+InputFieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
+        (multiplicity = Multiplicity)?
+        // There is no grammar for DualTask field
+        // to avoid overhead in computation, since
+        // we expect a large number of fields, and
+        // introducing a DualTaskField along with InputField
+        // will result in longer parsing time
+        // The interpreter will check whether a part
+        // is included in the DualTaskField instead.
+        (part = Part)?
+        (type = FieldType)?
+    )#
+;
+
+OutputField:
+    (
+        OutputFieldTerm name = ID
+            directive = OutputFieldDirective
+            (
+                description = Description
+                (additionalDescription = AdditionalDescription)?
+                (uiRef = UiReference)?
+                (path = CustomElementRefPath)?
+                (expression = OutputFieldExpression)?
+                (externalId = ExternalId)?
+                (defaultValue = DefaultValue)?
+                (defaultValues = DefaultValues)?
+            )#
+    ) | (Ref OutputFieldTerm ref=[OutputField|FQN])?
+;
+
+OutputFieldDirective:
+    (
+        (mandatory = Mandatory)?
+        (readOnly = ReadOnly)?
+        (position = Position)?
+        //(explicitType = PrimitiveDataType)?
+        (explicitType = Type)?
+    )#
+;
+
+Question:
+    'Question' Eq text=STRING
+    optionList += Option
+;
+
+Option:
+    /(Option)\s/ (
+        (key=STRING)
+        ('value' Eq value=STRING)
+        (additionalDescription = AdditionalDescription)?
+        (externalId = ExternalId)?
+    )#
+;
+
+/******************************
+****** COMMON DIRECTIVES ******
+*******************************/
+
+WorkflowElementDirective:
+    (
+        (mandatory = Mandatory)?
+        (repeatable = Repeatable)?
+        (activation = Activation)?
+        (multiplicity = Multiplicity)?
+    )#
+;
+
+Multiplicity:
+    Hash (
+        'maxOne'
+        | 'exactlyOne'
+        | 'atLeastOne'
+        | 'any'
+    )
+;
+
+Type:
+    Hash (
+        LinkType
+        | DocumentLinkType
+        | 'notype'
+        | 'text' // string
+        | 'longtext'
+        | 'string'
+        | 'boolean'
+        | NumType
+        | 'singlechoice' // aka. 'enumeration' in Thesis
+        | 'multiplechoice'
+        | DateType
+        | 'json'
+        | 'custom'
+    )
+;
+
+FieldType:
+    Type
+;
+
+LinkType:
+    'link' '.' (linkType='Users' | linkType='Entity')
+        '(' linkObj += TextNoQuote (',' linkObj += TextNoQuote)? ')'
+;
+
+DocumentLinkType:
+    'documentlink' '(' url=STRING ')'
+;
+
+DateType:
+    'date.after(TODAY)'
+    | /(date)\s/
+
+     // define the longest child path first
+;
+
+NumType:
+    'number' ('('
+        ((comparator=Comparator num=INT) | (min=INT '-' max=INT))
+    ')')?
+;
+
+Part:
+    Hash (
+        'humanDuty'
+        | 'systemDuty'
+    )
+;
+
+Repeatable:
+    Hash (
+        'repeatSerial'
+        | 'repeatParallel' ( '(' INT ')' )?
+        | 'noRepeat' // default
+    )
+;
+
+Mandatory:
+    Hash (
+        'mandatory' // Default
+        | 'notmandatory'
+    )
+;
+
+Activation:
+    Hash (
+        'manualActivate'
+        | 'autoActivate'
+        | 'activateWhen' '(' STRING ')'
+    )
+;
+
+ReadOnly:
+    Hash (
+        'readOnly'
+        | 'notReadOnly' // default
+    )
+;
+
+SharedPosition:
+    'stretched' // Default
+    | 'left'
+    | 'center'
+    | 'right'
+;
+
+SummarySectionPosition:
+    Hash SharedPosition
+;
+
+Position:
+    Hash (
+        'leftcenter'
+        | 'centerright'
+        | SharedPosition
+    )
+;
+
+
+/***********************
+***** SHARED PROPS *****
+************************/
+
+AdditionalDescription:
+    "additionalDescription" Eq value=STRING
+;
+
+DefaultValues:
+    'defaultValues' Eq value=WrapValue
+;
+
+DefaultValue:
+    (
+        'defaultValue' Eq
+        (
+            (value=STRING)
+            | (Ref ref=[AttributeValue|FQN])
+        )
+    )
+;
+
+DynamicDescriptionPath:
+    'dynamicDescriptionRef' Eq value=STRING
+;
+
+ExternalId:
+    'externalId' Eq value = STRING
+;
+
+OwnerPath:
+    'owner' Eq value = STRING
+;
+
+ClientPath:
+    'client' Eq value = STRING
+;
+
+UiReference:
+    'uiRef' Eq
+    (
+        ( value=STRING )
+        | (Ref ref=[AttributeValue|FQN])
+    )
+;
+
+DueDatePath:
+    'dueDateRef' Eq value=STRING
+;
+
+OutputFieldExpression:
+    // TODO: Create syntax for expression
+    'expression' Eq value = STRING
+;
+
+/*********************
+******* TERMINAL *****
+*********************/
+
+HttpMethod:
+    'get'
+    | 'post'
+    | 'put'
+    | 'delete'
+;
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    | '>='
+    | '<'
+    | '>'
+;
+
+//BasicArithmeticOperators: '+'    | '-'    | '*'    |'/' ;
+
+Quote:
+    '"' | "'"
+;
+
+Text:
+    STRING
+;
+
+TextNoQuote:
+    /([a-zA-Z0-9-_.])*/
+;
+
+// Assignment Sign
+Eq:
+    '='
+;
+
+// Directive Sign
+Hash:
+    '#'
+;
+
+WrapValue:
+    '[' (STRING | TextNoQuote) (',' (STRING | TextNoQuote))* ']'
+;
+
+Ref:
+    /(use)\s/
+;
+
+RefSetting:
+    Ref SettingTerm
+;
+
+RefStage:
+    Ref StageTerm
+;
+
+RefTask:
+    Ref TaskTerm
+;
+
+RefField:
+    Ref InputFieldTerm
+;
+
+RefForm:
+    Ref FormTerm
+;
+
+RefHook:
+    Ref HookTerm
+;
+
+Comment:
+  (/\/\/.*$/
+  | /\/\*.*$/
+  | /\*.*$/
+  | /.*[\*\/]$/ )
+;
+
+/**************************
+******* I18N TERMINAL *****
+***************************/
+
+WorkspaceTerm:
+    /(Workspace)\s/
+;
+
+CaseTerm:
+    /(Case)\s/
+;
+
+SettingTerm:
+    /(Setting)\s/
+;
+
+StageTerm:
+    /(Stage)\s/
+;
+
+TaskTerm:
+    /(Task)\s/
+;
+
+HumanTaskTerm:
+    /(HumanTask)\s/
+;
+
+AutoTaskTerm:
+    /(AutoTask)\s/
+;
+
+DualTaskTerm:
+    /(DualTask)\s/
+;
+
+FormTerm:
+    /(Form)\s/
+;
+
+InputFieldTerm:
+    /(InputField)\s/
+;
+
+OutputFieldTerm:
+    /(OutputField)\s/
+;
+
+TriggerTerm:
+    /(Trigger)\s/
+;
+
+HookTerm:
+    /(Hook)\s/
+;
+
+UserTerm:
+    /(User)\s/
+;
+
+GroupTerm:
+    /(Group)\s/
+;
+
+PreconditionTerm:
+    /(Precondition)\s/
+;
+
+FormTerm:
+    /(Form)\s/
+;
+AttributeTerm:
+    /(Attribute)\s/
+;
+
+/********************************************
+**** ERROR DETECTION ASSISTANT RULES ********
+*********************************************/
+
+// These are the foundational object in SACM. When the
+// Syntax Detector scan the lines upward from the error line,
+// if it reaches one of these keywords, it will stop scanning
+
+BuildingBlockObject:
+    WorkspaceTerm
+    | CaseTerm
+    | SettingTerm
+    | StageTerm
+    | HumanTaskTerm | DualTaskTerm | AutoTaskTerm
+    | FormTerm
+    | InputFieldTerm | OutputFieldTerm
+    | GroupTerm | UserTerm
+    | PreconditionTerm | HookTerm
+;
+
+/*****************
+*** OLD SYNTAX ***
+******************/
+

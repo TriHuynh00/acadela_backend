@@ -1,0 +1,48 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet">
+
+<style>
+    #dynamicstylevars{}
+</style>
+
+<image xlink:href="https://upliftlove.b-cdn.net/wp-content/uploads/2021/04/Meridians3-1.jpg" />
+
+
+<circle class="temple" cx="102" cy="52" r="3" fill="blue"/>
+<circle class="temple" cx="140" cy="52" r="3" fill="blue"/>
+<circle class="temple" cx="277" cy="57" r="2" fill="none"/>
+
+<circle class="nape" cx="574" cy="81" r="3" fill="blue"/>
+<circle class="nape" cx="594" cy="81" r="3" fill="blue"/>
+
+<circle class="topHead" cx="284" cy="37" r="4" fill="none"/>
+<ellipse class="inHead" cx="284" cy="49" rx="12" ry="6" fill="none"/>
+
+<circle class="neck" cx="122" cy="98" r="3" fill="none"/>
+<circle class="neck" cx="135" cy="98" r="3" fill="none"/>
+<circle class="neck" cx="283" cy="98" r="3" fill="none"/>
+
+<circle class="jaw" cx="117" cy="90" r="3" fill="none"/>
+<circle class="jaw" cx="140" cy="90" r="3" fill="none"/>
+<ellipse class="jaw" cx="278" cy="88" rx="9" ry="3" fill="none"/>
+
+<circle class="upperEyes" cx="117" cy="59" r="3" fill="none"/>
+<circle class="upperEyes" cx="139" cy="59" r="3" fill="none"/>
+<circle class="upperEyes" cx="269" cy="59" r="3" fill="none"/>
+
+
+
+<circle class="kidney" cx="430" cy="204" r="4" fill="none"/>
+<circle class="kidney" cx="445" cy="204" r="4" fill="none"/>
+
+<circle class="shoulder" cx="98" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="160" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="409" cy="109" r="3" fill="none"/>
+<circle class="shoulder" cx="466" cy="109" r="3" fill="none"/>
+
+<circle class="forehead" cx="128" cy="57" r="3" fill="none"/>
+<circle class="headCrown" cx="438" cy="51" r="14" fill="none"/>
+<circle class="centerUpperBack" cx="432" cy="134" r="3" fill="none"/>
+<circle class="centerUpperBack" cx="444" cy="134" r="3" fill="none"/>
+
+<circle class="occipitalBone" cx="303" cy="74" r="3" fill="none"/>
+</svg>

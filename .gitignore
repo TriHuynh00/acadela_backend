@@ -1,0 +1,5 @@
+acadela/config/__pycache__
+acadela/**/__pycache__
+/node_modules
+run.log
+.idea/workspace.xml

@@ -1,0 +1,53 @@
+//if-else statement grammar
+
+IfElseStatement:
+    ifStatement elseIfStatement* elseStatement
+;
+
+ifStatement:
+    /(if)\s/ conditionalExpr thenStatement
+;
+
+elseIfStatement:
+    /(else\sif)\s/ conditionalExpr thenStatement
+;
+elseStatement:
+    /(else)\s/ STRING
+;
+
+conditionalExpr:
+    (compoundStatement | complexStatement)
+;
+
+complexStatement:
+    '(' compoundStatement (andOr compoundStatement)* ')'
+;
+
+compoundStatement:
+    '(' Condition (andOr Condition)* ')'
+;
+
+Condition:
+    TextNoQuote Comparator ( NUMBER | STRING )
+;
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    |'>='
+    | '<'
+    | '>'
+;
+TextNoQuote:
+    /([a-zA-Z])*/  
+;
+
+andOr:
+    /(and)\s/| 
+    /(or)\s/
+;
+
+thenStatement:
+    "then" STRING
+;

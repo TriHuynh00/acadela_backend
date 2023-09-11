@@ -1,0 +1,37 @@
+//grammar for uiRef
+
+UiRef:
+    ColorCodeDef
+    | 'privatelink'
+    | 'hidden'
+    | 'svg'
+    | 'linediagram'
+;
+
+ColorCodeDef:
+    'colors'
+    '('
+        (CompareExpression)
+    ')'
+;
+
+CompareExpression:
+    NUMBER (Comparator ColorName Comparator NUMBER)+
+;
+
+ColorName:
+    'red'
+    | 'blue'
+    | 'green'
+    | 'orange'
+    | 'yellow'
+;
+
+Comparator:
+    '='
+    | '<>'
+    | '<='
+    |'>='
+    | '<'
+    | '>'
+;
