@@ -1,4 +1,4 @@
-# dsl-connecare
+# Acadela backend
 
 This project is the backend of Acadela DSL, which compiles the input Clinical Pathway (CP) code written in Acadela to an SACM-compatible JSON format.
 
